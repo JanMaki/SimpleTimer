@@ -3,6 +3,7 @@ package net.necromagic.simpletimerKT
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.necromagic.simpletimerKT.util.Log
 import java.util.*
 import java.util.concurrent.Executors
@@ -175,6 +176,10 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
             display.addReaction("5️⃣").queue({}, {})
             display.addReaction("\uD83D\uDD1F").queue({}, {})
         } catch (e: Exception) {
+            //権限関係が原因の物は排除
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+                return
+            }
             Log.sendLog(e.stackTraceToString())
         }
     }
@@ -192,6 +197,10 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
                 notice?.delete()?.complete()
             }
         } catch (e: Exception) {
+            //権限関係が原因の物は排除
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+                return
+            }
             Log.sendLog(e.stackTraceToString())
         } finally {
             //メッセージのメンションを書き換える
@@ -263,6 +272,10 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
                     message.delete().queue({}, {})
                 }
             } catch (e: Exception) {
+                //権限関係が原因の物は排除
+                if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+                    return
+                }
                 Log.sendLog(e.stackTraceToString())
             }
 

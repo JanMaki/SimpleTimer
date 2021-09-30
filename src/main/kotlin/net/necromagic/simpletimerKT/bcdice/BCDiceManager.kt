@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.necromagic.simpletimerKT.*
 import net.necromagic.simpletimerKT.bcdice.dataclass.*
 import net.necromagic.simpletimerKT.util.Log
@@ -117,6 +118,10 @@ class BCDiceManager {
             }
             message.addReaction("➡️").queue({}, {})
         } catch (e: Exception) {
+            //権限関係が原因の物は排除
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+                return
+            }
             Log.sendLog(e.stackTraceToString())
         }
     }
@@ -208,6 +213,10 @@ class BCDiceManager {
             }
             channelViews[channel] = selectMessage
         } catch (e: Exception) {
+            //権限関係が原因の物は排除
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+                return
+            }
             Log.sendLog(e.stackTraceToString())
         }
     }

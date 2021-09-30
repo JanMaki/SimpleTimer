@@ -1,9 +1,13 @@
 package net.necromagic.simpletimerKT.listener
 
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.PrivateChannel
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimerKT.command.slash.SlashCommandManager
+import net.necromagic.simpletimerKT.util.Log
+import net.necromagic.simpletimerKT.util.SendMessage
 import net.necromagic.simpletimerKT.util.equalsIgnoreCase
 
 /**
@@ -26,10 +30,35 @@ class SlashCommand : ListenerAdapter() {
             return
         }
 
-        SlashCommandManager.slashCommands.forEach { slashCommand ->
-            if (slashCommand.name.equalsIgnoreCase(name)) {
-                slashCommand.run(name, event)
+        //権限を確認
+        val permissions = event.guild!!.selfMember.getPermissions(event.textChannel)
+        if (!permissions.contains(Permission.ADMINISTRATOR)) {
+            if (!(
+                        permissions.contains(Permission.VIEW_CHANNEL) &&
+                                permissions.contains(Permission.MESSAGE_SEND) &&
+                                permissions.contains(Permission.MESSAGE_TTS) &&
+                                permissions.contains(Permission.MESSAGE_EMBED_LINKS) &&
+                                permissions.contains(Permission.MESSAGE_HISTORY) &&
+                                permissions.contains(Permission.MESSAGE_EXT_EMOJI))
+            ) {
+                event.deferReply().queue()
+                event.hook.sendMessageEmbeds(SendMessage.errorEmbed).queue()
+                return
             }
+        }
+
+        try {
+            SlashCommandManager.slashCommands.forEach { slashCommand ->
+                if (slashCommand.name.equalsIgnoreCase(name)) {
+                    slashCommand.run(name, event)
+                }
+            }
+        }catch (e: Exception){
+            //権限関係が原因の物は排除
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+                return
+            }
+            Log.sendLog(e.stackTraceToString())
         }
     }
 

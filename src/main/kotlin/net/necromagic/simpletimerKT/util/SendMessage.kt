@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.necromagic.simpletimerKT.SimpleTimer
 import java.util.*
@@ -12,7 +13,7 @@ import java.util.*
 class SendMessage {
     companion object {
         //権限エラーの埋め込み
-        private val errorEmbed: MessageEmbed
+        val errorEmbed: MessageEmbed
 
         init {
             //権限エラーの埋め込みを作成
@@ -42,6 +43,10 @@ class SendMessage {
                     channelsMessageMap[channel]?.delete()?.complete()
                 }
             } catch (e: Exception) {
+                //権限関係が原因の物は排除
+                if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+                    return
+                }
                 Log.sendLog(e.stackTraceToString())
             } finally {
                 try {
