@@ -1,0 +1,8 @@
+.idea
+.gradle
+*.iml
+out
+build
+classes
+server_config.yml
+libs
