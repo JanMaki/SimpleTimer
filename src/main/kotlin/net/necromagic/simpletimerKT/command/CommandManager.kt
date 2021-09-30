@@ -97,10 +97,10 @@ class CommandManager {
                                     出力結果の文字数が多すぎます。
                                     ダイスの内容を変更して再度実行してください。
                                     """.trimIndent()
-                                    )
+                                    ).queue()
                                 } else {
                                     //結果を出力する
-                                    message.reply(sendMessage)
+                                    message.reply(sendMessage).queue()
                                 }
                             }
                         }
@@ -109,7 +109,7 @@ class CommandManager {
                         ServerConfig.DiceMode.BCDice -> {
                             val roll = BCDiceManager.instance.roll(channel, args[0].replace(prefix, "").lowercase())
                                 ?: return@submit
-                            message.reply(roll)
+                            message.reply(roll).queue()
                         }
 
                     }

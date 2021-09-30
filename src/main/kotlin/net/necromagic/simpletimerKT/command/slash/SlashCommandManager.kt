@@ -18,7 +18,9 @@ object SlashCommandManager {
             DiceSlashCommand.Roll,
             DiceSlashCommand.DiceMode,
             DiceSlashCommand.DiceInfo,
-            DiceSlashCommand.DiceBot
+            DiceSlashCommand.DiceBot,
+            DiceSlashCommand.BasicDice,
+            DiceSlashCommand.BasicSecretDice
         ))
     }
 }

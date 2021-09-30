@@ -174,4 +174,74 @@ class DiceSlashCommand {
             BCDiceManager.instance.openSelectDiceBotView(event.textChannel)
         }
     }
+
+    /**
+     * 1d100
+     */
+    object BasicDice : SlashCommand("1d100", "100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます"){
+        override fun run(command: String, event: SlashCommandEvent) {
+            val config = SimpleTimer.instance.config
+
+            event.deferReply().queue()
+
+            //ギルドのダイスもーを確認
+            when (config.getDiceMode(event.guild!!)) {
+                //デフォルトのダイス
+                ServerConfig.DiceMode.Default -> {
+                    val dice = Dice("1d100", false)
+                    //出力メッセージの作成
+                    val sendMessage =
+                        """
+                        ${dice.resultMessage}
+                        """.trimIndent()
+                    event.hook.sendMessage(sendMessage).queue()
+                }
+
+
+                //BCDiceのダイス
+                ServerConfig.DiceMode.BCDice -> {
+                    //コマンドを実行
+                    val roll = BCDiceManager.instance.roll(event.textChannel, "1d100") ?: return
+
+                    //結果を出力する
+                    event.hook.sendMessage(roll).queue()
+                }
+            }
+        }
+    }
+
+    /**
+     * シークレットダイス1d100
+     */
+    object BasicSecretDice : SlashCommand("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます"){
+        override fun run(command: String, event: SlashCommandEvent) {
+            val config = SimpleTimer.instance.config
+
+            event.deferReply().queue()
+
+            //ギルドのダイスもーを確認
+            when (config.getDiceMode(event.guild!!)) {
+                //デフォルトのダイス
+                ServerConfig.DiceMode.Default -> {
+                    val dice = Dice("1d100", true)
+                    //出力メッセージの作成
+                    val sendMessage =
+                        """
+                        (シークレットダイス)${dice.resultMessage}
+                        """.trimIndent()
+                    event.hook.sendMessage(sendMessage).queue()
+                }
+
+
+                //BCDiceのダイス
+                ServerConfig.DiceMode.BCDice -> {
+                    //コマンドを実行
+                    val roll = BCDiceManager.instance.roll(event.textChannel, "s1d100") ?: return
+
+                    //結果を出力する
+                    event.hook.sendMessage(roll).queue()
+                }
+            }
+        }
+    }
 }
