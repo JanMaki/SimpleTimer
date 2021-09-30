@@ -1,10 +1,12 @@
 package net.necromagic.simpletimerKT
 
+import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.necromagic.simpletimerKT.bcdice.BCDiceManager
 import net.necromagic.simpletimerKT.command.CommandManager
+import net.necromagic.simpletimerKT.command.slash.SlashCommandManager
 import net.necromagic.simpletimerKT.listener.GenericMessageReaction
 import net.necromagic.simpletimerKT.listener.GuildMessageReceived
 import net.necromagic.simpletimerKT.listener.MessageDelete
@@ -49,7 +51,8 @@ import java.net.URL
 // v1.4.8 一時停止が一部動いていなかったのを修正
 // v1.4.9 ダイスのInfoの文字数が多いと表示されなかったのを修正
 // v1.4.10 tokenを外部ファイル(server_config.yml)にて記述するように変更
-// v1,4,11
+// v1,4,11 シャードを使用するように変更
+// v1.5.0 スラッシュコマンドを一新
 
 /**
  * メインクラス
@@ -71,7 +74,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v1.4.11"
+    val version = "v1.5.0"
 
     //多重起動防止
     private val lockPort = 918
@@ -154,24 +157,27 @@ class SimpleTimer {
         shardBuilder.addEventListeners(SlashCommand())
 
         shardBuilder.setStatus(OnlineStatus.ONLINE)
-        shardBuilder.setActivity(Activity.of(Activity.ActivityType.DEFAULT, "!timerでヘルプ表示"))
+        shardBuilder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "!timerでヘルプ表示"))
+
+        val shards = mutableSetOf<JDA>()
 
         for (i in 0..2) {
             val shard = shardBuilder.useSharding(i, 3).build()
-            val commands = shard.updateCommands()
-            commands.addCommands(commandManager.commands)
-            commands.complete()
 
+            shards.add(shard)
+        }
 
-            //ログ
+        shards.forEach { shard ->
             val section = config.getConfigurationSection("LoggingServer")
-            section?.getKeys(false)?.forEach { guildID ->
-                val guild = shard.getGuildById(guildID) ?: return@forEach
+            section?.getKeys(false)?.forEach guildID@{ guildID ->
+                val guild = shard.getGuildById(guildID) ?: return@guildID
                 val channel = guild.getTextChannelById(config.getString("LoggingServer.${guildID}"))
                 if (channel != null) {
                     Log.logChannels.add(channel)
                 }
             }
+
+            shard.updateCommands().addCommands(SlashCommandManager.slashCommands).complete()
         }
 
         Log.sendLog("Finish loading")

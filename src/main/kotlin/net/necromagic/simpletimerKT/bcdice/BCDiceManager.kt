@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.entities.TextChannel
 import net.necromagic.simpletimerKT.*
 import net.necromagic.simpletimerKT.bcdice.dataclass.*
 import net.necromagic.simpletimerKT.util.Log
-import net.necromagic.simpletimerKT.util.MessageReply
 import net.necromagic.simpletimerKT.util.equalsIgnoreCase
 import java.awt.Color
 import java.lang.StringBuilder
@@ -106,7 +105,7 @@ class BCDiceManager {
                 channelViews[channel]?.delete()?.complete()
             }
             //メッセージを送信
-            val message = channel.sendMessage(embed).complete()
+            val message = channel.sendMessageEmbeds(embed).complete()
             //マップに登録
             channelViews[channel] = message
             //ページを初期化
@@ -137,7 +136,7 @@ class BCDiceManager {
         //対象のメッセージを取得
         val message = channelViews[channel] ?: return
         //編集
-        message.editMessage(embed).queue({}, {})
+        message.editMessageEmbeds(embed).queue({}, {})
     }
 
     /**
@@ -155,7 +154,7 @@ class BCDiceManager {
         //対象のメッセージを取得
         val message = channelViews[channel] ?: return
         //編集
-        message.editMessage(embed).queue({}, {})
+        message.editMessageEmbeds(embed).queue({}, {})
     }
 
     /**
@@ -218,7 +217,7 @@ class BCDiceManager {
      *
      * @param channel [TextChannel] 送信するテキストチャンネル
      */
-    fun printInfo(channel: TextChannel) {
+    fun getInfoEmbed(channel: TextChannel): MessageEmbed {
         val prefix = SimpleTimer.instance.config.getPrefix(channel.guild)
 
         //コンフィグから設定されているダイスボットを取得
@@ -255,7 +254,7 @@ class BCDiceManager {
                     builder.addField(" ", buffer.toString(), false)
                 }
 
-                channel.sendMessage(builder.build()).queue({}, {})
+                channel.sendMessageEmbeds(builder.build()).queue({}, {})
                 buffer.clear()
 
                 builder = EmbedBuilder()
@@ -273,18 +272,18 @@ class BCDiceManager {
             builder.addField("システム共通コマンド", defaultGameSystemInfo.help_message, false)
         }
 
-        channel.sendMessage(builder.build()).queue({}, {})
+        return builder.build()
     }
 
+    private val json = Json{ ignoreUnknownKeys = true }
 
     /**
      * ダイスを振る
      *
      * @param channel [TextChannel] ダイスを振るチャンネル
      * @param command [String] ダイスの内容
-     * @param messageReply [MessageReply] 返信を行うクラス。
      */
-    fun roll(channel: TextChannel, command: String, messageReply: MessageReply) {
+    fun roll(channel: TextChannel, command: String): String? {
         var runCommand = command
 
         //スポイラーによるシークレットダイスを確認
@@ -311,20 +310,19 @@ class BCDiceManager {
             val rollPost = "${server}game_system/${id}/roll".httpPost(listOf("command" to runCommand)).response()
 
             //正常に処理されたかを確認
-            val check =
-                Json { ignoreUnknownKeys = true }.decodeFromString(OK.serializer(), String(rollPost.second.data))
+            val check = json.decodeFromString(OK.serializer(), String(rollPost.second.data))
             if (check.ok) {
                 //正常だった場合、結果を代入する
-                result = Json {}.decodeFromString(DiceRoll.serializer(), String(rollPost.second.data))
+                result = json.decodeFromString(DiceRoll.serializer(), String(rollPost.second.data))
             } else {
-                return
+                return null
             }
         } else {
-            return
+            return null
         }
 
-        //メッセージを構築
-        val resultMessage = if (result.secret) {
+        //メッセージを構築して返す
+        return if (result.secret) {
             //シークレットダイスダイス
             "(シークレットダイス)\n||${result.text}||"
         } else {
@@ -339,8 +337,5 @@ class BCDiceManager {
                 result.text
             }
         }
-
-        //メッセージを送信
-        messageReply.reply(resultMessage)
     }
 }

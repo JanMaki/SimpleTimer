@@ -1,11 +1,11 @@
 package net.necromagic.simpletimerKT.command
 
+import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.necromagic.simpletimerKT.*
 import net.necromagic.simpletimerKT.bcdice.BCDiceManager
-import net.necromagic.simpletimerKT.util.MessageReply
 import net.necromagic.simpletimerKT.util.equalsIgnoreCase
 import java.lang.StringBuilder
 import java.util.concurrent.Executors
@@ -15,14 +15,12 @@ import java.util.concurrent.Executors
  */
 class CommandManager {
     //コマンドのリスト
-    val commands = ArrayList<CommandData>()
+    private val commands = ArrayList<CommandData>()
 
     init {
         //コマンドを登録
         commands.add(TimerCommand())
         commands.add(DiceCommand())
-        commands.add(CommandData("1d100", "100面ダイスを振ります。その他の個数・面数のダイスは!!xDyで使用できます").setDefaultEnabled(true))
-        commands.add(CommandData("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは!!xDyで使用できます").setDefaultEnabled(true))
     }
 
     /**
@@ -30,9 +28,9 @@ class CommandManager {
      * @param user [User] 実行したユーザー
      * @param channel [TextChannel] 実行したチャンネル
      * @param args [List] 内容
-     * @param messageReply [MessageReply] 返信を行うクラス。
+     * @param message [Message] 返信を行うクラス。
      */
-    fun run(user: User, channel: TextChannel, args: List<String>, messageReply: MessageReply) {
+    fun run(user: User, channel: TextChannel, args: List<String>, message: Message) {
 
         val command = args[0]
 
@@ -44,7 +42,7 @@ class CommandManager {
         commands.forEach {
             if (it is RunCommand) {
                 if ("${prefix}${it.name}".equalsIgnoreCase(command) || "!!${it.name}".equalsIgnoreCase(command)) {
-                    it.runCommand(user, channel, args, messageReply)
+                    it.runCommand(user, channel, args, message)
                     result = true
                 }
             }
@@ -94,7 +92,7 @@ class CommandManager {
                                 }
                                 //2000文字超えたときは失敗のログを出す
                                 if (sendMessage.length >= 2000) {
-                                    messageReply.reply(
+                                    message.reply(
                                         """
                                     出力結果の文字数が多すぎます。
                                     ダイスの内容を変更して再度実行してください。
@@ -102,18 +100,16 @@ class CommandManager {
                                     )
                                 } else {
                                     //結果を出力する
-                                    messageReply.reply(sendMessage)
+                                    message.reply(sendMessage)
                                 }
                             }
                         }
 
                         //BCDice
                         ServerConfig.DiceMode.BCDice -> {
-                            BCDiceManager.instance.roll(
-                                channel,
-                                args[0].replace(prefix, "").lowercase(),
-                                messageReply
-                            )
+                            val roll = BCDiceManager.instance.roll(channel, args[0].replace(prefix, "").lowercase())
+                                ?: return@submit
+                            message.reply(roll)
                         }
 
                     }

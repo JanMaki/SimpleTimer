@@ -3,7 +3,6 @@ package net.necromagic.simpletimerKT.listener
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimerKT.*
-import net.necromagic.simpletimerKT.util.MessageReply
 
 /**
  * コマンドの処理のクラス
@@ -41,7 +40,7 @@ class GuildMessageReceived : ListenerAdapter() {
         //stringからargsの生成
         val args = messageValue.split(" ")
 
-        SimpleTimer.instance.commandManager.run(user, channel, args, MessageReply(message))
+        SimpleTimer.instance.commandManager.run(user, channel, args, message)
     }
 
 }

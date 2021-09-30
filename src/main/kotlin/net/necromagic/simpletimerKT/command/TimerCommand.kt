@@ -1,6 +1,7 @@
 package net.necromagic.simpletimerKT.command
 
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
@@ -10,7 +11,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.necromagic.simpletimerKT.*
 import net.necromagic.simpletimerKT.Timer
-import net.necromagic.simpletimerKT.util.MessageReply
 import net.necromagic.simpletimerKT.util.SendMessage
 import net.necromagic.simpletimerKT.util.equalsIgnoreCase
 import java.util.*
@@ -20,8 +20,7 @@ import kotlin.collections.HashSet
 /**
  * タイマーのコマンドのクラス
  */
-class TimerCommand : CommandData("timer", "タイマーを開始します。タイマーの操作は!!timerコマンドを使用してください。"), RunCommand,
-    Timer.FinishListener {
+class TimerCommand : CommandData("timer", "タイマーを開始します。タイマーの操作は!!timerコマンドを使用してください。"), RunCommand{
 
     init {
         setDefaultEnabled(true)
@@ -29,23 +28,20 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
         addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で").setRequired(true))
     }
 
-    //チャンネルとタイマーのマップ
-    private val channelsTimersMap = HashMap<TextChannel, EnumMap<Timer.Number, Timer>>()
-
     /**
      * コマンドを実行する
      * @param user [User] 実行したユーザー
      * @param channel [TextChannel] 実行したチャンネル
      * @param args [List] 内容
-     * @param messageReply [MessageReply] 返信を行うクラス。
+     * @param message [Message] 返信を行うクラス。
      */
-    override fun runCommand(user: User, channel: TextChannel, args: List<String>, messageReply: MessageReply) {
+    override fun runCommand(user: User, channel: TextChannel, args: List<String>, message: Message) {
         val prefix = SimpleTimer.instance.config.getPrefix(channel.guild)
 
         //labelの確認・ヘルプの表示
         if (args.size < 2) {
             try {
-                channel.sendMessage(createHelpEmbedBuilder(prefix)).queue({}, {})
+                channel.sendMessageEmbeds(createHelpEmbedBuilder(prefix)).queue({}, {})
             } catch (e: InsufficientPermissionException) {
                 SendMessage.sendErrorMessageToUser(user)
             }
@@ -54,7 +50,7 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
         val label = args[1]
 
 
-        val channelTimers = channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
+        val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
 
         //コマンドの実装
         if (label.equalsIgnoreCase("add")) {
@@ -257,7 +253,7 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
                 i = Integer.parseInt(label)
             } catch (e: Exception) {
                 try {
-                    channel.sendMessage(createHelpEmbedBuilder(prefix)).queue({}, {})
+                    channel.sendMessageEmbeds(createHelpEmbedBuilder(prefix)).queue({}, {})
                 } catch (e2: InsufficientPermissionException) {
                     error(user)
                 }
@@ -266,9 +262,8 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
             for (number in Timer.Number.values()) {
                 if (!channelTimers.containsKey(number)) {
                     val timer = Timer(channel, number, i)
-                    timer.finishListener = this
                     channelTimers[number] = timer
-                    channelsTimersMap[channel] = channelTimers
+                    Timer.channelsTimersMap[channel] = channelTimers
                     return
                 }
             }
@@ -331,19 +326,5 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
         val newMessageEmbed = helpEmbedBuilder.build()
         helpEmbedMap[prefix] = newMessageEmbed
         return newMessageEmbed
-    }
-
-
-    /**
-     * Timer終了時の処理
-     *
-     * @param timer [Timer] 終了したTimer
-     */
-    override fun finish(timer: Timer) {
-        val channelTimers = channelsTimersMap[timer.channel]
-        if (channelTimers != null) {
-            channelTimers.remove(timer.number)
-            channelsTimersMap[timer.channel] = channelTimers
-        }
     }
 }

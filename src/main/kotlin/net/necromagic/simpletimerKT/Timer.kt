@@ -15,8 +15,11 @@ import kotlin.math.abs
  * @property number [Number] タイマーの番号
  * @property seconds [Int] 分数
  */
-class Timer(val channel: TextChannel, val number: Number, private var seconds: Int) {
+class Timer(val channel: TextChannel, private val number: Number, private var seconds: Int) {
     companion object {
+        //チャンネルとタイマーのマップ
+        val channelsTimersMap = HashMap<TextChannel, EnumMap<Number, Timer>>()
+
         private val displays = TreeMap<Long, Timer>()
         private val timers = TreeMap<Long, Timer>()
 
@@ -69,9 +72,6 @@ class Timer(val channel: TextChannel, val number: Number, private var seconds: I
     //Displayと通知
     private var display: Message? = null
     var notice: Message? = null
-
-    //終了時に呼び出されるクラス
-    var finishListener: FinishListener? = null
 
     //強制的に更新を行うかのフラグ
     private var update = false
@@ -348,9 +348,15 @@ class Timer(val channel: TextChannel, val number: Number, private var seconds: I
             SimpleTimer.instance.config.getTTS(channel.guild).replace("x", number.number.toString()),
             ServerConfig.TTSTiming.LV1
         )
-        //リスナーへの終了通知
-        finishListener?.finish(this)
+
+        val channelTimers = channelsTimersMap[channel]
+        if (channelTimers != null) {
+            channelTimers.remove(number)
+            channelsTimersMap[channel] = channelTimers
+        }
+
         timers.remove(notice?.idLong)
+
         //時間を置いてリアクションを削除
         Executors.newSingleThreadExecutor().submit {
             try {
@@ -385,7 +391,13 @@ class Timer(val channel: TextChannel, val number: Number, private var seconds: I
         timers.remove(display?.idLong)
         displays.remove(display?.idLong)
         sendMessage("タイマーを破棄しました")
-        finishListener?.finish(this)
+
+        val channelTimers = channelsTimersMap[channel]
+        if (channelTimers != null) {
+            channelTimers.remove(number)
+            channelsTimersMap[channel] = channelTimers
+        }
+
         timers.remove(notice?.idLong)
         //メッセージを消す
         Executors.newSingleThreadExecutor().submit {
@@ -441,17 +453,5 @@ class Timer(val channel: TextChannel, val number: Number, private var seconds: I
                 return null
             }
         }
-    }
-
-    /**
-     * タイマーの終了時処理用のインタフェース
-     */
-    interface FinishListener {
-        /**
-         * 終了時に実行する処理
-         *
-         * @param timer [Timer] 終了したタイマー
-         */
-        fun finish(timer: Timer)
     }
 }

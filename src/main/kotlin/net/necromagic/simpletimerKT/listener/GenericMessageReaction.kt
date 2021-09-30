@@ -76,7 +76,7 @@ class GenericMessageReaction : ListenerAdapter() {
                 "7️⃣" -> bcdice.select(textChannel, 7)
                 "8️⃣" -> bcdice.select(textChannel, 8)
                 "9️⃣" -> bcdice.select(textChannel, 9)
-                "❓" -> bcdice.printInfo(textChannel)
+                "❓" -> textChannel.sendMessageEmbeds(bcdice.getInfoEmbed(textChannel)).queue()
                 else -> return
             }
 

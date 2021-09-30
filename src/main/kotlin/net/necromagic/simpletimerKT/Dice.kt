@@ -1,6 +1,7 @@
 package net.necromagic.simpletimerKT
 
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
 import java.awt.Color
 import java.util.Random
@@ -49,7 +50,7 @@ open class Dice(private val command: String, secret: Boolean = false) {
          *
          * @param channel [TextChannel] 送信するテキストチャンネル
          */
-        fun printInfo(channel: TextChannel) {
+        fun getInfoEmbed(channel: TextChannel): MessageEmbed {
             val prefix = SimpleTimer.instance.config.getPrefix(channel.guild)
 
             //作成開始
@@ -66,7 +67,7 @@ open class Dice(private val command: String, secret: Boolean = false) {
             )
 
             //送信
-            channel.sendMessage(builder.build()).queue({}, {})
+            return builder.build()
         }
     }
 

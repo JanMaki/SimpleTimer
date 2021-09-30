@@ -61,7 +61,7 @@ class SendMessage {
         fun sendErrorMessageToUser(user: User) {
             try {
                 val channel = user.openPrivateChannel().complete()
-                channel.sendMessage(errorEmbed).queue({ }, { })
+                channel.sendMessageEmbeds(errorEmbed).queue({ }, { })
             } catch (e: Exception) {
                 Log.sendLog(e.stackTraceToString())
             }

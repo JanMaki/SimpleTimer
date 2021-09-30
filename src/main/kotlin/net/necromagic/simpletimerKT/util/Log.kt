@@ -8,7 +8,7 @@ object Log {
     fun sendLog(log: String) {
         logChannels.forEach { channel ->
             try {
-                channel.sendMessage(log)
+                channel.sendMessage(log).queue()
             } catch (ignore: Exception) {
                 ignore.printStackTrace()
             }
