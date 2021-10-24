@@ -25,7 +25,7 @@ abstract class SlashCommand(name: String, description: String) : CommandData(nam
          * @param event [SlashCommandEvent] スラッシュコマンドのイベント
          */
         fun replyCommandError(event: SlashCommandEvent) {
-            event.reply("*コマンドエラー").queue()
+            event.hook.sendMessage("*コマンドエラー").queue()
         }
     }
 }

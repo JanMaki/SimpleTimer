@@ -12,6 +12,7 @@ object SlashCommandManager {
             TimerSlashCommand.Add,
             TimerSlashCommand.Stop,
             TimerSlashCommand.Restart,
+            TimerSlashCommand.Check,
             TimerSlashCommand.TTS,
             TimerSlashCommand.FinishTTS,
             TimerSlashCommand.Mention,
@@ -20,8 +21,12 @@ object SlashCommandManager {
             DiceSlashCommand.DiceInfo,
             DiceSlashCommand.DiceBot,
             DiceSlashCommand.BasicDice,
-            DiceSlashCommand.BasicSecretDice
-        ))
+            DiceSlashCommand.BasicSecretDice,
+            TimerListSlashCommand.List,
+            TimerListSlashCommand.ListAdd,
+            TimerListSlashCommand.ListRemove,
+            TimerListSlashCommand.TimerChannel)
+        )
     }
 }
 

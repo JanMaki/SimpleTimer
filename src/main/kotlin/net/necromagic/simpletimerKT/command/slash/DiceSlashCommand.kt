@@ -33,9 +33,6 @@ class DiceSlashCommand {
                 return
             }
 
-            //取り合えず待たせる
-            event.deferReply().queue()
-
             //コマンドを取得
             var diceCommand = option.asString
 
@@ -112,8 +109,6 @@ class DiceSlashCommand {
         }
 
         override fun run(command: String, event: SlashCommandEvent) {
-            //取り合えず待たせる
-            event.deferReply().queue()
 
             //コンフィグを取得
             val config = SimpleTimer.instance.config
@@ -142,9 +137,6 @@ class DiceSlashCommand {
      */
     object DiceInfo : SlashCommand("diceinfo", "ダイスの使い方を表示する") {
         override fun run(command: String, event: SlashCommandEvent) {
-            //取り合えず待たせる
-            event.deferReply().queue()
-
             //チャンネルを取得
             val channel = event.textChannel
 
@@ -168,7 +160,7 @@ class DiceSlashCommand {
     object DiceBot : SlashCommand("dicebot", "BCDiceで使用するボットを変更します") {
         override fun run(command: String, event: SlashCommandEvent) {
             //メッセージを出力
-            event.reply("メニューよりボットを選択してください").queue()
+            event.hook.sendMessage("メニューよりボットを選択してください").complete()
 
             //ダイスボットを変更する画面を出す
             BCDiceManager.instance.openSelectDiceBotView(event.textChannel)
@@ -178,11 +170,9 @@ class DiceSlashCommand {
     /**
      * 1d100
      */
-    object BasicDice : SlashCommand("1d100", "100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます"){
+    object BasicDice : SlashCommand("1d100", "100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
         override fun run(command: String, event: SlashCommandEvent) {
             val config = SimpleTimer.instance.config
-
-            event.deferReply().queue()
 
             //ギルドのダイスもーを確認
             when (config.getDiceMode(event.guild!!)) {
@@ -213,11 +203,9 @@ class DiceSlashCommand {
     /**
      * シークレットダイス1d100
      */
-    object BasicSecretDice : SlashCommand("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます"){
+    object BasicSecretDice : SlashCommand("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
         override fun run(command: String, event: SlashCommandEvent) {
             val config = SimpleTimer.instance.config
-
-            event.deferReply().queue()
 
             //ギルドのダイスもーを確認
             when (config.getDiceMode(event.guild!!)) {

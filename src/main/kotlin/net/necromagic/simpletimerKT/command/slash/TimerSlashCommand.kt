@@ -33,8 +33,6 @@ class TimerSlashCommand {
                 return
             }
 
-            //取り合えず待たせる
-            event.deferReply().queue()
 
             //秒数を取得
             val minutes = option.asLong
@@ -63,7 +61,7 @@ class TimerSlashCommand {
             }
 
             //最大数のメッセージを出力する
-            event.reply(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
+            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
         }
     }
 
@@ -97,8 +95,6 @@ class TimerSlashCommand {
             //タイマーの番号を取得
             val i = option.asLong.toInt()
 
-            //取り合えず待たせる
-            event.deferReply().queue()
 
             //番号をNumberに
             val number = Timer.Number.getNumber(i)
@@ -140,8 +136,6 @@ class TimerSlashCommand {
         }
 
         override fun run(command: String, event: SlashCommandEvent) {
-            //取り合えず待たせる
-            event.deferReply().queue()
 
             //チャンネルを取得
             val channel = event.textChannel
@@ -199,9 +193,6 @@ class TimerSlashCommand {
 
             //タイマーの番号を取得
             val i = timerOption.asLong.toInt()
-
-            //取り合えず待たせる
-            event.deferReply().queue()
 
             //チャンネルを取得
             val channel = event.textChannel
@@ -263,9 +254,6 @@ class TimerSlashCommand {
             //タイマーの番号を取得
             val i = option.asLong.toInt()
 
-            //取り合えず待たせる
-            event.deferReply().queue()
-
             //チャンネルを取得
             val channel = event.textChannel
 
@@ -326,8 +314,6 @@ class TimerSlashCommand {
             //タイマーの番号を取得
             val i = option.asLong.toInt()
 
-            //取り合えず待たせる
-            event.deferReply().queue()
 
             //チャンネルを取得
             val channel = event.textChannel
@@ -359,6 +345,67 @@ class TimerSlashCommand {
         }
     }
 
+
+    /**
+     * タイマーを確認する
+     */
+    object Check : SlashCommand("check", "タイマーを延長する") {
+        init {
+            setDefaultEnabled(true)
+
+            addOptions(
+                OptionData(OptionType.INTEGER, "タイマー", "確認するタイマー").setRequired(true).addChoices(
+                    Command.Choice("1番目のタイマー", 1),
+                    Command.Choice("2番目のタイマー", 2),
+                    Command.Choice("3番目のタイマー", 3),
+                    Command.Choice("4番目のタイマー", 4)
+                )
+            )
+        }
+
+        override fun run(command: String, event: SlashCommandEvent) {
+            //オプションを取得
+            val timerOption = event.getOption("タイマー")
+
+            //nullチェック
+            if (timerOption == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //タイマーの番号を取得
+            val i = timerOption.asLong.toInt()
+
+            //チャンネルを取得
+            val channel = event.textChannel
+
+            //チャンネルのタイマーを取得
+            val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
+
+            //番号をNumberに
+            val number = Timer.Number.getNumber(i)
+
+            //タイマーの稼働を確認
+            if (!channelTimers.containsKey(number)) {
+                if (number != null)
+                    event.hook.sendMessage(number.format("タイマーは動いていません")).queue()
+                else {
+                    event.hook.sendMessage("タイマーは動いていません").queue()
+                }
+                return
+            }
+
+            //タイマーを取得
+            val timer = channelTimers[number]!!
+
+            //タイマーを確認
+            timer.check()
+
+            //空白を出力して消し飛ばす
+            event.hook.sendMessage("|| ||").complete().delete().queue()
+        }
+    }
+
     /**
      * TTSの設定を行う
      */
@@ -382,9 +429,6 @@ class TimerSlashCommand {
                 replyCommandError(event)
                 return
             }
-
-            //取り合えず待たせる
-            event.deferReply().queue()
 
             //ttsのタイミングを取得
             val timing = when {
@@ -423,14 +467,11 @@ class TimerSlashCommand {
                 return
             }
 
-            //取り合えず待たせる
-            event.deferReply().queue()
-
             //メッセージを取得
             val message = option.asString
 
             //メッセージの長さを確認
-            if(message.length > 20){
+            if (message.length > 20) {
                 event.hook.sendMessage("20文字以下にしてください").queue()
                 return
             }
@@ -468,8 +509,6 @@ class TimerSlashCommand {
                 return
             }
 
-            //取り合えず待たせる
-            event.deferReply().queue()
 
             //メンションの方式を取得
             val mention = when (subCommand) {

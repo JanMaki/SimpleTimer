@@ -21,12 +21,14 @@ class SlashCommand : ListenerAdapter() {
      * @param event [SlashCommandEvent] イベント
      */
     override fun onSlashCommand(event: SlashCommandEvent) {
+        event.deferReply().complete()
+
         //各種値を取得
         val name = event.name
 
         //DMを弾く
         if (event.channel is PrivateChannel) {
-            event.reply("*DMでの対応はしていません").queue({}, {})
+            event.hook.sendMessage("*DMでの対応はしていません").queue({}, {})
             return
         }
 
@@ -41,21 +43,25 @@ class SlashCommand : ListenerAdapter() {
                                 permissions.contains(Permission.MESSAGE_HISTORY) &&
                                 permissions.contains(Permission.MESSAGE_EXT_EMOJI))
             ) {
-                event.deferReply().queue()
+                //権限が不足しているメッセージを送信する
                 event.hook.sendMessageEmbeds(SendMessage.errorEmbed).queue()
                 return
             }
         }
 
+
         try {
+            //スラッシュコマンドを実行する
             SlashCommandManager.slashCommands.forEach { slashCommand ->
+                //名前を確認
                 if (slashCommand.name.equalsIgnoreCase(name)) {
+                    //実行
                     slashCommand.run(name, event)
                 }
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             //権限関係が原因の物は排除
-            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                 return
             }
             Log.sendLog(e.stackTraceToString())

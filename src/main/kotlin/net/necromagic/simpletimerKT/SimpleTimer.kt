@@ -7,10 +7,7 @@ import net.dv8tion.jda.api.entities.Activity
 import net.necromagic.simpletimerKT.bcdice.BCDiceManager
 import net.necromagic.simpletimerKT.command.CommandManager
 import net.necromagic.simpletimerKT.command.slash.SlashCommandManager
-import net.necromagic.simpletimerKT.listener.GenericMessageReaction
-import net.necromagic.simpletimerKT.listener.GuildMessageReceived
-import net.necromagic.simpletimerKT.listener.MessageDelete
-import net.necromagic.simpletimerKT.listener.SlashCommand
+import net.necromagic.simpletimerKT.listener.*
 import net.necromagic.simpletimerKT.util.Log
 import java.io.IOException
 import java.net.ServerSocket
@@ -53,6 +50,7 @@ import java.net.URL
 // v1.4.10 tokenを外部ファイル(server_config.yml)にて記述するように変更
 // v1,4,11 シャードを使用するように変更
 // v1.5.0 スラッシュコマンドを一新
+// v1.5.1 一覧機能を実装
 
 /**
  * メインクラス
@@ -74,7 +72,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v1.5.0"
+    val version = "v1.5.1"
 
     //多重起動防止
     private val lockPort = 918
@@ -155,6 +153,7 @@ class SimpleTimer {
         shardBuilder.addEventListeners(GenericMessageReaction())
         shardBuilder.addEventListeners(MessageDelete())
         shardBuilder.addEventListeners(SlashCommand())
+        shardBuilder.addEventListeners(SelectionMenu())
 
         shardBuilder.setStatus(OnlineStatus.ONLINE)
         shardBuilder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "!timerでヘルプ表示"))

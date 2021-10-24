@@ -1,6 +1,7 @@
 package net.necromagic.simpletimerKT
 
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.necromagic.simpletimerKT.ServerConfig.TTSTiming.*
 import net.necromagic.simpletimerKT.util.equalsIgnoreCase
 import org.simpleyaml.configuration.file.YamlConfiguration
@@ -151,6 +152,81 @@ class ServerConfig : YamlConfiguration() {
         return getString("${guild.idLong}.diceBot", "DiceBot")
     }
 
+    /**
+     * タイマー一覧を取得する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @return [MutableMap]<[String],[Int]> タイマーの名前と分のマップ
+     */
+    fun getTimerList(guild: Guild): MutableMap<String, Int> {
+        //文字列のリストを取得
+        val list = getStringList("${guild.idLong}.list") ?: mutableListOf()
+        //結果用のマップ
+        val result = mutableMapOf<String, Int>()
+        list.forEach {
+            //文字列を':'で分割
+            val splitted = it.split(":")
+            //':'の前をは名前、後ろは数値に変換して代入
+            result[splitted[0]] = splitted[1].toInt()
+        }
+        return result
+    }
+
+    /**
+     * 一覧にタイマーを追加する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param name [String] タイマーの名前
+     * @param minutes [Int] 分
+     */
+    fun addTimerList(guild: Guild, name: String, minutes: Int) {
+        val timers = getTimerList(guild)
+        timers[name] = minutes
+        setTimerList(guild, timers)
+    }
+
+    /**
+     * 一覧からタイマーを削除する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param name [String] タイマーの名前
+     */
+    fun removeTimerList(guild: Guild, name: String) {
+        val timers = getTimerList(guild)
+        timers.remove(name)
+        setTimerList(guild, timers)
+    }
+
+    /**
+     * タイマーの一覧を設定する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param timers [MutableMap]<[String],[Int]> タイマーの名前と分のマップ
+     */
+    private fun setTimerList(guild: Guild, timers: MutableMap<String, Int>) {
+        val list = timers.map { "${it.key}:${it.value}" }
+        set("${guild.idLong}.list", list)
+    }
+
+    /**
+     * 一覧からタイマーを実行するチャンネルを設定する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param channel [MessageChannel] 対象のチャンネル
+     */
+    fun setTimerChannel(guild: Guild, channel: MessageChannel) {
+        set("${guild.idLong}.channel", channel.idLong)
+    }
+
+    /**
+     * 一覧からタイマーを実行するチャンネルを取得する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @return [Long] チャンネルのID
+     */
+    fun getTimerChannelID(guild: Guild): Long {
+        return getLong("${guild.idLong}.channel", -1)
+    }
 
     /**
      * ファイルに保存する
