@@ -204,21 +204,41 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
             Log.sendLog(e.stackTraceToString())
         } finally {
             //メッセージのメンションを書き換える
-            val mention = SimpleTimer.instance.config.getMention(channel.guild)
+            val config = SimpleTimer.instance.config
+            val mention = config.getMention(channel.guild)
             val message = "${number.format(string.replace("%mention%", ""))}${
                 if (string.contains("%mention%")) {
                     when (mention) {
+                        //何も書かない
                         ServerConfig.Mention.NONE -> {
                             ""
                         }
+                        //hereのメンション
                         ServerConfig.Mention.HERE -> {
                             "@here"
                         }
+                        //VCへのメンション
                         ServerConfig.Mention.VC -> {
                             val stringBuffer = StringBuffer()
                             val guild = channel.guild
-                            for (voiceChannel in guild.voiceChannels) {
-                                for (member in voiceChannel.members) {
+                            //対象のVCがあるかを確認
+                            val target = config.getVCMentionTarget(guild)
+                            if (target == null){
+                                //すべてのVCを確認
+                                for (voiceChannel in guild.voiceChannels) {
+                                    //メンバーを追加する
+                                    for (member in voiceChannel.members) {
+                                        if (member.user.isBot) {
+                                            continue
+                                        }
+                                        stringBuffer.append("<@")
+                                        stringBuffer.append(member.idLong)
+                                        stringBuffer.append(">")
+                                    }
+                                }
+                            }else {
+                                //メンバーを追加
+                                for (member in target.members) {
                                     if (member.user.isBot) {
                                         continue
                                     }
@@ -228,6 +248,15 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
                                 }
                             }
                             stringBuffer.toString()
+                        }
+                        //ロールへメンション
+                        ServerConfig.Mention.ROLE -> {
+                            val role = config.getRoleMentionTarget(channel.guild)
+                            if (role == null){
+                                "`@不明なロール`"
+                            }else {
+                                "<@&${role.idLong}>"
+                            }
                         }
                     }
                 } else {

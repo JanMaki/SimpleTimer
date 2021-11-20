@@ -2,6 +2,8 @@ package net.necromagic.simpletimerKT
 
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.Role
+import net.dv8tion.jda.api.entities.VoiceChannel
 import net.necromagic.simpletimerKT.ServerConfig.TTSTiming.*
 import net.necromagic.simpletimerKT.util.equalsIgnoreCase
 import org.simpleyaml.configuration.file.YamlConfiguration
@@ -89,6 +91,50 @@ class ServerConfig : YamlConfiguration() {
      */
     fun setMention(guild: Guild, mention: Mention) {
         set("${guild.idLong}.mention", mention.toString())
+    }
+
+    /**
+     * VCメンション時のターゲットを設定する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param target [VoiceChannel] 対象のボイスチャンネル
+     */
+    fun setVCMentionTarget(guild: Guild, target: VoiceChannel?){
+        if (target == null){
+            set("${guild.idLong}.vc_mention", null)
+        }else {
+            set("${guild.idLong}.vc_mention", target.idLong)
+        }
+    }
+
+    /**
+     * Cメンション時のターゲットを取得する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @return [VoiceChannel]? ボイスチャンネルを返す
+     */
+    fun getVCMentionTarget(guild: Guild): VoiceChannel?{
+        return guild.getVoiceChannelById(getLong("${guild.idLong}.vc_mention", 0))
+    }
+
+    /**
+     * メンション時のターゲットを設定する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param target [Role] 対象のロール
+     */
+    fun setRoleMentionTarget(guild: Guild, target: Role){
+        set("${guild.idLong}.role_mention", target.idLong)
+    }
+
+    /**
+     * メンション時のターゲットを取得する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @return [Role]? ロールを返す
+     */
+    fun getRoleMentionTarget(guild: Guild): Role?{
+        return guild.getRoleById(getLong("${guild.idLong}.role_mention", 0))
     }
 
     /**
@@ -250,6 +296,9 @@ class ServerConfig : YamlConfiguration() {
 
         //@hereのメンションを行う
         HERE,
+
+        //ロールにメンションを行う
+        ROLE,
 
         //ボイスチャットにいるメンバーへメンションを行う
         VC;

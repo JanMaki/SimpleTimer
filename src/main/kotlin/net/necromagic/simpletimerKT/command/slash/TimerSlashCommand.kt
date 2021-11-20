@@ -1,5 +1,6 @@
 package net.necromagic.simpletimerKT.command.slash
 
+import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -494,7 +495,10 @@ class TimerSlashCommand {
             setDefaultEnabled(true)
             addSubcommands(
                 SubcommandData("here", "@hereを用いたメンション"),
-                SubcommandData("vc", "ボイスチャットに接続されているメンバー"),
+                SubcommandData("vc", "ボイスチャットに接続されているメンバー")
+                    .addOption(OptionType.CHANNEL, "channel", "メンションを行うボイスチャット（省略可）",false),
+                SubcommandData("role", "ロールにメンションを行う")
+                    .addOption(OptionType.ROLE, "role", "メンションを行うロール"),
                 SubcommandData("off", "メンションを行わない")
             )
         }
@@ -509,11 +513,11 @@ class TimerSlashCommand {
                 return
             }
 
-
             //メンションの方式を取得
             val mention = when (subCommand) {
                 "off" -> ServerConfig.Mention.NONE
                 "here" -> ServerConfig.Mention.HERE
+                "role" -> ServerConfig.Mention.ROLE
                 "vc" -> ServerConfig.Mention.VC
                 else -> {
                     //エラーを出力
@@ -522,9 +526,38 @@ class TimerSlashCommand {
                 }
             }
 
-            //コンフィグへ保存
+            //コンフィグへ設定
             val config = SimpleTimer.instance.config
-            config.setMention(event.guild!!, mention)
+            val guild = event.guild!!
+
+            //VCの時に引数を確認
+            if (mention == ServerConfig.Mention.VC){
+                val option = event.getOption("channel")
+                if (option != null){
+                    val channel = option.asGuildChannel
+                    if(channel is VoiceChannel){
+                        config.setVCMentionTarget(guild, channel)
+                    }else {
+                        event.hook.sendMessage("ボイスチャットではないチャンネルです").queue()
+                        return
+                    }
+                }else {
+                    config.setVCMentionTarget(guild, null)
+                }
+            }
+
+            //Roleの時に引数を確認
+            if (mention == ServerConfig.Mention.ROLE){
+                val option = event.getOption("role")
+                if (option != null){
+                    val role = option.asRole
+                    config.setRoleMentionTarget(guild, role)
+                }
+            }
+
+            //メンションの方式
+            config.setMention(guild, mention)
+
             config.save()
 
             //メッセージを出力

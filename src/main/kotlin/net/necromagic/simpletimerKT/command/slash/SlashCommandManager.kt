@@ -25,8 +25,8 @@ object SlashCommandManager {
             TimerListSlashCommand.List,
             TimerListSlashCommand.ListAdd,
             TimerListSlashCommand.ListRemove,
-            TimerListSlashCommand.TimerChannel)
-        )
+            TimerListSlashCommand.TimerChannel
+        ))
     }
 }
 
