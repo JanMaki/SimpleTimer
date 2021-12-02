@@ -83,6 +83,7 @@ class ServerConfig : YamlConfiguration() {
         return Mention.fromString(getString("${guild.idLong}.mention", "VC"))
     }
 
+
     /**
      * メンションの内容を取得する
      *
@@ -93,19 +94,6 @@ class ServerConfig : YamlConfiguration() {
         set("${guild.idLong}.mention", mention.toString())
     }
 
-    /**
-     * VCメンション時のターゲットを設定する
-     *
-     * @param guild [Guild] 対象のギルド
-     * @param target [VoiceChannel] 対象のボイスチャンネル
-     */
-    fun setVCMentionTarget(guild: Guild, target: VoiceChannel?){
-        if (target == null){
-            set("${guild.idLong}.vc_mention", null)
-        }else {
-            set("${guild.idLong}.vc_mention", target.idLong)
-        }
-    }
 
     /**
      * Cメンション時のターゲットを取得する
@@ -113,29 +101,107 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @return [VoiceChannel]? ボイスチャンネルを返す
      */
-    fun getVCMentionTarget(guild: Guild): VoiceChannel?{
+    private fun getVCMentionTarget(guild: Guild): VoiceChannel?{
         return guild.getVoiceChannelById(getLong("${guild.idLong}.vc_mention", 0))
     }
 
+
     /**
-     * メンション時のターゲットを設定する
+     * メンション時のターゲットのVC一覧を取得する
      *
      * @param guild [Guild] 対象のギルド
-     * @param target [Role] 対象のロール
+     * @return [MutableList]<[VoiceChannel]> ロールの一覧を返す
      */
-    fun setRoleMentionTarget(guild: Guild, target: Role){
-        set("${guild.idLong}.role_mention", target.idLong)
+    fun getVCMentionTargetList(guild: Guild): MutableList<VoiceChannel>{
+        //取得
+        val list = getLongList("${guild.idLong}.vc_mention_list").mapNotNull { guild.getVoiceChannelById(it) }.toMutableList()
+
+        //旧データ
+        val voiceChannel = getVCMentionTarget(guild)
+        if (voiceChannel != null){
+            list.add(voiceChannel)
+        }
+
+        return list
     }
 
     /**
-     * メンション時のターゲットを取得する
+     * メンション時のターゲット一覧にVCを追加する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param voiceChannel [VoiceChannel] 追加するVC
+     */
+    fun addVCMentionTargetList(guild: Guild, voiceChannel: VoiceChannel){
+        val list = getVCMentionTargetList(guild)
+        list.add(voiceChannel)
+        set("${guild.idLong}.vc_mention_list", list.map { it.idLong })
+    }
+
+    /**
+     * メンション時のターゲット一覧からVCを削除する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param voiceChannel [VoiceChannel] 追加するVC
+     */
+    fun removeVCMentionTargetList(guild: Guild, voiceChannel: VoiceChannel){
+        val list = getVCMentionTargetList(guild)
+        list.remove(voiceChannel)
+        set("${guild.idLong}.vc_mention_list", list.map { it.idLong })
+    }
+
+
+    /**
+     * メンション時のターゲットのロールを取得する
      *
      * @param guild [Guild] 対象のギルド
      * @return [Role]? ロールを返す
      */
-    fun getRoleMentionTarget(guild: Guild): Role?{
+    private fun getRoleMentionTarget(guild: Guild): Role?{
         return guild.getRoleById(getLong("${guild.idLong}.role_mention", 0))
     }
+
+    /**
+     * メンション時のターゲットのロール一覧を取得する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @return [MutableList]<[Role]> ロールの一覧を返す
+     */
+    fun getRoleMentionTargetList(guild: Guild): MutableList<Role>{
+        val list = getLongList("${guild.idLong}.role_mention_list").mapNotNull { guild.getRoleById(it) }.toMutableList()
+
+        //旧データ
+        val role = getRoleMentionTarget(guild)
+        if (role != null){
+            list.add(role)
+        }
+
+        return list
+    }
+
+    /**
+     * メンション時のターゲット一覧にロールを追加する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param role [Role] 追加するロール
+     */
+    fun addRoleMentionTargetList(guild: Guild, role: Role){
+        val list = getRoleMentionTargetList(guild)
+        list.add(role)
+        set("${guild.idLong}.role_mention_list", list.map { it.idLong })
+    }
+
+    /**
+     * メンション時のターゲット一覧からロールを削除する
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param role [Role] 追加するロール
+     */
+    fun removeRoleMentionTargetList(guild: Guild, role: Role){
+        val list = getRoleMentionTargetList(guild)
+        list.remove(role)
+        set("${guild.idLong}.role_mention_list", list.map { it.idLong })
+    }
+
 
     /**
      * コマンドの頭を取得する
@@ -299,6 +365,9 @@ class ServerConfig : YamlConfiguration() {
 
         //ロールにメンションを行う
         ROLE,
+
+        //特定のVCにいるメンバーにメンションを行う
+        TARGET_VC,
 
         //ボイスチャットにいるメンバーへメンションを行う
         VC;

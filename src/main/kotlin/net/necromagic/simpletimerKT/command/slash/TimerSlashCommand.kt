@@ -39,7 +39,7 @@ class TimerSlashCommand {
             val minutes = option.asLong
 
             //チャンネルを取得
-            val channel = event.textChannel
+            val channel = event.channel
 
             //チャンネルのタイマーを取得する
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
@@ -49,7 +49,7 @@ class TimerSlashCommand {
                 //その番号のタイマーが動いているかを確認
                 if (!channelTimers.containsKey(number)) {
                     //タイマーを開始
-                    val timer = Timer(channel, number, minutes.toInt())
+                    val timer = Timer(channel, number, minutes.toInt(), event.guild!!)
 
                     //タイマーのインスタンスを代入する
                     channelTimers[number] = timer
@@ -101,7 +101,7 @@ class TimerSlashCommand {
             val number = Timer.Number.getNumber(i)
 
             //チャンネルを取得
-            val channel = event.textChannel
+            val channel = event.channel
 
             //チャンネルのタイマーを取得
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
@@ -139,7 +139,7 @@ class TimerSlashCommand {
         override fun run(command: String, event: SlashCommandEvent) {
 
             //チャンネルを取得
-            val channel = event.textChannel
+            val channel = event.channel
 
             //チャンネルのタイマーを取得
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
@@ -196,7 +196,7 @@ class TimerSlashCommand {
             val i = timerOption.asLong.toInt()
 
             //チャンネルを取得
-            val channel = event.textChannel
+            val channel = event.channel
 
             //チャンネルのタイマーを取得
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
@@ -256,7 +256,7 @@ class TimerSlashCommand {
             val i = option.asLong.toInt()
 
             //チャンネルを取得
-            val channel = event.textChannel
+            val channel = event.channel
 
             //チャンネルのタイマーを取得
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
@@ -317,7 +317,7 @@ class TimerSlashCommand {
 
 
             //チャンネルを取得
-            val channel = event.textChannel
+            val channel = event.channel
 
             //チャンネルのタイマーを取得
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
@@ -378,7 +378,7 @@ class TimerSlashCommand {
             val i = timerOption.asLong.toInt()
 
             //チャンネルを取得
-            val channel = event.textChannel
+            val channel = event.channel
 
             //チャンネルのタイマーを取得
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
@@ -495,10 +495,9 @@ class TimerSlashCommand {
             setDefaultEnabled(true)
             addSubcommands(
                 SubcommandData("here", "@hereを用いたメンション"),
-                SubcommandData("vc", "ボイスチャットに接続されているメンバー")
-                    .addOption(OptionType.CHANNEL, "channel", "メンションを行うボイスチャット（省略可）",false),
-                SubcommandData("role", "ロールにメンションを行う")
-                    .addOption(OptionType.ROLE, "role", "メンションを行うロール"),
+                SubcommandData("vc", "ボイスチャットに接続されているメンバー"),
+                SubcommandData("role", "特定のロールにメンション"),
+                SubcommandData("target_vc","特定のボイスチャットに接続されているメンバー"),
                 SubcommandData("off", "メンションを行わない")
             )
         }
@@ -519,6 +518,7 @@ class TimerSlashCommand {
                 "here" -> ServerConfig.Mention.HERE
                 "role" -> ServerConfig.Mention.ROLE
                 "vc" -> ServerConfig.Mention.VC
+                "target_vc" -> ServerConfig.Mention.TARGET_VC
                 else -> {
                     //エラーを出力
                     replyCommandError(event)
@@ -530,31 +530,6 @@ class TimerSlashCommand {
             val config = SimpleTimer.instance.config
             val guild = event.guild!!
 
-            //VCの時に引数を確認
-            if (mention == ServerConfig.Mention.VC){
-                val option = event.getOption("channel")
-                if (option != null){
-                    val channel = option.asGuildChannel
-                    if(channel is VoiceChannel){
-                        config.setVCMentionTarget(guild, channel)
-                    }else {
-                        event.hook.sendMessage("ボイスチャットではないチャンネルです").queue()
-                        return
-                    }
-                }else {
-                    config.setVCMentionTarget(guild, null)
-                }
-            }
-
-            //Roleの時に引数を確認
-            if (mention == ServerConfig.Mention.ROLE){
-                val option = event.getOption("role")
-                if (option != null){
-                    val role = option.asRole
-                    config.setRoleMentionTarget(guild, role)
-                }
-            }
-
             //メンションの方式
             config.setMention(guild, mention)
 
@@ -562,6 +537,189 @@ class TimerSlashCommand {
 
             //メッセージを出力
             event.hook.sendMessage("メンションの設定を${mention}にしました").queue()
+
+            //追加を促す
+            val appendMessageBuffer = StringBuffer()
+            if (mention == ServerConfig.Mention.ROLE){
+                val list = config.getRoleMentionTargetList(guild)
+                if (list.isNotEmpty()){
+                    appendMessageBuffer.append("メンションを行う対象のロールは${list.joinToString{ "`${it.name}`" }}です。")
+                }else {
+                    appendMessageBuffer.append("メンションを行う対象のロールが設定されていません。")
+                }
+                appendMessageBuffer.append("\n対象のロールは、`/mention_addrole`で追加できます。")
+            }
+            if (mention == ServerConfig.Mention.TARGET_VC){
+                val list = config.getVCMentionTargetList(guild)
+                if (list.isNotEmpty()){
+                    appendMessageBuffer.append("メンションを行う対象のボイスチャンネルは${list.joinToString{ "`${it.name}`" }}です。")
+                }else {
+                    appendMessageBuffer.append("メンションを行う対象のボイスチャンネルが設定されていません。")
+                }
+                appendMessageBuffer.append("\n対象のボイスチャンネルは、`/mention_addvc`で追加できます。")
+            }
+            val appendMessage = appendMessageBuffer.toString()
+            if (appendMessage != ""){
+                event.hook.sendMessage(appendMessage).queue()
+            }
+        }
+    }
+
+    object ShowRoleMentionTarget : SlashCommand("mention_role", "メンションを行う対象のロールを確認する"){
+        init {
+            setDefaultEnabled(true)
+        }
+
+        override fun run(command: String, event: SlashCommandEvent) {
+            val config = SimpleTimer.instance.config
+            val guild = event.guild!!
+
+            val list = config.getVCMentionTargetList(guild)
+            event.hook.sendMessage("""
+                メンションを行う対象のロールは${list.joinToString{ "`${it.name}`" }}です。
+                対象のロールは、`/mention_addrole`で追加できます。
+            """.trimIndent())
+        }
+    }
+
+    object AddRoleMentionTarget : SlashCommand("mention_addrole", "メンションを行う対象のロールを追加する") {
+        init {
+            setDefaultEnabled(true)
+            addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
+        }
+
+        override fun run(command: String, event: SlashCommandEvent) {
+            //オプションを取得
+            val option = event.getOption("role")
+
+            //nullチェック
+            if (option == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //ロール名を取得
+            val role = option.asRole
+
+            //コンフィグへ追加
+            val config = SimpleTimer.instance.config
+            config.addRoleMentionTargetList(event.guild!!, role)
+            config.save()
+
+            //メッセージを出力
+            event.hook.sendMessage("${role.name}をメンション対象に追加しました").queue()
+        }
+    }
+
+    object RemoveRoleMentionTarget : SlashCommand("mention_removerole", "メンションを行う対象のロールを追加する") {
+        init {
+            setDefaultEnabled(true)
+            addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
+        }
+
+        override fun run(command: String, event: SlashCommandEvent) {
+            //オプションを取得
+            val option = event.getOption("role")
+
+            //nullチェック
+            if (option == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //ロール名を取得
+            val role = option.asRole
+
+            //コンフィグへ追加
+            val config = SimpleTimer.instance.config
+            config.removeRoleMentionTargetList(event.guild!!, role)
+            config.save()
+
+            //メッセージを出力
+            event.hook.sendMessage("${role.name}をメンション対象から削除しました").queue()
+        }
+    }
+
+    object ShowVCMentionTarget : SlashCommand("mention_vc", "メンションを行う対象のボイスチャットを確認する"){
+        init {
+            setDefaultEnabled(true)
+        }
+
+        override fun run(command: String, event: SlashCommandEvent) {
+            val config = SimpleTimer.instance.config
+            val guild = event.guild!!
+
+            val list = config.getVCMentionTargetList(guild)
+            event.hook.sendMessage("""
+                メンションを行う対象のボイスチャンネルは${list.joinToString{ "`${it.name}`" }}です。
+                対象のチャンネルは、`/mention_addvc`で追加できます。
+            """.trimIndent())
+        }
+    }
+
+    object AddVCMentionTarget : SlashCommand("mention_addvc", "メンションを行う対象のボイスチャットを追加する") {
+        init {
+            setDefaultEnabled(true)
+            addOptions(OptionData(OptionType.CHANNEL, "channel", "追加するボイスチャット").setRequired(true))
+        }
+
+        override fun run(command: String, event: SlashCommandEvent) {
+            //オプションを取得
+            val option = event.getOption("channel")
+
+            //nullチェック
+            if (option == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //ロール名を取得
+            val channel = option.asGuildChannel
+            if(channel !is VoiceChannel){
+                event.hook.sendMessage("ボイスチャットではないチャンネルです").queue()
+                return
+            }
+
+            //コンフィグへ追加
+            val config = SimpleTimer.instance.config
+            config.addVCMentionTargetList(event.guild!!, channel)
+            config.save()
+
+            //メッセージを出力
+            event.hook.sendMessage("${channel.name}をメンション対象に追加しました").queue()
+        }
+    }
+
+    object RemoveVCMentionTarget : SlashCommand("mention_removevc", "メンションを行う対象のボイスチャットを削除する") {
+        init {
+            setDefaultEnabled(true)
+            addOptions(OptionData(OptionType.CHANNEL, "channel", "削除するボイスチャット").setRequired(true))
+        }
+
+        override fun run(command: String, event: SlashCommandEvent) {
+            //オプションを取得
+            val option = event.getOption("channel")
+
+            //nullチェック
+            if (option == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //ロール名を取得
+            val channel = option.asGuildChannel
+            if(channel !is VoiceChannel){
+                event.hook.sendMessage("ボイスチャットではないチャンネルです").queue()
+                return
+            }
+
+            //コンフィグへ追加
+            val config = SimpleTimer.instance.config
+            config.removeVCMentionTargetList(event.guild!!, channel)
+            config.save()
+
+            //メッセージを出力
+            event.hook.sendMessage("${channel.name}をメンション対象から削除しました").queue()
         }
     }
 }

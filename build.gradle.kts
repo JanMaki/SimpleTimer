@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "net.necromagic.simpletimerKT"
-version = "1.5.1"
+version = "1.5.4"
 
 repositories {
     mavenCentral()
@@ -19,8 +19,8 @@ dependencies {
 
     implementation(kotlin("stdlib", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
 
-    //implementation("net.dv8tion", "JDA", "4.3.0_277")
-    implementation(files("libs/JDA-4.3.0_DEV-withDependencies.jar"))
+    implementation("net.dv8tion", "JDA", "5.0.0-alpha.1")
+    //implementation(files("libs/JDA-4.3.0_DEV-withDependencies.jar"))
 
     implementation("me.carleslc.Simple-YAML", "Simple-Yaml", "1.7.2")
 

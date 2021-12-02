@@ -1,10 +1,7 @@
 package net.necromagic.simpletimerKT.util
 
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.TextChannel
-import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.necromagic.simpletimerKT.SimpleTimer
@@ -27,17 +24,17 @@ class SendMessage {
 
 
         //過去に送信したメッセージを記録
-        private val channelsMessageMap = TreeMap<TextChannel, Message>()
+        private val channelsMessageMap = TreeMap<MessageChannel, Message>()
 
         /**
          * メッセージをチャンネルに送信します
          * 過去にこのメソッドからメッセージを送っていた場合、過去のメッセージを削除します。
          *
-         * @param channel [TextChannel] 該当のチャンネル
+         * @param channel [MessageChannel] 該当のチャンネル
          * @param string [String] 送信する文字列
          * @param user [User] 送信が失敗したときにエラーを送るユーザー
          */
-        fun sendMessage(channel: TextChannel, string: String, user: User) {
+        fun sendMessage(channel: MessageChannel, string: String, user: User) {
             try {
                 if (channelsMessageMap.containsKey(channel)) {
                     channelsMessageMap[channel]?.delete()?.complete()

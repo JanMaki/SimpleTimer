@@ -1,7 +1,6 @@
 package net.necromagic.simpletimerKT.command
 
 import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.necromagic.simpletimerKT.*
@@ -26,15 +25,14 @@ class CommandManager {
     /**
      * コマンドを実行する
      * @param user [User] 実行したユーザー
-     * @param channel [TextChannel] 実行したチャンネル
      * @param args [List] 内容
      * @param message [Message] 返信を行うクラス。
      */
-    fun run(user: User, channel: TextChannel, args: List<String>, message: Message) {
+    fun run(user: User, args: List<String>, message: Message) {
 
         val command = args[0]
 
-        val prefix = SimpleTimer.instance.config.getPrefix(channel.guild)
+        val prefix = SimpleTimer.instance.config.getPrefix(message.guild)
 
         var result = false
 
@@ -42,7 +40,7 @@ class CommandManager {
         commands.forEach {
             if (it is RunCommand) {
                 if ("${prefix}${it.name}".equalsIgnoreCase(command) || "!!${it.name}".equalsIgnoreCase(command)) {
-                    it.runCommand(user, channel, args, message)
+                    it.runCommand(user, args, message)
                     result = true
                 }
             }
@@ -63,7 +61,7 @@ class CommandManager {
                 Executors.newSingleThreadExecutor().submit {
 
                     //ダイスモードの確認
-                    when (SimpleTimer.instance.config.getDiceMode(channel.guild)) {
+                    when (SimpleTimer.instance.config.getDiceMode(message.guild)) {
                         //SimpleTimerで実装されているタイマー
                         ServerConfig.DiceMode.Default -> {
                             //シークレットダイスの確認
@@ -107,7 +105,7 @@ class CommandManager {
 
                         //BCDice
                         ServerConfig.DiceMode.BCDice -> {
-                            val roll = BCDiceManager.instance.roll(channel, args[0].replace(prefix, "").lowercase())
+                            val roll = BCDiceManager.instance.roll(message.guild, args[0].replace(prefix, "").lowercase())
                                 ?: return@submit
                             message.reply(roll).queue()
                         }

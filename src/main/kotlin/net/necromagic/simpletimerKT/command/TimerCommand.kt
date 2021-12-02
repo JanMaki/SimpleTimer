@@ -3,7 +3,6 @@ package net.necromagic.simpletimerKT.command
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -31,13 +30,12 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
     /**
      * コマンドを実行する
      * @param user [User] 実行したユーザー
-     * @param channel [TextChannel] 実行したチャンネル
      * @param args [List] 内容
      * @param message [Message] 返信を行うクラス。
      */
-    override fun runCommand(user: User, channel: TextChannel, args: List<String>, message: Message) {
-        val prefix = SimpleTimer.instance.config.getPrefix(channel.guild)
-
+    override fun runCommand(user: User, args: List<String>, message: Message) {
+        val prefix = SimpleTimer.instance.config.getPrefix(message.guild)
+        val channel = message.channel
         //labelの確認・ヘルプの表示
         if (args.size < 2) {
             try {
@@ -186,7 +184,7 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
             if (mes.length > 40) {
                 SendMessage.sendMessage(channel, "終了時のTTSメッセージは50文字以下にしてください", user)
             }
-            SimpleTimer.instance.config.setFinishTTS(channel.guild, mes)
+            SimpleTimer.instance.config.setFinishTTS(message.guild, mes)
             SimpleTimer.instance.config.save()
             SendMessage.sendMessage(channel, "終了時のTTSメッセージを変更しました", user)
         } else if (label.equalsIgnoreCase("tts")) {
@@ -200,7 +198,7 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
                 args[2].equalsIgnoreCase("LV3") -> ServerConfig.TTSTiming.LV3
                 else -> ServerConfig.TTSTiming.LV0
             }
-            SimpleTimer.instance.config.setTTS(channel.guild, timing)
+            SimpleTimer.instance.config.setTTS(message.guild, timing)
             SendMessage.sendMessage(channel, "チャットの読み上げを${timing}にしました", user)
             SimpleTimer.instance.config.save()
         } else if (label.equalsIgnoreCase("mention")) {
@@ -217,7 +215,7 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
                     return
                 }
             }
-            SimpleTimer.instance.config.setMention(channel.guild, mention)
+            SimpleTimer.instance.config.setMention(message.guild, mention)
             SendMessage.sendMessage(channel, "メンションの設定を${mention}にしました", user)
             SimpleTimer.instance.config.save()
         } else if (label.equalsIgnoreCase("prefix")) {
@@ -234,7 +232,7 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
                 SendMessage.sendMessage(channel, "Prefixは５文字以下にしてください", user)
                 return
             }
-            SimpleTimer.instance.config.setPrefix(channel.guild, newPrefix)
+            SimpleTimer.instance.config.setPrefix(message.guild, newPrefix)
             if (args.size < 3) {
                 SendMessage.sendMessage(channel, "Prefixをリセットしました", user)
             } else {
@@ -244,7 +242,7 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
         } else if (label.equalsIgnoreCase("count")) {
             SendMessage.sendMessage(channel, "${Timer.getCount()}個のタイマーが稼働しています", user)
         } else if (label.equalsIgnoreCase("log")) {
-            SimpleTimer.instance.config.set("LoggingServer.${channel.guild.id}", channel.id)
+            SimpleTimer.instance.config.set("LoggingServer.${message.guild.id}", channel.id)
             SimpleTimer.instance.config.save()
             channel.sendMessage("設定を行いました").queue({}, {})
         } else {
@@ -261,7 +259,7 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
             }
             for (number in Timer.Number.values()) {
                 if (!channelTimers.containsKey(number)) {
-                    val timer = Timer(channel, number, i)
+                    val timer = Timer(channel, number, i, message.guild)
                     channelTimers[number] = timer
                     Timer.channelsTimersMap[channel] = channelTimers
                     return

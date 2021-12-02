@@ -33,7 +33,7 @@ class SlashCommand : ListenerAdapter() {
         }
 
         //権限を確認
-        val permissions = event.guild!!.selfMember.getPermissions(event.textChannel)
+        val permissions = event.guild!!.selfMember.getPermissions(event.guildChannel)
         if (!permissions.contains(Permission.ADMINISTRATOR)) {
             if (!(
                         permissions.contains(Permission.VIEW_CHANNEL) &&

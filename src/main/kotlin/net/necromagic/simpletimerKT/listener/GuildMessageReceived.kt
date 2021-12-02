@@ -1,6 +1,6 @@
 package net.necromagic.simpletimerKT.listener
 
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimerKT.*
 
@@ -13,13 +13,9 @@ class GuildMessageReceived : ListenerAdapter() {
     /**
      * Guildからメッセージを受信した時に呼び出される
      *
-     * @param event [GuildMessageReceivedEvent] イベント
+     * @param event [MessageReceivedEvent] イベント
      */
-    override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        super.onGuildMessageReceived(event)
-
-        //チャンネルごとの初期値を設定・取得
-        val channel = event.channel
+    override fun onMessageReceived(event: MessageReceivedEvent) {
 
         // メッセージを取得
         val message = event.message
@@ -40,7 +36,6 @@ class GuildMessageReceived : ListenerAdapter() {
         //stringからargsの生成
         val args = messageValue.split(" ")
 
-        SimpleTimer.instance.commandManager.run(user, channel, args, message)
+        SimpleTimer.instance.commandManager.run(user, args, message)
     }
-
 }

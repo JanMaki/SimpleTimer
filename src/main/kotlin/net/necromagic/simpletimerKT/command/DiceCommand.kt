@@ -3,7 +3,6 @@ package net.necromagic.simpletimerKT.command
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.necromagic.simpletimerKT.Dice
@@ -22,17 +21,17 @@ class DiceCommand : CommandData("dice", "ダイスの設定を変更します。
     /**
      * コマンドを実行する
      * @param user [User] 実行したユーザー
-     * @param channel [TextChannel] 実行したチャンネル
      * @param args [List] 内容
      * @param message [Message] 返信を行うクラス。
      */
-    override fun runCommand(user: User, channel: TextChannel, args: List<String>, message: Message) {
-        val prefix = SimpleTimer.instance.config.getPrefix(channel.guild)
+    override fun runCommand(user: User, args: List<String>, message: Message) {
+        val prefix = SimpleTimer.instance.config.getPrefix(message.guild)
+        val messageChannel = message.channel
         if (args.size >= 2) {
             when {
                 args[1].equalsIgnoreCase("mode") -> {
                     //ダイスモードを反転
-                    val diceMode = when (SimpleTimer.instance.config.getDiceMode(channel.guild)) {
+                    val diceMode = when (SimpleTimer.instance.config.getDiceMode(message.guild)) {
                         ServerConfig.DiceMode.Default -> {
                             ServerConfig.DiceMode.BCDice
                         }
@@ -40,34 +39,34 @@ class DiceCommand : CommandData("dice", "ダイスの設定を変更します。
                             ServerConfig.DiceMode.Default
                         }
                     }
-                    sendMessage(channel, "ダイスモードを**$diceMode**に変更しました", user)
+                    sendMessage(message.channel, "ダイスモードを**$diceMode**に変更しました", user)
                     //コンフィグへ保存
                     val config = SimpleTimer.instance.config
-                    config.setDiceMode(guild = channel.guild, diceMode)
+                    config.setDiceMode(guild = message.guild, diceMode)
                     config.save()
                     return
                 }
                 args[1].equalsIgnoreCase("bot") -> {
-                    BCDiceManager.instance.openSelectDiceBotView(channel)
+                    BCDiceManager.instance.openSelectDiceBotView(message.channel)
                     return
                 }
                 args[1].equalsIgnoreCase("info") -> {
-                    when (SimpleTimer.instance.config.getDiceMode(channel.guild)) {
+                    when (SimpleTimer.instance.config.getDiceMode(message.guild)) {
                         ServerConfig.DiceMode.Default -> {
-                            channel.sendMessageEmbeds(Dice.getInfoEmbed(channel)).queue()
+                            messageChannel.sendMessageEmbeds(Dice.getInfoEmbed(message.guild)).queue()
                         }
                         ServerConfig.DiceMode.BCDice -> {
-                            channel.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel)).queue()
+                            messageChannel.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(messageChannel, message.guild)).queue()
                         }
                     }
                     return
                 }
                 else -> {
-                    channel.sendMessageEmbeds(createDiceHelpEmbedBuilder(prefix)).queue()
+                    messageChannel.sendMessageEmbeds(createDiceHelpEmbedBuilder(prefix)).queue()
                 }
             }
         } else {
-            channel.sendMessageEmbeds(createDiceHelpEmbedBuilder(prefix)).queue()
+            messageChannel.sendMessageEmbeds(createDiceHelpEmbedBuilder(prefix)).queue()
         }
         return
     }

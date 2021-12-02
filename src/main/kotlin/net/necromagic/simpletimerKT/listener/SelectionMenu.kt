@@ -1,5 +1,6 @@
 package net.necromagic.simpletimerKT.listener
 
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimerKT.SimpleTimer
@@ -36,12 +37,14 @@ class SelectionMenu : ListenerAdapter() {
 
 
             //コンフィグからチャンネルのIDを取得
-            var long = SimpleTimer.instance.config.getTimerChannelID(event.guild!!)
-            //設定されていなかったら、実行されたチャンネルのIDを対象にする
-            if (long < 0) long = event.channel.idLong
+            val long = SimpleTimer.instance.config.getTimerChannelID(event.guild!!)
 
             //チャンネルを取得
-            val channel = guild.getTextChannelById(long) ?: return
+            var channel: MessageChannel? = guild.getTextChannelById(long)
+
+            if (channel == null){
+                channel = event.channel
+            }
 
             //チャンネルのタイマーを取得する
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
@@ -51,7 +54,7 @@ class SelectionMenu : ListenerAdapter() {
                 //その番号のタイマーが動いているかを確認
                 if (!channelTimers.containsKey(number)) {
                     //タイマーを開始
-                    val timer = Timer(channel, number, minutes)
+                    val timer = Timer(channel, number, minutes, event.guild!!)
 
                     //タイマーのインスタンスを代入する
                     channelTimers[number] = timer

@@ -59,24 +59,25 @@ class GenericMessageReaction : ListenerAdapter() {
         else if (BCDiceManager.instance.isSelectDiceBotView(idLong)) {
 
             val bcdice = BCDiceManager.instance
-            val textChannel = event.textChannel
+            val channel = event.channel
+            val guild = event.guild
 
             //リアクションの確認・処理
             when (event.reactionEmote.name) {
                 //ページ移動
-                "⬅️" -> bcdice.backSelectDiceBotView(textChannel)
-                "➡️" -> bcdice.nextSelectDiceBotView(textChannel)
+                "⬅️" -> bcdice.backSelectDiceBotView(channel)
+                "➡️" -> bcdice.nextSelectDiceBotView(channel)
                 //選択
-                "1️⃣" -> bcdice.select(textChannel, 1)
-                "2️⃣" -> bcdice.select(textChannel, 2)
-                "3️⃣" -> bcdice.select(textChannel, 3)
-                "4️⃣" -> bcdice.select(textChannel, 4)
-                "5️⃣" -> bcdice.select(textChannel, 5)
-                "6️⃣" -> bcdice.select(textChannel, 6)
-                "7️⃣" -> bcdice.select(textChannel, 7)
-                "8️⃣" -> bcdice.select(textChannel, 8)
-                "9️⃣" -> bcdice.select(textChannel, 9)
-                "❓" -> textChannel.sendMessageEmbeds(bcdice.getInfoEmbed(textChannel)).queue()
+                "1️⃣" -> bcdice.select(channel, 1, guild)
+                "2️⃣" -> bcdice.select(channel, 2, guild)
+                "3️⃣" -> bcdice.select(channel, 3, guild)
+                "4️⃣" -> bcdice.select(channel, 4, guild)
+                "5️⃣" -> bcdice.select(channel, 5, guild)
+                "6️⃣" -> bcdice.select(channel, 6, guild)
+                "7️⃣" -> bcdice.select(channel, 7, guild)
+                "8️⃣" -> bcdice.select(channel, 8, guild)
+                "9️⃣" -> bcdice.select(channel, 9, guild)
+                "❓" -> channel.sendMessageEmbeds(bcdice.getInfoEmbed(channel, guild)).queue()
                 else -> return
             }
 

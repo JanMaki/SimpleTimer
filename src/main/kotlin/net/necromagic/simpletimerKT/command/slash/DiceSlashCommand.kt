@@ -84,17 +84,19 @@ class DiceSlashCommand {
                 //BCDiceのダイス
                 ServerConfig.DiceMode.BCDice -> {
                     //コマンドを実行
-                    val roll = BCDiceManager.instance.roll(event.textChannel, diceCommand.lowercase())
+                    val guild = event.guild
+                    if (guild != null){  val roll = BCDiceManager.instance.roll(guild, diceCommand.lowercase())
 
-                    //結果の確認
-                    if (roll == null) {
-                        //構文が間違ってたらメッセージを出す
-                        event.hook.sendMessage("*ダイスの構文が間違っています").queue()
-                        return
+                        //結果の確認
+                        if (roll == null) {
+                            //構文が間違ってたらメッセージを出す
+                            event.hook.sendMessage("*ダイスの構文が間違っています").queue()
+                            return
+                        }
+
+                        //結果を出力する
+                        event.hook.sendMessage(roll).queue()
                     }
-
-                    //結果を出力する
-                    event.hook.sendMessage(roll).queue()
                 }
             }
         }
@@ -138,17 +140,20 @@ class DiceSlashCommand {
     object DiceInfo : SlashCommand("diceinfo", "ダイスの使い方を表示する") {
         override fun run(command: String, event: SlashCommandEvent) {
             //チャンネルを取得
-            val channel = event.textChannel
+            val channel = event.channel
+
+            //ギルドを取得
+            val guild = event.guild ?: return
 
             //ダイスモードを取得
-            when (SimpleTimer.instance.config.getDiceMode(event.guild!!)) {
+            when (SimpleTimer.instance.config.getDiceMode(guild)) {
                 ServerConfig.DiceMode.Default -> {
                     //標準ダイスのヘルプを取得して出力
-                    event.hook.sendMessageEmbeds(Dice.getInfoEmbed(channel)).queue()
+                    event.hook.sendMessageEmbeds(Dice.getInfoEmbed(guild)).queue()
                 }
                 ServerConfig.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
-                    event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel)).queue()
+                    event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild)).queue()
                 }
             }
         }
@@ -163,7 +168,7 @@ class DiceSlashCommand {
             event.hook.sendMessage("メニューよりボットを選択してください").complete()
 
             //ダイスボットを変更する画面を出す
-            BCDiceManager.instance.openSelectDiceBotView(event.textChannel)
+            BCDiceManager.instance.openSelectDiceBotView(event.channel)
         }
     }
 
@@ -191,7 +196,7 @@ class DiceSlashCommand {
                 //BCDiceのダイス
                 ServerConfig.DiceMode.BCDice -> {
                     //コマンドを実行
-                    val roll = BCDiceManager.instance.roll(event.textChannel, "1d100") ?: return
+                    val roll = BCDiceManager.instance.roll(event.guild!!, "1d100") ?: return
 
                     //結果を出力する
                     event.hook.sendMessage(roll).queue()
@@ -224,7 +229,7 @@ class DiceSlashCommand {
                 //BCDiceのダイス
                 ServerConfig.DiceMode.BCDice -> {
                     //コマンドを実行
-                    val roll = BCDiceManager.instance.roll(event.textChannel, "s1d100") ?: return
+                    val roll = BCDiceManager.instance.roll(event.guild!!, "s1d100") ?: return
 
                     //結果を出力する
                     event.hook.sendMessage(roll).queue()

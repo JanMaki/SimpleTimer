@@ -1,8 +1,9 @@
 package net.necromagic.simpletimerKT
 
 import net.dv8tion.jda.api.MessageBuilder
+import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.necromagic.simpletimerKT.util.Log
 import java.util.*
@@ -12,14 +13,14 @@ import kotlin.math.abs
 /**
  * 各タイマーのインスタンス用クラス
  *
- * @property channel [TextChannel] タイマーを動かすテキストチャンネル
+ * @property channel [MessageChannel] タイマーを動かすテキストチャンネル
  * @property number [Number] タイマーの番号
  * @property seconds [Int] 分数
  */
-class Timer(val channel: TextChannel, private val number: Number, private var seconds: Int) {
+class Timer(val channel: MessageChannel, private val number: Number, private var seconds: Int, private val guild: Guild) {
     companion object {
         //チャンネルとタイマーのマップ
-        val channelsTimersMap = HashMap<TextChannel, EnumMap<Number, Timer>>()
+        val channelsTimersMap = HashMap<MessageChannel, EnumMap<Number, Timer>>()
 
         private val displays = TreeMap<Long, Timer>()
         private val timers = TreeMap<Long, Timer>()
@@ -205,7 +206,7 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
         } finally {
             //メッセージのメンションを書き換える
             val config = SimpleTimer.instance.config
-            val mention = config.getMention(channel.guild)
+            val mention = config.getMention(guild)
             val message = "${number.format(string.replace("%mention%", ""))}${
                 if (string.contains("%mention%")) {
                     when (mention) {
@@ -220,25 +221,11 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
                         //VCへのメンション
                         ServerConfig.Mention.VC -> {
                             val stringBuffer = StringBuffer()
-                            val guild = channel.guild
-                            //対象のVCがあるかを確認
-                            val target = config.getVCMentionTarget(guild)
-                            if (target == null){
-                                //すべてのVCを確認
-                                for (voiceChannel in guild.voiceChannels) {
-                                    //メンバーを追加する
-                                    for (member in voiceChannel.members) {
-                                        if (member.user.isBot) {
-                                            continue
-                                        }
-                                        stringBuffer.append("<@")
-                                        stringBuffer.append(member.idLong)
-                                        stringBuffer.append(">")
-                                    }
-                                }
-                            }else {
-                                //メンバーを追加
-                                for (member in target.members) {
+                            val guild = guild
+                            //すべてのVCを確認
+                            for (voiceChannel in guild.voiceChannels) {
+                                //メンバーを追加する
+                                for (member in voiceChannel.members) {
                                     if (member.user.isBot) {
                                         continue
                                     }
@@ -251,12 +238,26 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
                         }
                         //ロールへメンション
                         ServerConfig.Mention.ROLE -> {
-                            val role = config.getRoleMentionTarget(channel.guild)
-                            if (role == null){
-                                "`@不明なロール`"
-                            }else {
-                                "<@&${role.idLong}>"
+                            config.getRoleMentionTargetList(guild).map { "<@&" + it.idLong + ">" }.joinToString { "" }
+                        }
+                        //対象のVCへのメンション
+                        ServerConfig.Mention.TARGET_VC ->{
+                            val stringBuffer = StringBuffer()
+                            val guild = guild
+                            //対象のVCがあるかを確認
+                            //すべてのVCを確認
+                            for (voiceChannel in config.getVCMentionTargetList(guild)) {
+                                //メンバーを追加する
+                                for (member in voiceChannel.members) {
+                                    if (member.user.isBot) {
+                                        continue
+                                    }
+                                    stringBuffer.append("<@")
+                                    stringBuffer.append(member.idLong)
+                                    stringBuffer.append(">")
+                                }
                             }
+                            stringBuffer.toString()
                         }
                     }
                 } else {
@@ -285,7 +286,7 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
     private fun sendTTS(sting: String, timing: ServerConfig.TTSTiming) {
         //サーバーの設定の確認
         val config = SimpleTimer.instance.config
-        if (config.checkTTS(channel.guild, timing)) {
+        if (config.checkTTS(guild, timing)) {
 
             //メッセージを作成
             val messageBuilder = MessageBuilder("、${sting.replace("%mention%", "")}")
@@ -387,7 +388,7 @@ class Timer(val channel: TextChannel, private val number: Number, private var se
         //メッセージを送信
         sendMessage("タイマーが終了しました%mention%")
         sendTTS(
-            SimpleTimer.instance.config.getTTS(channel.guild).replace("x", number.number.toString()),
+            SimpleTimer.instance.config.getTTS(guild).replace("x", number.number.toString()),
             ServerConfig.TTSTiming.LV1
         )
 

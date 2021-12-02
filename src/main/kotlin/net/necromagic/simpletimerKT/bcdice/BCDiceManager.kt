@@ -4,9 +4,7 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import kotlinx.serialization.json.Json
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.necromagic.simpletimerKT.*
 import net.necromagic.simpletimerKT.bcdice.dataclass.*
@@ -87,17 +85,17 @@ class BCDiceManager {
     }
 
     //チャンネルに送ってるViewのマップ
-    private val channelViews = HashMap<TextChannel, Message>()
+    private val channelViews = HashMap<MessageChannel, Message>()
 
     //チャンネルに送ってるViewの開いているページ
-    private val channelViewsPage = HashMap<TextChannel, Int>()
+    private val channelViewsPage = HashMap<MessageChannel, Int>()
 
     /**
      * ダイス選択画面を送る
      *
-     * @param channel [TextChannel] 対象のチャンネル
+     * @param channel [MessageChannel] 対象のチャンネル
      */
-    fun openSelectDiceBotView(channel: TextChannel) {
+    fun openSelectDiceBotView(channel: MessageChannel) {
         //embedを作成
         val embed = createView(1) ?: return
         try {
@@ -129,9 +127,9 @@ class BCDiceManager {
     /**
      * ダイス選択画面のページを進める
      *
-     * @param channel [TextChannel] 該当のチャンネル
+     * @param channel [MessageChannel] 該当のチャンネル
      */
-    fun nextSelectDiceBotView(channel: TextChannel) {
+    fun nextSelectDiceBotView(channel: MessageChannel) {
         //開いているページを取得
         val page = channelViewsPage[channel] ?: return
         //埋め込みを作成
@@ -147,9 +145,9 @@ class BCDiceManager {
     /**
      * ダイス選択画面のページを戻す
      *
-     * @param channel [TextChannel] 該当のチャンネル
+     * @param channel [MessageChannel] 該当のチャンネル
      */
-    fun backSelectDiceBotView(channel: TextChannel) {
+    fun backSelectDiceBotView(channel: MessageChannel) {
         //開いているページを取得
         val page = channelViewsPage[channel] ?: return
         //埋め込みを作成
@@ -181,10 +179,11 @@ class BCDiceManager {
     /**
      * ダイスボットを選択する
      *
-     * @param channel [TextChannel] 該当のテキストチャンネル
+     * @param channel [MessageChannel] 該当のテキストチャンネル
      * @param slot [Int] 開いてるページの何番目か
+     * @param guild [Guild] 対象のギルド
      */
-    fun select(channel: TextChannel, slot: Int) {
+    fun select(channel: MessageChannel, slot: Int, guild:Guild) {
         //開いているページを取得
         val pageNumber = channelViewsPage[channel] ?: return
         //ページ内のゲームシステムを取得
@@ -200,12 +199,12 @@ class BCDiceManager {
             val config = SimpleTimer.instance.config
 
             //ダイスモードを自動的に変更する
-            if (config.getDiceMode(channel.guild) == ServerConfig.DiceMode.Default) {
+            if (config.getDiceMode(guild) == ServerConfig.DiceMode.Default) {
                 channel.sendMessage("ダイスモードを**BCDice**に変更しました id:${gameSystem.id}").queue({}, {})
             }
 
-            config.setDiceBot(channel.guild, gameSystem.id)
-            config.setDiceMode(channel.guild, ServerConfig.DiceMode.BCDice)
+            config.setDiceBot(guild, gameSystem.id)
+            config.setDiceMode(guild, ServerConfig.DiceMode.BCDice)
             config.save()
             //設定画面を消す
             if (channelViews.containsKey(channel)) {
@@ -224,13 +223,14 @@ class BCDiceManager {
     /**
      * ダイスの説明画面を表示
      *
-     * @param channel [TextChannel] 送信するテキストチャンネル
+     * @param channel [MessageChannel] 送信するテキストチャンネル
+     * @param guild [Guild] 対象のギルド
      */
-    fun getInfoEmbed(channel: TextChannel): MessageEmbed {
-        val prefix = SimpleTimer.instance.config.getPrefix(channel.guild)
+    fun getInfoEmbed(channel: MessageChannel, guild: Guild): MessageEmbed {
+        val prefix = SimpleTimer.instance.config.getPrefix(guild)
 
         //コンフィグから設定されているダイスボットを取得
-        val id = SimpleTimer.instance.config.getDiceBot(channel.guild)
+        val id = SimpleTimer.instance.config.getDiceBot(guild)
 
         //ダイスボットの詳細を取得
         val gameSystemInfoResponse = "${server}game_system/$id".httpGet().response()
@@ -289,10 +289,10 @@ class BCDiceManager {
     /**
      * ダイスを振る
      *
-     * @param channel [TextChannel] ダイスを振るチャンネル
+     * @param guild [Guild] ダイスを振るギルド
      * @param command [String] ダイスの内容
      */
-    fun roll(channel: TextChannel, command: String): String? {
+    fun roll(guild: Guild, command: String): String? {
         var runCommand = command
 
         //スポイラーによるシークレットダイスを確認
@@ -301,7 +301,7 @@ class BCDiceManager {
         }
 
         //コンフィグから設定されているダイスボットを取得
-        val id = SimpleTimer.instance.config.getDiceBot(channel.guild)
+        val id = SimpleTimer.instance.config.getDiceBot(guild)
 
         //ダイスボットの詳細を取得
         val gameSystemInfoResponse = "${server}game_system/$id".httpGet().response()
