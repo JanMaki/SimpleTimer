@@ -122,7 +122,7 @@ class ServerConfig : YamlConfiguration() {
             list.add(voiceChannel)
         }
 
-        return list
+        return list.distinct().toMutableList()
     }
 
     /**
@@ -175,7 +175,8 @@ class ServerConfig : YamlConfiguration() {
             list.add(role)
         }
 
-        return list
+
+        return list.distinct().toMutableList()
     }
 
     /**

@@ -574,11 +574,19 @@ class TimerSlashCommand {
             val config = SimpleTimer.instance.config
             val guild = event.guild!!
 
-            val list = config.getVCMentionTargetList(guild)
-            event.hook.sendMessage("""
+            val list = config.getRoleMentionTargetList(guild)
+            println(list)
+            if (list.isEmpty()){
+                event.hook.sendMessage("""
+                メンションを行う対象のロールがありません。
+                対象のロールは、`/mention_addrole`で追加できます。
+                """.trimIndent()).queue()
+            }else {
+                event.hook.sendMessage("""
                 メンションを行う対象のロールは${list.joinToString{ "`${it.name}`" }}です。
                 対象のロールは、`/mention_addrole`で追加できます。
-            """.trimIndent())
+                """.trimIndent()).queue()
+            }
         }
     }
 
@@ -607,7 +615,7 @@ class TimerSlashCommand {
             config.save()
 
             //メッセージを出力
-            event.hook.sendMessage("${role.name}をメンション対象に追加しました").queue()
+            event.hook.sendMessage("`${role.name}`をメンション対象に追加しました").queue()
         }
     }
 
@@ -636,7 +644,7 @@ class TimerSlashCommand {
             config.save()
 
             //メッセージを出力
-            event.hook.sendMessage("${role.name}をメンション対象から削除しました").queue()
+            event.hook.sendMessage("`${role.name}`をメンション対象から削除しました").queue()
         }
     }
 
@@ -650,10 +658,17 @@ class TimerSlashCommand {
             val guild = event.guild!!
 
             val list = config.getVCMentionTargetList(guild)
-            event.hook.sendMessage("""
+            if (list.isEmpty()){
+                event.hook.sendMessage("""
+                メンションを行う対象のボイスチャンネルがありません。
+                対象のチャンネルは、`/mention_addvc`で追加できます。
+                """.trimIndent()).queue()
+            }else {
+                event.hook.sendMessage("""
                 メンションを行う対象のボイスチャンネルは${list.joinToString{ "`${it.name}`" }}です。
                 対象のチャンネルは、`/mention_addvc`で追加できます。
-            """.trimIndent())
+                """.trimIndent()).queue()
+            }
         }
     }
 
@@ -686,7 +701,7 @@ class TimerSlashCommand {
             config.save()
 
             //メッセージを出力
-            event.hook.sendMessage("${channel.name}をメンション対象に追加しました").queue()
+            event.hook.sendMessage("`${channel.name}`をメンション対象に追加しました").queue()
         }
     }
 
@@ -719,7 +734,7 @@ class TimerSlashCommand {
             config.save()
 
             //メッセージを出力
-            event.hook.sendMessage("${channel.name}をメンション対象から削除しました").queue()
+            event.hook.sendMessage("`${channel.name}`をメンション対象から削除しました").queue()
         }
     }
 }
