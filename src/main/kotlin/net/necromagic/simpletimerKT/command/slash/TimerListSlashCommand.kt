@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 import net.necromagic.simpletimerKT.TimerList
 import net.necromagic.simpletimerKT.SimpleTimer
 import net.necromagic.simpletimerKT.util.SendMessage
@@ -38,12 +39,20 @@ class TimerListSlashCommand {
         }
 
         override fun run(command: String, event: SlashCommandEvent) {
+            //コンフィグを取得
+            val config = SimpleTimer.instance.config
+
+            //同期の確認
+            if(config.getListSync(event.guild!!)){
+                event.hook.sendMessage("このサーバーでは一覧を同期しています。")
+                return
+            }
+
             //オプションを取得
             val name = event.getOption("名前")!!.asString
             val seconds = event.getOption("分")!!.asLong.toInt()
 
-            //コンフィグからタイマーの一覧を取得
-            val config = SimpleTimer.instance.config
+            //コンフィグから一覧を取得
             val list = config.getTimerList(event.guild!!)
 
             //上限を確認
@@ -78,11 +87,19 @@ class TimerListSlashCommand {
         }
 
         override fun run(command: String, event: SlashCommandEvent) {
+            //コンフィグを取得
+            val config = SimpleTimer.instance.config
+
             //オプションを取得
             val name = event.getOption("名前")!!.asString
 
+            //同期の確認
+            if(config.getListSync(event.guild!!)){
+                event.hook.sendMessage("このサーバーでは一覧を同期しています。")
+                return
+            }
+
             //コンフィグからタイマーの一覧を取得し、有効なタイマーかを確認する
-            val config = SimpleTimer.instance.config
             if (!config.getTimerList(event.guild!!).contains(name)) {
                 //エラーのメッセージを送信
                 event.hook.sendMessage("*無効なタイマーです").queue()
@@ -154,6 +171,98 @@ class TimerListSlashCommand {
 
             //メッセージを送信
             event.hook.sendMessage("一覧からタイマーを実行するチャンネルを**${channel.name}**に変更しました").queue()
+        }
+    }
+
+    object SyncList : SlashCommand("list_sync", "一覧を他のサーバーと同期します"){
+        init {
+            setDefaultEnabled(true)
+
+            addSubcommands(
+                SubcommandData("enable", "同期を行うようにする")
+                    .addOption(OptionType.STRING, "id","同期する対象のサーバーで出力されたIDを入れてください", true),
+                SubcommandData("disable", "同期を行わないようにする")
+            )
+        }
+
+        override fun run(command: String, event: SlashCommandEvent) {
+            //サブコマンドを取得
+            val subCommand = event.subcommandName
+
+            //nullチェック
+            if (subCommand == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //bool値に変換
+            val bool = when (subCommand) {
+                "enable" -> {
+                    true
+                }
+                "disable" -> {
+                    false
+                }
+                else -> {
+                    return
+                }
+            }
+
+            //コンフィグへ設定
+            val config = SimpleTimer.instance.config
+            val guild = event.guild!!
+
+            //メンションの方式
+            config.setListSync(guild, bool)
+
+
+
+            if (bool){
+                //オプションを取得
+                val option = event.getOption("id")
+
+                //nullチェック
+                if (option == null) {
+                    replyCommandError(event)
+                    return
+                }
+
+                //Stringに変換
+                val id = option.asString
+
+                val long = java.lang.Long.parseLong(id, 36)
+
+                if (guild.idLong != long){
+                    val targetGuild = SimpleTimer.instance.getGuild(long)
+
+                    if (targetGuild == null){
+                        event.hook.sendMessage("*無効なIDです").queue()
+                        return
+                    }else {
+                        event.hook.sendMessage("同期を開始しました").queue()
+                        config.setSyncTarget(guild, targetGuild)
+                    }
+                }else {
+                    event.hook.sendMessage("*対象のサーバーが同じサーバーです").queue()
+                    return
+                }
+
+            }else {
+                event.hook.sendMessage("同期を終了しました").queue()
+            }
+
+            config.save()
+        }
+    }
+
+    object GetID : SlashCommand("list_id", "同期に必要なIDを取得します"){
+        init {
+            setDefaultEnabled(true)
+        }
+
+        override fun run(command: String, event: SlashCommandEvent) {
+            val id = event.guild!!.idLong.toString(36)
+            event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期できます").queue()
         }
     }
 }

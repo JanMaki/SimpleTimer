@@ -342,6 +342,34 @@ class ServerConfig : YamlConfiguration() {
     }
 
     /**
+     * リストの同期設定を変更
+     *
+     * @param guild [Guild] 対象のギルド
+     * @param bool [Boolean] true->on false->off
+     */
+    fun setListSync(guild: Guild, bool: Boolean){
+        set("${guild.idLong}.sync", bool)
+    }
+
+    /**
+     * リストの同期設定を取得
+     *
+     * @param guild [Guild] 対象のギルド
+     * @return [Boolean] true->on false->off
+     */
+    fun getListSync(guild: Guild): Boolean{
+        return getBoolean("${guild.idLong}.sync", false)
+    }
+
+    fun setSyncTarget(guild: Guild, targetGuild: Guild){
+        set("${guild.id}.sync_target", targetGuild.idLong)
+    }
+
+    fun getSyncTarget(guild: Guild): Guild?{
+        return SimpleTimer.instance.getGuild(getLong("${guild.id}.sync_target", 0))
+    }
+
+    /**
      * ファイルに保存する
      *
      */

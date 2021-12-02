@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
+import net.dv8tion.jda.api.entities.Guild
 import net.necromagic.simpletimerKT.bcdice.BCDiceManager
 import net.necromagic.simpletimerKT.command.CommandManager
 import net.necromagic.simpletimerKT.command.slash.SlashCommandManager
@@ -54,6 +55,7 @@ import java.net.URL
 // v1.5.2 メンション方式の追加
 // v1.5.3 JDAのバージョンを更新
 // v1.5.4 メンションの方式を改修
+// v1.5.5 一覧の同期を実装
 
 /**
  * メインクラス
@@ -86,6 +88,8 @@ class SimpleTimer {
 
     //コマンド管理
     lateinit var commandManager: CommandManager
+
+    val shards = mutableSetOf<JDA>()
 
     init {
         init()
@@ -161,8 +165,6 @@ class SimpleTimer {
         shardBuilder.setStatus(OnlineStatus.ONLINE)
         shardBuilder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "!timerでヘルプ表示"))
 
-        val shards = mutableSetOf<JDA>()
-
         for (i in 0..2) {
             val shard = shardBuilder.useSharding(i, 3).build()
 
@@ -183,5 +185,16 @@ class SimpleTimer {
         }
 
         Log.sendLog("Finish loading")
+    }
+
+    fun getGuild(id: Long): Guild?{
+        var guild: Guild? = null
+        shards.forEach{
+            if (guild != null){
+                return@forEach
+            }
+            guild = it.getGuildById(id)
+        }
+        return guild
     }
 }
