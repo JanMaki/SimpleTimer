@@ -40,7 +40,7 @@ class SelectionMenu : ListenerAdapter() {
             val long = SimpleTimer.instance.config.getTimerChannelID(event.guild!!)
 
             //チャンネルを取得
-            var channel: MessageChannel? = guild.getTextChannelById(long)
+            var channel: MessageChannel? = guild.getTextChannelById(long) ?: guild.getThreadChannelById(long)
 
             if (channel == null){
                 channel = event.channel

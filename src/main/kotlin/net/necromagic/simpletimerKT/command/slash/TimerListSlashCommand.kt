@@ -148,7 +148,10 @@ class TimerListSlashCommand {
 
             //チャンネルの権限を確認
             val permissions =
-                event.guild!!.selfMember.getPermissions(event.guild!!.getTextChannelById(channel.idLong)!!)
+                event.guild!!.selfMember.getPermissions(
+                    event.guild!!.getTextChannelById(channel.idLong) ?:
+                    event.guild!!.getThreadChannelById(channel.idLong)!!
+                )
             if (!permissions.contains(Permission.ADMINISTRATOR)) {
                 if (!(
                             permissions.contains(Permission.VIEW_CHANNEL) &&
