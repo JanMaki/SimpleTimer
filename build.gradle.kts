@@ -19,12 +19,12 @@ dependencies {
 
     implementation(kotlin("stdlib", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
 
-    implementation("net.dv8tion", "JDA", "5.0.0-alpha.1")
+    implementation("net.dv8tion", "JDA", "5.0.0-alpha.2")
     //implementation(files("libs/JDA-4.3.0_DEV-withDependencies.jar"))
 
     implementation("me.carleslc.Simple-YAML", "Simple-Yaml", "1.7.2")
 
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.0-RC")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.1")
     implementation("com.github.kittinunf.fuel", "fuel", "2.3.1")
 
     implementation("org.slf4j", "slf4j-simple", "1.7.30")
