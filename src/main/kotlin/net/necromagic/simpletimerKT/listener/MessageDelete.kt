@@ -2,7 +2,7 @@ package net.necromagic.simpletimerKT.listener
 
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import net.necromagic.simpletimerKT.Timer
+import net.necromagic.simpletimerKT.timer.Timer
 
 /**
  * メッセージ削除時に対応をするクラス

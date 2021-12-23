@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimerKT.SimpleTimer
-import net.necromagic.simpletimerKT.Timer
+import net.necromagic.simpletimerKT.timer.Timer
 import java.util.*
 
 class SelectionMenu : ListenerAdapter() {

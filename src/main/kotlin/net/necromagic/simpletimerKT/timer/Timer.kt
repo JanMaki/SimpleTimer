@@ -1,10 +1,12 @@
-package net.necromagic.simpletimerKT
+package net.necromagic.simpletimerKT.timer
 
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
+import net.necromagic.simpletimerKT.ServerConfig
+import net.necromagic.simpletimerKT.SimpleTimer
 import net.necromagic.simpletimerKT.util.Log
 import java.util.*
 import java.util.concurrent.Executors
@@ -15,9 +17,9 @@ import kotlin.math.abs
  *
  * @property channel [MessageChannel] タイマーを動かすテキストチャンネル
  * @property number [Number] タイマーの番号
- * @property seconds [Int] 分数
+ * @property minuts [Int] 分数
  */
-class Timer(val channel: MessageChannel, private val number: Number, private var seconds: Int, private val guild: Guild) {
+class Timer(val channel: MessageChannel, private val number: Number, private var minuts: Int, private val guild: Guild): TimerService.TimerListener {
     companion object {
         //チャンネルとタイマーのマップ
         val channelsTimersMap = HashMap<MessageChannel, EnumMap<Number, Timer>>()
@@ -55,19 +57,6 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
         }
     }
 
-    //表示用 分・秒
-    private var hun = seconds
-    private var byo = 0
-
-    //開始時の時間
-    private var startNanoByo = System.nanoTime()
-
-    private var beforeTimingNanoByo = System.nanoTime()
-
-    //一時停止・終了フラグ
-    private var stop = false
-    private var finish = false
-
     //Displayのメッセージの文字列
     private var base = "タイマーを開始しました %s"
 
@@ -77,6 +66,9 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
 
     //強制的に更新を行うかのフラグ
     private var update = false
+
+    //タイマーのサービス
+    private val timerService = TimerService(minuts*60)
 
     //開始の処理へ飛ばす
     init {
@@ -88,62 +80,193 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
      *
      */
     private fun init() {
-        sendDisplayMessage("${seconds}分00秒")
-        Executors.newSingleThreadExecutor().submit {
-            var i = 0
-            while (i < seconds * 60) {
-                //途中通知の確認
-                if (i != 0 && i % 60 == 0) {
-                    val time = seconds - i / 60
-                    if (time % 10 == 0 || time == 5 || time == 3 || time == 2 || time == 1) {
-                        sendMessage("のこり${time}分です%mention%")
-                        sendTTS("のこり${time}分です", ServerConfig.TTSTiming.LV2)
-                    }
-                }
+        timerService.registerListener(this)
 
-                //１秒待つ
-                try {
-                    Thread.sleep(500)
-                } catch (e: InterruptedException) {
-                    Log.sendLog(e.stackTraceToString())
-                }
+        timerService.start()
+    }
 
-                //終了確認
-                if (finish) return@submit
+    override fun onStart() {
+        sendDisplayMessage("${minuts}分00秒")
+    }
 
-                //時間の更新
-                val oldI = i
+    override fun onUpdate() {
+        val time = timerService.getTime()
 
-                //停止してる時は時間を調整する
-                if (stop) {
-                    startNanoByo += System.nanoTime() - beforeTimingNanoByo
-                } else {
-                    i = ((System.nanoTime() - startNanoByo) / 1000000000L).toInt()
-                }
+        if (time.minute == this.minuts){
+            return
+        }
 
-                beforeTimingNanoByo = System.nanoTime()
-
-                if (oldI == i) continue
-
-                var hun: Int = seconds - i / 60
-                var byo: Int = 60 - (i % 60)
-                if (hun < 0) hun = 0
-                if (byo != 60) hun -= 1
-                if (byo == 60) byo = 0
-                this.byo = byo
-                this.hun = hun
-                var byoString = byo.toString()
-                if (byo < 10) byoString = "0$byoString"
-
-                //10秒の倍数と残り5秒の時、updateのフラグが立っているときはdisplayを更新する
-                if (byo % 10 == 0 || seconds * 60 - i == 5 || update) {
-                    update = false
-                    val action = display?.editMessage(number.format(base.format("${hun}分${byoString}秒")))
-                    action?.queue({}, {})
-                }
+        //途中通知の確認
+        if (time.seconds == 0) {
+            if (time.minute % 10 == 0 || time.minute == 5 || time.minute == 3 || time.minute == 2 || time.minute == 1) {
+                sendMessage("のこり${time.minute}分です%mention%")
+                sendTTS("のこり${time.minute}分です", ServerConfig.TTSTiming.LV2)
             }
-            //終了
-            finish()
+        }
+
+        println(time.seconds)
+        //10秒の倍数と残り5秒の時、updateのフラグが立っているときはdisplayを更新する
+        if (time.seconds % 10 == 0 || update || (time.minute == 0 && time.seconds == 5)) {
+            update = false
+            val action = display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
+            action?.queue({}, {})
+        }
+    }
+
+    /**
+     * タイマーを延長
+     *
+     * @param i [Int] 延長する秒
+     */
+    fun add(i: Int) {
+        //分数に加える
+        timerService.addTimer(i)
+    }
+
+    override fun onAdd(seconds: Int) {
+        //延長と短縮を判定
+        if (seconds >= 0) {
+            sendMessage("タイマーを${seconds}秒延長しました")
+            sendTTS("タイマーを${seconds}秒延長しました", ServerConfig.TTSTiming.LV3)
+        } else {
+            sendMessage("タイマーを${abs(seconds)}秒短縮しました")
+            sendTTS("タイマーを${abs(seconds)}秒短縮しました", ServerConfig.TTSTiming.LV3)
+        }
+        //強制的に更新させる
+        update = true
+    }
+
+    /**
+     * タイマーを再開
+     *
+     */
+    fun restart() {
+        timerService.restart()
+    }
+
+    override fun onRestart(check: Boolean) {
+        if (!check) {
+            sendMessage("タイマーは一時停止していません")
+            return
+        }
+        //新しいdisplayとして作る
+        base = "タイマーを再開しました　%s"
+        val time = timerService.getTime()
+        var byoString = time.seconds.toString()
+        if (time.seconds < 10) byoString = "0$byoString"
+        sendDisplayMessage("${time.minute}分${byoString}秒")
+        sendTTS("タイマーを再開しました", ServerConfig.TTSTiming.LV3)
+        notice?.clearReactions()?.queue({}, {})
+    }
+
+    /**
+     * タイマーを一時停止
+     *
+     */
+    fun stop() {
+        timerService.stop()
+    }
+
+    override fun onStop(check: Boolean) {
+        //停止の確認
+        if (!check) {
+            sendMessage("タイマーは既に一時停止しています")
+            return
+        }
+        update = true
+        //メッセージの送信とリアクション
+        sendMessage("タイマーを一時停止しました")
+        sendTTS("タイマーを一時停止しました", ServerConfig.TTSTiming.LV3)
+        notice?.addReaction("U+25C0")?.queue({}, {})
+    }
+
+    /**
+     * タイマーの終了
+     *
+     */
+    fun finish() {
+        timerService.finish()
+    }
+
+    override fun onFinish(check: Boolean) {
+        //終了確認
+        if (!check) {
+            return
+        }
+        //登録の解除
+        timers.remove(display?.idLong)
+        displays.remove(display?.idLong)
+        //メッセージを送信
+        sendMessage("タイマーが終了しました%mention%")
+        sendTTS(
+            SimpleTimer.instance.config.getTTS(guild).replace("x", number.number.toString()),
+            ServerConfig.TTSTiming.LV1
+        )
+
+        val channelTimers = channelsTimersMap[channel]
+        if (channelTimers != null) {
+            channelTimers.remove(number)
+            channelsTimersMap[channel] = channelTimers
+        }
+
+        timers.remove(notice?.idLong)
+
+        //時間を置いてリアクションを削除
+        Executors.newSingleThreadExecutor().submit {
+            try {
+                Thread.sleep(5000)
+                display?.clearReactions()?.queue({}, {})
+            } catch (e: InterruptedException) {
+                Log.sendLog(e.stackTraceToString())
+            }
+        }
+    }
+
+    /**
+     * 確認
+     *
+     */
+    fun check() {
+        //新しいdisplayとして作る
+        base = "タイマー終了まで: %s"
+        val time = timerService.getTime()
+        var byoString = time.seconds.toString()
+        if (time.seconds < 10) byoString = "0$byoString"
+        sendDisplayMessage("${time.minute}分${byoString}秒")
+    }
+
+    /**
+     * タイマーを破棄
+     *
+     */
+    fun end() {
+        timerService.end()
+    }
+
+    override fun onEnd(check: Boolean) {
+        if (!check){
+            return
+        }
+        //登録を消す
+        timers.remove(display?.idLong)
+        displays.remove(display?.idLong)
+        sendMessage("タイマーを破棄しました")
+
+        val channelTimers = channelsTimersMap[channel]
+        if (channelTimers != null) {
+            channelTimers.remove(number)
+            channelsTimersMap[channel] = channelTimers
+        }
+
+        timers.remove(notice?.idLong)
+        //メッセージを消す
+        Executors.newSingleThreadExecutor().submit {
+            try {
+                Thread.sleep(5000)
+                display?.clearReactions()?.queue({}, {})
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -311,148 +434,6 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
 
         }
     }
-
-    /**
-     * タイマーを延長
-     *
-     * @param i [Int] 延長する分
-     */
-    fun addTimer(i: Int) {
-        //分数に加える
-        seconds += i
-        //延長と短縮を判定
-        if (i >= 0) {
-            sendMessage("タイマーを${i}分延長しました")
-            sendTTS("タイマーを${i}分延長しました", ServerConfig.TTSTiming.LV3)
-        } else {
-            sendMessage("タイマーを${abs(i)}分短縮しました")
-            sendTTS("タイマーを${abs(i)}分短縮しました", ServerConfig.TTSTiming.LV3)
-        }
-        //強制的に更新させる
-        update = true
-    }
-
-    /**
-     * タイマーを再開
-     *
-     */
-    fun restart() {
-        //停止の確認
-        if (!stop) {
-            sendMessage("タイマーは一時停止していません")
-            return
-        }
-        //フラグを変更
-        stop = false
-        //新しいdisplayとして作る
-        base = "タイマーを再開しました　%s"
-        var byoString = byo.toString()
-        if (byo < 10) byoString = "0$byoString"
-        sendDisplayMessage("${hun}分${byoString}秒")
-        sendTTS("タイマーを再開しました", ServerConfig.TTSTiming.LV3)
-        notice?.clearReactions()?.queue({}, {})
-    }
-
-    /**
-     * タイマーを一時停止
-     *
-     */
-    fun stop() {
-        //停止の確認
-        if (stop) {
-            sendMessage("タイマーは既に一時停止しています")
-            return
-        }
-        //フラグを変更
-        stop = true
-        update = true
-        //メッセージの送信とリアクション
-        sendMessage("タイマーを一時停止しました")
-        sendTTS("タイマーを一時停止しました", ServerConfig.TTSTiming.LV3)
-        notice?.addReaction("U+25C0")?.queue({}, {})
-    }
-
-    /**
-     * タイマーの終了
-     *
-     */
-    fun finish() {
-        //終了確認
-        if (finish) {
-            return
-        }
-        finish = true
-        //登録の解除
-        timers.remove(display?.idLong)
-        displays.remove(display?.idLong)
-        //メッセージを送信
-        sendMessage("タイマーが終了しました%mention%")
-        sendTTS(
-            SimpleTimer.instance.config.getTTS(guild).replace("x", number.number.toString()),
-            ServerConfig.TTSTiming.LV1
-        )
-
-        val channelTimers = channelsTimersMap[channel]
-        if (channelTimers != null) {
-            channelTimers.remove(number)
-            channelsTimersMap[channel] = channelTimers
-        }
-
-        timers.remove(notice?.idLong)
-
-        //時間を置いてリアクションを削除
-        Executors.newSingleThreadExecutor().submit {
-            try {
-                Thread.sleep(5000)
-                display?.clearReactions()?.queue({}, {})
-            } catch (e: InterruptedException) {
-                Log.sendLog(e.stackTraceToString())
-            }
-        }
-    }
-
-    /**
-     * 確認
-     *
-     */
-    fun check() {
-        //新しいdisplayとして作る
-        base = "タイマー終了まで: %s"
-        var byoString = byo.toString()
-        if (byo < 10) byoString = "0$byoString"
-        sendDisplayMessage("${hun}分${byoString}秒")
-    }
-
-    /**
-     * タイマーを破棄
-     *
-     */
-    fun end() {
-        //フラグを立てる
-        finish = true
-        //登録を消す
-        timers.remove(display?.idLong)
-        displays.remove(display?.idLong)
-        sendMessage("タイマーを破棄しました")
-
-        val channelTimers = channelsTimersMap[channel]
-        if (channelTimers != null) {
-            channelTimers.remove(number)
-            channelsTimersMap[channel] = channelTimers
-        }
-
-        timers.remove(notice?.idLong)
-        //メッセージを消す
-        Executors.newSingleThreadExecutor().submit {
-            try {
-                Thread.sleep(5000)
-                display?.clearReactions()?.queue({}, {})
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-        }
-    }
-
 
     //タイマーの装飾
     enum class Number(private val string: String, val number: Int) {

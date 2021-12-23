@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.necromagic.simpletimerKT.*
-import net.necromagic.simpletimerKT.Timer
+import net.necromagic.simpletimerKT.timer.Timer
 import net.necromagic.simpletimerKT.util.SendMessage
 import net.necromagic.simpletimerKT.util.equalsIgnoreCase
 import java.util.*
@@ -70,7 +70,7 @@ class TimerCommand : CommandData("timer", "タイマーを開始します。タ�
                 }
                 val time = Integer.parseInt(args[3])
                 val timer = channelTimers[number]!!
-                timer.addTimer(time)
+                timer.add(time*60)
             } catch (e: Exception) {
                 SendMessage.sendMessage(channel, "${prefix}timer add #1|#2|#3|#4 秒", user)
             }

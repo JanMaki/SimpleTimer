@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 import net.necromagic.simpletimerKT.ServerConfig
 import net.necromagic.simpletimerKT.SimpleTimer
-import net.necromagic.simpletimerKT.Timer
+import net.necromagic.simpletimerKT.timer.Timer
 import net.necromagic.simpletimerKT.util.equalsIgnoreCase
 import java.util.*
 
@@ -218,7 +218,7 @@ class TimerSlashCommand {
             val timer = channelTimers[number]!!
 
             //タイマーを延長
-            timer.addTimer(minutes.toInt())
+            timer.add(minutes.toInt()*60)
 
             //空白を出力して消し飛ばす
             event.hook.sendMessage("|| ||").complete().delete().queue()
