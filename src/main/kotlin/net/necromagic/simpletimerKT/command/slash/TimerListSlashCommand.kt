@@ -44,7 +44,7 @@ class TimerListSlashCommand {
 
             //同期の確認
             if(config.getListSync(event.guild!!)){
-                event.hook.sendMessage("このサーバーでは一覧を同期しています。")
+                event.hook.sendMessage("このサーバーでは一覧を同期しています。").queue()
                 return
             }
 
@@ -57,7 +57,7 @@ class TimerListSlashCommand {
 
             //上限を確認
             if (list.size >= 10) {
-                event.hook.sendMessage("*10個以上登録できません")
+                event.hook.sendMessage("*10個以上登録できません").queue()
                 return
             }
 
@@ -95,7 +95,7 @@ class TimerListSlashCommand {
 
             //同期の確認
             if(config.getListSync(event.guild!!)){
-                event.hook.sendMessage("このサーバーでは一覧を同期しています。")
+                event.hook.sendMessage("このサーバーでは一覧を同期しています。").queue()
                 return
             }
 
