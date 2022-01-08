@@ -1,14 +1,14 @@
-package net.necromagic.simpletimerKT.listener
+package net.necromagic.simpletimer.listener
 
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.PrivateChannel
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import net.necromagic.simpletimerKT.command.slash.SlashCommandManager
-import net.necromagic.simpletimerKT.util.Log
-import net.necromagic.simpletimerKT.util.SendMessage
-import net.necromagic.simpletimerKT.util.equalsIgnoreCase
+import net.necromagic.simpletimer.command.slash.SlashCommandManager
+import net.necromagic.simpletimer.util.Log
+import net.necromagic.simpletimer.util.SendMessage
+import net.necromagic.simpletimer.util.equalsIgnoreCase
 
 /**
  * スラッシュコマンドに対応をするクラス

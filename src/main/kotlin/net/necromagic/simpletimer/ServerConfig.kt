@@ -1,11 +1,11 @@
-package net.necromagic.simpletimerKT
+package net.necromagic.simpletimer
 
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.entities.VoiceChannel
-import net.necromagic.simpletimerKT.ServerConfig.TTSTiming.*
-import net.necromagic.simpletimerKT.util.equalsIgnoreCase
+import net.necromagic.simpletimer.ServerConfig.TTSTiming.*
+import net.necromagic.simpletimer.util.equalsIgnoreCase
 import org.simpleyaml.configuration.file.YamlConfiguration
 import java.io.File
 import java.nio.file.Paths

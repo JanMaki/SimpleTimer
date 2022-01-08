@@ -1,13 +1,13 @@
-package net.necromagic.simpletimerKT.bcdice
+package net.necromagic.simpletimer.bcdice
 
 import dev.simpletimer.bcdice_kt.BCDice
 import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
-import net.necromagic.simpletimerKT.*
-import net.necromagic.simpletimerKT.util.Log
-import net.necromagic.simpletimerKT.util.equalsIgnoreCase
+import net.necromagic.simpletimer.*
+import net.necromagic.simpletimer.util.Log
+import net.necromagic.simpletimer.util.equalsIgnoreCase
 import java.awt.Color
 import java.lang.StringBuilder
 

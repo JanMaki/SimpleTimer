@@ -1,4 +1,4 @@
-package net.necromagic.simpletimerKT.command.slash
+package net.necromagic.simpletimer.command.slash
 
 object SlashCommandManager {
     val slashCommands = mutableSetOf<SlashCommand>()

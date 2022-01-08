@@ -1,4 +1,4 @@
-package net.necromagic.simpletimerKT.timer
+package net.necromagic.simpletimer.timer
 
 import java.util.concurrent.Executors
 

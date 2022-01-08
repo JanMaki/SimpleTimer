@@ -1,4 +1,4 @@
-package net.necromagic.simpletimerKT.command
+package net.necromagic.simpletimer.command
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
@@ -8,10 +8,10 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
-import net.necromagic.simpletimerKT.*
-import net.necromagic.simpletimerKT.timer.Timer
-import net.necromagic.simpletimerKT.util.SendMessage
-import net.necromagic.simpletimerKT.util.equalsIgnoreCase
+import net.necromagic.simpletimer.*
+import net.necromagic.simpletimer.timer.Timer
+import net.necromagic.simpletimer.util.SendMessage
+import net.necromagic.simpletimer.util.equalsIgnoreCase
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet

@@ -1,4 +1,4 @@
-package net.necromagic.simpletimerKT.command
+package net.necromagic.simpletimer.command
 
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.User

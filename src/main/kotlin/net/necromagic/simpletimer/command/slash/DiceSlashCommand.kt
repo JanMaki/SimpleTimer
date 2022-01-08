@@ -1,13 +1,13 @@
-package net.necromagic.simpletimerKT.command.slash
+package net.necromagic.simpletimer.command.slash
 
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
-import net.necromagic.simpletimerKT.Dice
-import net.necromagic.simpletimerKT.ServerConfig
-import net.necromagic.simpletimerKT.SimpleTimer
-import net.necromagic.simpletimerKT.bcdice.BCDiceManager
-import net.necromagic.simpletimerKT.util.equalsIgnoreCase
+import net.necromagic.simpletimer.Dice
+import net.necromagic.simpletimer.ServerConfig
+import net.necromagic.simpletimer.SimpleTimer
+import net.necromagic.simpletimer.bcdice.BCDiceManager
+import net.necromagic.simpletimer.util.equalsIgnoreCase
 
 /**
  * ダイス関連のコマンド

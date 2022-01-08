@@ -1,4 +1,4 @@
-package net.necromagic.simpletimerKT.command.slash
+package net.necromagic.simpletimer.command.slash
 
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.interactions.commands.build.CommandData

@@ -1,4 +1,4 @@
-package net.necromagic.simpletimerKT.util
+package net.necromagic.simpletimer.util
 
 import net.dv8tion.jda.api.entities.TextChannel
 

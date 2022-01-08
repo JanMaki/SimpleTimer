@@ -1,16 +1,16 @@
-package net.necromagic.simpletimerKT.command
+package net.necromagic.simpletimer.command
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
-import net.necromagic.simpletimerKT.Dice
-import net.necromagic.simpletimerKT.ServerConfig
-import net.necromagic.simpletimerKT.SimpleTimer
-import net.necromagic.simpletimerKT.util.SendMessage.Companion.sendMessage
-import net.necromagic.simpletimerKT.bcdice.BCDiceManager
-import net.necromagic.simpletimerKT.util.equalsIgnoreCase
+import net.necromagic.simpletimer.Dice
+import net.necromagic.simpletimer.ServerConfig
+import net.necromagic.simpletimer.SimpleTimer
+import net.necromagic.simpletimer.util.SendMessage.Companion.sendMessage
+import net.necromagic.simpletimer.bcdice.BCDiceManager
+import net.necromagic.simpletimer.util.equalsIgnoreCase
 import java.awt.Color
 
 /**

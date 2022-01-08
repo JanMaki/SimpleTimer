@@ -1,13 +1,13 @@
-package net.necromagic.simpletimerKT.command.slash
+package net.necromagic.simpletimer.command.slash
 
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
-import net.necromagic.simpletimerKT.TimerList
-import net.necromagic.simpletimerKT.SimpleTimer
-import net.necromagic.simpletimerKT.util.SendMessage
+import net.necromagic.simpletimer.TimerList
+import net.necromagic.simpletimer.SimpleTimer
+import net.necromagic.simpletimer.util.SendMessage
 
 class TimerListSlashCommand {
     /**

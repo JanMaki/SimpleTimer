@@ -1,13 +1,13 @@
-package net.necromagic.simpletimerKT.timer
+package net.necromagic.simpletimer.timer
 
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
-import net.necromagic.simpletimerKT.ServerConfig
-import net.necromagic.simpletimerKT.SimpleTimer
-import net.necromagic.simpletimerKT.util.Log
+import net.necromagic.simpletimer.ServerConfig
+import net.necromagic.simpletimer.SimpleTimer
+import net.necromagic.simpletimer.util.Log
 import java.util.*
 import java.util.concurrent.Executors
 import kotlin.math.abs

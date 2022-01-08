@@ -1,4 +1,4 @@
-package net.necromagic.simpletimerKT.util
+package net.necromagic.simpletimer.util
 
 /**
  * Stringの拡張

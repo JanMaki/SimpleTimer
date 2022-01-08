@@ -1,4 +1,4 @@
-package net.necromagic.simpletimerKT
+package net.necromagic.simpletimer
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild

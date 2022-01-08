@@ -1,15 +1,15 @@
-package net.necromagic.simpletimerKT
+package net.necromagic.simpletimer
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
-import net.necromagic.simpletimerKT.bcdice.BCDiceManager
-import net.necromagic.simpletimerKT.command.CommandManager
-import net.necromagic.simpletimerKT.command.slash.SlashCommandManager
-import net.necromagic.simpletimerKT.listener.*
-import net.necromagic.simpletimerKT.util.Log
+import net.necromagic.simpletimer.bcdice.BCDiceManager
+import net.necromagic.simpletimer.command.CommandManager
+import net.necromagic.simpletimer.command.slash.SlashCommandManager
+import net.necromagic.simpletimer.listener.*
+import net.necromagic.simpletimer.util.Log
 import java.io.IOException
 import java.net.ServerSocket
 import java.net.URL

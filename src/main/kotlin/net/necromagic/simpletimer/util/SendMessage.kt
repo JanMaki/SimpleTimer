@@ -1,10 +1,10 @@
-package net.necromagic.simpletimerKT.util
+package net.necromagic.simpletimer.util
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
-import net.necromagic.simpletimerKT.SimpleTimer
+import net.necromagic.simpletimer.SimpleTimer
 import java.util.*
 
 class SendMessage {
