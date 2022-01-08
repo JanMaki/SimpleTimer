@@ -57,13 +57,6 @@ import java.net.URL
 // v1.5.4 メンションの方式を改修
 // v1.5.5 一覧の同期を実装
 
-/**
- * すべての始まり
- *
- */
-fun main() {
-    SimpleTimer()
-}
 
 /**
  * メインクラス
@@ -72,6 +65,17 @@ fun main() {
 class SimpleTimer {
     companion object {
         lateinit var instance: SimpleTimer
+
+        /**
+         * すべての始まり
+         *
+         * @param args [Array] 引数（未使用）
+         */
+        @JvmStatic
+        fun main(args: Array<String>) {
+            SimpleTimer()
+        }
+
     }
 
     //バージョン
