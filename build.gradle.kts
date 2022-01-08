@@ -29,12 +29,12 @@ dependencies {
 
     implementation("org.slf4j", "slf4j-simple", "1.7.30")
     implementation("org.slf4j", "slf4j-api", "1.7.30")
+
+    implementation("com.github.JanMaki","bcdice-kt","alpha-1")
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_16.toString()
 }
 
 val jar by tasks.getting(Jar::class) {

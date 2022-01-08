@@ -1,13 +1,11 @@
 package net.necromagic.simpletimerKT.bcdice
 
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.httpPost
-import kotlinx.serialization.json.Json
+import dev.simpletimer.bcdice_kt.BCDice
+import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.necromagic.simpletimerKT.*
-import net.necromagic.simpletimerKT.bcdice.dataclass.*
 import net.necromagic.simpletimerKT.util.Log
 import net.necromagic.simpletimerKT.util.equalsIgnoreCase
 import java.awt.Color
@@ -18,27 +16,27 @@ class BCDiceManager {
         lateinit var instance: BCDiceManager
     }
 
-    //APIサーバーのURL
-    private val server = "https://bcdice.onlinesession.app/v2/"
-
     //ゲームシステムの一覧をページで分ける
     private val gameSystemPages = HashMap<Int, ArrayList<GameSystem>>()
 
+    private val bcdice = BCDice()
 
     init {
         instance = this
 
+        if (!bcdice.wasInstalled()){
+            bcdice.install()
+        }
+
+        bcdice.setup()
+
         //ゲームシステムの一覧を取得
-        val response = "${server}game_system".httpGet().response()
-        val gameSystems = Json.decodeFromString(GameSystemArray.serializer(), String(response.second.data)).game_system
+        val gameSystems = bcdice.getGameSystems()!!
 
         //ページで分ける
         var page = 1
         var count = 1
         for (gameSystem in gameSystems) {
-            gameSystem.page = page
-            gameSystem.number = count
-
             val gameSystemPage = gameSystemPages.getOrDefault(page, ArrayList())
             gameSystemPage.add(gameSystem)
             gameSystemPages[page] = gameSystemPage
@@ -233,9 +231,7 @@ class BCDiceManager {
         val id = SimpleTimer.instance.config.getDiceBot(guild)
 
         //ダイスボットの詳細を取得
-        val gameSystemInfoResponse = "${server}game_system/$id".httpGet().response()
-        val gameSystemInfo =
-            Json.decodeFromString(GameSystemInfo.serializer(), String(gameSystemInfoResponse.second.data))
+        val gameSystemInfo = bcdice.getGameSystem(id)!!
 
         //作成開始
         var builder = EmbedBuilder()
@@ -275,16 +271,12 @@ class BCDiceManager {
 
         //システム共通を張る
         if (id != "DiceBot") {
-            val defaultGameSystemInfoResponse = "${server}game_system/DiceBot".httpGet().response()
-            val defaultGameSystemInfo =
-                Json.decodeFromString(GameSystemInfo.serializer(), String(defaultGameSystemInfoResponse.second.data))
-            builder.addField("システム共通コマンド", defaultGameSystemInfo.help_message, false)
+            val defaultGameSystem = bcdice.getGameSystem("DiceBot")
+            builder.addField("システム共通コマンド", defaultGameSystem?.help_message, false)
         }
 
         return builder.build()
     }
-
-    private val json = Json{ ignoreUnknownKeys = true }
 
     /**
      * ダイスを振る
@@ -304,29 +296,13 @@ class BCDiceManager {
         val id = SimpleTimer.instance.config.getDiceBot(guild)
 
         //ダイスボットの詳細を取得
-        val gameSystemInfoResponse = "${server}game_system/$id".httpGet().response()
-        val gameSystemInfo =
-            Json.decodeFromString(GameSystemInfo.serializer(), String(gameSystemInfoResponse.second.data))
+        val gameSystem = bcdice.getGameSystem(id) ?: return null
 
         //コマンドのパターンを取得
-        val commandPattern = Regex(gameSystemInfo.command_pattern, RegexOption.IGNORE_CASE)
-        val result: DiceRoll
+        val result = gameSystem.roll(runCommand)
 
-        //コマンドの確認
-        if (commandPattern.containsMatchIn(runCommand)) {
-
-            //コマンドを送信する
-            val rollPost = "${server}game_system/${id}/roll".httpPost(listOf("command" to runCommand)).response()
-
-            //正常に処理されたかを確認
-            val check = json.decodeFromString(OK.serializer(), String(rollPost.second.data))
-            if (check.ok) {
-                //正常だった場合、結果を代入する
-                result = json.decodeFromString(DiceRoll.serializer(), String(rollPost.second.data))
-            } else {
-                return null
-            }
-        } else {
+        //失敗時はnullを返す
+        if (!result.check){
             return null
         }
 
