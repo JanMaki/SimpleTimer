@@ -8,6 +8,7 @@ import net.necromagic.simpletimer.ServerConfig
 import net.necromagic.simpletimer.SimpleTimer
 import net.necromagic.simpletimer.bcdice.BCDiceManager
 import net.necromagic.simpletimer.util.equalsIgnoreCase
+import java.util.concurrent.Executors
 
 /**
  * ダイス関連のコマンド
@@ -83,19 +84,21 @@ class DiceSlashCommand {
 
                 //BCDiceのダイス
                 ServerConfig.DiceMode.BCDice -> {
-                    //コマンドを実行
-                    val guild = event.guild
-                    if (guild != null){  val roll = BCDiceManager.instance.roll(guild, diceCommand.lowercase())
+                    Executors.newSingleThreadExecutor().submit {
+                        //コマンドを実行
+                        val guild = event.guild
+                        if (guild != null) {
+                            val roll = BCDiceManager.instance.roll(guild, diceCommand.lowercase())
 
-                        //結果の確認
-                        if (roll == null) {
-                            //構文が間違ってたらメッセージを出す
-                            event.hook.sendMessage("*ダイスの構文が間違っています").queue()
-                            return
+                            //結果の確認
+                            if (roll == null) {
+                                //構文が間違ってたらメッセージを出す
+                                event.hook.sendMessage("*ダイスの構文が間違っています").queue()
+                            } else {
+                                //結果を出力する
+                                event.hook.sendMessage(roll).queue()
+                            }
                         }
-
-                        //結果を出力する
-                        event.hook.sendMessage(roll).queue()
                     }
                 }
             }
@@ -153,7 +156,9 @@ class DiceSlashCommand {
                 }
                 ServerConfig.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
-                    event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild)).queue()
+                    Executors.newSingleThreadExecutor().submit {
+                        event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild)).queue()
+                    }
                 }
             }
         }
@@ -167,8 +172,10 @@ class DiceSlashCommand {
             //メッセージを出力
             event.hook.sendMessage("メニューよりボットを選択してください").complete()
 
-            //ダイスボットを変更する画面を出す
-            BCDiceManager.instance.openSelectDiceBotView(event.channel)
+            Executors.newSingleThreadExecutor().submit {
+                //ダイスボットを変更する画面を出す
+                BCDiceManager.instance.openSelectDiceBotView(event.channel)
+            }
         }
     }
 
@@ -195,11 +202,19 @@ class DiceSlashCommand {
 
                 //BCDiceのダイス
                 ServerConfig.DiceMode.BCDice -> {
-                    //コマンドを実行
-                    val roll = BCDiceManager.instance.roll(event.guild!!, "1d100") ?: return
+                    Executors.newSingleThreadExecutor().submit {
+                        //コマンドを実行
+                        val roll = BCDiceManager.instance.roll(event.guild!!, "1d100")
 
-                    //結果を出力する
-                    event.hook.sendMessage(roll).queue()
+                        //結果の確認
+                        if (roll == null) {
+                            //構文が間違ってたらメッセージを出す
+                            event.hook.sendMessage("*ダイスの構文が間違っています").queue()
+                        } else {
+                            //結果を出力する
+                            event.hook.sendMessage(roll).queue()
+                        }
+                    }
                 }
             }
         }
@@ -228,11 +243,19 @@ class DiceSlashCommand {
 
                 //BCDiceのダイス
                 ServerConfig.DiceMode.BCDice -> {
-                    //コマンドを実行
-                    val roll = BCDiceManager.instance.roll(event.guild!!, "s1d100") ?: return
+                    Executors.newSingleThreadExecutor().submit {
+                        //コマンドを実行
+                        val roll = BCDiceManager.instance.roll(event.guild!!, "s1d100")
 
-                    //結果を出力する
-                    event.hook.sendMessage(roll).queue()
+                        //結果の確認
+                        if (roll == null) {
+                            //構文が間違ってたらメッセージを出す
+                            event.hook.sendMessage("*ダイスの構文が間違っています").queue()
+                        } else {
+                            //結果を出力する
+                            event.hook.sendMessage(roll).queue()
+                        }
+                    }
                 }
             }
         }
