@@ -13,6 +13,7 @@ import net.necromagic.simpletimer.util.Log
 import java.io.IOException
 import java.net.ServerSocket
 import java.net.URL
+import java.util.*
 
 // v1.0.0 リリース
 // v1.0.1 リアクションによる操作の実装
@@ -187,6 +188,24 @@ class SimpleTimer {
         }
 
         Log.sendLog("Finish loading")
+
+        //終了処理
+        //入力を作成
+        var input: String?
+        val scanner = Scanner(System.`in`)
+        while (scanner.hasNextLine()) {
+            //入力を取得
+            input = scanner.nextLine()
+            //終了の場合
+            if (input == "exit") {
+                //JDAを終了
+                shards.forEach{
+                    it.shutdown()
+                }
+                println("Botを終了します...")
+                break
+            }
+        }
     }
 
     fun getGuild(id: Long): Guild?{
