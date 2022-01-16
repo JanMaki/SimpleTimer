@@ -35,6 +35,16 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_16.toString()
 }
 
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    archiveBaseName.set("SimpleTimer")
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes["Main-Class"] = "net.necromagic.simpletimer.SimpleTimer"
+    }
+
+    from(
+        configurations.runtimeClasspath.get().map {
+            if (it.isDirectory) it else zipTree(it)
+        }
+    )
+
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }
