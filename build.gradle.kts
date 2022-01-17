@@ -28,7 +28,7 @@ dependencies {
     implementation("me.carleslc.Simple-YAML", "Simple-Yaml", "1.7.2")
 
     //BCDice
-    implementation("com.github.JanMaki","bcdice-kt","alpha-1")
+    implementation("dev.simpletimer","bcdice-kt","alpha-1")
 }
 
 tasks.withType<KotlinCompile> {
