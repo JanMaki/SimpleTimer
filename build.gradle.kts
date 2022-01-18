@@ -19,7 +19,7 @@ dependencies {
     implementation(kotlin("stdlib", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
 
     //Discord連携 JDA
-    implementation("net.dv8tion", "JDA", "5.0.0-alpha.2")
+    implementation("net.dv8tion", "JDA", "5.0.0-alpha.4")
     //implementation(files("libs/JDA-4.3.0_DEV-withDependencies.jar"))
     implementation("org.slf4j", "slf4j-simple", "1.7.30")
     implementation("org.slf4j", "slf4j-api", "1.7.30")
@@ -28,7 +28,7 @@ dependencies {
     implementation("me.carleslc.Simple-YAML", "Simple-Yaml", "1.7.2")
 
     //BCDice
-    implementation("dev.simpletimer","bcdice-kt","alpha-1")
+    implementation("dev.simpletimer","bcdice-kt","alpha-2")
 }
 
 tasks.withType<KotlinCompile> {
