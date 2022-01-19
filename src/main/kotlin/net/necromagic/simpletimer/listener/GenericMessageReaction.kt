@@ -1,12 +1,15 @@
 package net.necromagic.simpletimer.listener
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimer.timer.Timer
 import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 
 import java.util.*
-import java.util.concurrent.Executors
 
 /**
  * リアクションの操作を行うクラス
@@ -85,9 +88,9 @@ class GenericMessageReaction : ListenerAdapter() {
 
         //クールタイムの作成
         coolTime.add(idLong)
-        Executors.newSingleThreadExecutor().submit {
+        CoroutineScope(Dispatchers.Default).launch {
             try {
-                Thread.sleep(100)
+                delay(100)
                 coolTime.remove(idLong)
             } catch (e: InterruptedException) {
                 coolTime.remove(idLong)

@@ -1,6 +1,9 @@
 package net.necromagic.simpletimer.timer
 
-import java.util.concurrent.Executors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * タイマーのサービス
@@ -37,7 +40,7 @@ class TimerService(private var seconds: Int) {
         var oldTime = System.nanoTime()
 
         //別スレッドでタイマーを開始
-        Executors.newSingleThreadExecutor().submit {
+        CoroutineScope(Dispatchers.Default).launch {
             do{
                 //終了フラグを確認
                 if (isFinish){
@@ -56,7 +59,7 @@ class TimerService(private var seconds: Int) {
                 listeners.forEach{it.onUpdate()}
 
                 //スレッドを0.5秒待つ
-                Thread.sleep(500)
+                delay(500)
 
                 //経過時間を更新
                 elapsedTime = System.nanoTime() - startNanoTime

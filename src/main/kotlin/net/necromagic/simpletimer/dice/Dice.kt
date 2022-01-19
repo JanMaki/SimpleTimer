@@ -1,12 +1,14 @@
 package net.necromagic.simpletimer.dice
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.interactions.Interaction
 import net.necromagic.simpletimer.ServerConfig
 import net.necromagic.simpletimer.SimpleTimer
 import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 import net.necromagic.simpletimer.util.equalsIgnoreCase
-import java.util.concurrent.Executors
 
 class Dice {
     fun roll(event: Interaction, command: String, mentionTarget: User? = null){
@@ -63,7 +65,7 @@ class Dice {
 
             //BCDiceのダイス
             ServerConfig.DiceMode.BCDice -> {
-                Executors.newSingleThreadExecutor().submit {
+                CoroutineScope(Dispatchers.Default).launch {
                     //コマンドを実行
                     val guild = event.guild
                     if (guild != null) {
