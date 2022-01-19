@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
-import net.necromagic.simpletimer.bcdice.BCDiceManager
+import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 import net.necromagic.simpletimer.command.CommandManager
 import net.necromagic.simpletimer.command.slash.SlashCommandManager
 import net.necromagic.simpletimer.listener.*
@@ -159,6 +159,7 @@ class SimpleTimer {
         val shardBuilder = JDABuilder.createDefault(token)
 
         //リスナーの登録
+        shardBuilder.addEventListeners(ButtonClick())
         shardBuilder.addEventListeners(GuildMessageReceived())
         shardBuilder.addEventListeners(GenericMessageReaction())
         shardBuilder.addEventListeners(MessageDelete())

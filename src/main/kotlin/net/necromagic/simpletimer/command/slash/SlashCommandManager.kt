@@ -6,6 +6,7 @@ object SlashCommandManager {
     init {
         //コマンド一覧
         slashCommands.addAll(arrayOf(
+            ButtonSlashCommand,
             TimerSlashCommand.StartTimer,
             TimerSlashCommand.Finish,
             TimerSlashCommand.FinAll,
