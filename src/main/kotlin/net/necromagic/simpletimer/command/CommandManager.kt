@@ -4,7 +4,8 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.necromagic.simpletimer.*
-import net.necromagic.simpletimer.bcdice.BCDiceManager
+import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
+import net.necromagic.simpletimer.dice.DefaultDice
 import net.necromagic.simpletimer.util.equalsIgnoreCase
 import java.lang.StringBuilder
 import java.util.concurrent.Executors
@@ -73,10 +74,10 @@ class CommandManager {
                                 diceCommand = diceCommand.replace("||", "")
 
                             //ダイスの実行
-                            if (Dice.checkDiceFormat(diceCommand)) {
+                            if (DefaultDice.checkDiceFormat(diceCommand)) {
 
                                 //ダイスを作成
-                                val dice = Dice(diceCommand, isSecret)
+                                val dice = DefaultDice(diceCommand, isSecret)
 
                                 //出力メッセージの作成
                                 val sendMessage = if (isSecret) {
