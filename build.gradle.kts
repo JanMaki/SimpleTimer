@@ -1,7 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.30"
+    kotlin("jvm") version "1.6.0"
+
     id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
@@ -15,8 +16,9 @@ repositories {
 }
 
 dependencies {
-
     implementation(kotlin("stdlib", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 
     //Discord連携 JDA
     implementation("net.dv8tion", "JDA", "5.0.0-alpha.4")

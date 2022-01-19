@@ -1,5 +1,9 @@
 package net.necromagic.simpletimer.timer
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Message
@@ -9,7 +13,6 @@ import net.necromagic.simpletimer.ServerConfig
 import net.necromagic.simpletimer.SimpleTimer
 import net.necromagic.simpletimer.util.Log
 import java.util.*
-import java.util.concurrent.Executors
 import kotlin.math.abs
 
 /**
@@ -212,9 +215,9 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
         timers.remove(notice?.idLong)
 
         //時間を置いてリアクションを削除
-        Executors.newSingleThreadExecutor().submit {
+        CoroutineScope(Dispatchers.Default).launch {
             try {
-                Thread.sleep(5000)
+                delay(5000)
                 display?.clearReactions()?.queue({}, {})
             } catch (e: InterruptedException) {
                 Log.sendLog(e.stackTraceToString())
@@ -260,9 +263,9 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
 
         timers.remove(notice?.idLong)
         //メッセージを消す
-        Executors.newSingleThreadExecutor().submit {
+        CoroutineScope(Dispatchers.Default).launch {
             try {
-                Thread.sleep(5000)
+                delay(5000)
                 display?.clearReactions()?.queue({}, {})
             } catch (e: InterruptedException) {
                 e.printStackTrace()
@@ -420,8 +423,8 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
                 val message = channel.sendMessage(messageBuilder.build()).complete()
 
                 //時間を置いてメッセージを削除
-                Executors.newSingleThreadExecutor().submit {
-                    Thread.sleep(5000)
+                CoroutineScope(Dispatchers.Default).launch {
+                    delay(5000)
                     message.delete().queue({}, {})
                 }
             } catch (e: Exception) {

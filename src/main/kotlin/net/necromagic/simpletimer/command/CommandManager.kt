@@ -1,5 +1,8 @@
 package net.necromagic.simpletimer.command
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
@@ -8,7 +11,6 @@ import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 import net.necromagic.simpletimer.dice.DefaultDice
 import net.necromagic.simpletimer.util.equalsIgnoreCase
 import java.lang.StringBuilder
-import java.util.concurrent.Executors
 
 /**
  * コマンドの管理クラス
@@ -59,7 +61,7 @@ class CommandManager {
                 }
                 var diceCommand = builder.toString().replace(prefix, "").lowercase()
 
-                Executors.newSingleThreadExecutor().submit {
+                CoroutineScope(Dispatchers.Default).launch launch@{
 
                     //ダイスモードの確認
                     when (SimpleTimer.instance.config.getDiceMode(message.guild)) {
@@ -107,7 +109,7 @@ class CommandManager {
                         //BCDice
                         ServerConfig.DiceMode.BCDice -> {
                             val roll = BCDiceManager.instance.roll(message.guild, args[0].replace(prefix, "").lowercase())
-                                ?: return@submit
+                                ?: return@launch
                             message.reply(roll).queue()
                         }
 

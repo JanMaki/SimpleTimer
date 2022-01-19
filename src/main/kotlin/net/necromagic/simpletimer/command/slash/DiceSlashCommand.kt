@@ -1,5 +1,8 @@
 package net.necromagic.simpletimer.command.slash
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -8,8 +11,6 @@ import net.necromagic.simpletimer.ServerConfig
 import net.necromagic.simpletimer.SimpleTimer
 import net.necromagic.simpletimer.dice.Dice
 import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
-import net.necromagic.simpletimer.util.equalsIgnoreCase
-import java.util.concurrent.Executors
 
 /**
  * ダイス関連のコマンド
@@ -91,7 +92,7 @@ class DiceSlashCommand {
                 }
                 ServerConfig.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
-                    Executors.newSingleThreadExecutor().submit {
+                    CoroutineScope(Dispatchers.Default).launch {
                         event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild)).queue()
                     }
                 }
@@ -107,7 +108,7 @@ class DiceSlashCommand {
             //メッセージを出力
             event.hook.sendMessage("メニューよりボットを選択してください").complete()
 
-            Executors.newSingleThreadExecutor().submit {
+            CoroutineScope(Dispatchers.Default).launch {
                 //ダイスボットを変更する画面を出す
                 BCDiceManager.instance.openSelectDiceBotView(event.channel)
             }
