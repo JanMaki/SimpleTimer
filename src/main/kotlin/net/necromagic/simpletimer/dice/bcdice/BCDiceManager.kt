@@ -1,4 +1,4 @@
-package net.necromagic.simpletimer.bcdice
+package net.necromagic.simpletimer.dice.bcdice
 
 import dev.simpletimer.bcdice_kt.BCDice
 import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem

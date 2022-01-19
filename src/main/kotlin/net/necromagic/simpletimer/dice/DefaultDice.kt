@@ -1,8 +1,9 @@
-package net.necromagic.simpletimer
+package net.necromagic.simpletimer.dice
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
+import net.necromagic.simpletimer.SimpleTimer
 import java.awt.Color
 import java.util.Random
 import kotlin.collections.ArrayList
@@ -14,7 +15,7 @@ import kotlin.collections.ArrayList
  * @param command [String] ダイスのコマンド。
  * @param secret [Boolean] シークレットダイスかどうか
  */
-open class Dice(private val command: String, secret: Boolean = false) {
+open class DefaultDice(private val command: String, secret: Boolean = false) {
     companion object {
         /**
          * 文字列がDiceのフォーマットに沿っているかを確認する

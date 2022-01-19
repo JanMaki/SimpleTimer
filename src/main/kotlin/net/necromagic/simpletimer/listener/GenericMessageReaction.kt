@@ -3,7 +3,7 @@ package net.necromagic.simpletimer.listener
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimer.timer.Timer
-import net.necromagic.simpletimer.bcdice.BCDiceManager
+import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 
 import java.util.*
 import java.util.concurrent.Executors
