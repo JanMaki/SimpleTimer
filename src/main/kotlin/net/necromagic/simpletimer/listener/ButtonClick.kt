@@ -1,14 +1,15 @@
 package net.necromagic.simpletimer.listener
 
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimer.dice.Dice
 import net.necromagic.simpletimer.timer.Timer
 import java.util.*
 
 class ButtonClick:ListenerAdapter() {
-    override fun onButtonClick(event: ButtonClickEvent) {
-        super.onButtonClick(event)
+
+    override fun onButtonInteraction(event: ButtonInteractionEvent) {
+        super.onButtonInteraction(event)
         event.deferReply().queue()
 
         val buttonID = event.componentId

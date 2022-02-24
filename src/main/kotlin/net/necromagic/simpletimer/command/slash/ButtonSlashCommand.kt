@@ -1,10 +1,10 @@
 package net.necromagic.simpletimer.command.slash
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
-import net.dv8tion.jda.api.interactions.components.Button
+import net.dv8tion.jda.api.interactions.components.buttons.Button
 
 /**
  * ボタンを送信する
@@ -19,7 +19,7 @@ object ButtonSlashCommand: SlashCommand("button","タイマーやボタンを開
         )
     }
 
-    override fun run(command: String, event: SlashCommandEvent) {
+    override fun run(command: String, event: SlashCommandInteractionEvent) {
         //サブコマンドを取得
         val subCommand = event.subcommandName
 

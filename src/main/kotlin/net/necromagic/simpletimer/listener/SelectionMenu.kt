@@ -1,25 +1,26 @@
 package net.necromagic.simpletimer.listener
 
 import net.dv8tion.jda.api.entities.MessageChannel
-import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimer.SimpleTimer
 import net.necromagic.simpletimer.timer.Timer
 import java.util.*
 
 class SelectionMenu : ListenerAdapter() {
-    override fun onSelectionMenu(event: SelectionMenuEvent) {
+
+    override fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
         //実行されたサーバー
         val guild = event.guild!!
 
         //実行されたメニュー
-        val selectionMenu = event.selectionMenu ?: return
+        val selectionMenu = event.selectMenu
 
         //メニューのID
         val id = selectionMenu.id ?: return
 
         //選ばれたオプション
-        val options = event.selectedOptions ?: return
+        val options = event.selectedOptions
 
         //タイマーリストの時の処理
         if (id == "TimerList") {

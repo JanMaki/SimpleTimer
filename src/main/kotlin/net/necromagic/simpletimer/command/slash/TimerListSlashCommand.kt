@@ -1,7 +1,7 @@
 package net.necromagic.simpletimer.command.slash
 
 import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
@@ -18,7 +18,7 @@ class TimerListSlashCommand {
             setDefaultEnabled(true)
         }
 
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             //タイマーリストを送信する
             TimerList.sendList(event)
         }
@@ -38,7 +38,7 @@ class TimerListSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             //コンフィグを取得
             val config = SimpleTimer.instance.config
 
@@ -86,7 +86,7 @@ class TimerListSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             //コンフィグを取得
             val config = SimpleTimer.instance.config
 
@@ -125,7 +125,7 @@ class TimerListSlashCommand {
             addOption(OptionType.CHANNEL, "テキストチャンネル", "対象のチャンネル", true)
         }
 
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("テキストチャンネル")
 
@@ -188,7 +188,7 @@ class TimerListSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             //サブコマンドを取得
             val subCommand = event.subcommandName
 
@@ -263,7 +263,7 @@ class TimerListSlashCommand {
             setDefaultEnabled(true)
         }
 
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             val id = event.guild!!.idLong.toString(36)
             event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期できます").queue()
         }

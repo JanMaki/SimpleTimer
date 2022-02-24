@@ -1,17 +1,17 @@
 package net.necromagic.simpletimer
 
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
-import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
 
 object TimerList {
     /**
      * タイマーリストを送信する
      *
-     * @param event [SlashCommandEvent] スラッシュコマンドのイベント
+     * @param event [SlashCommandInteractionEvent] スラッシュコマンドのイベント
      * @author Shiba_Magic
      */
-    fun sendList(event: SlashCommandEvent) {
+    fun sendList(event: SlashCommandInteractionEvent) {
         val config = SimpleTimer.instance.config
 
         var appendMessage = ""
@@ -28,7 +28,7 @@ object TimerList {
         }
 
         //メニューを作成
-        val selectionMenu = SelectionMenu.create("TimerList")
+        val selectionMenu = SelectMenu.create("TimerList")
         selectionMenu.placeholder = "タイマーを選択"
         selectionMenu.setRequiredRange(1, 1)
 

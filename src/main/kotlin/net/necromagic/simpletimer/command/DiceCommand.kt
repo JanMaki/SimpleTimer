@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.api.interactions.commands.build.CommandData
+import net.dv8tion.jda.internal.interactions.CommandDataImpl
 import net.necromagic.simpletimer.dice.DefaultDice
 import net.necromagic.simpletimer.ServerConfig
 import net.necromagic.simpletimer.SimpleTimer
@@ -16,7 +16,7 @@ import java.awt.Color
 /**
  * ダイスのコマンドのクラス
  */
-class DiceCommand : CommandData("dice", "ダイスの設定を変更します。"), RunCommand {
+class DiceCommand : CommandDataImpl("dice", "ダイスの設定を変更します。"), RunCommand {
 
     /**
      * コマンドを実行する

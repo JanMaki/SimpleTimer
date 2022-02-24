@@ -3,7 +3,7 @@ package net.necromagic.simpletimer.command.slash
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.necromagic.simpletimer.dice.DefaultDice
@@ -26,7 +26,7 @@ class DiceSlashCommand {
             addOptions(OptionData(OptionType.STRING, "ダイス", "ダイスの内容 例:1d100").setRequired(true))
         }
 
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("ダイス")
 
@@ -49,7 +49,7 @@ class DiceSlashCommand {
             setDefaultEnabled(true)
         }
 
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
 
             //コンフィグを取得
             val config = SimpleTimer.instance.config
@@ -77,7 +77,7 @@ class DiceSlashCommand {
      * ダイスの情報を表示する
      */
     object DiceInfo : SlashCommand("diceinfo", "ダイスの使い方を表示する") {
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             //チャンネルを取得
             val channel = event.channel
 
@@ -104,7 +104,7 @@ class DiceSlashCommand {
      * ダイスボットを変更する画面を出す
      */
     object DiceBot : SlashCommand("dicebot", "BCDiceで使用するボットを変更します") {
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             //メッセージを出力
             event.hook.sendMessage("メニューよりボットを選択してください").complete()
 
@@ -119,7 +119,7 @@ class DiceSlashCommand {
      * 1d100
      */
     object BasicDice : SlashCommand("1d100", "100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             Dice().roll(event, "1d100")
         }
     }
@@ -128,7 +128,7 @@ class DiceSlashCommand {
      * シークレットダイス1d100
      */
     object BasicSecretDice : SlashCommand("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
-        override fun run(command: String, event: SlashCommandEvent) {
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
             Dice().roll(event, "s1d100")
         }
     }

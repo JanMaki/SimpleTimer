@@ -6,8 +6,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.interactions.commands.OptionType
-import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
+import net.dv8tion.jda.internal.interactions.CommandDataImpl
 import net.necromagic.simpletimer.*
 import net.necromagic.simpletimer.timer.Timer
 import net.necromagic.simpletimer.util.SendMessage
@@ -19,7 +19,7 @@ import kotlin.collections.HashSet
 /**
  * タイマーのコマンドのクラス
  */
-class TimerCommand : CommandData("timer", "タイマーを開始します。タイマーの操作は!!timerコマンドを使用してください。"), RunCommand{
+class TimerCommand : CommandDataImpl("timer", "タイマーを開始します。タイマーの操作は!!timerコマンドを使用してください。"), RunCommand{
 
     init {
         setDefaultEnabled(true)

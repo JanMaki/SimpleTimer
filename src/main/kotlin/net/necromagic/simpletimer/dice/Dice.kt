@@ -4,14 +4,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.api.interactions.Interaction
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback
 import net.necromagic.simpletimer.ServerConfig
 import net.necromagic.simpletimer.SimpleTimer
 import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 import net.necromagic.simpletimer.util.equalsIgnoreCase
 
 class Dice {
-    fun roll(event: Interaction, command: String, mentionTarget: User? = null){
+    fun roll(event: IReplyCallback, command: String, mentionTarget: User? = null){
         var diceCommand = command
 
         //メンションを作成

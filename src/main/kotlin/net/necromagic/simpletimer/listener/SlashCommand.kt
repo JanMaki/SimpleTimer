@@ -2,7 +2,7 @@ package net.necromagic.simpletimer.listener
 
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.PrivateChannel
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.necromagic.simpletimer.command.slash.SlashCommandManager
@@ -18,9 +18,9 @@ class SlashCommand : ListenerAdapter() {
     /**
      * スラッシュコマンドを実行した時に呼び出される
      *
-     * @param event [SlashCommandEvent] イベント
+     * @param event [SlashCommandInteractionEvent] イベント
      */
-    override fun onSlashCommand(event: SlashCommandEvent) {
+    override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
         event.deferReply().complete()
 
         //各種値を取得
