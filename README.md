@@ -35,7 +35,7 @@ http://invite.simpletimer.dev
 http://community.simpletimer.dev
 ###
 ### ｜詳細｜
-https://twitter.com/i/events/1308593708955181056
+https://info.simpletimer.dev
 ###
 ### ｜投げ銭｜
 https://note.com/jan_maki/n/nc44d88dfc911
