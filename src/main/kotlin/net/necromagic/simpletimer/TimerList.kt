@@ -54,13 +54,13 @@ object TimerList {
 
         if (timerList.isEmpty()) {
             //空だった時は埋め込みだけ送信
-            event.hook.sendMessageEmbeds(builder.build()).queue()
+            event.hook.sendMessageEmbeds(builder.build()).queue({}, {})
         } else {
             //中身があるときは、埋め込みとメニューを送信
             event.hook.sendMessageEmbeds(builder.build())
                 .setEphemeral(true)
                 .addActionRow(selectionMenu.build())
-                .complete()
+                .queue({}, {})
         }
     }
 }

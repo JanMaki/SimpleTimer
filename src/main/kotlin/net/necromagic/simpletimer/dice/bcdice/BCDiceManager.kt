@@ -99,20 +99,21 @@ class BCDiceManager {
         try {
             //過去の物を消す
             if (channelViews.containsKey(channel)) {
-                channelViews[channel]?.delete()?.complete()
+                channelViews[channel]?.delete()?.queue({}, {})
             }
             //メッセージを送信
-            val message = channel.sendMessageEmbeds(embed).complete()
-            //マップに登録
-            channelViews[channel] = message
-            //ページを初期化
-            channelViewsPage[channel] = 1
-            //リアクションを付与
-            message.addReaction("⬅️").queue({}, {})
-            for (emoji in numberEmojis) {
-                message.addReaction(emoji).queue({}, {})
+            channel.sendMessageEmbeds(embed).queue { message ->
+                //マップに登録
+                channelViews[channel] = message
+                //ページを初期化
+                channelViewsPage[channel] = 1
+                //リアクションを付与
+                message.addReaction("⬅️").queue({}, {})
+                for (emoji in numberEmojis) {
+                    message.addReaction(emoji).queue({}, {})
+                }
+                message.addReaction("➡️").queue({}, {})
             }
-            message.addReaction("➡️").queue({}, {})
         } catch (e: Exception) {
             //権限関係が原因の物は排除
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
@@ -190,8 +191,15 @@ class BCDiceManager {
         val gameSystem = gameSystems[slot - 1]
         try {
             //メッセージを送信
-            val selectMessage = channel.sendMessage("ダイスBotを**${gameSystem.name}**に変更しました").complete()
-            selectMessage.addReaction("❓").queue({}, {})
+            channel.sendMessage("ダイスBotを**${gameSystem.name}**に変更しました").queue { selectMessage ->
+                selectMessage.addReaction("❓").queue({}, {})
+
+                //設定画面を消す
+                if (channelViews.containsKey(channel)) {
+                    channelViews[channel]?.delete()?.queue({}, {})
+                }
+                channelViews[channel] = selectMessage
+            }
 
             //コンフィグのインスタンス
             val config = SimpleTimer.instance.config
@@ -204,11 +212,6 @@ class BCDiceManager {
             config.setDiceBot(guild, gameSystem.id)
             config.setDiceMode(guild, ServerConfig.DiceMode.BCDice)
             config.save()
-            //設定画面を消す
-            if (channelViews.containsKey(channel)) {
-                channelViews[channel]?.delete()?.complete()
-            }
-            channelViews[channel] = selectMessage
         } catch (e: Exception) {
             //権限関係が原因の物は排除
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){

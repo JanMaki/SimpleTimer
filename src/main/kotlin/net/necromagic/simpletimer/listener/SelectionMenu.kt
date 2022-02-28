@@ -25,7 +25,7 @@ class SelectionMenu : ListenerAdapter() {
         //タイマーリストの時の処理
         if (id == "TimerList") {
             //とりあえず待たせる
-            event.deferReply().queue()
+            event.deferReply().queue({}, {})
 
             //オプションを取得
             val option = options[0] ?: return
@@ -63,16 +63,16 @@ class SelectionMenu : ListenerAdapter() {
 
 
                     //空白を出力して消し飛ばす
-                    event.hook.sendMessage(number.format("${splitted[0]}（${minutes}分）を実行しました")).complete()
+                    event.hook.sendMessage(number.format("${splitted[0]}（${minutes}分）を実行しました")).queue({}, {})
                     return
                 }
             }
 
             //最大数のメッセージを出力する
-            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
+            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue({}, {})
             return
         }
 
-        event.reply("").complete()
+        event.reply("").queue({}, {})
     }
 }

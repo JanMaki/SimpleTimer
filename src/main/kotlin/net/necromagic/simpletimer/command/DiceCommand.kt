@@ -53,20 +53,20 @@ class DiceCommand : CommandDataImpl("dice", "ダイスの設定を変更しま�
                 args[1].equalsIgnoreCase("info") -> {
                     when (SimpleTimer.instance.config.getDiceMode(message.guild)) {
                         ServerConfig.DiceMode.Default -> {
-                            messageChannel.sendMessageEmbeds(DefaultDice.getInfoEmbed(message.guild)).queue()
+                            messageChannel.sendMessageEmbeds(DefaultDice.getInfoEmbed(message.guild)).queue({}, {})
                         }
                         ServerConfig.DiceMode.BCDice -> {
-                            messageChannel.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(messageChannel, message.guild)).queue()
+                            messageChannel.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(messageChannel, message.guild)).queue({}, {})
                         }
                     }
                     return
                 }
                 else -> {
-                    messageChannel.sendMessageEmbeds(createDiceHelpEmbedBuilder(prefix)).queue()
+                    messageChannel.sendMessageEmbeds(createDiceHelpEmbedBuilder(prefix)).queue({}, {})
                 }
             }
         } else {
-            messageChannel.sendMessageEmbeds(createDiceHelpEmbedBuilder(prefix)).queue()
+            messageChannel.sendMessageEmbeds(createDiceHelpEmbedBuilder(prefix)).queue({}, {})
         }
         return
     }

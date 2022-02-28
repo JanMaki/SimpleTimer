@@ -185,7 +185,7 @@ class SimpleTimer {
                 }
             }
 
-            shard.updateCommands().addCommands(SlashCommandManager.slashCommands).complete()
+            shard.updateCommands().addCommands(SlashCommandManager.slashCommands).queue({}, {})
         }
 
         Log.sendLog("Finish loading")

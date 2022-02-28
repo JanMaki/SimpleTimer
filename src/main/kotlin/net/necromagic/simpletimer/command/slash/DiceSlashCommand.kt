@@ -69,7 +69,7 @@ class DiceSlashCommand {
             config.save()
 
             //メッセージを出力
-            event.hook.sendMessage("ダイスモードを**$diceMode**に変更しました").queue()
+            event.hook.sendMessage("ダイスモードを**$diceMode**に変更しました").queue({}, {})
         }
     }
 
@@ -88,12 +88,12 @@ class DiceSlashCommand {
             when (SimpleTimer.instance.config.getDiceMode(guild)) {
                 ServerConfig.DiceMode.Default -> {
                     //標準ダイスのヘルプを取得して出力
-                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed(guild)).queue()
+                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed(guild)).queue({}, {})
                 }
                 ServerConfig.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
                     CoroutineScope(Dispatchers.Default).launch {
-                        event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild)).queue()
+                        event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild)).queue({}, {})
                     }
                 }
             }
@@ -106,7 +106,7 @@ class DiceSlashCommand {
     object DiceBot : SlashCommand("dice_bot", "BCDiceで使用するボットを変更します") {
         override fun run(command: String, event: SlashCommandInteractionEvent) {
             //メッセージを出力
-            event.hook.sendMessage("メニューよりボットを選択してください").complete()
+            event.hook.sendMessage("メニューよりボットを選択してください").queue({}, {})
 
             CoroutineScope(Dispatchers.Default).launch {
                 //ダイスボットを変更する画面を出す

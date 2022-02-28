@@ -162,7 +162,7 @@ class TimerListSlashCommand {
                                     permissions.contains(Permission.MESSAGE_EXT_EMOJI))
                 ) {
                     //権限が不足しているメッセージを送信する
-                    event.hook.sendMessageEmbeds(SendMessage.errorEmbed).complete()
+                    event.hook.sendMessageEmbeds(SendMessage.errorEmbed).queue({}, {})
                     return
                 }
             }
@@ -173,7 +173,7 @@ class TimerListSlashCommand {
             config.save()
 
             //メッセージを送信
-            event.hook.sendMessage("一覧からタイマーを実行するチャンネルを**${channel.name}**に変更しました").queue()
+            event.hook.sendMessage("一覧からタイマーを実行するチャンネルを**${channel.name}**に変更しました").queue({}, {})
         }
     }
 

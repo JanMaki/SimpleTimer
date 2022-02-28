@@ -10,7 +10,7 @@ class ButtonClick:ListenerAdapter() {
 
     override fun onButtonInteraction(event: ButtonInteractionEvent) {
         super.onButtonInteraction(event)
-        event.deferReply().queue()
+        event.deferReply().queue({}, {})
 
         val buttonID = event.componentId
         val channel = event.channel
@@ -34,14 +34,14 @@ class ButtonClick:ListenerAdapter() {
                     Timer.channelsTimersMap[channel] = channelTimers
                     //空白を送信
                     event.hook.sendMessage("|| ||").queue { message ->
-                        message.delete().queue()
+                        message.delete().queue({}, {})
                     }
                     return
                 }
             }
 
             //最大数のメッセージを出力する
-            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
+            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue({}, {})
         }
 
         //ダイスのボタン

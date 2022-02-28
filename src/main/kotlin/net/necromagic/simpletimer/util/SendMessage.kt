@@ -37,7 +37,7 @@ class SendMessage {
         fun sendMessage(channel: MessageChannel, string: String, user: User) {
             try {
                 if (channelsMessageMap.containsKey(channel)) {
-                    channelsMessageMap[channel]?.delete()?.complete()
+                    channelsMessageMap[channel]?.delete()?.queue({}, {})
                 }
             } catch (e: Exception) {
                 //権限関係が原因の物は排除
@@ -47,7 +47,9 @@ class SendMessage {
                 Log.sendLog(e.stackTraceToString())
             } finally {
                 try {
-                    channelsMessageMap[channel] = channel.sendMessage(string).complete()
+                    channel.sendMessage(string).queue {
+                        channelsMessageMap[channel] = it
+                    }
                 } catch (e: InsufficientPermissionException) {
                     sendErrorMessageToUser(user)
                 }
@@ -62,8 +64,9 @@ class SendMessage {
          */
         fun sendErrorMessageToUser(user: User) {
             try {
-                val channel = user.openPrivateChannel().complete()
-                channel.sendMessageEmbeds(errorEmbed).queue({ }, { })
+                user.openPrivateChannel().queue { channel ->
+                    channel.sendMessageEmbeds(errorEmbed).queue({ }, { })
+                }
             } catch (e: Exception) {
                 Log.sendLog(e.stackTraceToString())
             }

@@ -44,7 +44,7 @@ object ButtonSlashCommand: SlashCommand("button","タイマーやボタンを開
 
                 //ボタンを送信
                 val button = Button.primary("timer-${option.asLong}", "⏱開始")
-                event.hook.sendMessage("**${option.asLong}分**のタイマーを開始する").addActionRow(button).queue()
+                event.hook.sendMessage("**${option.asLong}分**のタイマーを開始する").addActionRow(button).queue({}, {})
             }
             //ダイスのボタン
             "dice" -> {
@@ -59,7 +59,7 @@ object ButtonSlashCommand: SlashCommand("button","タイマーやボタンを開
 
                 //ボタンを送信
                 val button = Button.primary("dice-${option.asString}", "🎲振る")
-                event.hook.sendMessage("**${option.asString}**を振る").addActionRow(button).queue()
+                event.hook.sendMessage("**${option.asString}**を振る").addActionRow(button).queue({}, {})
             }
             else -> {
                 //エラーメッセージを送信

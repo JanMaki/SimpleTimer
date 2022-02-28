@@ -52,14 +52,14 @@ class Dice {
                                 ${mention}出力結果の文字数が多すぎます。
                                 ダイスの内容を変更して再度実行してください。
                                 """.trimIndent()
-                        ).queue()
+                        ).queue({}, {})
                     } else {
                         //結果を出力する
-                        event.hook.sendMessage(sendMessage).queue()
+                        event.hook.sendMessage(sendMessage).queue({}, {})
                     }
                 } else {
                     //構文が間違ってたらメッセージを出す
-                    event.hook.sendMessage("${mention}*ダイスの構文が間違っています").queue()
+                    event.hook.sendMessage("${mention}*ダイスの構文が間違っています").queue({}, {})
                 }
             }
 
@@ -74,10 +74,10 @@ class Dice {
                         //結果の確認
                         if (roll == null) {
                             //構文が間違ってたらメッセージを出す
-                            event.hook.sendMessage("${mention}*ダイスの構文が間違っています").queue()
+                            event.hook.sendMessage("${mention}*ダイスの構文が間違っています").queue({}, {})
                         } else {
                             //結果を出力する
-                            event.hook.sendMessage("${mention}${roll}").queue()
+                            event.hook.sendMessage("${mention}${roll}").queue({}, {})
                         }
                     }
                 }

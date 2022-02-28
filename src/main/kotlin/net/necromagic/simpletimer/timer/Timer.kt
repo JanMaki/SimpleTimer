@@ -285,23 +285,24 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
                 val id = display?.idLong
                 timers.remove(id)
                 displays.remove(id)
-                display?.delete()?.complete()
+                display?.delete()?.queue({}, {})
             }
             //送信
-            val display = channel.sendMessage(number.format(base.format(data))).complete()
-            this.display = display
-            //登録
-            val id = display.idLong
-            timers[id] = this
-            displays[id] = this
-            //リアクションの追加
-            display.addReaction("U+25C0").queue({}, {})
-            display.addReaction("U+23F8").queue({}, {})
-            display.addReaction("U+1F6D1").queue({}, {})
-            display.addReaction("1️⃣").queue({}, {})
-            display.addReaction("3️⃣").queue({}, {})
-            display.addReaction("5️⃣").queue({}, {})
-            display.addReaction("\uD83D\uDD1F").queue({}, {})
+            channel.sendMessage(number.format(base.format(data))).queue { display ->
+                this.display = display
+                //登録
+                val id = display.idLong
+                timers[id] = this
+                displays[id] = this
+                //リアクションの追加
+                display.addReaction("U+25C0").queue({}, {})
+                display.addReaction("U+23F8").queue({}, {})
+                display.addReaction("U+1F6D1").queue({}, {})
+                display.addReaction("1️⃣").queue({}, {})
+                display.addReaction("3️⃣").queue({}, {})
+                display.addReaction("5️⃣").queue({}, {})
+                display.addReaction("\uD83D\uDD1F").queue({}, {})
+            }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
@@ -321,7 +322,7 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
             //過去のメッセージを確認・削除
             if (notice != null) {
                 timers.remove(notice?.idLong)
-                notice?.delete()?.complete()
+                notice?.delete()?.queue({}, {})
             }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
@@ -393,10 +394,10 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
 
             try {
                 //送信・登録
-                val notice = display?.reply(message)?.mentionRepliedUser(false)?.complete()
-                    ?: channel.sendMessage(message).complete()
-                this.notice = notice
-                timers[notice.idLong] = this
+                display?.reply(message)?.mentionRepliedUser(false)?.queue { notice ->
+                    timers[notice.idLong] = this
+                    this.notice = notice
+                } ?: channel.sendMessage(message).queue({}, {})
             } catch (e: Exception) {
                 Log.sendLog(e.stackTraceToString())
             }
@@ -420,12 +421,12 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
 
             try {
                 //メッセージを送信
-                val message = channel.sendMessage(messageBuilder.build()).complete()
-
-                //時間を置いてメッセージを削除
-                CoroutineScope(Dispatchers.Default).launch {
-                    delay(5000)
-                    message.delete().queue({}, {})
+                val message = channel.sendMessage(messageBuilder.build()).queue { message ->
+                    //時間を置いてメッセージを削除
+                    CoroutineScope(Dispatchers.Default).launch {
+                        delay(5000)
+                        message.delete().queue({}, {})
+                    }
                 }
             } catch (e: Exception) {
                 //権限関係が原因の物は排除
