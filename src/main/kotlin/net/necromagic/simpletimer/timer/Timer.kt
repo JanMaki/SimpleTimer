@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.necromagic.simpletimer.ServerConfig
 import net.necromagic.simpletimer.SimpleTimer
+import net.necromagic.simpletimer.timer.Timer.Number
 import net.necromagic.simpletimer.util.Log
 import java.util.*
 import kotlin.math.abs
@@ -22,7 +23,12 @@ import kotlin.math.abs
  * @property number [Number] タイマーの番号
  * @property minuts [Int] 分数
  */
-class Timer(val channel: MessageChannel, private val number: Number, private var minuts: Int, private val guild: Guild): TimerService.TimerListener {
+class Timer(
+    val channel: MessageChannel,
+    private val number: Number,
+    private var minuts: Int,
+    private val guild: Guild
+) : TimerService.TimerListener {
     companion object {
         //チャンネルとタイマーのマップ
         val channelsTimersMap = HashMap<MessageChannel, EnumMap<Number, Timer>>()
@@ -71,7 +77,7 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
     private var update = false
 
     //タイマーのサービス
-    private val timerService = TimerService(minuts*60)
+    private val timerService = TimerService(minuts * 60)
 
     //開始の処理へ飛ばす
     init {
@@ -95,7 +101,7 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
     override fun onUpdate() {
         val time = timerService.getTime()
 
-        if (time.minute == this.minuts){
+        if (time.minute == this.minuts) {
             return
         }
 
@@ -247,7 +253,7 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
     }
 
     override fun onEnd(check: Boolean) {
-        if (!check){
+        if (!check) {
             return
         }
         //登録を消す
@@ -305,7 +311,7 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
             }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
-            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                 return
             }
             Log.sendLog(e.stackTraceToString())
@@ -326,7 +332,7 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
             }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
-            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                 return
             }
             Log.sendLog(e.stackTraceToString())
@@ -368,7 +374,7 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
                             config.getRoleMentionTargetList(guild).map { "<@&" + it.idLong + ">" }.joinToString { "" }
                         }
                         //対象のVCへのメンション
-                        ServerConfig.Mention.TARGET_VC ->{
+                        ServerConfig.Mention.TARGET_VC -> {
                             val stringBuffer = StringBuffer()
                             val guild = guild
                             //対象のVCがあるかを確認
@@ -421,7 +427,7 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
 
             try {
                 //メッセージを送信
-                val message = channel.sendMessage(messageBuilder.build()).queue { message ->
+                channel.sendMessage(messageBuilder.build()).queue { message ->
                     //時間を置いてメッセージを削除
                     CoroutineScope(Dispatchers.Default).launch {
                         delay(5000)
@@ -430,7 +436,7 @@ class Timer(val channel: MessageChannel, private val number: Number, private var
                 }
             } catch (e: Exception) {
                 //権限関係が原因の物は排除
-                if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+                if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                     return
                 }
                 Log.sendLog(e.stackTraceToString())

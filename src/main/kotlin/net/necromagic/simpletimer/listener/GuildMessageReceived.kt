@@ -2,7 +2,7 @@ package net.necromagic.simpletimer.listener
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import net.necromagic.simpletimer.*
+import net.necromagic.simpletimer.SimpleTimer
 
 /**
  * コマンドの処理のクラス

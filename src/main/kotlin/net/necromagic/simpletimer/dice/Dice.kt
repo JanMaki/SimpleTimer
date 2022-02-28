@@ -11,7 +11,7 @@ import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 import net.necromagic.simpletimer.util.equalsIgnoreCase
 
 class Dice {
-    fun roll(event: IReplyCallback, command: String, mentionTarget: User? = null){
+    fun roll(event: IReplyCallback, command: String, mentionTarget: User? = null) {
         var diceCommand = command
 
         //メンションを作成

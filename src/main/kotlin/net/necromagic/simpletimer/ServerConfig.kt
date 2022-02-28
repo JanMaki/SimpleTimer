@@ -101,7 +101,7 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @return [VoiceChannel]? ボイスチャンネルを返す
      */
-    private fun getVCMentionTarget(guild: Guild): VoiceChannel?{
+    private fun getVCMentionTarget(guild: Guild): VoiceChannel? {
         return guild.getVoiceChannelById(getLong("${guild.idLong}.vc_mention", 0))
     }
 
@@ -112,13 +112,14 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @return [MutableList]<[VoiceChannel]> ロールの一覧を返す
      */
-    fun getVCMentionTargetList(guild: Guild): MutableList<VoiceChannel>{
+    fun getVCMentionTargetList(guild: Guild): MutableList<VoiceChannel> {
         //取得
-        val list = getLongList("${guild.idLong}.vc_mention_list").mapNotNull { guild.getVoiceChannelById(it) }.toMutableList()
+        val list =
+            getLongList("${guild.idLong}.vc_mention_list").mapNotNull { guild.getVoiceChannelById(it) }.toMutableList()
 
         //旧データ
         val voiceChannel = getVCMentionTarget(guild)
-        if (voiceChannel != null){
+        if (voiceChannel != null) {
             list.add(voiceChannel)
         }
 
@@ -131,7 +132,7 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @param voiceChannel [VoiceChannel] 追加するVC
      */
-    fun addVCMentionTargetList(guild: Guild, voiceChannel: VoiceChannel){
+    fun addVCMentionTargetList(guild: Guild, voiceChannel: VoiceChannel) {
         val list = getVCMentionTargetList(guild)
         list.add(voiceChannel)
         set("${guild.idLong}.vc_mention_list", list.map { it.idLong })
@@ -143,7 +144,7 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @param voiceChannel [VoiceChannel] 追加するVC
      */
-    fun removeVCMentionTargetList(guild: Guild, voiceChannel: VoiceChannel){
+    fun removeVCMentionTargetList(guild: Guild, voiceChannel: VoiceChannel) {
         val list = getVCMentionTargetList(guild)
         list.remove(voiceChannel)
         set("${guild.idLong}.vc_mention_list", list.map { it.idLong })
@@ -156,7 +157,7 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @return [Role]? ロールを返す
      */
-    private fun getRoleMentionTarget(guild: Guild): Role?{
+    private fun getRoleMentionTarget(guild: Guild): Role? {
         return guild.getRoleById(getLong("${guild.idLong}.role_mention", 0))
     }
 
@@ -166,12 +167,12 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @return [MutableList]<[Role]> ロールの一覧を返す
      */
-    fun getRoleMentionTargetList(guild: Guild): MutableList<Role>{
+    fun getRoleMentionTargetList(guild: Guild): MutableList<Role> {
         val list = getLongList("${guild.idLong}.role_mention_list").mapNotNull { guild.getRoleById(it) }.toMutableList()
 
         //旧データ
         val role = getRoleMentionTarget(guild)
-        if (role != null){
+        if (role != null) {
             list.add(role)
         }
 
@@ -185,7 +186,7 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @param role [Role] 追加するロール
      */
-    fun addRoleMentionTargetList(guild: Guild, role: Role){
+    fun addRoleMentionTargetList(guild: Guild, role: Role) {
         val list = getRoleMentionTargetList(guild)
         list.add(role)
         set("${guild.idLong}.role_mention_list", list.map { it.idLong })
@@ -197,7 +198,7 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @param role [Role] 追加するロール
      */
-    fun removeRoleMentionTargetList(guild: Guild, role: Role){
+    fun removeRoleMentionTargetList(guild: Guild, role: Role) {
         val list = getRoleMentionTargetList(guild)
         list.remove(role)
         set("${guild.idLong}.role_mention_list", list.map { it.idLong })
@@ -347,7 +348,7 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @param bool [Boolean] true->on false->off
      */
-    fun setListSync(guild: Guild, bool: Boolean){
+    fun setListSync(guild: Guild, bool: Boolean) {
         set("${guild.idLong}.sync", bool)
     }
 
@@ -357,15 +358,15 @@ class ServerConfig : YamlConfiguration() {
      * @param guild [Guild] 対象のギルド
      * @return [Boolean] true->on false->off
      */
-    fun getListSync(guild: Guild): Boolean{
+    fun getListSync(guild: Guild): Boolean {
         return getBoolean("${guild.idLong}.sync", false)
     }
 
-    fun setSyncTarget(guild: Guild, targetGuild: Guild){
+    fun setSyncTarget(guild: Guild, targetGuild: Guild) {
         set("${guild.id}.sync_target", targetGuild.idLong)
     }
 
-    fun getSyncTarget(guild: Guild): Guild?{
+    fun getSyncTarget(guild: Guild): Guild? {
         return SimpleTimer.instance.getGuild(getLong("${guild.id}.sync_target", 0))
     }
 

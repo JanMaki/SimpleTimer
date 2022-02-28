@@ -17,12 +17,12 @@ object TimerList {
         var appendMessage = ""
         var guild = event.guild!!
 
-        if (config.getListSync(guild)){
+        if (config.getListSync(guild)) {
             val targetGuild = config.getSyncTarget(guild)
-            if (targetGuild != null){
+            if (targetGuild != null) {
                 guild = targetGuild
                 appendMessage = "この一覧は同期されています"
-            }else {
+            } else {
                 appendMessage = "同期元のサーバーが見つからなかったため、このサーバーに設定されている一覧を表示しています"
             }
         }

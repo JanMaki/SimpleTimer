@@ -21,7 +21,7 @@ class SlashCommand : ListenerAdapter() {
      * @param event [SlashCommandInteractionEvent] イベント
      */
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
-        event.deferReply().queue{
+        event.deferReply().queue {
             //各種値を取得
             val name = event.name
 

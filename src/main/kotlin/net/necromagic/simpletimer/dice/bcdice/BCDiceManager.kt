@@ -3,13 +3,16 @@ package net.necromagic.simpletimer.dice.bcdice
 import dev.simpletimer.bcdice_kt.BCDice
 import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
-import net.necromagic.simpletimer.*
+import net.necromagic.simpletimer.ServerConfig
+import net.necromagic.simpletimer.SimpleTimer
 import net.necromagic.simpletimer.util.Log
 import net.necromagic.simpletimer.util.equalsIgnoreCase
 import java.awt.Color
-import java.lang.StringBuilder
 
 class BCDiceManager {
     companion object {
@@ -24,7 +27,7 @@ class BCDiceManager {
     init {
         instance = this
 
-        if (!bcdice.wasInstalled()){
+        if (!bcdice.wasInstalled()) {
             bcdice.install()
         }
 
@@ -116,7 +119,7 @@ class BCDiceManager {
             }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
-            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                 return
             }
             Log.sendLog(e.stackTraceToString())
@@ -182,7 +185,7 @@ class BCDiceManager {
      * @param slot [Int] 開いてるページの何番目か
      * @param guild [Guild] 対象のギルド
      */
-    fun select(channel: MessageChannel, slot: Int, guild:Guild) {
+    fun select(channel: MessageChannel, slot: Int, guild: Guild) {
         //開いているページを取得
         val pageNumber = channelViewsPage[channel] ?: return
         //ページ内のゲームシステムを取得
@@ -214,7 +217,7 @@ class BCDiceManager {
             config.save()
         } catch (e: Exception) {
             //権限関係が原因の物は排除
-            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                 return
             }
             Log.sendLog(e.stackTraceToString())
@@ -234,7 +237,7 @@ class BCDiceManager {
         val id = SimpleTimer.instance.config.getDiceBot(guild)
 
         //ダイスボットの詳細を取得
-        val gameSystemInfo = bcdice.getGameSystem(id)!!
+        val gameSystemInfo = bcdice.getGameSystem(id)
 
         //作成開始
         var builder = EmbedBuilder()
@@ -275,7 +278,7 @@ class BCDiceManager {
         //システム共通を張る
         if (id != "DiceBot") {
             val defaultGameSystem = bcdice.getGameSystem("DiceBot")
-            builder.addField("システム共通コマンド", defaultGameSystem?.help_message, false)
+            builder.addField("システム共通コマンド", defaultGameSystem.help_message, false)
         }
 
         return builder.build()
@@ -299,13 +302,13 @@ class BCDiceManager {
         val id = SimpleTimer.instance.config.getDiceBot(guild)
 
         //ダイスボットの詳細を取得
-        val gameSystem = bcdice.getGameSystem(id) ?: return null
+        val gameSystem = bcdice.getGameSystem(id)
 
         //コマンドのパターンを取得
         val result = gameSystem.roll(runCommand)
 
         //失敗時はnullを返す
-        if (!result.check){
+        if (!result.check) {
             return null
         }
 

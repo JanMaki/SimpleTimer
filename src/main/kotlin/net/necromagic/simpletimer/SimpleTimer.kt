@@ -5,9 +5,9 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
-import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 import net.necromagic.simpletimer.command.CommandManager
 import net.necromagic.simpletimer.command.slash.SlashCommandManager
+import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 import net.necromagic.simpletimer.listener.*
 import net.necromagic.simpletimer.util.Log
 import java.io.IOException
@@ -92,7 +92,7 @@ class SimpleTimer {
     //コマンド管理
     lateinit var commandManager: CommandManager
 
-    val shards = mutableSetOf<JDA>()
+    private val shards = mutableSetOf<JDA>()
 
     init {
         init()
@@ -200,7 +200,7 @@ class SimpleTimer {
             //終了の場合
             if (input == "exit") {
                 //JDAを終了
-                shards.forEach{
+                shards.forEach {
                     it.shutdown()
                 }
                 println("Botを終了します...")
@@ -209,10 +209,10 @@ class SimpleTimer {
         }
     }
 
-    fun getGuild(id: Long): Guild?{
+    fun getGuild(id: Long): Guild? {
         var guild: Guild? = null
-        shards.forEach{
-            if (guild != null){
+        shards.forEach {
+            if (guild != null) {
                 return@forEach
             }
             guild = it.getGuildById(id)

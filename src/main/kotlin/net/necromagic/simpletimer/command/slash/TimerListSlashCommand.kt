@@ -5,8 +5,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
-import net.necromagic.simpletimer.TimerList
 import net.necromagic.simpletimer.SimpleTimer
+import net.necromagic.simpletimer.TimerList
 import net.necromagic.simpletimer.util.SendMessage
 
 class TimerListSlashCommand {
@@ -15,7 +15,7 @@ class TimerListSlashCommand {
      */
     object List : SlashCommand("list", "タイマーリストを表示します") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
@@ -30,7 +30,7 @@ class TimerListSlashCommand {
      */
     object ListAdd : SlashCommand("list_add", "タイマーリストに追加をします") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addOptions(
                 OptionData(OptionType.STRING, "名前", "タイマーの名前", true),
@@ -43,7 +43,7 @@ class TimerListSlashCommand {
             val config = SimpleTimer.instance.config
 
             //同期の確認
-            if(config.getListSync(event.guild!!)){
+            if (config.getListSync(event.guild!!)) {
                 event.hook.sendMessage("このサーバーでは一覧を同期しています。").queue()
                 return
             }
@@ -79,7 +79,7 @@ class TimerListSlashCommand {
      */
     object ListRemove : SlashCommand("list_remove", "タイマーリストに追加をします") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addOptions(
                 OptionData(OptionType.STRING, "名前", "タイマーの名前", true)
@@ -94,7 +94,7 @@ class TimerListSlashCommand {
             val name = event.getOption("名前")!!.asString
 
             //同期の確認
-            if(config.getListSync(event.guild!!)){
+            if (config.getListSync(event.guild!!)) {
                 event.hook.sendMessage("このサーバーでは一覧を同期しています。").queue()
                 return
             }
@@ -120,7 +120,7 @@ class TimerListSlashCommand {
 
     object TimerChannel : SlashCommand("timer_channel", "一覧からタイマーを送信する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addOption(OptionType.CHANNEL, "テキストチャンネル", "対象のチャンネル", true)
         }
@@ -149,8 +149,8 @@ class TimerListSlashCommand {
             //チャンネルの権限を確認
             val permissions =
                 event.guild!!.selfMember.getPermissions(
-                    event.guild!!.getTextChannelById(channel.idLong) ?:
-                    event.guild!!.getThreadChannelById(channel.idLong)!!
+                    event.guild!!.getTextChannelById(channel.idLong)
+                        ?: event.guild!!.getThreadChannelById(channel.idLong)!!
                 )
             if (!permissions.contains(Permission.ADMINISTRATOR)) {
                 if (!(
@@ -177,13 +177,13 @@ class TimerListSlashCommand {
         }
     }
 
-    object SyncList : SlashCommand("list_sync", "一覧を他のサーバーと同期します"){
+    object SyncList : SlashCommand("list_sync", "一覧を他のサーバーと同期します") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addSubcommands(
                 SubcommandData("enable", "同期を行うようにする")
-                    .addOption(OptionType.STRING, "id","同期する対象のサーバーで出力されたIDを入れてください", true),
+                    .addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true),
                 SubcommandData("disable", "同期を行わないようにする")
             )
         }
@@ -220,7 +220,7 @@ class TimerListSlashCommand {
 
 
 
-            if (bool){
+            if (bool) {
                 //オプションを取得
                 val option = event.getOption("id")
 
@@ -235,22 +235,22 @@ class TimerListSlashCommand {
 
                 val long = java.lang.Long.parseLong(id, 36)
 
-                if (guild.idLong != long){
+                if (guild.idLong != long) {
                     val targetGuild = SimpleTimer.instance.getGuild(long)
 
-                    if (targetGuild == null){
+                    if (targetGuild == null) {
                         event.hook.sendMessage("*無効なIDです").queue()
                         return
-                    }else {
+                    } else {
                         event.hook.sendMessage("同期を開始しました").queue()
                         config.setSyncTarget(guild, targetGuild)
                     }
-                }else {
+                } else {
                     event.hook.sendMessage("*対象のサーバーが同じサーバーです").queue()
                     return
                 }
 
-            }else {
+            } else {
                 event.hook.sendMessage("同期を終了しました").queue()
             }
 
@@ -258,9 +258,9 @@ class TimerListSlashCommand {
         }
     }
 
-    object GetID : SlashCommand("list_id", "同期に必要なIDを取得します"){
+    object GetID : SlashCommand("list_id", "同期に必要なIDを取得します") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {

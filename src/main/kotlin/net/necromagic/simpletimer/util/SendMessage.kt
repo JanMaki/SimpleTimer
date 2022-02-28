@@ -1,7 +1,10 @@
 package net.necromagic.simpletimer.util
 
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.necromagic.simpletimer.SimpleTimer
@@ -41,7 +44,7 @@ class SendMessage {
                 }
             } catch (e: Exception) {
                 //権限関係が原因の物は排除
-                if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)){
+                if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                     return
                 }
                 Log.sendLog(e.stackTraceToString())

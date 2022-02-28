@@ -6,9 +6,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import net.necromagic.simpletimer.timer.Timer
 import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
-
+import net.necromagic.simpletimer.timer.Timer
 import java.util.*
 
 /**
@@ -47,10 +46,10 @@ class GenericMessageReaction : ListenerAdapter() {
                 else -> {
                     when (event.reactionEmote.name) {
                         "⏸" -> timer.stop()
-                        "1️⃣" -> timer.add(1*60)
-                        "3️⃣" -> timer.add(3*60)
-                        "5️⃣" -> timer.add(5*60)
-                        "\uD83D\uDD1F" -> timer.add(10*60)
+                        "1️⃣" -> timer.add(1 * 60)
+                        "3️⃣" -> timer.add(3 * 60)
+                        "5️⃣" -> timer.add(5 * 60)
+                        "\uD83D\uDD1F" -> timer.add(10 * 60)
                         else -> return
                     }
                 }

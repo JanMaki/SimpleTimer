@@ -5,8 +5,7 @@ import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.necromagic.simpletimer.SimpleTimer
 import java.awt.Color
-import java.util.Random
-import kotlin.collections.ArrayList
+import java.util.*
 
 /**
  * ダイス用クラス

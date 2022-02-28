@@ -8,21 +8,20 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.internal.interactions.CommandDataImpl
-import net.necromagic.simpletimer.*
+import net.necromagic.simpletimer.ServerConfig
+import net.necromagic.simpletimer.SimpleTimer
 import net.necromagic.simpletimer.timer.Timer
 import net.necromagic.simpletimer.util.SendMessage
 import net.necromagic.simpletimer.util.equalsIgnoreCase
 import java.util.*
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 /**
  * タイマーのコマンドのクラス
  */
-class TimerCommand : CommandDataImpl("timer", "タイマーを開始します。タイマーの操作は!!timerコマンドを使用してください。"), RunCommand{
+class TimerCommand : CommandDataImpl("timer", "タイマーを開始します。タイマーの操作は!!timerコマンドを使用してください。"), RunCommand {
 
     init {
-        setDefaultEnabled(true)
+        isDefaultEnabled = true
 
         addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で").setRequired(true))
     }
@@ -70,7 +69,7 @@ class TimerCommand : CommandDataImpl("timer", "タイマーを開始します。
                 }
                 val time = Integer.parseInt(args[3])
                 val timer = channelTimers[number]!!
-                timer.add(time*60)
+                timer.add(time * 60)
             } catch (e: Exception) {
                 SendMessage.sendMessage(channel, "${prefix}timer add #1|#2|#3|#4 秒", user)
             }

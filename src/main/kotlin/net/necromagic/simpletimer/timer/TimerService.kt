@@ -13,8 +13,10 @@ import kotlinx.coroutines.launch
 class TimerService(private var seconds: Int) {
     //始まっているか
     private var isStarted = false
+
     //動いているか
     private var isMove = true
+
     //終了しているか
     private var isFinish = false
 
@@ -25,9 +27,9 @@ class TimerService(private var seconds: Int) {
      * タイマーを開始する
      *
      */
-    fun start(): Boolean{
+    fun start(): Boolean {
         //既に開始していたら何もしない
-        if (isStarted){
+        if (isStarted) {
             return false
         }
 
@@ -41,14 +43,14 @@ class TimerService(private var seconds: Int) {
 
         //別スレッドでタイマーを開始
         CoroutineScope(Dispatchers.Default).launch {
-            do{
+            do {
                 //終了フラグを確認
-                if (isFinish){
+                if (isFinish) {
                     break
                 }
 
                 //もしタイマーが止まっていたら、調整値を増やす
-                if (!isMove){
+                if (!isMove) {
                     adjustTime += System.nanoTime() - oldTime
                 }
 
@@ -56,14 +58,14 @@ class TimerService(private var seconds: Int) {
                 oldTime = System.nanoTime()
 
                 //イベントを呼び出す
-                listeners.forEach{it.onUpdate()}
+                listeners.forEach { it.onUpdate() }
 
                 //スレッドを0.5秒待つ
                 delay(500)
 
                 //経過時間を更新
                 elapsedTime = System.nanoTime() - startNanoTime
-            }while (elapsedTime < (seconds * 1000000000L) + adjustTime)// 経過時間が、秒数 * 1000000000 + 調整値 以下なら続ける
+            } while (elapsedTime < (seconds * 1000000000L) + adjustTime)// 経過時間が、秒数 * 1000000000 + 調整値 以下なら続ける
 
             //終了する
             finish()
@@ -73,7 +75,7 @@ class TimerService(private var seconds: Int) {
         isStarted = true
 
         //イベントを呼び出す
-        listeners.forEach{it.onStart()}
+        listeners.forEach { it.onStart() }
 
         //正常に開始したのでtrueを返す
         return true
@@ -84,7 +86,7 @@ class TimerService(private var seconds: Int) {
      *
      * @return 既に一時停止していたらfalseを返す
      */
-    fun stop(): Boolean{
+    fun stop(): Boolean {
         //既に止まっているかを確認
         val check = isMove
 
@@ -92,7 +94,7 @@ class TimerService(private var seconds: Int) {
         isMove = false
 
         //イベントを呼び出す
-        listeners.forEach{it.onStop(check)}
+        listeners.forEach { it.onStop(check) }
 
         //確認したものを返す
         return check
@@ -103,7 +105,7 @@ class TimerService(private var seconds: Int) {
      *
      * @return 停止していなかったらfalseを返す
      */
-    fun restart(): Boolean{
+    fun restart(): Boolean {
         //止まっているかを確認
         val check = !isMove
 
@@ -111,7 +113,7 @@ class TimerService(private var seconds: Int) {
         isMove = true
 
         //イベントを呼び出す
-        listeners.forEach{it.onRestart(check)}
+        listeners.forEach { it.onRestart(check) }
 
         //確認したものを返す
         return check
@@ -122,7 +124,7 @@ class TimerService(private var seconds: Int) {
      *
      * @return 既に終了していたらfalseを返す
      */
-    fun finish(): Boolean{
+    fun finish(): Boolean {
         //既に終わっているかを確認
         val check = !isFinish
 
@@ -130,7 +132,7 @@ class TimerService(private var seconds: Int) {
         isFinish = true
 
         //イベントを呼び出す
-        listeners.forEach{it.onFinish(check)}
+        listeners.forEach { it.onFinish(check) }
 
         //確認したものを返す
         return check
@@ -141,7 +143,7 @@ class TimerService(private var seconds: Int) {
      *
      * @return 既に終了していたらfalseを返す
      */
-    fun end(): Boolean{
+    fun end(): Boolean {
         //既に終わっているかを確認
         val check = !isFinish
 
@@ -149,7 +151,7 @@ class TimerService(private var seconds: Int) {
         isFinish = true
 
         //イベントを呼び出す
-        listeners.forEach{it.onEnd(check)}
+        listeners.forEach { it.onEnd(check) }
 
         //確認したものを返す
         return check
@@ -160,9 +162,9 @@ class TimerService(private var seconds: Int) {
      *
      * @param seconds 追加する秒数
      */
-    fun addTimer(seconds: Int){
+    fun addTimer(seconds: Int) {
         //イベントを呼び出す
-        listeners.forEach{it.onAdd(seconds)}
+        listeners.forEach { it.onAdd(seconds) }
 
         //秒数を追加
         this.seconds += seconds
@@ -176,7 +178,7 @@ class TimerService(private var seconds: Int) {
      *
      * @param listener 登録するリスナー[TimerListener]
      */
-    fun registerListener(listener: TimerListener){
+    fun registerListener(listener: TimerListener) {
         listeners.add(listener)
     }
 
@@ -184,7 +186,7 @@ class TimerService(private var seconds: Int) {
      * リスナーのインターフェース
      *
      */
-    interface TimerListener{
+    interface TimerListener {
         /**
          * 開始したときに呼び出される
          *
@@ -238,7 +240,7 @@ class TimerService(private var seconds: Int) {
      *
      * @return 残り時間[Time]
      */
-    fun getTime(): Time{
+    fun getTime(): Time {
         //残りの秒数を取得する
         var seconds = this.seconds - (elapsedTime / 1000000000L).toInt()
         //60で割り、小数点切り捨てで分数にする

@@ -43,7 +43,7 @@ class SelectionMenu : ListenerAdapter() {
             //チャンネルを取得
             var channel: MessageChannel? = guild.getTextChannelById(long) ?: guild.getThreadChannelById(long)
 
-            if (channel == null){
+            if (channel == null) {
                 channel = event.channel
             }
 

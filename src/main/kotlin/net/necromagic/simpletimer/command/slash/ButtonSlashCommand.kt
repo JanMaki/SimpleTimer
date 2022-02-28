@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
 /**
  * ボタンを送信する
  */
-object ButtonSlashCommand: SlashCommand("button","タイマーやボタンを開始するボタンを送信します"){
+object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを開始するボタンを送信します") {
     init {
         addSubcommands(
             SubcommandData("timer", "タイマー")
@@ -30,7 +30,7 @@ object ButtonSlashCommand: SlashCommand("button","タイマーやボタンを開
         }
 
         //ボタンの内容を確認する
-        when(subCommand){
+        when (subCommand) {
             //タイマーのボタン
             "timer" -> {
                 //オプションを取得
@@ -52,7 +52,7 @@ object ButtonSlashCommand: SlashCommand("button","タイマーやボタンを開
                 val option = event.getOption("ダイス")
 
                 //nullチェック
-                if (option == null){
+                if (option == null) {
                     replyCommandError(event)
                     return
                 }

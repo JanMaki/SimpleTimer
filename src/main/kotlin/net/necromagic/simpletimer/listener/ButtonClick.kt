@@ -6,7 +6,7 @@ import net.necromagic.simpletimer.dice.Dice
 import net.necromagic.simpletimer.timer.Timer
 import java.util.*
 
-class ButtonClick:ListenerAdapter() {
+class ButtonClick : ListenerAdapter() {
 
     override fun onButtonInteraction(event: ButtonInteractionEvent) {
         super.onButtonInteraction(event)
@@ -16,7 +16,7 @@ class ButtonClick:ListenerAdapter() {
         val channel = event.channel
 
         //タイマーのボタン
-        if (buttonID.contains("timer")){
+        if (buttonID.contains("timer")) {
             //チャンネルのタイマーを取得する
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
 
@@ -25,11 +25,10 @@ class ButtonClick:ListenerAdapter() {
                 //その番号のタイマーが動いているかを確認
                 if (!channelTimers.containsKey(number)) {
                     //タイマーを開始・代入
-                    channelTimers[number] =  Timer(
+                    channelTimers[number] = Timer(
                         channel,
                         number,
-                        buttonID.replace("timer-","").toIntOrNull() ?: return
-                        , event.guild!!
+                        buttonID.replace("timer-", "").toIntOrNull() ?: return, event.guild!!
                     )
                     Timer.channelsTimersMap[channel] = channelTimers
                     //空白を送信
@@ -45,9 +44,9 @@ class ButtonClick:ListenerAdapter() {
         }
 
         //ダイスのボタン
-        if(buttonID.contains("dice")){
+        if (buttonID.contains("dice")) {
             //ダイスのコマンドを取得
-            val value = buttonID.replace("dice-","")
+            val value = buttonID.replace("dice-", "")
 
             //ダイスを振る
             Dice().roll(event, value, event.user)

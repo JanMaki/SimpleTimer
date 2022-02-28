@@ -6,11 +6,11 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
-import net.necromagic.simpletimer.*
-import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
+import net.necromagic.simpletimer.ServerConfig
+import net.necromagic.simpletimer.SimpleTimer
 import net.necromagic.simpletimer.dice.DefaultDice
+import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 import net.necromagic.simpletimer.util.equalsIgnoreCase
-import java.lang.StringBuilder
 
 /**
  * コマンドの管理クラス
@@ -108,8 +108,9 @@ class CommandManager {
 
                         //BCDice
                         ServerConfig.DiceMode.BCDice -> {
-                            val roll = BCDiceManager.instance.roll(message.guild, args[0].replace(prefix, "").lowercase())
-                                ?: return@launch
+                            val roll =
+                                BCDiceManager.instance.roll(message.guild, args[0].replace(prefix, "").lowercase())
+                                    ?: return@launch
                             message.reply(roll).queue({}, {})
                         }
 

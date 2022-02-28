@@ -19,7 +19,7 @@ class TimerSlashCommand {
      */
     object StartTimer : SlashCommand("timer", "タイマーを開始する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で").setRequired(true))
         }
@@ -56,7 +56,7 @@ class TimerSlashCommand {
                     Timer.channelsTimersMap[channel] = channelTimers
 
                     //空白を出力して消し飛ばす
-                    event.hook.sendMessage("|| ||").queue{
+                    event.hook.sendMessage("|| ||").queue {
                         it.delete().queue({}, {})
                     }
                     return
@@ -73,7 +73,7 @@ class TimerSlashCommand {
      */
     object Finish : SlashCommand("finish", "タイマーを終了する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "終了するタイマー").setRequired(true).addChoices(
@@ -137,7 +137,7 @@ class TimerSlashCommand {
      */
     object FinAll : SlashCommand("finish_all", "すべてのタイマーを終了する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
@@ -171,7 +171,7 @@ class TimerSlashCommand {
      */
     object Add : SlashCommand("add", "タイマーを延長する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "延長するタイマー").setRequired(true).addChoices(
@@ -224,7 +224,7 @@ class TimerSlashCommand {
             val timer = channelTimers[number]!!
 
             //タイマーを延長
-            timer.add(minutes.toInt()*60)
+            timer.add(minutes.toInt() * 60)
 
             //空白を出力して消し飛ばす
             event.hook.sendMessage("|| ||").queue {
@@ -238,7 +238,7 @@ class TimerSlashCommand {
      */
     object Stop : SlashCommand("stop", "タイマーを一時停止する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "一時停止するタイマー").setRequired(true).addChoices(
@@ -289,7 +289,7 @@ class TimerSlashCommand {
             timer.stop()
 
             //空白を出力して消し飛ばす
-            event.hook.sendMessage("|| ||").queue { 
+            event.hook.sendMessage("|| ||").queue {
                 it.delete().queue({}, {})
             }
         }
@@ -300,7 +300,7 @@ class TimerSlashCommand {
      */
     object Restart : SlashCommand("restart", "タイマーの一時停止を再開する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "再開するタイマー").setRequired(true).addChoices(
@@ -352,7 +352,7 @@ class TimerSlashCommand {
             timer.restart()
 
             //空白を出力して消し飛ばす
-            event.hook.sendMessage("|| ||").queue { 
+            event.hook.sendMessage("|| ||").queue {
                 it.delete().queue({}, {})
             }
         }
@@ -364,7 +364,7 @@ class TimerSlashCommand {
      */
     object Check : SlashCommand("check", "タイマーを延長する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "確認するタイマー").setRequired(true).addChoices(
@@ -426,7 +426,7 @@ class TimerSlashCommand {
      */
     object TTS : SlashCommand("tts", "ttsによるメッセージの読み上げを設定する 初期状態ではLV0") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
             addSubcommands(
                 SubcommandData("lv0", "TTSによる通知を行わない"),
                 SubcommandData("lv1", "タイマー終了時のみ通知"),
@@ -468,7 +468,7 @@ class TimerSlashCommand {
      */
     object FinishTTS : SlashCommand("finish_tts", "終了時のメッセージ読み上げの内容を変更する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
             addOptions(OptionData(OptionType.STRING, "メッセージ", "メッセージの内容 タイマーの番号が'x'に代入されます").setRequired(true))
         }
 
@@ -506,12 +506,12 @@ class TimerSlashCommand {
      */
     object Mention : SlashCommand("mention", "メンションの方式を変更する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
             addSubcommands(
                 SubcommandData("here", "@hereを用いたメンション"),
                 SubcommandData("vc", "ボイスチャットに接続されているメンバー"),
                 SubcommandData("role", "特定のロールにメンション"),
-                SubcommandData("target_vc","特定のボイスチャットに接続されているメンバー"),
+                SubcommandData("target_vc", "特定のボイスチャットに接続されているメンバー"),
                 SubcommandData("off", "メンションを行わない")
             )
         }
@@ -554,34 +554,34 @@ class TimerSlashCommand {
 
             //追加を促す
             val appendMessageBuffer = StringBuffer()
-            if (mention == ServerConfig.Mention.ROLE){
+            if (mention == ServerConfig.Mention.ROLE) {
                 val list = config.getRoleMentionTargetList(guild)
-                if (list.isNotEmpty()){
-                    appendMessageBuffer.append("メンションを行う対象のロールは${list.joinToString{ "`${it.name}`" }}です。")
-                }else {
+                if (list.isNotEmpty()) {
+                    appendMessageBuffer.append("メンションを行う対象のロールは${list.joinToString { "`${it.name}`" }}です。")
+                } else {
                     appendMessageBuffer.append("メンションを行う対象のロールが設定されていません。")
                 }
                 appendMessageBuffer.append("\n対象のロールは、`/mention_addrole`で追加できます。")
             }
-            if (mention == ServerConfig.Mention.TARGET_VC){
+            if (mention == ServerConfig.Mention.TARGET_VC) {
                 val list = config.getVCMentionTargetList(guild)
-                if (list.isNotEmpty()){
-                    appendMessageBuffer.append("メンションを行う対象のボイスチャンネルは${list.joinToString{ "`${it.name}`" }}です。")
-                }else {
+                if (list.isNotEmpty()) {
+                    appendMessageBuffer.append("メンションを行う対象のボイスチャンネルは${list.joinToString { "`${it.name}`" }}です。")
+                } else {
                     appendMessageBuffer.append("メンションを行う対象のボイスチャンネルが設定されていません。")
                 }
                 appendMessageBuffer.append("\n対象のボイスチャンネルは、`/mention_addvc`で追加できます。")
             }
             val appendMessage = appendMessageBuffer.toString()
-            if (appendMessage != ""){
+            if (appendMessage != "") {
                 event.hook.sendMessage(appendMessage).queue({}, {})
             }
         }
     }
 
-    object ShowRoleMentionTarget : SlashCommand("mention_role", "メンションを行う対象のロールを確認する"){
+    object ShowRoleMentionTarget : SlashCommand("mention_role", "メンションを行う対象のロールを確認する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
@@ -590,23 +590,27 @@ class TimerSlashCommand {
 
             val list = config.getRoleMentionTargetList(guild)
             println(list)
-            if (list.isEmpty()){
-                event.hook.sendMessage("""
+            if (list.isEmpty()) {
+                event.hook.sendMessage(
+                    """
                 メンションを行う対象のロールがありません。
                 対象のロールは、`/mention_addrole`で追加できます。
-                """.trimIndent()).queue({}, {})
-            }else {
-                event.hook.sendMessage("""
-                メンションを行う対象のロールは${list.joinToString{ "`${it.name}`" }}です。
+                """.trimIndent()
+                ).queue({}, {})
+            } else {
+                event.hook.sendMessage(
+                    """
+                メンションを行う対象のロールは${list.joinToString { "`${it.name}`" }}です。
                 対象のロールは、`/mention_addrole`で追加できます。
-                """.trimIndent()).queue({}, {})
+                """.trimIndent()
+                ).queue({}, {})
             }
         }
     }
 
     object AddRoleMentionTarget : SlashCommand("mention_addrole", "メンションを行う対象のロールを追加する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
             addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
         }
 
@@ -635,7 +639,7 @@ class TimerSlashCommand {
 
     object RemoveRoleMentionTarget : SlashCommand("mention_removerole", "メンションを行う対象のロールを追加する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
             addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
         }
 
@@ -662,9 +666,9 @@ class TimerSlashCommand {
         }
     }
 
-    object ShowVCMentionTarget : SlashCommand("mention_vc", "メンションを行う対象のボイスチャットを確認する"){
+    object ShowVCMentionTarget : SlashCommand("mention_vc", "メンションを行う対象のボイスチャットを確認する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
@@ -672,23 +676,27 @@ class TimerSlashCommand {
             val guild = event.guild!!
 
             val list = config.getVCMentionTargetList(guild)
-            if (list.isEmpty()){
-                event.hook.sendMessage("""
+            if (list.isEmpty()) {
+                event.hook.sendMessage(
+                    """
                 メンションを行う対象のボイスチャンネルがありません。
                 対象のチャンネルは、`/mention_addvc`で追加できます。
-                """.trimIndent()).queue({}, {})
-            }else {
-                event.hook.sendMessage("""
-                メンションを行う対象のボイスチャンネルは${list.joinToString{ "`${it.name}`" }}です。
+                """.trimIndent()
+                ).queue({}, {})
+            } else {
+                event.hook.sendMessage(
+                    """
+                メンションを行う対象のボイスチャンネルは${list.joinToString { "`${it.name}`" }}です。
                 対象のチャンネルは、`/mention_addvc`で追加できます。
-                """.trimIndent()).queue({}, {})
+                """.trimIndent()
+                ).queue({}, {})
             }
         }
     }
 
     object AddVCMentionTarget : SlashCommand("mention_addvc", "メンションを行う対象のボイスチャットを追加する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
             addOptions(OptionData(OptionType.CHANNEL, "channel", "追加するボイスチャット").setRequired(true))
         }
 
@@ -704,7 +712,7 @@ class TimerSlashCommand {
 
             //ロール名を取得
             val channel = option.asGuildChannel
-            if(channel !is VoiceChannel){
+            if (channel !is VoiceChannel) {
                 event.hook.sendMessage("ボイスチャットではないチャンネルです").queue({}, {})
                 return
             }
@@ -721,7 +729,7 @@ class TimerSlashCommand {
 
     object RemoveVCMentionTarget : SlashCommand("mention_removevc", "メンションを行う対象のボイスチャットを削除する") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
             addOptions(OptionData(OptionType.CHANNEL, "channel", "削除するボイスチャット").setRequired(true))
         }
 
@@ -737,7 +745,7 @@ class TimerSlashCommand {
 
             //ロール名を取得
             val channel = option.asGuildChannel
-            if(channel !is VoiceChannel){
+            if (channel !is VoiceChannel) {
                 event.hook.sendMessage("ボイスチャットではないチャンネルです").queue({}, {})
                 return
             }

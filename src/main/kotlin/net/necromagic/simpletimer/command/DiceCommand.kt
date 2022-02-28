@@ -5,11 +5,11 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.internal.interactions.CommandDataImpl
-import net.necromagic.simpletimer.dice.DefaultDice
 import net.necromagic.simpletimer.ServerConfig
 import net.necromagic.simpletimer.SimpleTimer
-import net.necromagic.simpletimer.util.SendMessage.Companion.sendMessage
+import net.necromagic.simpletimer.dice.DefaultDice
 import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
+import net.necromagic.simpletimer.util.SendMessage.Companion.sendMessage
 import net.necromagic.simpletimer.util.equalsIgnoreCase
 import java.awt.Color
 
@@ -56,7 +56,12 @@ class DiceCommand : CommandDataImpl("dice", "ダイスの設定を変更しま�
                             messageChannel.sendMessageEmbeds(DefaultDice.getInfoEmbed(message.guild)).queue({}, {})
                         }
                         ServerConfig.DiceMode.BCDice -> {
-                            messageChannel.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(messageChannel, message.guild)).queue({}, {})
+                            messageChannel.sendMessageEmbeds(
+                                BCDiceManager.instance.getInfoEmbed(
+                                    messageChannel,
+                                    message.guild
+                                )
+                            ).queue({}, {})
                         }
                     }
                     return

@@ -6,9 +6,9 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
-import net.necromagic.simpletimer.dice.DefaultDice
 import net.necromagic.simpletimer.ServerConfig
 import net.necromagic.simpletimer.SimpleTimer
+import net.necromagic.simpletimer.dice.DefaultDice
 import net.necromagic.simpletimer.dice.Dice
 import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 
@@ -22,7 +22,7 @@ class DiceSlashCommand {
      */
     object Roll : SlashCommand("roll", "ダイスを振ります") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
             addOptions(OptionData(OptionType.STRING, "ダイス", "ダイスの内容 例:1d100").setRequired(true))
         }
 
@@ -46,7 +46,7 @@ class DiceSlashCommand {
      */
     object DiceMode : SlashCommand("dice_mode", "使うダイスをDefaultかBCDiceかを切り替える") {
         init {
-            setDefaultEnabled(true)
+            isDefaultEnabled = true
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
