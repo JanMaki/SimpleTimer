@@ -6,8 +6,9 @@ plugins {
     id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
-group = "net.necromagic.simpletimer"
+group = "dev.simpletimer"
 version = "1.5.5"
+val name = "SimpleTimer"
 
 repositories {
     mavenCentral()
@@ -39,7 +40,7 @@ tasks.withType<KotlinCompile> {
 
 val jar by tasks.getting(Jar::class) {
     manifest {
-        attributes["Main-Class"] = "net.necromagic.simpletimer.SimpleTimer"
+        attributes["Main-Class"] = "${group}.$name"
     }
 
     from(
