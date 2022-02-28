@@ -32,6 +32,10 @@ class ButtonClick:ListenerAdapter() {
                         , event.guild!!
                     )
                     Timer.channelsTimersMap[channel] = channelTimers
+                    //空白を送信
+                    event.hook.sendMessage("|| ||").queue { message ->
+                        message.delete().queue()
+                    }
                     return
                 }
             }
