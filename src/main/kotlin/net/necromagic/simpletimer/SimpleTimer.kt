@@ -9,7 +9,6 @@ import net.necromagic.simpletimer.command.CommandManager
 import net.necromagic.simpletimer.command.slash.SlashCommandManager
 import net.necromagic.simpletimer.dice.bcdice.BCDiceManager
 import net.necromagic.simpletimer.listener.*
-import net.necromagic.simpletimer.util.Log
 import java.io.IOException
 import java.net.ServerSocket
 import java.net.URL
@@ -163,6 +162,7 @@ class SimpleTimer {
         shardBuilder.addEventListeners(GuildMessageReceived())
         shardBuilder.addEventListeners(GenericMessageReaction())
         shardBuilder.addEventListeners(MessageDelete())
+        shardBuilder.addEventListeners(Ready())
         shardBuilder.addEventListeners(SlashCommand())
         shardBuilder.addEventListeners(SelectionMenu())
 
@@ -173,22 +173,9 @@ class SimpleTimer {
             val shard = shardBuilder.useSharding(i, 3).build()
 
             shards.add(shard)
-        }
-
-        shards.forEach { shard ->
-            val section = config.getConfigurationSection("LoggingServer")
-            section?.getKeys(false)?.forEach guildID@{ guildID ->
-                val guild = shard.getGuildById(guildID) ?: return@guildID
-                val channel = guild.getTextChannelById(config.getString("LoggingServer.${guildID}"))
-                if (channel != null) {
-                    Log.logChannels.add(channel)
-                }
-            }
 
             shard.updateCommands().addCommands(SlashCommandManager.slashCommands).queue({}, {})
         }
-
-        Log.sendLog("Finish loading")
 
         //終了処理
         //入力を作成
