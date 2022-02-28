@@ -44,7 +44,7 @@ class DiceSlashCommand {
     /**
      * ダイスモードを変更する
      */
-    object DiceMode : SlashCommand("dicemode", "使うダイスをDefaultかBCDiceかを切り替える") {
+    object DiceMode : SlashCommand("dice_mode", "使うダイスをDefaultかBCDiceかを切り替える") {
         init {
             setDefaultEnabled(true)
         }
@@ -76,7 +76,7 @@ class DiceSlashCommand {
     /**
      * ダイスの情報を表示する
      */
-    object DiceInfo : SlashCommand("diceinfo", "ダイスの使い方を表示する") {
+    object DiceInfo : SlashCommand("dice_info", "ダイスの使い方を表示する") {
         override fun run(command: String, event: SlashCommandInteractionEvent) {
             //チャンネルを取得
             val channel = event.channel
@@ -103,7 +103,7 @@ class DiceSlashCommand {
     /**
      * ダイスボットを変更する画面を出す
      */
-    object DiceBot : SlashCommand("dicebot", "BCDiceで使用するボットを変更します") {
+    object DiceBot : SlashCommand("dice_bot", "BCDiceで使用するボットを変更します") {
         override fun run(command: String, event: SlashCommandInteractionEvent) {
             //メッセージを出力
             event.hook.sendMessage("メニューよりボットを選択してください").complete()
