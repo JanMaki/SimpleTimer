@@ -40,7 +40,7 @@ tasks.withType<KotlinCompile> {
 
 val jar by tasks.getting(Jar::class) {
     manifest {
-        attributes["Main-Class"] = "${group}.$name"
+        attributes["Main-Class"] = "dev.simpletimer.SimpleTimer"
     }
 
     from(
