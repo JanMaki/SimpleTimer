@@ -113,7 +113,6 @@ class Timer(
             }
         }
 
-        println(time.seconds)
         //10秒の倍数と残り5秒の時、updateのフラグが立っているときはdisplayを更新する
         if (time.seconds % 10 == 0 || update || (time.minute == 0 && time.seconds == 5)) {
             update = false
