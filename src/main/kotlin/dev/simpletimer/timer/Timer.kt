@@ -218,7 +218,7 @@ class Timer(
             channelsTimersMap[channel] = channelTimers
         }
 
-        timers.remove(notice?.idLong)
+        if (notice != null) timers.remove(notice?.idLong)
 
         //時間を置いてリアクションを削除
         CoroutineScope(Dispatchers.Default).launch {
@@ -267,7 +267,7 @@ class Timer(
             channelsTimersMap[channel] = channelTimers
         }
 
-        timers.remove(notice?.idLong)
+        if (notice != null) timers.remove(notice?.idLong)
         //メッセージを消す
         CoroutineScope(Dispatchers.Default).launch {
             try {
