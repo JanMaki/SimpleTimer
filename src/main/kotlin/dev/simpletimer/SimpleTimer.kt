@@ -141,7 +141,7 @@ class SimpleTimer {
         //トークンがないときに終了する
         if (token.equals("TOKEN IS HERE", ignoreCase = true)) {
             //コンソールに出力
-            println("SETUP: Write the token in the \"token\" field of server_config.yml")
+            println("SETUP: Write the token in the \"token\" field of config.yml")
             return
         }
 
