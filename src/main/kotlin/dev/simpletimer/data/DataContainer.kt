@@ -6,6 +6,7 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.guild.GuildData
 import dev.simpletimer.data.guild.GuildsData
+import dev.simpletimer.util.equalsIgnoreCase
 import net.dv8tion.jda.api.entities.Guild
 import java.io.File
 import java.nio.file.Paths
@@ -83,11 +84,24 @@ class DataContainer {
         return guildsData.guilds.getOrPut(guild.idLong) { GuildData() }
     }
 
+
+    //デフォルトのGuildDataのYAMLの文字列
+    private val defaultGuildDataYAML = Yaml.default.encodeToString(GuildData.serializer(), GuildData())
+
     /**
      * ギルドのデータを保存する
      *
      */
     fun saveGuildsData() {
+        //すべてのGuildDataを確認
+        mutableMapOf<Long, GuildData>().apply { putAll(guildsData.guilds) }.forEach{ entry ->
+            //デフォルトのGuildDataのYAMLと比較
+            if (Yaml.default.encodeToString(GuildData.serializer(), entry.value).equalsIgnoreCase(defaultGuildDataYAML)){
+                //GuildDataの一覧から削除
+                guildsData.guilds.remove(entry.key)
+            }
+        }
+
         //ファイルを書き込み
         val guildsFileOutputStream = guildsFile.outputStream()
         Yaml.default.encodeToStream(GuildsData.serializer(), guildsData, guildsFileOutputStream)
