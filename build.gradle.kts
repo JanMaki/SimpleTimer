@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.0"
+    kotlin("plugin.serialization") version "1.4.20"
 
     id("com.github.johnrengelman.shadow") version "5.2.0"
 }
@@ -28,7 +29,7 @@ dependencies {
     implementation("org.slf4j", "slf4j-api", "1.7.30")
 
     //YAML
-    implementation("me.carleslc.Simple-YAML", "Simple-Yaml", "1.7.2")
+    implementation("com.charleskorn.kaml","kaml","0.42.0")
 
     //BCDice
     implementation("dev.simpletimer","bcdice-kt","1.0.0")

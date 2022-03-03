@@ -13,18 +13,14 @@ class Ready : ListenerAdapter() {
      */
     override fun onReady(event: ReadyEvent) {
         //コンフィグを取得
-        val config = SimpleTimer.instance.config
+        val config = SimpleTimer.instance.dataContainer.config
 
-        //ログを出力するサーバーの一覧を取得
-        val section = config.getConfigurationSection("LoggingServer")
         //サーバーの一覧を確認
-        section?.getKeys(false)?.forEach guildID@{ guildID ->
-
+        config.loggingChannels.forEach guildID@{
             //チャンネルを取得
-            val channel = event.jda.getTextChannelById(config.getString("LoggingServer.${guildID}")) ?: return@guildID
+            val channel = event.jda.getTextChannelById(it) ?: return@guildID
             //ログを出力するチャンネルに追加
             Log.logChannels.add(channel)
-
         }
     }
 }

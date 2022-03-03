@@ -1,6 +1,7 @@
 package dev.simpletimer.dice
 
-import dev.simpletimer.SimpleTimer
+import dev.simpletimer.data.enum.DiceMode
+import dev.simpletimer.data.getGuildData
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.util.equalsIgnoreCase
 import kotlinx.coroutines.CoroutineScope
@@ -16,13 +17,13 @@ class Dice {
         //メンションを作成
         val mention = if (mentionTarget == null) "" else "<@${mentionTarget.idLong}>\n"
 
-        //コンフィグを取得
-        val config = SimpleTimer.instance.config
+        //ギルドのデータを取得
+        val guildData = event.guild!!.getGuildData()
 
-        //ギルドのダイスもーを確認
-        when (config.getDiceMode(event.guild!!)) {
+        //ギルドのダイスモードを確認
+        when (guildData.diceMode) {
             //デフォルトのダイス
-            dev.simpletimer.ServerConfig.DiceMode.Default -> {
+            DiceMode.Default -> {
                 //シークレットダイスの確認
                 val isSecret = diceCommand.substring(0, 1).equalsIgnoreCase("s")
                 if (isSecret) diceCommand = diceCommand.replaceFirst("s", "")
@@ -63,7 +64,7 @@ class Dice {
             }
 
             //BCDiceのダイス
-            dev.simpletimer.ServerConfig.DiceMode.BCDice -> {
+            DiceMode.BCDice -> {
                 CoroutineScope(Dispatchers.Default).launch {
                     //コマンドを実行
                     val guild = event.guild

@@ -1,6 +1,7 @@
-package dev.simpletimer.command.slash
+package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
+import dev.simpletimer.data.getGuildData
 import dev.simpletimer.dice.DefaultDice
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.dice.bcdice.BCDiceManager
@@ -50,22 +51,22 @@ class DiceSlashCommand {
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
 
-            //コンフィグを取得
-            val config = SimpleTimer.instance.config
+            //ギルドのデータを取得
+            val guildData = event.guild?.getGuildData() ?: return
 
             //ダイスモードを反転
-            val diceMode = when (config.getDiceMode(event.guild!!)) {
-                dev.simpletimer.ServerConfig.DiceMode.Default -> {
-                    dev.simpletimer.ServerConfig.DiceMode.BCDice
+            val diceMode = when (guildData.diceMode) {
+                dev.simpletimer.data.enum.DiceMode.Default -> {
+                    dev.simpletimer.data.enum.DiceMode.BCDice
                 }
-                dev.simpletimer.ServerConfig.DiceMode.BCDice -> {
-                    dev.simpletimer.ServerConfig.DiceMode.Default
+                dev.simpletimer.data.enum.DiceMode.BCDice -> {
+                    dev.simpletimer.data.enum.DiceMode.Default
                 }
             }
 
-            //コンフィグへ保存
-            config.setDiceMode(guild = event.guild!!, diceMode)
-            config.save()
+            //ギルドのデータへ保存
+            guildData.diceMode = diceMode
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを出力
             event.hook.sendMessage("ダイスモードを**$diceMode**に変更しました").queue({}, {})
@@ -84,12 +85,12 @@ class DiceSlashCommand {
             val guild = event.guild ?: return
 
             //ダイスモードを取得
-            when (SimpleTimer.instance.config.getDiceMode(guild)) {
-                dev.simpletimer.ServerConfig.DiceMode.Default -> {
+            when (guild.getGuildData().diceMode) {
+                dev.simpletimer.data.enum.DiceMode.Default -> {
                     //標準ダイスのヘルプを取得して出力
-                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed(guild)).queue({}, {})
+                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed()).queue({}, {})
                 }
-                dev.simpletimer.ServerConfig.DiceMode.BCDice -> {
+                dev.simpletimer.data.enum.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
                     CoroutineScope(Dispatchers.Default).launch {
                         event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild)).queue({}, {})

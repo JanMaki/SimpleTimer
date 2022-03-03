@@ -1,7 +1,7 @@
 package dev.simpletimer
 
-import dev.simpletimer.command.CommandManager
-import dev.simpletimer.command.slash.SlashCommandManager
+import dev.simpletimer.command.SlashCommandManager
+import dev.simpletimer.data.DataContainer
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.listener.*
 import net.dv8tion.jda.api.JDA
@@ -86,12 +86,10 @@ class SimpleTimer {
     private lateinit var socket: ServerSocket
 
     //データ保存用
-    lateinit var config: ServerConfig
+    lateinit var dataContainer: DataContainer
 
-    //コマンド管理
-    lateinit var commandManager: CommandManager
-
-    private val shards = mutableSetOf<JDA>()
+    //起動しているShardのSet
+    val shards = mutableSetOf<JDA>()
 
     init {
         init()
@@ -131,26 +129,19 @@ class SimpleTimer {
         //インスタンスを代入
         instance = this
 
-        //コンフィグを生成
-        config = ServerConfig()
-        config.save()
-
-        //コマンドのクラス
-        commandManager = CommandManager()
+        //データのクラス
+        dataContainer = DataContainer()
 
         //BCDiceのマネージャーを開始
         BCDiceManager()
 
         //Tokenを取得
-        val token = config.getString("TOKEN", "TOKEN IS HERE")
+        val token = dataContainer.config.token
 
         //トークンがないときに終了する
         if (token.equals("TOKEN IS HERE", ignoreCase = true)) {
-            //初期値を保存
-            config.set("TOKEN", "TOKEN IS HERE")
-            config.save()
             //コンソールに出力
-            println("SETUP: Write the token in the \"TOKEN\" field of server_config.yml")
+            println("SETUP: Write the token in the \"token\" field of server_config.yml")
             return
         }
 
@@ -159,7 +150,6 @@ class SimpleTimer {
 
         //リスナーの登録
         shardBuilder.addEventListeners(ButtonClick())
-        shardBuilder.addEventListeners(GuildMessageReceived())
         shardBuilder.addEventListeners(GenericMessageReaction())
         shardBuilder.addEventListeners(MessageDelete())
         shardBuilder.addEventListeners(Ready())

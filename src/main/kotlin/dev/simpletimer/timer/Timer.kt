@@ -1,9 +1,10 @@
 package dev.simpletimer.timer
 
-import dev.simpletimer.ServerConfig
-import dev.simpletimer.SimpleTimer
-import dev.simpletimer.util.Log
+import dev.simpletimer.data.enum.Mention
+import dev.simpletimer.data.enum.TTSTiming
+import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer.Number
+import dev.simpletimer.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -109,7 +110,7 @@ class Timer(
         if (time.seconds == 0) {
             if (time.minute % 10 == 0 || time.minute == 5 || time.minute == 3 || time.minute == 2 || time.minute == 1) {
                 sendMessage("のこり${time.minute}分です%mention%")
-                sendTTS("のこり${time.minute}分です", ServerConfig.TTSTiming.LV2)
+                sendTTS("のこり${time.minute}分です", TTSTiming.LV2)
             }
         }
 
@@ -135,10 +136,10 @@ class Timer(
         //延長と短縮を判定
         if (seconds >= 0) {
             sendMessage("タイマーを${seconds}秒延長しました")
-            sendTTS("タイマーを${seconds}秒延長しました", ServerConfig.TTSTiming.LV3)
+            sendTTS("タイマーを${seconds}秒延長しました", TTSTiming.LV3)
         } else {
             sendMessage("タイマーを${abs(seconds)}秒短縮しました")
-            sendTTS("タイマーを${abs(seconds)}秒短縮しました", ServerConfig.TTSTiming.LV3)
+            sendTTS("タイマーを${abs(seconds)}秒短縮しました", TTSTiming.LV3)
         }
         //強制的に更新させる
         update = true
@@ -163,7 +164,7 @@ class Timer(
         var byoString = time.seconds.toString()
         if (time.seconds < 10) byoString = "0$byoString"
         sendDisplayMessage("${time.minute}分${byoString}秒")
-        sendTTS("タイマーを再開しました", ServerConfig.TTSTiming.LV3)
+        sendTTS("タイマーを再開しました", TTSTiming.LV3)
         notice?.clearReactions()?.queue({}, {})
     }
 
@@ -184,7 +185,7 @@ class Timer(
         update = true
         //メッセージの送信とリアクション
         sendMessage("タイマーを一時停止しました")
-        sendTTS("タイマーを一時停止しました", ServerConfig.TTSTiming.LV3)
+        sendTTS("タイマーを一時停止しました", TTSTiming.LV3)
         notice?.addReaction("U+25C0")?.queue({}, {})
     }
 
@@ -207,8 +208,8 @@ class Timer(
         //メッセージを送信
         sendMessage("タイマーが終了しました%mention%")
         sendTTS(
-            SimpleTimer.instance.config.getTTS(guild).replace("x", number.number.toString()),
-            ServerConfig.TTSTiming.LV1
+            guild.getGuildData().finishTTS.replace("x", number.number.toString()),
+            TTSTiming.LV1
         )
 
         val channelTimers = channelsTimersMap[channel]
@@ -337,21 +338,21 @@ class Timer(
             Log.sendLog(e.stackTraceToString())
         } finally {
             //メッセージのメンションを書き換える
-            val config = SimpleTimer.instance.config
-            val mention = config.getMention(guild)
+            val guildData = guild.getGuildData()
+            val mention = guildData.mention
             val message = "${number.format(string.replace("%mention%", ""))}${
                 if (string.contains("%mention%")) {
                     when (mention) {
                         //何も書かない
-                        ServerConfig.Mention.NONE -> {
+                        Mention.NONE -> {
                             ""
                         }
                         //hereのメンション
-                        ServerConfig.Mention.HERE -> {
+                        Mention.HERE -> {
                             "@here"
                         }
                         //VCへのメンション
-                        ServerConfig.Mention.VC -> {
+                        Mention.VC -> {
                             val stringBuffer = StringBuffer()
                             val guild = guild
                             //すべてのVCを確認
@@ -369,16 +370,16 @@ class Timer(
                             stringBuffer.toString()
                         }
                         //ロールへメンション
-                        ServerConfig.Mention.ROLE -> {
-                            config.getRoleMentionTargetList(guild).map { "<@&" + it.idLong + ">" }.joinToString { "" }
+                        Mention.ROLE -> {
+                            guildData.roleMentionTargets.filterNotNull().map { "<@&" + it.idLong + ">" }
+                                .joinToString { "" }
                         }
                         //対象のVCへのメンション
-                        ServerConfig.Mention.TARGET_VC -> {
+                        Mention.TARGET_VC -> {
                             val stringBuffer = StringBuffer()
-                            val guild = guild
                             //対象のVCがあるかを確認
                             //すべてのVCを確認
-                            for (voiceChannel in config.getVCMentionTargetList(guild)) {
+                            for (voiceChannel in guildData.vcMentionTargets.filterNotNull()) {
                                 //メンバーを追加する
                                 for (member in voiceChannel.members) {
                                     if (member.user.isBot) {
@@ -413,12 +414,12 @@ class Timer(
      * TTSメッセージを送信
      *
      * @param sting [String] メッセージ
-     * @param timing [ServerConfig.TTSTiming] このメッセージのタイミング
+     * @param timing [TTSTiming] このメッセージのタイミング
      */
-    private fun sendTTS(sting: String, timing: ServerConfig.TTSTiming) {
-        //サーバーの設定の確認
-        val config = SimpleTimer.instance.config
-        if (config.checkTTS(guild, timing)) {
+    private fun sendTTS(sting: String, timing: TTSTiming) {
+        //ギルドのデータの確認
+        val guildData = guild.getGuildData()
+        if (guildData.ttsTiming.priority >= timing.priority) {
 
             //メッセージを作成
             val messageBuilder = MessageBuilder("、${sting.replace("%mention%", "")}")

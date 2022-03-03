@@ -3,6 +3,8 @@ package dev.simpletimer.dice.bcdice
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.bcdice_kt.BCDice
 import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
+import dev.simpletimer.data.enum.DiceMode
+import dev.simpletimer.data.getGuildData
 import dev.simpletimer.util.Log
 import dev.simpletimer.util.equalsIgnoreCase
 import net.dv8tion.jda.api.EmbedBuilder
@@ -203,17 +205,17 @@ class BCDiceManager {
                 channelViews[channel] = selectMessage
             }
 
-            //コンフィグのインスタンス
-            val config = SimpleTimer.instance.config
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData()
 
             //ダイスモードを自動的に変更する
-            if (config.getDiceMode(guild) == dev.simpletimer.ServerConfig.DiceMode.Default) {
+            if (guildData.diceMode == DiceMode.Default) {
                 channel.sendMessage("ダイスモードを**BCDice**に変更しました id:${gameSystem.id}").queue({}, {})
             }
 
-            config.setDiceBot(guild, gameSystem.id)
-            config.setDiceMode(guild, dev.simpletimer.ServerConfig.DiceMode.BCDice)
-            config.save()
+            guildData.diceBot = gameSystem.id
+            guildData.diceMode = DiceMode.BCDice
+            SimpleTimer.instance.dataContainer.saveGuildsData()
         } catch (e: Exception) {
             //権限関係が原因の物は排除
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
@@ -230,10 +232,11 @@ class BCDiceManager {
      * @param guild [Guild] 対象のギルド
      */
     fun getInfoEmbed(channel: MessageChannel, guild: Guild): MessageEmbed {
-        val prefix = SimpleTimer.instance.config.getPrefix(guild)
+        //ギルドのデータを取得
+        val guildData = guild.getGuildData()
 
-        //コンフィグから設定されているダイスボットを取得
-        val id = SimpleTimer.instance.config.getDiceBot(guild)
+        //ギルドのデータから設定されているダイスボットを取得
+        val id = guildData.diceBot
 
         //ダイスボットの詳細を取得
         val gameSystemInfo = bcdice.getGameSystem(id)
@@ -241,7 +244,7 @@ class BCDiceManager {
         //作成開始
         var builder = EmbedBuilder()
         builder.setTitle(gameSystemInfo.name)
-        builder.setDescription("ダイスは\"${prefix}+コマンド\"で実行できます 例: ${prefix}1D100")
+        builder.setDescription("ダイスは\"/roll ダイス: コマンド\"で実行できます 例: /roll ダイス: 1d100")
         builder.setColor(Color.BLUE)
 
         if (gameSystemInfo.help_message.length >= 1024) {
@@ -297,8 +300,8 @@ class BCDiceManager {
             runCommand = "s$command".replace("||", "")
         }
 
-        //コンフィグから設定されているダイスボットを取得
-        val id = SimpleTimer.instance.config.getDiceBot(guild)
+        //ギルドのデータから設定されているダイスボットを取得
+        val id = guild.getGuildData().diceBot
 
         //ダイスボットの詳細を取得
         val gameSystem = bcdice.getGameSystem(id)

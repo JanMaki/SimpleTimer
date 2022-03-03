@@ -1,4 +1,4 @@
-package dev.simpletimer.command.slash
+package dev.simpletimer.command
 
 object SlashCommandManager {
     val slashCommands = mutableSetOf<SlashCommand>()

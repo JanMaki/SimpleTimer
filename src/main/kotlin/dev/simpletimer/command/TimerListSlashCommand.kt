@@ -1,7 +1,8 @@
-package dev.simpletimer.command.slash
+package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.TimerList
+import dev.simpletimer.data.getGuildData
 import dev.simpletimer.util.SendMessage
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -39,11 +40,11 @@ class TimerListSlashCommand {
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
-            //コンフィグを取得
-            val config = SimpleTimer.instance.config
+            //ギルドのデータを取得
+            val guildData = event.guild?.getGuildData() ?: return
 
             //同期の確認
-            if (config.getListSync(event.guild!!)) {
+            if (guildData.listSync) {
                 event.hook.sendMessage("このサーバーでは一覧を同期しています。").queue()
                 return
             }
@@ -52,8 +53,8 @@ class TimerListSlashCommand {
             val name = event.getOption("名前")!!.asString
             val seconds = event.getOption("分")!!.asLong.toInt()
 
-            //コンフィグから一覧を取得
-            val list = config.getTimerList(event.guild!!)
+            //ギルドのデータから一覧を取得
+            val list = guildData.timerList
 
             //上限を確認
             if (list.size >= 10) {
@@ -61,9 +62,9 @@ class TimerListSlashCommand {
                 return
             }
 
-            //コンフィグでタイマーを追加して保存する
-            config.addTimerList(event.guild!!, name, seconds)
-            config.save()
+            //ギルドのデータでタイマーを追加して保存する
+            guildData.timerList[name] = seconds
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを送信
             event.hook.sendMessage("タイマーを追加しました").queue()
@@ -87,28 +88,28 @@ class TimerListSlashCommand {
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
-            //コンフィグを取得
-            val config = SimpleTimer.instance.config
+            //ギルドのデータを取得
+            val guildData = event.guild?.getGuildData() ?: return
 
             //オプションを取得
             val name = event.getOption("名前")!!.asString
 
             //同期の確認
-            if (config.getListSync(event.guild!!)) {
+            if (guildData.listSync) {
                 event.hook.sendMessage("このサーバーでは一覧を同期しています。").queue()
                 return
             }
 
-            //コンフィグからタイマーの一覧を取得し、有効なタイマーかを確認する
-            if (!config.getTimerList(event.guild!!).contains(name)) {
+            //ギルドのデータからタイマーの一覧を取得し、有効なタイマーかを確認する
+            if (!guildData.timerList.contains(name)) {
                 //エラーのメッセージを送信
                 event.hook.sendMessage("*無効なタイマーです").queue()
                 return
             }
 
-            //コンフィグでタイマーを削除して保存する
-            config.removeTimerList(event.guild!!, name)
-            config.save()
+            //ギルドのデータでタイマーを削除して保存する
+            guildData.timerList.remove(name)
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを送信
             event.hook.sendMessage("タイマーを削除しました").queue()
@@ -167,10 +168,9 @@ class TimerListSlashCommand {
                 }
             }
 
-            //コンフィグに設定をし、保存
-            val config = SimpleTimer.instance.config
-            config.setTimerChannel(event.guild!!, channel)
-            config.save()
+            //ギルドのデータに設定をし、保存
+            event.guild!!.getGuildData().timerChannel = channel
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを送信
             event.hook.sendMessage("一覧からタイマーを実行するチャンネルを**${channel.name}**に変更しました").queue({}, {})
@@ -211,14 +211,14 @@ class TimerListSlashCommand {
                 }
             }
 
-            //コンフィグへ設定
-            val config = SimpleTimer.instance.config
+
             val guild = event.guild!!
 
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData()
+
             //メンションの方式
-            config.setListSync(guild, bool)
-
-
+            guildData.listSync = bool
 
             if (bool) {
                 //オプションを取得
@@ -243,7 +243,7 @@ class TimerListSlashCommand {
                         return
                     } else {
                         event.hook.sendMessage("同期を開始しました").queue()
-                        config.setSyncTarget(guild, targetGuild)
+                        guildData.syncTarget = targetGuild
                     }
                 } else {
                     event.hook.sendMessage("*対象のサーバーが同じサーバーです").queue()
@@ -254,7 +254,7 @@ class TimerListSlashCommand {
                 event.hook.sendMessage("同期を終了しました").queue()
             }
 
-            config.save()
+            SimpleTimer.instance.dataContainer.saveGuildsData()
         }
     }
 

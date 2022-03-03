@@ -1,8 +1,6 @@
 package dev.simpletimer.dice
 
-import dev.simpletimer.SimpleTimer
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
 import java.awt.Color
 import java.util.*
@@ -48,20 +46,17 @@ open class DefaultDice(private val command: String, secret: Boolean = false) {
         /**
          * ダイスの説明画面を表示
          *
-         * @param guild [Guild] 送信するギルド
          */
-        fun getInfoEmbed(guild: Guild): MessageEmbed {
-            val prefix = SimpleTimer.instance.config.getPrefix(guild)
-
+        fun getInfoEmbed(): MessageEmbed {
             //作成開始
             val builder = EmbedBuilder()
             builder.setTitle("SimpleTimer標準ダイス")
             builder.setColor(Color.GRAY)
-            builder.addField("${prefix}〇D●", "〇個の●面ダイスを振ります\n例： !1d100　1個100面ダイスを振ります", false)
-            builder.addField("${prefix}□+■", "□と■を足します\n例１： !2+5　2+7を行います\n例２： !1D6+1 1個6面ダイスを振った結果に+1を行います", false)
-            builder.addField("${prefix}◇<◆", "◇が◆より下かどうかを成功・失敗で、判定します\n例１： !10<5　10が5より下かどうかを判定します 結果は失敗です　", false)
+            builder.addField("〇D●", "〇個の●面ダイスを振ります\n例： !1d100　1個100面ダイスを振ります", false)
+            builder.addField("□+■", "□と■を足します\n例１： !2+5　2+7を行います\n例２： !1D6+1 1個6面ダイスを振った結果に+1を行います", false)
+            builder.addField("◇<◆", "◇が◆より下かどうかを成功・失敗で、判定します\n例１： !10<5　10が5より下かどうかを判定します 結果は失敗です　", false)
             builder.addField(
-                "${prefix}◇<=◆",
+                "◇<=◆",
                 "◇が◆以下かどうかを成功・失敗で、判定します\n例１： !1d10<=2 1個10面ダイスを振った結果が2以下かどうかを判定します 20%の確率で成功します ",
                 false
             )

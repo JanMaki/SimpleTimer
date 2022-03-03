@@ -1,6 +1,6 @@
 package dev.simpletimer.listener
 
-import dev.simpletimer.command.slash.SlashCommandManager
+import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.util.Log
 import dev.simpletimer.util.SendMessage
 import dev.simpletimer.util.equalsIgnoreCase

@@ -1,8 +1,7 @@
 package dev.simpletimer.listener
 
-import dev.simpletimer.SimpleTimer
+import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer
-import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.util.*
@@ -10,9 +9,6 @@ import java.util.*
 class SelectionMenu : ListenerAdapter() {
 
     override fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
-        //実行されたサーバー
-        val guild = event.guild!!
-
         //実行されたメニュー
         val selectionMenu = event.selectMenu
 
@@ -36,12 +32,8 @@ class SelectionMenu : ListenerAdapter() {
             //分を取得
             val minutes = splitted[1].toInt()
 
-
-            //コンフィグからチャンネルのIDを取得
-            val long = SimpleTimer.instance.config.getTimerChannelID(event.guild!!)
-
             //チャンネルを取得
-            var channel: MessageChannel? = guild.getTextChannelById(long) ?: guild.getThreadChannelById(long)
+            var channel = event.guild!!.getGuildData().timerChannel
 
             if (channel == null) {
                 channel = event.channel

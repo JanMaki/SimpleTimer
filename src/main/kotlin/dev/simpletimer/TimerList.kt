@@ -1,5 +1,6 @@
 package dev.simpletimer
 
+import dev.simpletimer.data.getGuildData
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
@@ -12,18 +13,19 @@ object TimerList {
      * @author Shiba_Magic
      */
     fun sendList(event: SlashCommandInteractionEvent) {
-        val config = SimpleTimer.instance.config
+        val guild = event.guild!!
+
+        //ギルドのデータを取得
+        val guildData = guild.getGuildData()
 
         var appendMessage = ""
-        var guild = event.guild!!
 
-        if (config.getListSync(guild)) {
-            val targetGuild = config.getSyncTarget(guild)
-            if (targetGuild != null) {
-                guild = targetGuild
-                appendMessage = "この一覧は同期されています"
+        if (guildData.listSync) {
+            val targetGuild = guildData.syncTarget
+            appendMessage = if (targetGuild != null) {
+                "この一覧は同期されています"
             } else {
-                appendMessage = "同期元のサーバーが見つからなかったため、このサーバーに設定されている一覧を表示しています"
+                "同期元のサーバーが見つからなかったため、このサーバーに設定されている一覧を表示しています"
             }
         }
 
@@ -32,8 +34,8 @@ object TimerList {
         selectionMenu.placeholder = "タイマーを選択"
         selectionMenu.setRequiredRange(1, 1)
 
-        //コンフィグからタイマーの一覧を取得
-        val timerList = config.getTimerList(guild)
+        //ギルドのデータからタイマーの一覧を取得
+        val timerList = guildData.timerList
 
         //埋め込みを作成開始
         val builder = EmbedBuilder()

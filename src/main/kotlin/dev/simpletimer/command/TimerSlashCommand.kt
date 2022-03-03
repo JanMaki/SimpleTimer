@@ -1,6 +1,8 @@
-package dev.simpletimer.command.slash
+package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
+import dev.simpletimer.data.enum.TTSTiming
+import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.util.equalsIgnoreCase
 import net.dv8tion.jda.api.entities.VoiceChannel
@@ -446,16 +448,15 @@ class TimerSlashCommand {
 
             //ttsのタイミングを取得
             val timing = when {
-                subCommand.equalsIgnoreCase("lv1") -> dev.simpletimer.ServerConfig.TTSTiming.LV1
-                subCommand.equalsIgnoreCase("lv2") -> dev.simpletimer.ServerConfig.TTSTiming.LV2
-                subCommand.equalsIgnoreCase("lv3") -> dev.simpletimer.ServerConfig.TTSTiming.LV3
-                else -> dev.simpletimer.ServerConfig.TTSTiming.LV0
+                subCommand.equalsIgnoreCase("lv1") -> TTSTiming.LV1
+                subCommand.equalsIgnoreCase("lv2") -> TTSTiming.LV2
+                subCommand.equalsIgnoreCase("lv3") -> TTSTiming.LV3
+                else -> TTSTiming.LV0
             }
 
-            //コンフィグへ保存
-            val config = SimpleTimer.instance.config
-            config.setTTS(event.guild!!, timing)
-            config.save()
+            //ギルドのデータへ保存
+            event.guild!!.getGuildData().ttsTiming = timing
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを出力
             event.hook.sendMessage("チャットの読み上げを${timing}にしました").queue({}, {})
@@ -490,10 +491,9 @@ class TimerSlashCommand {
                 return
             }
 
-            //コンフィグへ保存
-            val config = SimpleTimer.instance.config
-            config.setFinishTTS(event.guild!!, message)
-            config.save()
+            //ギルドのデータへ保存
+            event.guild!!.getGuildData().finishTTS = message
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを出力
             event.hook.sendMessage("終了時のTTSメッセージを変更しました").queue({}, {})
@@ -527,11 +527,11 @@ class TimerSlashCommand {
 
             //メンションの方式を取得
             val mention = when (subCommand) {
-                "off" -> dev.simpletimer.ServerConfig.Mention.NONE
-                "here" -> dev.simpletimer.ServerConfig.Mention.HERE
-                "role" -> dev.simpletimer.ServerConfig.Mention.ROLE
-                "vc" -> dev.simpletimer.ServerConfig.Mention.VC
-                "target_vc" -> dev.simpletimer.ServerConfig.Mention.TARGET_VC
+                "off" -> dev.simpletimer.data.enum.Mention.NONE
+                "here" -> dev.simpletimer.data.enum.Mention.HERE
+                "role" -> dev.simpletimer.data.enum.Mention.ROLE
+                "vc" -> dev.simpletimer.data.enum.Mention.VC
+                "target_vc" -> dev.simpletimer.data.enum.Mention.TARGET_VC
                 else -> {
                     //エラーを出力
                     replyCommandError(event)
@@ -539,33 +539,41 @@ class TimerSlashCommand {
                 }
             }
 
-            //コンフィグへ設定
-            val config = SimpleTimer.instance.config
             val guild = event.guild!!
 
-            //メンションの方式
-            config.setMention(guild, mention)
+            //ギルドのデータ取得
+            val guildData = guild.getGuildData()
 
-            config.save()
+            //ギルドのデータへ保存
+            guildData.mention = mention
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを出力
             event.hook.sendMessage("メンションの設定を${mention}にしました").queue({}, {})
 
             //追加を促す
             val appendMessageBuffer = StringBuffer()
-            if (mention == dev.simpletimer.ServerConfig.Mention.ROLE) {
-                val list = config.getRoleMentionTargetList(guild)
+            if (mention == dev.simpletimer.data.enum.Mention.ROLE) {
+                val list = guildData.roleMentionTargets
                 if (list.isNotEmpty()) {
-                    appendMessageBuffer.append("メンションを行う対象のロールは${list.joinToString { "`${it.name}`" }}です。")
+                    appendMessageBuffer.append(
+                        "メンションを行う対象のロールは${
+                            list.filterNotNull().joinToString { "`${it.name}`" }
+                        }です。"
+                    )
                 } else {
                     appendMessageBuffer.append("メンションを行う対象のロールが設定されていません。")
                 }
                 appendMessageBuffer.append("\n対象のロールは、`/mention_addrole`で追加できます。")
             }
-            if (mention == dev.simpletimer.ServerConfig.Mention.TARGET_VC) {
-                val list = config.getVCMentionTargetList(guild)
+            if (mention == dev.simpletimer.data.enum.Mention.TARGET_VC) {
+                val list = guildData.vcMentionTargets
                 if (list.isNotEmpty()) {
-                    appendMessageBuffer.append("メンションを行う対象のボイスチャンネルは${list.joinToString { "`${it.name}`" }}です。")
+                    appendMessageBuffer.append(
+                        "メンションを行う対象のボイスチャンネルは${
+                            list.filterNotNull().joinToString { "`${it.name}`" }
+                        }です。"
+                    )
                 } else {
                     appendMessageBuffer.append("メンションを行う対象のボイスチャンネルが設定されていません。")
                 }
@@ -584,11 +592,13 @@ class TimerSlashCommand {
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
-            val config = SimpleTimer.instance.config
             val guild = event.guild!!
 
-            val list = config.getRoleMentionTargetList(guild)
-            println(list)
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData()
+
+            val list = guildData.roleMentionTargets
+
             if (list.isEmpty()) {
                 event.hook.sendMessage(
                     """
@@ -599,7 +609,7 @@ class TimerSlashCommand {
             } else {
                 event.hook.sendMessage(
                     """
-                メンションを行う対象のロールは${list.joinToString { "`${it.name}`" }}です。
+                メンションを行う対象のロールは${list.filterNotNull().joinToString { "`${it.name}`" }}です。
                 対象のロールは、`/mention_addrole`で追加できます。
                 """.trimIndent()
                 ).queue({}, {})
@@ -626,10 +636,10 @@ class TimerSlashCommand {
             //ロール名を取得
             val role = option.asRole
 
-            //コンフィグへ追加
-            val config = SimpleTimer.instance.config
-            config.addRoleMentionTargetList(event.guild!!, role)
-            config.save()
+            //ギルドのデータに保管
+            val guildData = event.guild?.getGuildData() ?: return
+            guildData.roleMentionTargets.add(role)
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを出力
             event.hook.sendMessage("`${role.name}`をメンション対象に追加しました").queue({}, {})
@@ -655,10 +665,10 @@ class TimerSlashCommand {
             //ロール名を取得
             val role = option.asRole
 
-            //コンフィグへ追加
-            val config = SimpleTimer.instance.config
-            config.removeRoleMentionTargetList(event.guild!!, role)
-            config.save()
+            //ギルドのデータへ追加
+            val guildData = event.guild?.getGuildData() ?: return
+            guildData.roleMentionTargets.remove(role)
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを出力
             event.hook.sendMessage("`${role.name}`をメンション対象から削除しました").queue({}, {})
@@ -671,10 +681,12 @@ class TimerSlashCommand {
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
-            val config = SimpleTimer.instance.config
             val guild = event.guild!!
 
-            val list = config.getVCMentionTargetList(guild)
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData()
+
+            val list = guildData.vcMentionTargets
             if (list.isEmpty()) {
                 event.hook.sendMessage(
                     """
@@ -685,7 +697,7 @@ class TimerSlashCommand {
             } else {
                 event.hook.sendMessage(
                     """
-                メンションを行う対象のボイスチャンネルは${list.joinToString { "`${it.name}`" }}です。
+                メンションを行う対象のボイスチャンネルは${list.filterNotNull().joinToString { "`${it.name}`" }}です。
                 対象のチャンネルは、`/mention_addvc`で追加できます。
                 """.trimIndent()
                 ).queue({}, {})
@@ -716,10 +728,9 @@ class TimerSlashCommand {
                 return
             }
 
-            //コンフィグへ追加
-            val config = SimpleTimer.instance.config
-            config.addVCMentionTargetList(event.guild!!, channel)
-            config.save()
+            //ギルドのデータへ追加
+            event.guild!!.getGuildData().vcMentionTargets.add(channel)
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを出力
             event.hook.sendMessage("`${channel.name}`をメンション対象に追加しました").queue({}, {})
@@ -749,10 +760,9 @@ class TimerSlashCommand {
                 return
             }
 
-            //コンフィグへ追加
-            val config = SimpleTimer.instance.config
-            config.removeVCMentionTargetList(event.guild!!, channel)
-            config.save()
+            //ギルドのデータから削除
+            event.guild!!.getGuildData().vcMentionTargets.remove(channel)
+            SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを出力
             event.hook.sendMessage("`${channel.name}`をメンション対象から削除しました").queue({}, {})
