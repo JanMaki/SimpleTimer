@@ -341,7 +341,7 @@ class Timer(
             val guildData = guild.getGuildData()
             val mention = guildData.mention
             val message = "${number.format(string)}${
-                if (guildData.ttsTiming.priority >= timing.priority){
+                if (guildData.ttsTiming.priority >= timing.priority) {
                     when (mention) {
                         //何も書かない
                         Mention.NONE -> {
@@ -393,7 +393,7 @@ class Timer(
                             stringBuffer.toString()
                         }
                     }
-                }else {
+                } else {
                     ""
                 }
             }"

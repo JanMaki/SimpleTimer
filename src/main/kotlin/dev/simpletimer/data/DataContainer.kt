@@ -94,9 +94,11 @@ class DataContainer {
      */
     fun saveGuildsData() {
         //すべてのGuildDataを確認
-        mutableMapOf<Long, GuildData>().apply { putAll(guildsData.guilds) }.forEach{ entry ->
+        mutableMapOf<Long, GuildData>().apply { putAll(guildsData.guilds) }.forEach { entry ->
             //デフォルトのGuildDataのYAMLと比較
-            if (Yaml.default.encodeToString(GuildData.serializer(), entry.value).equalsIgnoreCase(defaultGuildDataYAML)){
+            if (Yaml.default.encodeToString(GuildData.serializer(), entry.value)
+                    .equalsIgnoreCase(defaultGuildDataYAML)
+            ) {
                 //GuildDataの一覧から削除
                 guildsData.guilds.remove(entry.key)
             }

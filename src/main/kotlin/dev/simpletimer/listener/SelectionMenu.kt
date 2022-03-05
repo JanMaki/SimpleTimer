@@ -25,7 +25,7 @@ class SelectionMenu : ListenerAdapter() {
             event.deferReply().queue({}, {})
 
             //チャンネルを取得
-            val channel = event.guild!!.getGuildData().listTargetChannel ?:  event.channel as GuildMessageChannel
+            val channel = event.guild!!.getGuildData().listTargetChannel ?: event.channel as GuildMessageChannel
 
             //オプションを取得
             val option = options[0] ?: return
@@ -62,7 +62,7 @@ class SelectionMenu : ListenerAdapter() {
                 event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue({}, {})
             }
             //ダイスの要素の時
-            else if(option.value.startsWith("dice")){
+            else if (option.value.startsWith("dice")) {
                 //ダイスのコマンドを取得
                 val command = splitted[2]
 

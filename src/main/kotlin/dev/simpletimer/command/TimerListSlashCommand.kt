@@ -1,8 +1,8 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
-import dev.simpletimer.list.ListMenu
 import dev.simpletimer.data.getGuildData
+import dev.simpletimer.list.ListMenu
 import dev.simpletimer.util.SendMessage
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent

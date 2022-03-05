@@ -500,7 +500,7 @@ class TimerSlashCommand {
         }
     }
 
-    object MentionTiming: SlashCommand("mention_timing", "メンションを行うタイミングの設定をする 初期状態ではLV2") {
+    object MentionTiming : SlashCommand("mention_timing", "メンションを行うタイミングの設定をする 初期状態ではLV2") {
         init {
             isDefaultEnabled = true
             addSubcommands(
