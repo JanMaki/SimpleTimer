@@ -56,6 +56,7 @@ import java.util.*
 // v1.5.3 JDAのバージョンを更新
 // v1.5.4 メンションの方式を改修
 // v1.5.5 一覧の同期を実装
+// v2.0.0 https://source.simpletimer.dev/pull/1
 
 
 /**
@@ -79,7 +80,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v1.5.1"
+    val version = "v2.0.0"
 
     //多重起動防止
     private val lockPort = 918
