@@ -33,7 +33,7 @@ object SlashCommandManager {
                 TimerListSlashCommand.List,
                 TimerListSlashCommand.ListAdd,
                 TimerListSlashCommand.ListRemove,
-                TimerListSlashCommand.TimerChannel,
+                TimerListSlashCommand.ListTargetChannel,
                 TimerListSlashCommand.SyncList,
                 TimerListSlashCommand.GetID
             )

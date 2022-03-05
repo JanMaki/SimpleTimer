@@ -1,7 +1,7 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
-import dev.simpletimer.TimerList
+import dev.simpletimer.list.ListMenu
 import dev.simpletimer.data.getGuildData
 import dev.simpletimer.util.SendMessage
 import net.dv8tion.jda.api.Permission
@@ -12,30 +12,36 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 
 class TimerListSlashCommand {
     /**
-     * リストを表示する
+     * 一覧を表示する
      */
-    object List : SlashCommand("list", "タイマーリストを表示します") {
+    object List : SlashCommand("list", "一覧を表示します") {
         init {
             isDefaultEnabled = true
         }
 
         override fun run(command: String, event: SlashCommandInteractionEvent) {
-            //タイマーリストを送信する
-            TimerList.sendList(event)
+            //一覧を送信する
+            ListMenu.sendList(event)
         }
     }
 
     /**
-     * リストにタイマーを追加する
+     * 一覧に要素を追加する
      *
      */
-    object ListAdd : SlashCommand("list_add", "タイマーリストに追加をします") {
+    object ListAdd : SlashCommand("list_add", "一覧に要素を追加をします") {
         init {
             isDefaultEnabled = true
 
-            addOptions(
-                OptionData(OptionType.STRING, "名前", "タイマーの名前", true),
-                OptionData(OptionType.INTEGER, "分", "時間を分単位で", true)
+            addSubcommands(
+                SubcommandData("timer", "タイマーを一覧に追加する").addOptions(
+                    OptionData(OptionType.STRING, "名前", "タイマーの名前", true),
+                    OptionData(OptionType.INTEGER, "分", "時間を分単位で", true)
+                ),
+                SubcommandData("dice", "ダイスを一覧に追加する").addOptions(
+                    OptionData(OptionType.STRING, "名前", "ダイスの名前", true),
+                    OptionData(OptionType.STRING, "ダイス", "ダイスの内容", true)
+                )
             )
         }
 
@@ -51,10 +57,21 @@ class TimerListSlashCommand {
 
             //オプションを取得
             val name = event.getOption("名前")!!.asString
-            val seconds = event.getOption("分")!!.asLong.toInt()
+
+            //文字数制限
+            if (name.length >= 10) {
+                event.hook.sendMessage("*名前の文字数は10文字以下にしてください").queue()
+                return
+            }
+
+            //:を挟まれないようにする
+            if (name.contains(":")) {
+                event.hook.sendMessage("*名前に使用できない文字が含まれています").queue()
+                return
+            }
 
             //ギルドのデータから一覧を取得
-            val list = guildData.timerList
+            val list = guildData.list
 
             //上限を確認
             if (list.size >= 10) {
@@ -62,28 +79,45 @@ class TimerListSlashCommand {
                 return
             }
 
-            //ギルドのデータでタイマーを追加して保存する
-            guildData.timerList[name] = seconds
+            //サブコマンドを確認
+            when (event.subcommandName) {
+                "timer" -> {
+                    //分を取得
+                    val seconds = event.getOption("分")!!.asLong.toInt()
+
+                    //ギルドのデータでタイマーを追加
+                    guildData.list["timer:${name}"] = seconds.toString()
+                }
+                "dice" -> {
+                    //ダイスの内容を取得
+                    val rollCommand = event.getOption("ダイス")!!.asString
+
+                    //ギルドのデータでダイスを追加
+                    guildData.list["dice:${name}"] = rollCommand
+                }
+            }
+
+            //保存
             SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを送信
-            event.hook.sendMessage("タイマーを追加しました").queue()
+            event.hook.sendMessage("一覧に追加しました").queue()
 
-            //タイマーリストを送信する
-            TimerList.sendList(event)
+            //タイマー一覧を送信する
+            ListMenu.sendList(event)
         }
     }
 
     /**
-     * リストからタイマーを削除する
+     * 一覧から要素を削除する
      *
      */
-    object ListRemove : SlashCommand("list_remove", "タイマーリストに追加をします") {
+    object ListRemove : SlashCommand("list_remove", "一覧から要素を削除をします") {
         init {
             isDefaultEnabled = true
 
             addOptions(
-                OptionData(OptionType.STRING, "名前", "タイマーの名前", true)
+                OptionData(OptionType.STRING, "名前", "要素の名前", true)
             )
         }
 
@@ -100,26 +134,26 @@ class TimerListSlashCommand {
                 return
             }
 
-            //ギルドのデータからタイマーの一覧を取得し、有効なタイマーかを確認する
-            if (!guildData.timerList.contains(name)) {
+            //ギルドのデータから一覧を取得し、有効な要素かを確認する
+            if (!guildData.list.contains(name)) {
                 //エラーのメッセージを送信
-                event.hook.sendMessage("*無効なタイマーです").queue()
+                event.hook.sendMessage("*無効な要素です").queue()
                 return
             }
 
-            //ギルドのデータでタイマーを削除して保存する
-            guildData.timerList.remove(name)
+            //ギルドのデータを削除して保存する
+            guildData.list.remove(name)
             SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを送信
-            event.hook.sendMessage("タイマーを削除しました").queue()
+            event.hook.sendMessage("要素を削除しました").queue()
 
-            //タイマーリストを送信する
-            TimerList.sendList(event)
+            //一覧を送信する
+            ListMenu.sendList(event)
         }
     }
 
-    object TimerChannel : SlashCommand("timer_channel", "一覧からタイマーを送信する") {
+    object ListTargetChannel : SlashCommand("list_target", "タイマーやダイスを送信するチャンネルを設定する") {
         init {
             isDefaultEnabled = true
 
@@ -169,11 +203,11 @@ class TimerListSlashCommand {
             }
 
             //ギルドのデータに設定をし、保存
-            event.guild!!.getGuildData().timerChannel = channel
+            event.guild!!.getGuildData().listTargetChannel = channel
             SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを送信
-            event.hook.sendMessage("一覧からタイマーを実行するチャンネルを**${channel.name}**に変更しました").queue({}, {})
+            event.hook.sendMessage("一覧からタイマーやダイスを実行するチャンネルを**${channel.name}**に変更しました").queue({}, {})
         }
     }
 
