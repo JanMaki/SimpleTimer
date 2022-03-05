@@ -2,7 +2,7 @@ package dev.simpletimer.data.guild
 
 import dev.simpletimer.data.enum.DiceMode
 import dev.simpletimer.data.enum.Mention
-import dev.simpletimer.data.enum.TTSTiming
+import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.serializer.GuildSerializer
 import dev.simpletimer.data.serializer.MessageChannelSerializer
 import dev.simpletimer.data.serializer.RoleSerializer
@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel
 /**
  * ギルドのデータ
  *
- * @property ttsTiming [TTSTiming]
+ * @property ttsTiming [NoticeTiming]
  * @property finishTTS 終了時のTTSのメッセージ
  * @property mention [Mention]
  * @property vcMentionTargets 特定のVCへのメンション時にターゲットとなる[VoiceChannel]の[List]
@@ -31,9 +31,10 @@ import net.dv8tion.jda.api.entities.VoiceChannel
  */
 @Serializable
 data class GuildData(
-    var ttsTiming: TTSTiming = TTSTiming.LV0,
+    var ttsTiming: NoticeTiming = NoticeTiming.LV0,
     var finishTTS: String = "x番目のタイマーが終了しました",
     var mention: Mention = Mention.VC,
+    var mentionTiming: NoticeTiming = NoticeTiming.LV2,
     var vcMentionTargets: MutableList<@Serializable(with = VoiceChannelSerializer::class) VoiceChannel?> = mutableListOf(),
     var roleMentionTargets: MutableList<@Serializable(with = RoleSerializer::class) Role?> = mutableListOf(),
     var diceMode: DiceMode = DiceMode.Default,
