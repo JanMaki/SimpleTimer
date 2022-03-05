@@ -1,7 +1,7 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
-import dev.simpletimer.data.enum.TTSTiming
+import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.util.equalsIgnoreCase
@@ -425,11 +425,11 @@ class TimerSlashCommand {
     /**
      * TTSの設定を行う
      */
-    object TTS : SlashCommand("tts", "ttsによるメッセージの読み上げを設定する 初期状態ではLV0") {
+    object TTSTiming : SlashCommand("tts_timing", "ttsによるメッセージの読み上げを設定する 初期状態ではLV0") {
         init {
             isDefaultEnabled = true
             addSubcommands(
-                SubcommandData("lv0", "TTSによる通知を行わない"),
+                SubcommandData("lv0", "通知を行わない"),
                 SubcommandData("lv1", "タイマー終了時のみ通知"),
                 SubcommandData("lv2", "タイマー終了時と、定期的な時間通知の時に通知"),
                 SubcommandData("lv3", "タイマーのすべての通知（LV2に加えて、延長など）で通知")
@@ -448,10 +448,10 @@ class TimerSlashCommand {
 
             //ttsのタイミングを取得
             val timing = when {
-                subCommand.equalsIgnoreCase("lv1") -> TTSTiming.LV1
-                subCommand.equalsIgnoreCase("lv2") -> TTSTiming.LV2
-                subCommand.equalsIgnoreCase("lv3") -> TTSTiming.LV3
-                else -> TTSTiming.LV0
+                subCommand.equalsIgnoreCase("lv1") -> NoticeTiming.LV1
+                subCommand.equalsIgnoreCase("lv2") -> NoticeTiming.LV2
+                subCommand.equalsIgnoreCase("lv3") -> NoticeTiming.LV3
+                else -> NoticeTiming.LV0
             }
 
             //ギルドのデータへ保存
@@ -466,7 +466,7 @@ class TimerSlashCommand {
     /**
      * 終了時のTTSのメッセージを変更
      */
-    object FinishTTS : SlashCommand("finish_tts", "終了時のメッセージ読み上げの内容を変更する") {
+    object FinishTTS : SlashCommand("tts_finishmessage", "終了時のメッセージ読み上げの内容を変更する") {
         init {
             isDefaultEnabled = true
             addOptions(OptionData(OptionType.STRING, "メッセージ", "メッセージの内容 タイマーの番号が'x'に代入されます").setRequired(true))
@@ -497,6 +497,44 @@ class TimerSlashCommand {
 
             //メッセージを出力
             event.hook.sendMessage("終了時のTTSメッセージを変更しました").queue({}, {})
+        }
+    }
+
+    object MentionTiming: SlashCommand("mention_timing", "メンションを行うタイミングの設定をする 初期状態ではLV2") {
+        init {
+            isDefaultEnabled = true
+            addSubcommands(
+                SubcommandData("lv0", "通知を行わない"),
+                SubcommandData("lv1", "タイマー終了時のみ通知"),
+                SubcommandData("lv2", "タイマー終了時と、定期的な時間通知の時に通知"),
+                SubcommandData("lv3", "タイマーのすべての通知（LV2に加えて、延長など）で通知")
+            )
+        }
+
+        override fun run(command: String, event: SlashCommandInteractionEvent) {
+            //サブコマンドを取得
+            val subCommand = event.subcommandName
+
+            //nullチェック
+            if (subCommand == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //ttsのタイミングを取得
+            val timing = when {
+                subCommand.equalsIgnoreCase("lv1") -> NoticeTiming.LV1
+                subCommand.equalsIgnoreCase("lv2") -> NoticeTiming.LV2
+                subCommand.equalsIgnoreCase("lv3") -> NoticeTiming.LV3
+                else -> NoticeTiming.LV0
+            }
+
+            //ギルドのデータへ保存
+            event.guild!!.getGuildData().mentionTiming = timing
+            SimpleTimer.instance.dataContainer.saveGuildsData()
+
+            //メッセージを出力
+            event.hook.sendMessage("メンションを行うタイミングを${timing}にしました").queue({}, {})
         }
     }
 

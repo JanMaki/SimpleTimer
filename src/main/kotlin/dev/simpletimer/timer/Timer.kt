@@ -1,7 +1,7 @@
 package dev.simpletimer.timer
 
 import dev.simpletimer.data.enum.Mention
-import dev.simpletimer.data.enum.TTSTiming
+import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer.Number
 import dev.simpletimer.util.Log
@@ -109,8 +109,8 @@ class Timer(
         //途中通知の確認
         if (time.seconds == 0) {
             if (time.minute % 10 == 0 || time.minute == 5 || time.minute == 3 || time.minute == 2 || time.minute == 1) {
-                sendMessage("のこり${time.minute}分です%mention%")
-                sendTTS("のこり${time.minute}分です", TTSTiming.LV2)
+                sendMessage("のこり${time.minute}分です", NoticeTiming.LV2)
+                sendTTS("のこり${time.minute}分です", NoticeTiming.LV2)
             }
         }
 
@@ -135,11 +135,11 @@ class Timer(
     override fun onAdd(seconds: Int) {
         //延長と短縮を判定
         if (seconds >= 0) {
-            sendMessage("タイマーを${seconds}秒延長しました")
-            sendTTS("タイマーを${seconds}秒延長しました", TTSTiming.LV3)
+            sendMessage("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
+            sendTTS("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
         } else {
-            sendMessage("タイマーを${abs(seconds)}秒短縮しました")
-            sendTTS("タイマーを${abs(seconds)}秒短縮しました", TTSTiming.LV3)
+            sendMessage("タイマーを${abs(seconds)}秒短縮しました", NoticeTiming.LV3)
+            sendTTS("タイマーを${abs(seconds)}秒短縮しました", NoticeTiming.LV3)
         }
         //強制的に更新させる
         update = true
@@ -155,7 +155,7 @@ class Timer(
 
     override fun onRestart(check: Boolean) {
         if (!check) {
-            sendMessage("タイマーは一時停止していません")
+            sendMessage("タイマーは一時停止していません", NoticeTiming.NONE)
             return
         }
         //新しいdisplayとして作る
@@ -164,7 +164,7 @@ class Timer(
         var byoString = time.seconds.toString()
         if (time.seconds < 10) byoString = "0$byoString"
         sendDisplayMessage("${time.minute}分${byoString}秒")
-        sendTTS("タイマーを再開しました", TTSTiming.LV3)
+        sendTTS("タイマーを再開しました", NoticeTiming.LV3)
         notice?.clearReactions()?.queue({}, {})
     }
 
@@ -179,13 +179,13 @@ class Timer(
     override fun onStop(check: Boolean) {
         //停止の確認
         if (!check) {
-            sendMessage("タイマーは既に一時停止しています")
+            sendMessage("タイマーは既に一時停止しています", NoticeTiming.NONE)
             return
         }
         update = true
         //メッセージの送信とリアクション
-        sendMessage("タイマーを一時停止しました")
-        sendTTS("タイマーを一時停止しました", TTSTiming.LV3)
+        sendMessage("タイマーを一時停止しました", NoticeTiming.LV3)
+        sendTTS("タイマーを一時停止しました", NoticeTiming.LV3)
         notice?.addReaction("U+25C0")?.queue({}, {})
     }
 
@@ -206,10 +206,10 @@ class Timer(
         timers.remove(display?.idLong)
         displays.remove(display?.idLong)
         //メッセージを送信
-        sendMessage("タイマーが終了しました%mention%")
+        sendMessage("タイマーが終了しました", NoticeTiming.LV1)
         sendTTS(
             guild.getGuildData().finishTTS.replace("x", number.number.toString()),
-            TTSTiming.LV1
+            NoticeTiming.LV1
         )
 
         val channelTimers = channelsTimersMap[channel]
@@ -259,7 +259,7 @@ class Timer(
         //登録を消す
         timers.remove(display?.idLong)
         displays.remove(display?.idLong)
-        sendMessage("タイマーを破棄しました")
+        sendMessage("タイマーを破棄しました", NoticeTiming.NONE)
 
         val channelTimers = channelsTimersMap[channel]
         if (channelTimers != null) {
@@ -323,7 +323,7 @@ class Timer(
      *
      * @param string [String] メッセージ
      */
-    private fun sendMessage(string: String) {
+    private fun sendMessage(string: String, timing: NoticeTiming) {
         try {
             //過去のメッセージを確認・削除
             if (notice != null) {
@@ -340,8 +340,8 @@ class Timer(
             //メッセージのメンションを書き換える
             val guildData = guild.getGuildData()
             val mention = guildData.mention
-            val message = "${number.format(string.replace("%mention%", ""))}${
-                if (string.contains("%mention%")) {
+            val message = "${number.format(string)}${
+                if (guildData.ttsTiming.priority >= timing.priority){
                     when (mention) {
                         //何も書かない
                         Mention.NONE -> {
@@ -393,7 +393,7 @@ class Timer(
                             stringBuffer.toString()
                         }
                     }
-                } else {
+                }else {
                     ""
                 }
             }"
@@ -414,15 +414,15 @@ class Timer(
      * TTSメッセージを送信
      *
      * @param sting [String] メッセージ
-     * @param timing [TTSTiming] このメッセージのタイミング
+     * @param timing [NoticeTiming] このメッセージのタイミング
      */
-    private fun sendTTS(sting: String, timing: TTSTiming) {
+    private fun sendTTS(sting: String, timing: NoticeTiming) {
         //ギルドのデータの確認
         val guildData = guild.getGuildData()
         if (guildData.ttsTiming.priority >= timing.priority) {
 
             //メッセージを作成
-            val messageBuilder = MessageBuilder("、${sting.replace("%mention%", "")}")
+            val messageBuilder = MessageBuilder("、${sting.replace("", "")}")
             messageBuilder.setTTS(true)
 
             try {
