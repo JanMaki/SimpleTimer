@@ -109,7 +109,7 @@ class Timer(
         //途中通知の確認
         if (time.seconds == 0) {
             if (time.minute % 10 == 0 || time.minute == 5 || time.minute == 3 || time.minute == 2 || time.minute == 1) {
-                sendMessage("のこり${time.minute}分です%mention%", NoticeTiming.LV2)
+                sendMessage("のこり${time.minute}分です", NoticeTiming.LV2)
                 sendTTS("のこり${time.minute}分です", NoticeTiming.LV2)
             }
         }
@@ -206,7 +206,7 @@ class Timer(
         timers.remove(display?.idLong)
         displays.remove(display?.idLong)
         //メッセージを送信
-        sendMessage("タイマーが終了しました%mention%", NoticeTiming.LV1)
+        sendMessage("タイマーが終了しました", NoticeTiming.LV1)
         sendTTS(
             guild.getGuildData().finishTTS.replace("x", number.number.toString()),
             NoticeTiming.LV1
@@ -422,7 +422,7 @@ class Timer(
         if (guildData.ttsTiming.priority >= timing.priority) {
 
             //メッセージを作成
-            val messageBuilder = MessageBuilder("、${sting.replace("%mention%", "")}")
+            val messageBuilder = MessageBuilder("、${sting.replace("", "")}")
             messageBuilder.setTTS(true)
 
             try {
