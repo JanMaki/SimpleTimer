@@ -1,10 +1,11 @@
 package dev.simpletimer.command
 
+import dev.simpletimer.component.button.DiceButton
+import dev.simpletimer.component.button.TimerButton
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
-import net.dv8tion.jda.api.interactions.components.buttons.Button
 
 /**
  * ボタンを送信する
@@ -43,8 +44,9 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
                 }
 
                 //ボタンを送信
-                val button = Button.primary("timer-${option.asLong}", "⏱開始")
-                event.hook.sendMessage("**${option.asLong}分**のタイマーを開始する").addActionRow(button).queue({}, {})
+                event.hook.sendMessage("**${option.asLong}分**のタイマーを開始する")
+                    .addActionRow(TimerButton.createButton(option.asLong.toString()))
+                    .queue({}, {})
             }
             //ダイスのボタン
             "dice" -> {
@@ -58,8 +60,9 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
                 }
 
                 //ボタンを送信
-                val button = Button.primary("dice-${option.asString}", "🎲振る")
-                event.hook.sendMessage("**${option.asString}**を振る").addActionRow(button).queue({}, {})
+                event.hook.sendMessage("**${option.asString}**を振る")
+                    .addActionRow(DiceButton.createButton(option.asString))
+                    .queue({}, {})
             }
             else -> {
                 //エラーメッセージを送信
