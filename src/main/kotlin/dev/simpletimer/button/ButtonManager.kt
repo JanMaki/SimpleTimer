@@ -1,4 +1,4 @@
-package dev.simpletimer.component.button
+package dev.simpletimer.button
 
 /**
  * ボタンのマネージャー

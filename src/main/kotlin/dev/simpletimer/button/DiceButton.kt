@@ -1,4 +1,4 @@
-package dev.simpletimer.component.button
+package dev.simpletimer.button
 
 import dev.simpletimer.dice.Dice
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
  * ダイスを振るボタン
  *
  */
-object DiceButton : dev.simpletimer.component.button.Button {
+object DiceButton : dev.simpletimer.button.Button {
     override fun run(event: ButtonInteractionEvent) {
         val buttonID = event.button.id ?: return
 

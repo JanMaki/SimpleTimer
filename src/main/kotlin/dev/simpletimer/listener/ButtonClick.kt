@@ -1,6 +1,6 @@
 package dev.simpletimer.listener
 
-import dev.simpletimer.component.button.ButtonManager
+import dev.simpletimer.button.ButtonManager
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 

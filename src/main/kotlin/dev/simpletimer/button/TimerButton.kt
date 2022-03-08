@@ -1,4 +1,4 @@
-package dev.simpletimer.component.button
+package dev.simpletimer.button
 
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
@@ -9,7 +9,7 @@ import java.util.*
  * タイマーを実行するボタン
  *
  */
-object TimerButton : dev.simpletimer.component.button.Button {
+object TimerButton : dev.simpletimer.button.Button {
     override fun run(event: ButtonInteractionEvent) {
         val buttonID = event.componentId
         val channel = event.channel
