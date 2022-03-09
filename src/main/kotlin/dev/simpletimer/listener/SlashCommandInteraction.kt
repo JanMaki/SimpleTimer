@@ -55,7 +55,7 @@ class SlashCommandInteraction : ListenerAdapter() {
                     //名前を確認
                     if (slashCommand.name.equalsIgnoreCase(name)) {
                         //実行
-                        slashCommand.run(name, event)
+                        slashCommand.run(event)
                     }
                 }
             } catch (e: Exception) {

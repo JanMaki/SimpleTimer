@@ -13,10 +13,9 @@ abstract class SlashCommand(name: String, description: String) : CommandDataImpl
     /**
      * コマンドを実行する
      *
-     * @param command [String] コマンドの文字列
      * @param event [SlashCommandInteractionEvent] スラッシュコマンドのイベント
      */
-    abstract fun run(command: String, event: SlashCommandInteractionEvent)
+    abstract fun run(event: SlashCommandInteractionEvent)
 
     companion object {
         /**

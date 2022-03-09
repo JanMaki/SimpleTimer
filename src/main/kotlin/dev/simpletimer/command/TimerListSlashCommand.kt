@@ -19,7 +19,7 @@ class TimerListSlashCommand {
             isDefaultEnabled = true
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //一覧を送信する
             ListMenu.sendList(event)
         }
@@ -45,7 +45,7 @@ class TimerListSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //ギルドのデータを取得
             val guildData = event.guild?.getGuildData() ?: return
 
@@ -121,7 +121,7 @@ class TimerListSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //ギルドのデータを取得
             val guildData = event.guild?.getGuildData() ?: return
 
@@ -160,7 +160,7 @@ class TimerListSlashCommand {
             addOption(OptionType.CHANNEL, "テキストチャンネル", "対象のチャンネル", true)
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("テキストチャンネル")
 
@@ -218,7 +218,7 @@ class TimerListSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //サブコマンドを取得
             val subCommand = event.subcommandName
 
@@ -293,7 +293,7 @@ class TimerListSlashCommand {
             isDefaultEnabled = true
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             val id = event.guild!!.idLong.toString(36)
             event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期できます").queue()
         }
