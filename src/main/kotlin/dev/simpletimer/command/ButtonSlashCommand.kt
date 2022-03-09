@@ -20,7 +20,7 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
         )
     }
 
-    override fun run(command: String, event: SlashCommandInteractionEvent) {
+    override fun run(event: SlashCommandInteractionEvent) {
         //サブコマンドを取得
         val subCommand = event.subcommandName
 

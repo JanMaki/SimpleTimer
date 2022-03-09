@@ -1,7 +1,7 @@
 package dev.simpletimer.list
 
-import dev.simpletimer.data.getGuildData
 import dev.simpletimer.component.select_menu.ListSelectMenu
+import dev.simpletimer.data.getGuildData
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 

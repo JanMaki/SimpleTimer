@@ -25,7 +25,7 @@ class TimerSlashCommand {
             addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で").setRequired(true))
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("分")
 
@@ -86,7 +86,7 @@ class TimerSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("タイマー")
 
@@ -141,7 +141,7 @@ class TimerSlashCommand {
             isDefaultEnabled = true
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
 
             //チャンネルを取得
             val channel = event.channel
@@ -185,7 +185,7 @@ class TimerSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val timerOption = event.getOption("タイマー")
             val minutesOption = event.getOption("分")
@@ -251,7 +251,7 @@ class TimerSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("タイマー")
 
@@ -313,7 +313,7 @@ class TimerSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("タイマー")
 
@@ -377,7 +377,7 @@ class TimerSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val timerOption = event.getOption("タイマー")
 
@@ -436,7 +436,7 @@ class TimerSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //サブコマンドを取得
             val subCommand = event.subcommandName
 
@@ -472,7 +472,7 @@ class TimerSlashCommand {
             addOptions(OptionData(OptionType.STRING, "メッセージ", "メッセージの内容 タイマーの番号が'x'に代入されます").setRequired(true))
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("メッセージ")
 
@@ -511,7 +511,7 @@ class TimerSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //サブコマンドを取得
             val subCommand = event.subcommandName
 
@@ -553,7 +553,7 @@ class TimerSlashCommand {
             )
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //サブコマンドを取得
             val subCommand = event.subcommandName
 
@@ -629,7 +629,7 @@ class TimerSlashCommand {
             isDefaultEnabled = true
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             val guild = event.guild!!
 
             //ギルドのデータを取得
@@ -661,7 +661,7 @@ class TimerSlashCommand {
             addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("role")
 
@@ -690,7 +690,7 @@ class TimerSlashCommand {
             addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("role")
 
@@ -718,7 +718,7 @@ class TimerSlashCommand {
             isDefaultEnabled = true
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             val guild = event.guild!!
 
             //ギルドのデータを取得
@@ -749,7 +749,7 @@ class TimerSlashCommand {
             addOptions(OptionData(OptionType.CHANNEL, "channel", "追加するボイスチャット").setRequired(true))
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("channel")
 
@@ -781,7 +781,7 @@ class TimerSlashCommand {
             addOptions(OptionData(OptionType.CHANNEL, "channel", "削除するボイスチャット").setRequired(true))
         }
 
-        override fun run(command: String, event: SlashCommandInteractionEvent) {
+        override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val option = event.getOption("channel")
 

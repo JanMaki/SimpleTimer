@@ -1,5 +1,6 @@
 package dev.simpletimer.command
 
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.internal.interactions.CommandDataImpl
 
@@ -14,10 +15,16 @@ abstract class SlashCommand(name: String, description: String, val beforeReply: 
     /**
      * コマンドを実行する
      *
-     * @param command [String] コマンドの文字列
      * @param event [SlashCommandInteractionEvent] スラッシュコマンドのイベント
      */
-    abstract fun run(command: String, event: SlashCommandInteractionEvent)
+    abstract fun run(event: SlashCommandInteractionEvent)
+
+    /**
+     * 自動補完をする
+     *
+     * @param event [CommandAutoCompleteInteractionEvent] 自動補完のイベント
+     */
+    open fun autoComplete(event: CommandAutoCompleteInteractionEvent) {}
 
     companion object {
         /**
