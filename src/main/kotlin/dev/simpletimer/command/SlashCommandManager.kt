@@ -8,6 +8,7 @@ object SlashCommandManager {
         slashCommands.addAll(
             arrayOf(
                 ButtonSlashCommand,
+                DebugCommand,
                 TimerSlashCommand.StartTimer,
                 TimerSlashCommand.Finish,
                 TimerSlashCommand.FinAll,
