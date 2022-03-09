@@ -150,12 +150,12 @@ class SimpleTimer {
         val shardBuilder = JDABuilder.createDefault(token)
 
         //リスナーの登録
-        shardBuilder.addEventListeners(ButtonClick())
+        shardBuilder.addEventListeners(ButtonInteraction())
         shardBuilder.addEventListeners(GenericMessageReaction())
         shardBuilder.addEventListeners(MessageDelete())
         shardBuilder.addEventListeners(Ready())
-        shardBuilder.addEventListeners(SlashCommand())
-        shardBuilder.addEventListeners(SelectionMenu())
+        shardBuilder.addEventListeners(SlashCommandInteraction())
+        shardBuilder.addEventListeners(SelectMenuInteraction())
 
         shardBuilder.setStatus(OnlineStatus.ONLINE)
         shardBuilder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "!timerでヘルプ表示"))
