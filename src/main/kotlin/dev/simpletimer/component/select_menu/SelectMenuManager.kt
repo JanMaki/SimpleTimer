@@ -1,4 +1,4 @@
-package dev.simpletimer.select_menu
+package dev.simpletimer.component.select_menu
 
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 

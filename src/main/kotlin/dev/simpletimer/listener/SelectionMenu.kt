@@ -1,6 +1,6 @@
 package dev.simpletimer.listener
 
-import dev.simpletimer.select_menu.SelectMenuManager
+import dev.simpletimer.component.select_menu.SelectMenuManager
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 

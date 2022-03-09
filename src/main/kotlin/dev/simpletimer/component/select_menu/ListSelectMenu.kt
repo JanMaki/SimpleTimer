@@ -1,4 +1,4 @@
-package dev.simpletimer.select_menu
+package dev.simpletimer.component.select_menu
 
 import dev.simpletimer.data.getGuildData
 import dev.simpletimer.dice.Dice

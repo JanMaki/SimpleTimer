@@ -1,4 +1,4 @@
-package dev.simpletimer.button
+package dev.simpletimer.component.button
 
 import dev.simpletimer.dice.Dice
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
