@@ -9,7 +9,7 @@ import java.util.*
  * タイマーを実行するボタン
  *
  */
-object TimerButton : dev.simpletimer.button.Button {
+object TimerButton : ButtonManager.Button<String> {
     override fun run(event: ButtonInteractionEvent) {
         val buttonID = event.componentId
         val channel = event.channel
