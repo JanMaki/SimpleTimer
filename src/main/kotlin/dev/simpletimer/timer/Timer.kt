@@ -4,6 +4,7 @@ import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer.Number
+import dev.simpletimer.util.DeletableMessage
 import dev.simpletimer.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -206,7 +207,7 @@ class Timer(
         timers.remove(display?.idLong)
         displays.remove(display?.idLong)
         //メッセージを送信
-        sendMessage("タイマーが終了しました", NoticeTiming.LV1)
+        sendMessage("タイマーが終了しました", NoticeTiming.LV1, true)
         sendTTS(
             guild.getGuildData().finishTTS.replace("x", number.number.toString()),
             NoticeTiming.LV1
@@ -220,11 +221,20 @@ class Timer(
 
         if (notice != null) timers.remove(notice?.idLong)
 
+        //ディスプレイを削除可能メッセージに追加
+        if (display != null) {
+            val display = display!!
+            DeletableMessage[display.idLong] = display
+        }
+
         //時間を置いてリアクションを削除
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 delay(5000)
-                display?.clearReactions()?.queue({}, {})
+                display?.clearReactions()?.queue {
+                    //削除用のリアクションを追加
+                    display?.addReaction("\uD83D\uDDD1")?.queue({}, {})
+                }
             } catch (e: InterruptedException) {
                 Log.sendLog(e.stackTraceToString())
             }
@@ -259,7 +269,7 @@ class Timer(
         //登録を消す
         timers.remove(display?.idLong)
         displays.remove(display?.idLong)
-        sendMessage("タイマーを破棄しました", NoticeTiming.NONE)
+        sendMessage("タイマーを破棄しました", NoticeTiming.NONE, true)
 
         val channelTimers = channelsTimersMap[channel]
         if (channelTimers != null) {
@@ -323,7 +333,7 @@ class Timer(
      *
      * @param string [String] メッセージ
      */
-    private fun sendMessage(string: String, timing: NoticeTiming) {
+    private fun sendMessage(string: String, timing: NoticeTiming, deletable: Boolean = false) {
         try {
             //過去のメッセージを確認・削除
             if (notice != null) {
@@ -403,7 +413,18 @@ class Timer(
                 display?.reply(message)?.mentionRepliedUser(false)?.queue { notice ->
                     timers[notice.idLong] = this
                     this.notice = notice
-                } ?: channel.sendMessage(message).queue({}, {})
+                    if (deletable) {
+                        DeletableMessage[notice.idLong] = notice
+                        notice.addReaction("\uD83D\uDDD1").queue({}, {})
+                    }
+                } ?: channel.sendMessage(message).queue { notice ->
+                    timers[notice.idLong] = this
+                    this.notice = notice
+                    if (deletable) {
+                        DeletableMessage[notice.idLong] = notice
+                        notice.addReaction("\uD83D\uDDD1").queue({}, {})
+                    }
+                }
             } catch (e: Exception) {
                 Log.sendLog(e.stackTraceToString())
             }
