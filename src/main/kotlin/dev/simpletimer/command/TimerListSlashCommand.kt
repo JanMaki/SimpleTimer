@@ -5,6 +5,7 @@ import dev.simpletimer.data.getGuildData
 import dev.simpletimer.list.ListMenu
 import dev.simpletimer.util.SendMessage
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -117,7 +118,7 @@ class TimerListSlashCommand {
             isDefaultEnabled = true
 
             addOptions(
-                OptionData(OptionType.STRING, "名前", "要素の名前", true)
+                OptionData(OptionType.STRING, "名前", "要素の名前", true, true)
             )
         }
 
@@ -135,14 +136,15 @@ class TimerListSlashCommand {
             }
 
             //ギルドのデータから一覧を取得し、有効な要素かを確認する
-            if (!guildData.list.contains(name)) {
+            if (!guildData.list.contains("dice:${name}") && !guildData.list.contains("timer:${name}")) {
                 //エラーのメッセージを送信
                 event.hook.sendMessage("*無効な要素です").queue()
                 return
             }
 
             //ギルドのデータを削除して保存する
-            guildData.list.remove(name)
+            guildData.list.remove("dice:${name}")
+            guildData.list.remove("timer:${name}")
             SimpleTimer.instance.dataContainer.saveGuildsData()
 
             //メッセージを送信
@@ -150,6 +152,20 @@ class TimerListSlashCommand {
 
             //一覧を送信する
             ListMenu.sendList(event)
+        }
+
+        override fun autoComplete(event: CommandAutoCompleteInteractionEvent) {
+            //オプション名を確認
+            if (event.focusedOption.name != "名前") return
+
+            //ギルドのデータを取得
+            val guildData = event.guild?.getGuildData() ?: return
+
+            //文字列のコレクションを返す
+            event.replyChoiceStrings(guildData.list.keys.map { it.split(":")[1] }.filter {
+                //リストの要素を確認
+                it.startsWith(event.focusedOption.value)
+            }).queue()
         }
     }
 
