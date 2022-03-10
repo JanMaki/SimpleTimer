@@ -234,7 +234,6 @@ class Timer(
                 display?.clearReactions()?.queue {
                     //削除用のリアクションを追加
                     display?.addReaction("\uD83D\uDDD1")?.queue({}, {})
-                    display?.actionRows?.clear()
                 }
             } catch (e: InterruptedException) {
                 Log.sendLog(e.stackTraceToString())
