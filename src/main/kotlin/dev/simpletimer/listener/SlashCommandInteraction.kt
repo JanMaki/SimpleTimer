@@ -26,7 +26,7 @@ class SlashCommandInteraction : ListenerAdapter() {
 
         //DMを弾く
         if (event.channel is PrivateChannel) {
-            event.hook.sendMessage("*DMでの対応はしていません").queue({}, {})
+            event.reply("*DMでの対応はしていません").queue({}, {})
             return
         }
 
@@ -42,7 +42,7 @@ class SlashCommandInteraction : ListenerAdapter() {
                                 permissions.contains(Permission.MESSAGE_EXT_EMOJI))
             ) {
                 //権限が不足しているメッセージを送信する
-                event.hook.sendMessageEmbeds(SendMessage.errorEmbed).queue({}, {})
+                event.replyEmbeds(SendMessage.errorEmbed).queue({}, {})
                 return
             }
         }
@@ -56,7 +56,7 @@ class SlashCommandInteraction : ListenerAdapter() {
                     //考え中をするかを確認
                     if (slashCommand.beforeReply) {
                         //考え中を出す
-                        event.deferReply().queue()
+                        event.deferReply().queue({}, {})
                     }
 
                     //実行
