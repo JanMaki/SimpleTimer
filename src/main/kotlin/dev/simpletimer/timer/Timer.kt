@@ -32,9 +32,6 @@ class Timer(
     private val guild: Guild
 ) : TimerService.TimerListener {
     companion object {
-        //タイマーの更新時間
-        var updateRate = 10
-
         //チャンネルとタイマーのマップ
         val channelsTimersMap = HashMap<MessageChannel, EnumMap<Number, Timer>>()
 
@@ -94,16 +91,6 @@ class Timer(
      *
      */
     private fun init() {
-        //更新の時間を調整する
-        updateRate = if (getCount() > 50){
-            10
-        }else if (getCount() > 25){
-            5
-        }else {
-            2
-        }
-
-
         timerService.registerListener(this)
 
         timerService.start()
@@ -128,7 +115,7 @@ class Timer(
         }
 
         //10秒の倍数と残り5秒の時、updateのフラグが立っているときはdisplayを更新する
-        if (time.seconds % updateRate == 0 || update || (time.minute == 0 && time.seconds == 5)) {
+        if (time.seconds % 10 == 0 || update || (time.minute == 0 && time.seconds == 5)) {
             update = false
             val action = display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
             action?.queue({}, {})
