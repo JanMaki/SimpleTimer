@@ -9,6 +9,10 @@ import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEve
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
 import java.util.*
 
+/**
+ * 一覧の選択メニュー
+ *
+ */
 object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, String>>("list") {
     override fun run(event: SelectMenuInteractionEvent) {
         //選ばれたオプション

@@ -21,6 +21,7 @@ class ButtonManager {
     /**
      * ボタンの親
      *
+     * @property name 識別に使う名前
      */
     abstract class Button<T>(val name: String) {
         /**

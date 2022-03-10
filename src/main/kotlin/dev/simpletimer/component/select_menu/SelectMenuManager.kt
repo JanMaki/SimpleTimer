@@ -17,6 +17,7 @@ object SelectMenuManager {
     /**
      * 選択メニューの親
      *
+     * @property name 識別に使う名前
      */
     abstract class SelectMenu<T>(val name: String) {
         /**

@@ -19,6 +19,7 @@ object ModalInteractionManager {
     /**
      * Modalの親
      *
+     * @property name 識別に使う名前
      */
     abstract class Modal<T>(val name: String) {
         /**
