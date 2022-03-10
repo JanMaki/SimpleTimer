@@ -54,6 +54,12 @@ class SlashCommandInteraction : ListenerAdapter() {
                 SlashCommandManager.slashCommands.forEach { slashCommand ->
                     //名前を確認
                     if (slashCommand.name.equalsIgnoreCase(name)) {
+                        //考え中をするかを確認
+                        if (slashCommand.beforeReply) {
+                            //考え中を出す
+                            event.deferReply().queue()
+                        }
+
                         //実行
                         slashCommand.run(event)
                     }

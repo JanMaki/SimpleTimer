@@ -154,6 +154,7 @@ class SimpleTimer {
         shardBuilder.addEventListeners(CommandAutoCompleteInteraction())
         shardBuilder.addEventListeners(GenericMessageReaction())
         shardBuilder.addEventListeners(MessageDelete())
+        shardBuilder.addEventListeners(ModalInteraction())
         shardBuilder.addEventListeners(Ready())
         shardBuilder.addEventListeners(SlashCommandInteraction())
         shardBuilder.addEventListeners(SelectMenuInteraction())

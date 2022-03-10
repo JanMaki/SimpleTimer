@@ -10,7 +10,8 @@ import net.dv8tion.jda.internal.interactions.CommandDataImpl
  * @param name コマンド名
  * @param description コマンドの説明
  */
-abstract class SlashCommand(name: String, description: String) : CommandDataImpl(name, description) {
+abstract class SlashCommand(name: String, description: String, val beforeReply: Boolean = true) :
+    CommandDataImpl(name, description) {
     /**
      * コマンドを実行する
      *
