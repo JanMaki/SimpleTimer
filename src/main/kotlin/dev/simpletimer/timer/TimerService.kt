@@ -163,11 +163,11 @@ class TimerService(private var seconds: Int) {
      * @param seconds 追加する秒数
      */
     fun addTimer(seconds: Int) {
-        //イベントを呼び出す
-        listeners.forEach { it.onAdd(seconds) }
-
         //秒数を追加
         this.seconds += seconds
+
+        //イベントを呼び出す
+        listeners.forEach { it.onAdd(seconds) }
     }
 
     //イベントを受け取るリスナー
