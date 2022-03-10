@@ -18,8 +18,11 @@ class ModalInteraction : ListenerAdapter() {
         super.onModalInteraction(event)
         event.deferReply().queue()
 
+        //ModalのIDを取得
+        val id = event.modalId
+
         //すべてのModal
-        ModalInteractionManager.modals.forEach {
+        ModalInteractionManager.modals.filter { it.name.startsWith(id) }.forEach {
             //Modalを実行
             it.run(event)
         }

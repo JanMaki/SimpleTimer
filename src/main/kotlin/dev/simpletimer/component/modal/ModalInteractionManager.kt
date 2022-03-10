@@ -20,13 +20,13 @@ object ModalInteractionManager {
      * Modalの親
      *
      */
-    interface Modal<T> {
+    abstract class Modal<T>(val name: String) {
         /**
          * Modalを実行する
          *
          * @param event [ModalInteractionEvent] 選択をしたイベント
          */
-        fun run(event: ModalInteractionEvent)
+        abstract fun run(event: ModalInteractionEvent)
 
         /**
          * Modalを作成する
@@ -34,6 +34,6 @@ object ModalInteractionManager {
          * @param data Modalに何かデータつける時に使う
          * @return 作成した[Modal]
          */
-        fun createModal(data: T): net.dv8tion.jda.api.interactions.components.text.Modal
+        abstract fun createModal(data: T): net.dv8tion.jda.api.interactions.components.text.Modal
     }
 }

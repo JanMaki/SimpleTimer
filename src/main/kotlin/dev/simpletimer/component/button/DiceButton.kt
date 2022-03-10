@@ -8,21 +8,18 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
  * ダイスを振るボタン
  *
  */
-object DiceButton : ButtonManager.Button<String> {
+object DiceButton : ButtonManager.Button<String>("dice") {
     override fun run(event: ButtonInteractionEvent) {
         val buttonID = event.button.id ?: return
 
-        //ダイスのボタン
-        if (buttonID.contains("dice")) {
-            //ダイスのコマンドを取得
-            val value = buttonID.replace("dice-", "")
+        //ダイスのコマンドを取得
+        val value = buttonID.replace("${name}-", "")
 
-            //ダイスを振る
-            Dice().roll(event, value, event.user)
-        }
+        //ダイスを振る
+        Dice().roll(event, value, event.user)
     }
 
     override fun createButton(data: String): Button {
-        return Button.primary("dice-$data", "🎲振る")
+        return Button.primary("${name}-$data", "🎲振る")
     }
 }

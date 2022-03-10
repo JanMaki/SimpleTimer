@@ -19,8 +19,11 @@ class SelectMenuInteraction : ListenerAdapter() {
         super.onSelectMenuInteraction(event)
         event.deferReply().queue({}, {})
 
+        //選択メニューのIDを取得
+        val id = event.selectMenu.id ?: return
+
         //すべての選択メニュー
-        SelectMenuManager.selectMenus.forEach {
+        SelectMenuManager.selectMenus.filter { it.name.startsWith(id) }.forEach {
             //選択メニューを実行
             it.run(event)
         }

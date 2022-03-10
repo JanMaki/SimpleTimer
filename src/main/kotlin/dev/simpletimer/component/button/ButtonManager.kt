@@ -22,13 +22,13 @@ class ButtonManager {
      * ボタンの親
      *
      */
-    interface Button<T> {
+    abstract class Button<T>(val name: String) {
         /**
          * ボタンを実行する
          *
          * @param event [ButtonInteractionEvent] ボタンを押したイベント
          */
-        fun run(event: ButtonInteractionEvent)
+        abstract fun run(event: ButtonInteractionEvent)
 
         /**
          * ボタンを作成する
@@ -36,6 +36,6 @@ class ButtonManager {
          * @param data ボタンに何かデータつける時に使う
          * @return 作成した[Button]
          */
-        fun createButton(data: T): net.dv8tion.jda.api.interactions.components.buttons.Button
+        abstract fun createButton(data: T): net.dv8tion.jda.api.interactions.components.buttons.Button
     }
 }

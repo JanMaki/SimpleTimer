@@ -18,13 +18,13 @@ object SelectMenuManager {
      * 選択メニューの親
      *
      */
-    interface SelectMenu<T> {
+    abstract class SelectMenu<T>(val name: String) {
         /**
          * 選択メニューを実行する
          *
          * @param event [SelectMenuInteractionEvent] 選択をしたイベント
          */
-        fun run(event: SelectMenuInteractionEvent)
+        abstract fun run(event: SelectMenuInteractionEvent)
 
         /**
          * 選択メニューを作成する
@@ -32,6 +32,6 @@ object SelectMenuManager {
          * @param data 選択メニューに何かデータつける時に使う
          * @return 作成した[SelectMenu]
          */
-        fun createSelectMenu(data: T): net.dv8tion.jda.api.interactions.components.selections.SelectMenu
+        abstract fun createSelectMenu(data: T): net.dv8tion.jda.api.interactions.components.selections.SelectMenu
     }
 }

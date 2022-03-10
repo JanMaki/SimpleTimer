@@ -21,8 +21,11 @@ class ButtonInteraction : ListenerAdapter() {
         super.onButtonInteraction(event)
         event.deferReply().queue({}, {})
 
+        //ボタンのIDを取得
+        val buttonID = event.button.id ?: return
+
         //すべてのボタン
-        buttonManager.buttons.forEach { button ->
+        buttonManager.buttons.filter { it.name.startsWith(buttonID) }.forEach { button ->
             //ボタンを実行
             button.run(event)
         }

@@ -10,14 +10,8 @@ import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
  * デバッグ機能のModal
  *
  */
-object DebugModal : ModalInteractionManager.Modal<Byte> {
+object DebugModal : ModalInteractionManager.Modal<Byte>("debug") {
     override fun run(event: ModalInteractionEvent) {
-        //メニューのID
-        val id = event.modalId
-
-        //IDを確認
-        if (id != "debug") return
-
         //入力した値を取得
         val inputValue = event.getValue("input")?.asString ?: return
 
@@ -43,6 +37,6 @@ object DebugModal : ModalInteractionManager.Modal<Byte> {
             .setRequired(true)
             .build()
         //Modalを作成して返す
-        return Modal.create("debug", "Debug").addActionRow(input).build()
+        return Modal.create(name, "Debug").addActionRow(input).build()
     }
 }
