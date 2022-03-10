@@ -50,7 +50,7 @@ class TimerSlashCommand {
                 //その番号のタイマーが動いているかを確認
                 if (!channelTimers.containsKey(number)) {
                     //タイマーを開始
-                    val timer = Timer(channel, number, minutes.toInt(), event.guild!!)
+                    val timer = Timer(channel, number, minutes.toInt() * 60, event.guild!!)
 
                     //タイマーのインスタンスを代入する
                     channelTimers[number] = timer

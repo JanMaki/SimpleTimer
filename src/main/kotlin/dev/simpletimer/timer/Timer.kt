@@ -23,12 +23,12 @@ import kotlin.math.abs
  *
  * @property channel [MessageChannel] タイマーを動かすテキストチャンネル
  * @property number [Number] タイマーの番号
- * @property minuts [Int] 分数
+ * @property seconds [Int] 秒数
  */
 class Timer(
     val channel: MessageChannel,
     private val number: Number,
-    private var minuts: Int,
+    private var seconds: Int,
     private val guild: Guild
 ) : TimerService.TimerListener {
     companion object {
@@ -82,7 +82,7 @@ class Timer(
     private var update = false
 
     //タイマーのサービス
-    private val timerService = TimerService(minuts * 60)
+    private val timerService = TimerService(seconds)
 
     //開始の処理へ飛ばす
     init {
@@ -110,13 +110,14 @@ class Timer(
     }
 
     override fun onStart() {
-        sendDisplayMessage("${minuts}分00秒")
+        val time = timerService.getTime()
+        sendDisplayMessage("${time.minute}分${time.seconds}秒")
     }
 
     override fun onUpdate() {
         val time = timerService.getTime()
 
-        if (time.minute == this.minuts) {
+        if (time.minute * 60 + time.seconds == this.seconds) {
             return
         }
 

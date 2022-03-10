@@ -39,11 +39,8 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
             for (number in Timer.Number.values()) {
                 //その番号のタイマーが動いているかを確認
                 if (!channelTimers.containsKey(number)) {
-                    //タイマーを開始
-                    val timer = Timer(channel, number, minutes, event.guild!!)
-
-                    //タイマーのインスタンスを代入する
-                    channelTimers[number] = timer
+                    //タイマーを開始してインスタンスを代入する
+                    channelTimers[number] = Timer(channel, number, minutes * 60, event.guild!!)
                     Timer.channelsTimersMap[channel] = channelTimers
 
                     //メッセージを送信
