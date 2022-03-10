@@ -13,13 +13,13 @@ object DiceButton : ButtonManager.Button<String>("dice") {
         val buttonID = event.button.id ?: return
 
         //ダイスのコマンドを取得
-        val value = buttonID.replace("${name}-", "")
+        val value = buttonID.replace("${name}:", "")
 
         //ダイスを振る
         Dice().roll(event, value, event.user)
     }
 
     override fun createButton(data: String): Button {
-        return Button.primary("${name}-$data", "🎲振る")
+        return Button.primary("${name}:$data", "🎲振る")
     }
 }

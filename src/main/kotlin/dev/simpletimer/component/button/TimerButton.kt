@@ -1,6 +1,7 @@
 package dev.simpletimer.component.button
 
 import dev.simpletimer.timer.Timer
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
 import java.util.*
@@ -11,8 +12,7 @@ import java.util.*
  */
 object TimerButton : ButtonManager.Button<String>("timer") {
     override fun run(event: ButtonInteractionEvent) {
-        val buttonID = event.componentId
-        val channel = event.channel
+        val channel: MessageChannel = event.channel
 
         //チャンネルのタイマーを取得する
         val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
@@ -25,7 +25,7 @@ object TimerButton : ButtonManager.Button<String>("timer") {
                 channelTimers[number] = Timer(
                     channel,
                     number,
-                    buttonID.replace("${name}-", "").toIntOrNull() ?: return, event.guild!!
+                    event.componentId.replace("${name}:", "").toIntOrNull() ?: return, event.guild!!
                 )
                 Timer.channelsTimersMap[channel] = channelTimers
                 //空白を送信
@@ -41,6 +41,6 @@ object TimerButton : ButtonManager.Button<String>("timer") {
     }
 
     override fun createButton(data: String): Button {
-        return Button.primary("${name}-$data", "⏱開始")
+        return Button.primary("${name}:$data", "⏱開始")
     }
 }
