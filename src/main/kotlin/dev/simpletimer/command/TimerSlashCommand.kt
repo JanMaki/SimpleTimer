@@ -1,6 +1,7 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
+import dev.simpletimer.component.modal.AddTimerModal
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer
@@ -170,7 +171,7 @@ class TimerSlashCommand {
     /**
      * タイマーを延長する
      */
-    object Add : SlashCommand("add", "タイマーを延長する") {
+    object Add : SlashCommand("add", "タイマーを延長する", false) {
         init {
             isDefaultEnabled = true
 
@@ -181,56 +182,28 @@ class TimerSlashCommand {
                     Command.Choice("3番目のタイマー", 3),
                     Command.Choice("4番目のタイマー", 4)
                 ),
-                OptionData(OptionType.INTEGER, "分", "時間を分単位で").setRequired(true)
             )
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
             val timerOption = event.getOption("タイマー")
-            val minutesOption = event.getOption("分")
-
             //nullチェック
-            if (timerOption == null || minutesOption == null) {
+            if (timerOption == null){
                 replyCommandError(event)
                 return
             }
 
-            //時間を取得
-            val minutes = minutesOption.asLong
-
             //タイマーの番号を取得
-            val i = timerOption.asLong.toInt()
-
-            //チャンネルを取得
-            val channel = event.channel
-
-            //チャンネルのタイマーを取得
-            val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
-
-            //番号をNumberに
-            val number = Timer.Number.getNumber(i)
-
-            //タイマーの稼働を確認
-            if (!channelTimers.containsKey(number)) {
-                if (number != null)
-                    event.hook.sendMessage(number.format("タイマーは動いていません")).queue({}, {})
-                else {
-                    event.hook.sendMessage("タイマーは動いていません").queue({}, {})
-                }
+            val number = Timer.Number.getNumber(timerOption.asLong.toInt())
+            //nullチェック
+            if (number == null){
+                replyCommandError(event)
                 return
             }
 
-            //タイマーを取得
-            val timer = channelTimers[number]!!
-
-            //タイマーを延長
-            timer.add(minutes.toInt() * 60)
-
-            //空白を出力して消し飛ばす
-            event.hook.sendMessage("|| ||").queue {
-                it.delete().queue({}, {})
-            }
+            //Modalを送信
+            event.replyModal(AddTimerModal.createModal(number)).queue({}, {})
         }
     }
 
