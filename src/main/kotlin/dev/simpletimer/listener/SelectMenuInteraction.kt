@@ -1,6 +1,7 @@
 package dev.simpletimer.listener
 
 import dev.simpletimer.component.select_menu.SelectMenuManager
+import dev.simpletimer.util.equalsIgnoreCase
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
@@ -23,7 +24,7 @@ class SelectMenuInteraction : ListenerAdapter() {
         val id = event.selectMenu.id ?: return
 
         //すべての選択メニュー
-        SelectMenuManager.selectMenus.filter { it.name.startsWith(id) }.forEach {
+        SelectMenuManager.selectMenus.filter { id.split(":")[0].equalsIgnoreCase(it.name) }.forEach {
             //選択メニューを実行
             it.run(event)
         }
