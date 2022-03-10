@@ -1,5 +1,6 @@
 package dev.simpletimer.component.modal
 
+import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.Modal
@@ -21,6 +22,17 @@ object DebugModal : ModalInteractionManager.Modal<Byte>("debug") {
             "count" -> {
                 //タイマーの稼働数を送信する
                 event.hook.sendMessage("${Timer.getCount()}個のタイマーが稼働しています").queue({}, {})
+            }
+            //ギルドにコマンドを強制的に追加させる
+            "commands" -> {
+                //すべてのコマンド
+                SlashCommandManager.slashCommands.forEach{
+                    //コマンドを登録
+                    event.guild?.upsertCommand(it)?.queue({}, {})
+                }
+
+                //メッセージを送信
+                event.hook.sendMessage("コマンドを更新しました").queue({}, {})
             }
             //無効な値の時
             else -> {
