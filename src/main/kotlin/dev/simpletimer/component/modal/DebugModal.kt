@@ -30,13 +30,16 @@ object DebugModal : ModalInteractionManager.Modal<Byte>("debug") {
         }
     }
 
-    override fun createModal(data: Byte): Modal {
-        //TextInputを作成
-        val input = TextInput.create("input", "入力", TextInputStyle.SHORT)
+    //Modalを作成する
+    private val modal = Modal.create(name, "Debug").addActionRow(
+        TextInput.create("input", "入力", TextInputStyle.SHORT)
             .setPlaceholder("値を入力してください")
             .setRequired(true)
             .build()
-        //Modalを作成して返す
-        return Modal.create(name, "Debug").addActionRow(input).build()
+    ).build()
+
+    override fun createModal(data: Byte): Modal {
+        //Modalを返す
+        return modal
     }
 }

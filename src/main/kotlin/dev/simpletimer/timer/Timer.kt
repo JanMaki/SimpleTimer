@@ -1,5 +1,6 @@
 package dev.simpletimer.timer
 
+import dev.simpletimer.component.button.AddTimerButton
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.getGuildData
@@ -233,6 +234,7 @@ class Timer(
                 display?.clearReactions()?.queue {
                     //削除用のリアクションを追加
                     display?.addReaction("\uD83D\uDDD1")?.queue({}, {})
+                    display?.actionRows?.clear()
                 }
             } catch (e: InterruptedException) {
                 Log.sendLog(e.stackTraceToString())
@@ -303,21 +305,23 @@ class Timer(
                 display?.delete()?.queue({}, {})
             }
             //送信
-            channel.sendMessage(number.format(base.format(data))).queue { display ->
-                this.display = display
-                //登録
-                val id = display.idLong
-                timers[id] = this
-                displays[id] = this
-                //リアクションの追加
-                display.addReaction("U+25C0").queue({}, {})
-                display.addReaction("U+23F8").queue({}, {})
-                display.addReaction("U+1F6D1").queue({}, {})
-                display.addReaction("1️⃣").queue({}, {})
-                display.addReaction("3️⃣").queue({}, {})
-                display.addReaction("5️⃣").queue({}, {})
-                display.addReaction("\uD83D\uDD1F").queue({}, {})
-            }
+            channel.sendMessage(number.format(base.format(data)))
+                .setActionRow(AddTimerButton.createButton(number))
+                .queue { display ->
+                    this.display = display
+                    //登録
+                    val id = display.idLong
+                    timers[id] = this
+                    displays[id] = this
+                    //リアクションの追加
+                    display.addReaction("U+25C0").queue({}, {})
+                    display.addReaction("U+23F8").queue({}, {})
+                    display.addReaction("U+1F6D1").queue({}, {})
+                    display.addReaction("1️⃣").queue({}, {})
+                    display.addReaction("3️⃣").queue({}, {})
+                    display.addReaction("5️⃣").queue({}, {})
+                    display.addReaction("\uD83D\uDD1F").queue({}, {})
+                }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {

@@ -12,6 +12,7 @@ class ButtonManager {
         //ボタンを追加
         addAll(
             arrayOf(
+                AddTimerButton,
                 DiceButton,
                 TimerButton
             )
@@ -22,8 +23,9 @@ class ButtonManager {
      * ボタンの親
      *
      * @property name 識別に使う名前
+     * @property beforeReply あらかじめbeforeReplyを実行するかどうか
      */
-    abstract class Button<T>(val name: String) {
+    abstract class Button<T>(val name: String, val beforeReply: Boolean = true) {
         /**
          * ボタンを実行する
          *
