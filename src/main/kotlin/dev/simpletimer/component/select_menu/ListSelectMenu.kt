@@ -62,6 +62,11 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
 
             //メッセージを送信
             event.hook.sendMessage("${splitted[1]}（${command}）を実行しました").queue({}, {})
+        } else {
+            //空白を送信して削除する
+            event.hook.sendMessage("|| ||").queue{
+                it.delete().queue({}, {})
+            }
         }
     }
 
@@ -70,6 +75,9 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
         val selectionMenu = SelectMenu.create(name)
         selectionMenu.placeholder = "選択"
         selectionMenu.setRequiredRange(1, 1)
+
+        //空白を追加
+        selectionMenu.addOption("　", "empty")
 
         //タイマの一覧を回す
         data.forEach {
