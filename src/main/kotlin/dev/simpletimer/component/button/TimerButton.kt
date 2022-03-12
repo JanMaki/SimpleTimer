@@ -10,7 +10,7 @@ import java.util.*
  * タイマーを実行するボタン
  *
  */
-object TimerButton : ButtonManager.Button<String>("timer") {
+object TimerButton : ButtonManager.Button<Int>("timer") {
     override fun run(event: ButtonInteractionEvent) {
         val channel: MessageChannel = event.channel
 
@@ -40,7 +40,7 @@ object TimerButton : ButtonManager.Button<String>("timer") {
         event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue({}, {})
     }
 
-    override fun createButton(data: String): Button {
+    override fun createButton(data: Int): Button {
         return Button.primary("${name}:$data", "⏱開始")
     }
 }

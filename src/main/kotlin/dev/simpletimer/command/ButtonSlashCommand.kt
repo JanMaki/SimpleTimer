@@ -43,9 +43,18 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
                     return
                 }
 
+                //分数を取得
+                val minutes = option.asInt
+
+                //時間を確認する
+                if (minutes <= 0) {
+                    event.hook.sendMessage("*1秒以上の時間を設定してください").queue({}, {})
+                    return
+                }
+
                 //ボタンを送信
-                event.hook.sendMessage("**${option.asLong}分**のタイマーを開始する")
-                    .addActionRow(TimerButton.createButton(option.asLong.toString()))
+                event.hook.sendMessage("**${minutes}分**のタイマーを開始する")
+                    .addActionRow(TimerButton.createButton(minutes * 60))
                     .queue({}, {})
             }
             //ダイスのボタン
