@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.AddTimerModal
+import dev.simpletimer.component.modal.StartTimerModal
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer
@@ -19,11 +20,11 @@ class TimerSlashCommand {
     /**
      * タイマーを開始する
      */
-    object StartTimer : SlashCommand("timer", "タイマーを開始する") {
+    object StartTimer : SlashCommand("timer", "タイマーを開始する", beforeReply = false) {
         init {
             isDefaultEnabled = true
 
-            addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で").setRequired(true))
+            addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で"))
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
@@ -32,13 +33,13 @@ class TimerSlashCommand {
 
             //nullチェック
             if (option == null) {
-                replyCommandError(event)
+                //Timerを開始するModalを送信
+                event.replyModal(StartTimerModal.createModal(0)).queue({}, {})
                 return
             }
 
-
-            //秒数を取得
-            val minutes = option.asLong
+            //とありあえず待たせる
+            event.deferReply()
 
             //チャンネルを取得
             val channel = event.channel
@@ -50,11 +51,8 @@ class TimerSlashCommand {
             for (number in Timer.Number.values()) {
                 //その番号のタイマーが動いているかを確認
                 if (!channelTimers.containsKey(number)) {
-                    //タイマーを開始
-                    val timer = Timer(channel, number, minutes.toInt() * 60, event.guild!!)
-
-                    //タイマーのインスタンスを代入する
-                    channelTimers[number] = timer
+                    //タイマーを開始し、インスタンスを代入する
+                    channelTimers[number] = Timer(channel, number,  option.asInt * 60, event.guild!!)
                     Timer.channelsTimersMap[channel] = channelTimers
 
                     //空白を出力して消し飛ばす

@@ -12,7 +12,8 @@ object ModalInteractionManager {
         addAll(
             arrayOf(
                 AddTimerModal,
-                DebugModal
+                DebugModal,
+                StartTimerModal
             )
         )
     }
