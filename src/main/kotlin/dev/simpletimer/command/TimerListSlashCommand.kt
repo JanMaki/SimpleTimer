@@ -27,19 +27,19 @@ class TimerListSlashCommand {
     }
 
     /**
-     * 一覧に要素を追加する
+     * 一覧に要素を追加・上書きをする
      *
      */
-    object ListAdd : SlashCommand("list_add", "一覧に要素を追加をします") {
+    object ListAdd : SlashCommand("list_add", "一覧に要素を追加・上書きをします") {
         init {
             isDefaultEnabled = true
 
             addSubcommands(
-                SubcommandData("timer", "タイマーを一覧に追加する").addOptions(
+                SubcommandData("timer", "タイマーを一覧に追加・上書きをする").addOptions(
                     OptionData(OptionType.STRING, "名前", "タイマーの名前", true),
                     OptionData(OptionType.INTEGER, "分", "時間を分単位で", true)
                 ),
-                SubcommandData("dice", "ダイスを一覧に追加する").addOptions(
+                SubcommandData("dice", "ダイスを一覧に追加・上書きをする").addOptions(
                     OptionData(OptionType.STRING, "名前", "ダイスの名前", true),
                     OptionData(OptionType.STRING, "ダイス", "ダイスの内容", true)
                 )
