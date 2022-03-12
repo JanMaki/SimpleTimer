@@ -39,7 +39,7 @@ class TimerSlashCommand {
             }
 
             //とありあえず待たせる
-            event.deferReply()
+            event.deferReply().queue({}, {})
 
             //チャンネルを取得
             val channel = event.channel
