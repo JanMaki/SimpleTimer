@@ -23,7 +23,7 @@ object HelpSlashCommand : SlashCommand("help", "Botの概要などを表示") {
         embed.addField("", "一覧機能解説\nhttps://www.fanbox.cc/manage/posts/3088371", true)
         embed.addField("","**開発情報**",false)
         embed.addField("", "ソースコード\nhttps://source.simpletimer.dev/", true)
-        embed.addField("", "開発者への寄付\nhttps://simpletimer.fanbox.cc/posts/3128883", true)
+        embed.addField("", "開発者へ支援\nhttps://simpletimer.fanbox.cc/posts/3128883", true)
         embed.addField("", "**表示**", false)
         embed.addField("", "利用規約\nhttps://docs.google.com/document/d/1ae23tZfLhLppYQCICte91qYN__ADQ9w4uq6OVaT3AjM/edit?usp=sharing", true)
         embed.addField("", "プライバシーポリシー\nhttps://docs.google.com/document/d/1etnMMknasi3JU6V573sWWJcqcU8Im1_3b-cc2pqKE6U/edit?usp=sharing", true)
