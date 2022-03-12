@@ -160,7 +160,7 @@ class SimpleTimer {
         shardBuilder.addEventListeners(SelectMenuInteraction())
 
         shardBuilder.setStatus(OnlineStatus.ONLINE)
-        shardBuilder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "!timerでヘルプ表示"))
+        shardBuilder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "/helpでヘルプ表示　　　　　　"))
 
         for (i in 0..2) {
             val shard = shardBuilder.useSharding(i, 3).build()
