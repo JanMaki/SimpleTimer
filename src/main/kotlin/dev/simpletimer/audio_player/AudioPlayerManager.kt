@@ -27,4 +27,13 @@ class AudioPlayerManager {
     fun getAudioPlayer(guild: Guild): GuildAudioPlayer {
         return audioPlayers.getOrPut(guild.idLong) { GuildAudioPlayer(guild) }
     }
+
+    /**
+     * オーディオプレイヤーをすべて取得
+     *
+     * @return [Collection]<[GuildAudioPlayer]>
+     */
+    fun getAudioPlayers(): Collection<GuildAudioPlayer> {
+        return audioPlayers.values
+    }
 }
