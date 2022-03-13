@@ -1,5 +1,6 @@
 package dev.simpletimer.timer
 
+import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.button.AddTimerButton
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
@@ -7,6 +8,7 @@ import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer.Number
 import dev.simpletimer.util.DeletableMessage
 import dev.simpletimer.util.Log
+import dev.simpletimer.util.getAudioPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -206,12 +208,24 @@ class Timer(
         //登録の解除
         timers.remove(display?.idLong)
         displays.remove(display?.idLong)
+        //ギルドのデータを取得
+        val guildData = guild.getGuildData()
         //メッセージを送信
         sendMessage("タイマーが終了しました", NoticeTiming.LV1, true)
         sendTTS(
-            guild.getGuildData().finishTTS.replace("x", number.number.toString()),
+            guildData.finishTTS.replace("x", number.number.toString()),
             NoticeTiming.LV1
         )
+
+        //プレイヤーを取得
+        val player = guild.getAudioPlayer()
+        //オーディオを探す
+        val audioDatum = SimpleTimer.instance.dataContainer.audioDatum.filter { it.id == guild.getGuildData().audio }
+        //見つかったかを確認
+        if (audioDatum.isNotEmpty() && player.isConnected()) {
+            //再生
+            player.play(audioDatum.first())
+        }
 
         val channelTimers = channelsTimersMap[channel]
         if (channelTimers != null) {
@@ -440,6 +454,9 @@ class Timer(
      * @param timing [NoticeTiming] このメッセージのタイミング
      */
     private fun sendTTS(sting: String, timing: NoticeTiming) {
+        //何もないときは読み上げない
+        if (sting.replace(" ", "").replace("　", "") == "") return
+
         //ギルドのデータの確認
         val guildData = guild.getGuildData()
         if (guildData.ttsTiming.priority >= timing.priority) {

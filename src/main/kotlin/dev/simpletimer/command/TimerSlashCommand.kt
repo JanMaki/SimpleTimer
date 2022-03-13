@@ -440,21 +440,18 @@ class TimerSlashCommand {
     object FinishTTS : SlashCommand("tts_finishmessage", "終了時のメッセージ読み上げの内容を変更する") {
         init {
             isDefaultEnabled = true
-            addOptions(OptionData(OptionType.STRING, "メッセージ", "メッセージの内容 タイマーの番号が'x'に代入されます").setRequired(true))
+            addOptions(
+                OptionData(
+                    OptionType.STRING,
+                    "メッセージ",
+                    "メッセージの内容 タイマーの番号が'x'に代入されます 何も入力しないと、終了時にTTSの読み上げを行いません"
+                )
+            )
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
-            //オプションを取得
-            val option = event.getOption("メッセージ")
-
-            //nullチェック
-            if (option == null) {
-                replyCommandError(event)
-                return
-            }
-
             //メッセージを取得
-            val message = option.asString
+            val message = event.getOption("メッセージ")?.asString ?: ""
 
             //メッセージの長さを確認
             if (message.length > 20) {

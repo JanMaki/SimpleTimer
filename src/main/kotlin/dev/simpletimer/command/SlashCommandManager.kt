@@ -7,6 +7,10 @@ object SlashCommandManager {
         //コマンド一覧
         slashCommands.addAll(
             arrayOf(
+                AudioCommand.Connect,
+                AudioCommand.DisConnect,
+                AudioCommand.Listen,
+                AudioCommand.Change,
                 ButtonSlashCommand,
                 DebugCommand,
                 HelpSlashCommand,

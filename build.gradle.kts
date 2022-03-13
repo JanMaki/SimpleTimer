@@ -25,8 +25,12 @@ dependencies {
     //Discord連携 JDA
     //implementation("net.dv8tion", "JDA", "5.0.0-alpha.9")
     implementation(files("libs/JDA-5.0.0-alpha.9_DEV-withDependencies.jar"))
+    //JDAに必要なもの
     implementation("org.slf4j", "slf4j-simple", "1.7.30")
     implementation("org.slf4j", "slf4j-api", "1.7.30")
+    //音再生
+    implementation("com.sedmelluq", "lavaplayer", "1.3.77")
+    implementation("com.github.aikaterna","lavaplayer-natives","original-SNAPSHOT")
 
     //YAML
     implementation("com.charleskorn.kaml","kaml","0.42.0")

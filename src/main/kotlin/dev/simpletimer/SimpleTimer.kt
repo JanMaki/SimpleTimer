@@ -1,5 +1,6 @@
 package dev.simpletimer
 
+import dev.simpletimer.audio_player.AudioPlayerManager
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.DataContainer
 import dev.simpletimer.dice.bcdice.BCDiceManager
@@ -88,6 +89,9 @@ class SimpleTimer {
 
     //データ保存用
     lateinit var dataContainer: DataContainer
+
+    //オーディオプレイヤーのマネージャー
+    val audioManager = AudioPlayerManager()
 
     //起動しているShardのSet
     val shards = mutableSetOf<JDA>()

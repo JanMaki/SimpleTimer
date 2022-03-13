@@ -3,6 +3,7 @@ package dev.simpletimer.data
 import com.charleskorn.kaml.EmptyYamlDocumentException
 import com.charleskorn.kaml.Yaml
 import dev.simpletimer.SimpleTimer
+import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.guild.GuildData
 import dev.simpletimer.data.guild.GuildsData
@@ -22,6 +23,8 @@ class DataContainer {
     //コンフィグ
     var config: ConfigData
 
+    val audioDatum = mutableListOf<AudioInformationData>()
+
     //jarがあるディレクトリ
     private val parentDirectory: File =
         File(Paths.get(javaClass.protectionDomain.codeSource.location.toURI()).toString()).parentFile
@@ -31,6 +34,9 @@ class DataContainer {
 
     //コンフィグを保管するファイル
     private val configFile = File(parentDirectory, "config.yml")
+
+    //音源データを保管するディレクトリ
+    private val audioDirectory = File(parentDirectory, "Audio")
 
     init {
 
@@ -71,6 +77,18 @@ class DataContainer {
         } catch (ignore: EmptyYamlDocumentException) {
             //空データを代入
             config = ConfigData()
+        }
+
+
+        //音源を保管するディレクトリがあるかを確認
+        if (!audioDirectory.exists()) audioDirectory.mkdirs()
+
+        //ymlリを読み込み
+        audioDirectory.listFiles()?.filterNotNull()?.filter { it.extension == "yml" }?.forEach { file ->
+            //ファイル読み込み
+            val audioDataFileInputStream = file.inputStream()
+            val audioData = Yaml.default.decodeFromStream(AudioInformationData.serializer(), audioDataFileInputStream)
+            audioDatum.add(audioData)
         }
     }
 
