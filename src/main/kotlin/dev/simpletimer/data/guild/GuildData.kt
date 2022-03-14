@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel
  * @property listSync タイマーリストを同期するかどうか
  * @property syncTarget タイマーリストの同期元の[Guild]
  * @property audio 設定されているオーディオのID
- * @constructor Create empty Guild data
+ * @property needAudioAnnounce オーディオの権利表示などの
  */
 @Serializable
 data class GuildData(
@@ -44,5 +44,6 @@ data class GuildData(
     var listTargetChannel: @Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel? = null,
     var listSync: Boolean = false,
     var syncTarget: @Serializable(with = GuildSerializer::class) Guild? = null,
-    var audio: String = "Voice"
+    var audio: String = "Voice",
+    var needAudioAnnounce: Boolean = true
 )
