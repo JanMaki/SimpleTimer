@@ -101,7 +101,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             guild.getAudioPlayer().connect(channel)
 
             //メッセージを送信
-            event.hook.sendMessage("チャンネルから退出しました").queue({}, {})
+            event.hook.sendMessage("チャンネルに参加しました").queue({}, {})
         }
     }
 
