@@ -191,6 +191,9 @@ class SimpleTimer {
                 println("Botを終了します...")
                 break
             }
+            if (input == "convert") {
+                dataContainer.convertOldData()
+            }
         }
     }
 
