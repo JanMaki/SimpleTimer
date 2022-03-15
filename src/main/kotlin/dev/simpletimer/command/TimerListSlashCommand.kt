@@ -1,9 +1,9 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
-import dev.simpletimer.data.getGuildData
 import dev.simpletimer.list.ListMenu
 import dev.simpletimer.util.SendMessage
+import dev.simpletimer.util.getGuildData
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -47,8 +47,11 @@ class TimerListSlashCommand {
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
+            //ギルドを取得
+            val guild = event.guild!!
+
             //ギルドのデータを取得
-            val guildData = event.guild?.getGuildData() ?: return
+            val guildData = guild.getGuildData()
 
             //同期の確認
             if (guildData.listSync) {
@@ -99,7 +102,7 @@ class TimerListSlashCommand {
             }
 
             //保存
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを送信
             event.hook.sendMessage("一覧に追加しました").queue()
@@ -123,8 +126,11 @@ class TimerListSlashCommand {
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
+            //ギルドを取得
+            val guild = event.guild!!
+
             //ギルドのデータを取得
-            val guildData = event.guild?.getGuildData() ?: return
+            val guildData = guild.getGuildData()
 
             //オプションを取得
             val name = event.getOption("名前")!!.asString
@@ -145,7 +151,7 @@ class TimerListSlashCommand {
             //ギルドのデータを削除して保存する
             guildData.list.remove("dice:${name}")
             guildData.list.remove("timer:${name}")
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを送信
             event.hook.sendMessage("要素を削除しました").queue()
@@ -215,8 +221,9 @@ class TimerListSlashCommand {
             }
 
             //ギルドのデータに設定をし、保存
-            event.guild!!.getGuildData().listTargetChannel = channel
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            val guild = event.guild!!
+            guild.getGuildData().listTargetChannel = channel
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを送信
             event.hook.sendMessage("一覧からタイマーやダイスを実行するチャンネルを**${channel.name}**に変更しました").queue({}, {})
@@ -300,7 +307,7 @@ class TimerListSlashCommand {
                 event.hook.sendMessage("同期を終了しました").queue()
             }
 
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
         }
     }
 

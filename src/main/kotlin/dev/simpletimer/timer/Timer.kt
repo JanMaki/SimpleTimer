@@ -4,11 +4,11 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.button.AddTimerButton
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
-import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer.Number
 import dev.simpletimer.util.DeletableMessage
 import dev.simpletimer.util.Log
 import dev.simpletimer.util.getAudioPlayer
+import dev.simpletimer.util.getGuildData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

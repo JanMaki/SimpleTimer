@@ -4,9 +4,9 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.bcdice_kt.BCDice
 import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
 import dev.simpletimer.data.enum.DiceMode
-import dev.simpletimer.data.getGuildData
 import dev.simpletimer.util.Log
 import dev.simpletimer.util.equalsIgnoreCase
+import dev.simpletimer.util.getGuildData
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Message
@@ -215,7 +215,7 @@ class BCDiceManager {
 
             guildData.diceBot = gameSystem.id
             guildData.diceMode = DiceMode.BCDice
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
         } catch (e: Exception) {
             //権限関係が原因の物は排除
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {

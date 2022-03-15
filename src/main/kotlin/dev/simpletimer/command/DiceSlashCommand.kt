@@ -1,10 +1,10 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
-import dev.simpletimer.data.getGuildData
 import dev.simpletimer.dice.DefaultDice
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.dice.bcdice.BCDiceManager
+import dev.simpletimer.util.getGuildData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,9 +50,11 @@ class DiceSlashCommand {
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
+            //ギルドを取得
+            val guild = event.guild!!
 
             //ギルドのデータを取得
-            val guildData = event.guild?.getGuildData() ?: return
+            val guildData = guild.getGuildData()
 
             //ダイスモードを反転
             val diceMode = when (guildData.diceMode) {
@@ -66,7 +68,7 @@ class DiceSlashCommand {
 
             //ギルドのデータへ保存
             guildData.diceMode = diceMode
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
             event.hook.sendMessage("ダイスモードを**$diceMode**に変更しました").queue({}, {})

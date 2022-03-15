@@ -4,9 +4,9 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.AddTimerModal
 import dev.simpletimer.component.modal.StartTimerModal
 import dev.simpletimer.data.enum.NoticeTiming
-import dev.simpletimer.data.getGuildData
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.util.equalsIgnoreCase
+import dev.simpletimer.util.getGuildData
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.Command
@@ -426,8 +426,9 @@ class TimerSlashCommand {
             }
 
             //ギルドのデータへ保存
-            event.guild!!.getGuildData().ttsTiming = timing
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            val guild = event.guild!!
+            guild.getGuildData().ttsTiming = timing
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
             event.hook.sendMessage("チャットの読み上げを${timing}にしました").queue({}, {})
@@ -460,8 +461,9 @@ class TimerSlashCommand {
             }
 
             //ギルドのデータへ保存
-            event.guild!!.getGuildData().finishTTS = message
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            val guild = event.guild!!
+            guild.getGuildData().finishTTS = message
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
             event.hook.sendMessage("終了時のTTSメッセージを変更しました").queue({}, {})
@@ -498,8 +500,9 @@ class TimerSlashCommand {
             }
 
             //ギルドのデータへ保存
-            event.guild!!.getGuildData().mentionTiming = timing
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            val guild = event.guild!!
+            guild.getGuildData().mentionTiming = timing
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
             event.hook.sendMessage("メンションを行うタイミングを${timing}にしました").queue({}, {})
@@ -552,7 +555,7 @@ class TimerSlashCommand {
 
             //ギルドのデータへ保存
             guildData.mention = mention
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
             event.hook.sendMessage("メンションの設定を${mention}にしました").queue({}, {})
@@ -643,9 +646,10 @@ class TimerSlashCommand {
             val role = option.asRole
 
             //ギルドのデータに保管
-            val guildData = event.guild?.getGuildData() ?: return
+            val guild = event.guild!!
+            val guildData = guild.getGuildData()
             guildData.roleMentionTargets.add(role)
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
             event.hook.sendMessage("`${role.name}`をメンション対象に追加しました").queue({}, {})
@@ -672,9 +676,10 @@ class TimerSlashCommand {
             val role = option.asRole
 
             //ギルドのデータへ追加
-            val guildData = event.guild?.getGuildData() ?: return
+            val guild = event.guild!!
+            val guildData = guild.getGuildData()
             guildData.roleMentionTargets.remove(role)
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
             event.hook.sendMessage("`${role.name}`をメンション対象から削除しました").queue({}, {})
@@ -735,8 +740,9 @@ class TimerSlashCommand {
             }
 
             //ギルドのデータへ追加
-            event.guild!!.getGuildData().vcMentionTargets.add(channel)
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            val guild = event.guild!!
+            guild.getGuildData().vcMentionTargets.add(channel)
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
             event.hook.sendMessage("`${channel.name}`をメンション対象に追加しました").queue({}, {})
@@ -767,8 +773,9 @@ class TimerSlashCommand {
             }
 
             //ギルドのデータから削除
-            event.guild!!.getGuildData().vcMentionTargets.remove(channel)
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            val guild = event.guild!!
+            guild.getGuildData().vcMentionTargets.remove(channel)
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
             event.hook.sendMessage("`${channel.name}`をメンション対象から削除しました").queue({}, {})

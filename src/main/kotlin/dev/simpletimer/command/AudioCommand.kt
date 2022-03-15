@@ -2,8 +2,8 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.audio.AudioInformationData
-import dev.simpletimer.data.getGuildData
 import dev.simpletimer.util.getAudioPlayer
+import dev.simpletimer.util.getGuildData
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
@@ -16,8 +16,11 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
 abstract class AudioCommand(name: String, description: String) : SlashCommand(name, description) {
 
     override fun run(event: SlashCommandInteractionEvent) {
+        //ギルドを取得
+        val guild = event.guild!!
+
         //ギルドのデータを取得
-        val guildData = event.guild!!.getGuildData()
+        val guildData = guild.getGuildData()
 
         //権利表示などのアナウンスが必要かを確認
         if (guildData.needAudioAnnounce) {
@@ -30,7 +33,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
 
             //オーディオの通知をしなくして保存
             guildData.needAudioAnnounce = false
-            SimpleTimer.instance.dataContainer.saveGuildsData()
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
         }
 
         //子のコマンドを実行
@@ -178,13 +181,16 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             //オーディオを取得
             val audioData = audioDatum.first()
 
+            //ギルドを取得
+            val guild = event.guild!!
+
             //ギルドのデータを変更
-            val guildData = event.guild!!.getGuildData()
+            val guildData = guild.getGuildData()
 
             //オーディオを設定
             guildData.audio = name
             //保存
-            dataContainer.saveGuildsData()
+            dataContainer.saveGuildsData(guild)
 
             //埋め込みを作成して送信
             event.hook.sendMessageEmbeds(getAudioInfoEmbed(audioData, "オーディオを${name}に変更しました")).queue({}, {})

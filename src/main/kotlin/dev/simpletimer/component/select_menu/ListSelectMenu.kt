@@ -1,8 +1,8 @@
 package dev.simpletimer.component.select_menu
 
-import dev.simpletimer.data.getGuildData
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.timer.Timer
+import dev.simpletimer.util.getGuildData
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
