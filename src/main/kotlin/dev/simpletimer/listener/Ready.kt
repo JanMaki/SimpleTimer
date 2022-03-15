@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 class Ready : ListenerAdapter() {
+    private var count = 0
+
     /**
      * JDA(Shardも含む)起動時に呼び出される
      *
@@ -22,5 +24,7 @@ class Ready : ListenerAdapter() {
             //ログを出力するチャンネルに追加
             Log.logChannels.add(channel)
         }
+
+        Log.sendLog("Shardを起動しました　${++count}/${SimpleTimer.instance.shards.count()}")
     }
 }
