@@ -3,6 +3,8 @@ package dev.simpletimer.command
 import dev.simpletimer.component.modal.QueueModal
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
+import dev.simpletimer.util.sendMessage
+import dev.simpletimer.util.sendMessageEmbeds
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -63,7 +65,8 @@ abstract class QueueCommand {
             val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
             event.hook.sendMessageEmbeds(
-                TimerQueue.getTimerQueue(event.guild!!, event.messageChannel, number).getQueueEmbed()
+                TimerQueue.getTimerQueue(event.guild!!, event.messageChannel, number).getQueueEmbed(),
+                true
             ).queue({}, {})
         }
     }
@@ -112,14 +115,14 @@ abstract class QueueCommand {
 
             //キューがあるかを確認する
             if (queue.getQueue().size < index + 1) {
-                event.hook.sendMessage("該当のキューが見つかりません").queue({}, {})
+                event.hook.sendMessage("該当のキューが見つかりません", true).queue({}, {})
                 return
             }
             //削除
             queue.removeQueueIndex(index)
 
             //メッセージを送信
-            event.hook.sendMessageEmbeds(queue.getQueueEmbed()).queue({}, {})
+            event.hook.sendMessage("${number.number}番目のタイマーのキューを削除しました").queue({}, {})
         }
     }
 

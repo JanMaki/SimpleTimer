@@ -1,6 +1,7 @@
 package dev.simpletimer.component.modal
 
 import dev.simpletimer.timer.Timer
+import dev.simpletimer.util.sendEmpty
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.Modal
 import java.util.*
@@ -28,9 +29,9 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
         //タイマーの稼働を確認
         if (!channelTimers.containsKey(timerNumber)) {
             if (timerNumber != null)
-                event.reply(timerNumber.format("タイマーは動いていません")).queue({}, {})
+                event.reply(timerNumber.format("*タイマーは動いていません")).setEphemeral(true).queue({}, {})
             else {
-                event.reply("タイマーは動いていません").queue({}, {})
+                event.reply("*タイマーは動いていません").setEphemeral(true).queue({}, {})
             }
             return
         }
@@ -43,9 +44,7 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
 
         //空白を出力して消し飛ばす
         event.deferReply().queue {
-            event.hook.sendMessage("|| ||").queueAfter(1L, TimeUnit.NANOSECONDS) {
-                it.delete().queue({}, {})
-            }
+            event.hook.sendEmpty()
         }
     }
 

@@ -1,5 +1,6 @@
 package dev.simpletimer.component.modal
 
+import dev.simpletimer.util.sendMessage
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.text.Modal
@@ -20,7 +21,7 @@ abstract class TimerModal<T>(name: String, beforeReply: Boolean = true) :
 
         //時間を確認する
         if (seconds <= 0) {
-            event.hook.sendMessage("*1秒以上の時間を設定してください").queue({}, {})
+            event.hook.sendMessage("*1秒以上の時間を設定してください", true).queue({}, {})
             return
         }
 

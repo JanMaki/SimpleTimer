@@ -4,6 +4,8 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.list.ListMenu
 import dev.simpletimer.util.SendMessage
 import dev.simpletimer.util.getGuildData
+import dev.simpletimer.util.sendMessage
+import dev.simpletimer.util.sendMessageEmbeds
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -55,7 +57,7 @@ class TimerListSlashCommand {
 
             //同期の確認
             if (guildData.listSync) {
-                event.hook.sendMessage("このサーバーでは一覧を同期しています。").queue()
+                event.hook.sendMessage("*このサーバーでは一覧を同期しています。", true).queue()
                 return
             }
 
@@ -64,13 +66,13 @@ class TimerListSlashCommand {
 
             //文字数制限
             if (name.length >= 10) {
-                event.hook.sendMessage("*名前の文字数は10文字以下にしてください").queue()
+                event.hook.sendMessage("*名前の文字数は10文字以下にしてください", true).queue()
                 return
             }
 
             //:を挟まれないようにする
             if (name.contains(":")) {
-                event.hook.sendMessage("*名前に使用できない文字が含まれています").queue()
+                event.hook.sendMessage("*名前に使用できない文字が含まれています", true).queue()
                 return
             }
 
@@ -79,7 +81,7 @@ class TimerListSlashCommand {
 
             //上限を確認
             if (list.size >= 10) {
-                event.hook.sendMessage("*10個以上登録できません").queue()
+                event.hook.sendMessage("*10個以上登録できません",true).queue()
                 return
             }
 
@@ -137,14 +139,14 @@ class TimerListSlashCommand {
 
             //同期の確認
             if (guildData.listSync) {
-                event.hook.sendMessage("このサーバーでは一覧を同期しています。").queue()
+                event.hook.sendMessage("*このサーバーでは一覧を同期しています。", true).queue()
                 return
             }
 
             //ギルドのデータから一覧を取得し、有効な要素かを確認する
             if (!guildData.list.contains("dice:${name}") && !guildData.list.contains("timer:${name}")) {
                 //エラーのメッセージを送信
-                event.hook.sendMessage("*無効な要素です").queue()
+                event.hook.sendMessage("*無効な要素です", true).queue()
                 return
             }
 
@@ -215,7 +217,7 @@ class TimerListSlashCommand {
                                     permissions.contains(Permission.MESSAGE_EXT_EMOJI))
                 ) {
                     //権限が不足しているメッセージを送信する
-                    event.hook.sendMessageEmbeds(SendMessage.errorEmbed).queue({}, {})
+                    event.hook.sendMessageEmbeds(SendMessage.errorEmbed, true).queue({}, {})
                     return
                 }
             }
@@ -292,14 +294,14 @@ class TimerListSlashCommand {
                     val targetGuild = SimpleTimer.instance.getGuild(long)
 
                     if (targetGuild == null) {
-                        event.hook.sendMessage("*無効なIDです").queue()
+                        event.hook.sendMessage("*無効なIDです", true).queue()
                         return
                     } else {
-                        event.hook.sendMessage("同期を開始しました").queue()
+                        event.hook.sendMessage("同期を開始しました", true).queue()
                         guildData.syncTarget = targetGuild
                     }
                 } else {
-                    event.hook.sendMessage("*対象のサーバーが同じサーバーです").queue()
+                    event.hook.sendMessage("*対象のサーバーが同じサーバーです", true).queue()
                     return
                 }
 

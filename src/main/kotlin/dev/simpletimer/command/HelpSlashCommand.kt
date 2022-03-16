@@ -1,5 +1,6 @@
 package dev.simpletimer.command
 
+import dev.simpletimer.util.sendMessageEmbeds
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
@@ -29,6 +30,6 @@ object HelpSlashCommand : SlashCommand("help", "Botの概要などを表示") {
         embed.addField("", "プライバシーポリシー\nhttps://docs.google.com/document/d/1etnMMknasi3JU6V573sWWJcqcU8Im1_3b-cc2pqKE6U/edit?usp=sharing", true)
 
         //Embedを作成し、送信
-        event.hook.sendMessageEmbeds(embed.build()).queue({}, {})
+        event.hook.sendMessageEmbeds(embed.build(), true).queue({}, {})
     }
 }

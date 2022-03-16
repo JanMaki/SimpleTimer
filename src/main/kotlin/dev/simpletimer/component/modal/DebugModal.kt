@@ -3,6 +3,7 @@ package dev.simpletimer.component.modal
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.timer.Timer
+import dev.simpletimer.util.sendMessage
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.Modal
 import net.dv8tion.jda.api.interactions.components.text.TextInput
@@ -22,7 +23,7 @@ object DebugModal : ModalManager.Modal<Byte>("debug") {
             //タイマーの稼働数を確認する
             "count" -> {
                 //タイマーの稼働数を送信する
-                event.hook.sendMessage("${Timer.getCount()}個のタイマーが稼働しています").queue({}, {})
+                event.hook.sendMessage("${Timer.getCount()}個のタイマーが稼働しています", true).queue({}, {})
             }
             //ギルドにコマンドを強制的に追加させる
             "commands" -> {
@@ -33,7 +34,7 @@ object DebugModal : ModalManager.Modal<Byte>("debug") {
                 }
 
                 //メッセージを送信
-                event.hook.sendMessage("コマンドを更新しました").queue({}, {})
+                event.hook.sendMessage("コマンドを更新しました", true).queue({}, {})
             }
             //接続しているVCの数を確認する
             "audio" -> {
@@ -41,13 +42,14 @@ object DebugModal : ModalManager.Modal<Byte>("debug") {
                 event.hook.sendMessage(
                     "${
                         SimpleTimer.instance.audioManager.getAudioPlayers().filter { it.isConnected() }.size
-                    }個のVCに接続しています"
+                    }個のVCに接続しています",
+                    true
                 ).queue({}, {})
             }
             //無効な値の時
             else -> {
                 //メッセージを送信
-                event.hook.sendMessage("*無効な入力です").queue({}, {})
+                event.hook.sendMessage("*無効な入力です", true).queue({}, {})
             }
         }
     }

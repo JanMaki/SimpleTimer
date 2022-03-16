@@ -7,6 +7,8 @@ import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.util.equalsIgnoreCase
 import dev.simpletimer.util.getGuildData
+import dev.simpletimer.util.sendEmpty
+import dev.simpletimer.util.sendMessage
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.Command
@@ -56,15 +58,13 @@ class TimerSlashCommand {
                     Timer.channelsTimersMap[channel] = channelTimers
 
                     //空白を出力して消し飛ばす
-                    event.hook.sendMessage("|| ||").queue {
-                        it.delete().queue({}, {})
-                    }
+                    event.hook.sendEmpty()
                     return
                 }
             }
 
             //最大数のメッセージを出力する
-            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue({}, {})
+            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue({}, {})
         }
     }
 
@@ -112,9 +112,9 @@ class TimerSlashCommand {
             if (!channelTimers.containsKey(number)) {
                 //タイマーが稼働していないことを教えるメッセージを出力
                 if (number != null)
-                    event.hook.sendMessage(number.format("タイマーは動いていません")).queue({}, {})
+                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue({}, {})
                 else {
-                    event.hook.sendMessage("タイマーは動いていません").queue({}, {})
+                    event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
                 }
                 return
             }
@@ -126,9 +126,7 @@ class TimerSlashCommand {
             timer.finish()
 
             //空白を出力して消し飛ばす
-            event.hook.sendMessage("|| ||").queue {
-                it.delete().queue({}, {})
-            }
+            event.hook.sendEmpty()
         }
     }
 
@@ -150,7 +148,7 @@ class TimerSlashCommand {
 
             //稼働しているタイマーの数を取得
             if (channelTimers.keys.size == 0) {
-                event.hook.sendMessage("タイマーは動いていません").queue({}, {})
+                event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
                 return
             }
 
@@ -160,9 +158,7 @@ class TimerSlashCommand {
             }
 
             //空白を出力して消し飛ばす
-            event.hook.sendMessage("|| ||").queue {
-                it.delete().queue({}, {})
-            }
+            event.hook.sendEmpty()
         }
     }
 
@@ -247,9 +243,9 @@ class TimerSlashCommand {
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
                 if (number != null)
-                    event.hook.sendMessage(number.format("タイマーは動いていません")).queue({}, {})
+                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue({}, {})
                 else {
-                    event.hook.sendMessage("タイマーは動いていません").queue({}, {})
+                    event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
                 }
                 return
             }
@@ -261,9 +257,7 @@ class TimerSlashCommand {
             timer.stop()
 
             //空白を出力して消し飛ばす
-            event.hook.sendMessage("|| ||").queue {
-                it.delete().queue({}, {})
-            }
+            event.hook.sendEmpty()
         }
     }
 
@@ -310,9 +304,9 @@ class TimerSlashCommand {
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
                 if (number != null)
-                    event.hook.sendMessage(number.format("タイマーは動いていません")).queue({}, {})
+                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue({}, {})
                 else {
-                    event.hook.sendMessage("タイマーは動いていません").queue({}, {})
+                    event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
                 }
                 return
             }
@@ -324,9 +318,7 @@ class TimerSlashCommand {
             timer.restart()
 
             //空白を出力して消し飛ばす
-            event.hook.sendMessage("|| ||").queue {
-                it.delete().queue({}, {})
-            }
+            event.hook.sendEmpty()
         }
     }
 
@@ -373,9 +365,9 @@ class TimerSlashCommand {
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
                 if (number != null)
-                    event.hook.sendMessage(number.format("タイマーは動いていません")).queue({}, {})
+                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue({}, {})
                 else {
-                    event.hook.sendMessage("タイマーは動いていません").queue({}, {})
+                    event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
                 }
                 return
             }
@@ -387,9 +379,7 @@ class TimerSlashCommand {
             timer.check()
 
             //空白を出力して消し飛ばす
-            event.hook.sendMessage("|| ||").queue {
-                it.delete().queue({}, {})
-            }
+            event.hook.sendEmpty()
         }
     }
 
@@ -456,7 +446,7 @@ class TimerSlashCommand {
 
             //メッセージの長さを確認
             if (message.length > 20) {
-                event.hook.sendMessage("20文字以下にしてください").queue({}, {})
+                event.hook.sendMessage("*20文字以下にしてください", true).queue({}, {})
                 return
             }
 
@@ -590,7 +580,7 @@ class TimerSlashCommand {
             }
             val appendMessage = appendMessageBuffer.toString()
             if (appendMessage != "") {
-                event.hook.sendMessage(appendMessage).queue({}, {})
+                event.hook.sendMessage(appendMessage, true).queue({}, {})
             }
         }
     }
@@ -735,7 +725,7 @@ class TimerSlashCommand {
             //ロール名を取得
             val channel = option.asGuildChannel
             if (channel !is VoiceChannel) {
-                event.hook.sendMessage("ボイスチャットではないチャンネルです").queue({}, {})
+                event.hook.sendMessage("ボイスチャットではないチャンネルです", true).queue({}, {})
                 return
             }
 
@@ -768,7 +758,7 @@ class TimerSlashCommand {
             //ロール名を取得
             val channel = option.asGuildChannel
             if (channel !is VoiceChannel) {
-                event.hook.sendMessage("ボイスチャットではないチャンネルです").queue({}, {})
+                event.hook.sendMessage("*ボイスチャットではないチャンネルです", true).queue({}, {})
                 return
             }
 

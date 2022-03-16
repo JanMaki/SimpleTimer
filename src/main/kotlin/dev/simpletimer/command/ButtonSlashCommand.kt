@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.component.button.DiceButton
 import dev.simpletimer.component.button.TimerButton
+import dev.simpletimer.util.sendMessage
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -48,7 +49,7 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
 
                 //時間を確認する
                 if (minutes <= 0) {
-                    event.hook.sendMessage("*1秒以上の時間を設定してください").queue({}, {})
+                    event.hook.sendMessage("*1秒以上の時間を設定してください", true).queue({}, {})
                     return
                 }
 

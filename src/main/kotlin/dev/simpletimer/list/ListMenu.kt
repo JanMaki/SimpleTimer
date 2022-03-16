@@ -2,6 +2,7 @@ package dev.simpletimer.list
 
 import dev.simpletimer.component.select_menu.ListSelectMenu
 import dev.simpletimer.util.getGuildData
+import dev.simpletimer.util.sendMessageEmbeds
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
@@ -58,7 +59,7 @@ object ListMenu {
 
         if (list.isEmpty()) {
             //空だった時は埋め込みだけ送信
-            event.hook.sendMessageEmbeds(builder.build()).queue({}, {})
+            event.hook.sendMessageEmbeds(builder.build(), true).queue({}, {})
         } else {
             //中身があるときは、埋め込みとメニューを送信
             event.hook.sendMessageEmbeds(builder.build())

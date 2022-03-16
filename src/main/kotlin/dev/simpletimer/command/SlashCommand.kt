@@ -1,5 +1,6 @@
 package dev.simpletimer.command
 
+import dev.simpletimer.util.sendMessage
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.internal.interactions.CommandDataImpl
@@ -24,7 +25,9 @@ abstract class SlashCommand(name: String, description: String, val beforeReply: 
      *
      * @param event [CommandAutoCompleteInteractionEvent] 自動補完のイベント
      */
-    open fun autoComplete(event: CommandAutoCompleteInteractionEvent) {}
+    open fun autoComplete(event: CommandAutoCompleteInteractionEvent) {
+        //デフォルトでは何もしない
+    }
 
     companion object {
         /**
@@ -33,7 +36,7 @@ abstract class SlashCommand(name: String, description: String, val beforeReply: 
          * @param event [SlashCommandInteractionEvent] スラッシュコマンドのイベント
          */
         fun replyCommandError(event: SlashCommandInteractionEvent) {
-            event.hook.sendMessage("*コマンドエラー").queue({}, {})
+            event.hook.sendMessage("*コマンドエラー", true).queue({}, {})
         }
     }
 }

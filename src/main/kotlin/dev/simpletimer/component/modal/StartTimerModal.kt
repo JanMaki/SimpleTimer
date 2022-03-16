@@ -1,6 +1,8 @@
 package dev.simpletimer.component.modal
 
 import dev.simpletimer.timer.Timer
+import dev.simpletimer.util.sendEmpty
+import dev.simpletimer.util.sendMessage
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.Modal
 import java.util.*
@@ -31,15 +33,13 @@ object StartTimerModal : TimerModal<Byte>("start_timer") {
                 Timer.channelsTimersMap[channel] = channelTimers
 
                 //空白を出力して消し飛ばす
-                event.hook.sendMessage("|| ||").queue {
-                    it.delete().queue({}, {})
-                }
+                event.hook.sendEmpty()
                 return
             }
         }
 
         //最大数のメッセージを出力する
-        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue({}, {})
+        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue({}, {})
     }
 
     override fun getModalBuilder(data: Byte): Modal.Builder {

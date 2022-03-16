@@ -2,6 +2,8 @@ package dev.simpletimer.component.modal
 
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
+import dev.simpletimer.util.sendEmpty
+import dev.simpletimer.util.sendMessageEmbeds
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.Modal
 
@@ -29,12 +31,10 @@ object QueueModal : TimerModal<Timer.Number>("queue") {
         //キューの量を確認
         if (queue.getQueue().size > 0) {
             //メッセージを送信
-            event.hook.sendMessageEmbeds(queue.getQueueEmbed()).queue({}, {})
+            event.hook.sendMessageEmbeds(queue.getQueueEmbed(), true).queue({}, {})
         } else {
             //空のメッセージを送信
-            event.hook.sendMessage("|| ||").queue {
-                it.delete().queue({}, {})
-            }
+            event.hook.sendEmpty()
         }
     }
 

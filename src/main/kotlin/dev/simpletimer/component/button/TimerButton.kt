@@ -1,6 +1,8 @@
 package dev.simpletimer.component.button
 
 import dev.simpletimer.timer.Timer
+import dev.simpletimer.util.sendEmpty
+import dev.simpletimer.util.sendMessage
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
@@ -29,15 +31,13 @@ object TimerButton : ButtonManager.Button<Int>("timer") {
                 )
                 Timer.channelsTimersMap[channel] = channelTimers
                 //空白を送信
-                event.hook.sendMessage("|| ||").queue { message ->
-                    message.delete().queue({}, {})
-                }
+                event.hook.sendEmpty()
                 return
             }
         }
 
         //最大数のメッセージを出力する
-        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue({}, {})
+        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue({}, {})
     }
 
     override fun createButton(data: Int): Button {
