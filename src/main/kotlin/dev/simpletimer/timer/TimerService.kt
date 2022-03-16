@@ -23,6 +23,15 @@ class TimerService(private var seconds: Int) {
     //経過時間
     private var elapsedTime = 0L
 
+    //タイマーが開始した時間
+    private var startNanoTime = 0L
+
+    //タイマーの調整値
+    var adjustTime = 0L
+
+    //一時停止した時の時間を保管 調整に使用
+    var stopTime = System.nanoTime()
+
     /**
      * タイマーを開始する
      *
@@ -33,43 +42,11 @@ class TimerService(private var seconds: Int) {
             return false
         }
 
-        //タイマーが開始した時間
-        val startNanoTime = System.nanoTime()
+        //開始した時間を代入
+        startNanoTime = System.nanoTime()
 
-        //タイマーの調整値
-        var adjustTime = 0L
-        //更新ごとに時間を保管する。調整に使用
-        var oldTime = System.nanoTime()
-
-        //別スレッドでタイマーを開始
-        CoroutineScope(Dispatchers.Default).launch {
-            do {
-                //終了フラグを確認
-                if (isFinish) {
-                    break
-                }
-
-                //もしタイマーが止まっていたら、調整値を増やす
-                if (!isMove) {
-                    adjustTime += System.nanoTime() - oldTime
-                }
-
-                //時間を保管
-                oldTime = System.nanoTime()
-
-                //イベントを呼び出す
-                listeners.forEach { it.onUpdate() }
-
-                //スレッドを0.5秒待つ
-                delay(500)
-
-                //経過時間を更新
-                elapsedTime = System.nanoTime() - startNanoTime
-            } while (elapsedTime < (seconds * 1000000000L) + adjustTime)// 経過時間が、秒数 * 1000000000 + 調整値 以下なら続ける
-
-            //終了する
-            finish()
-        }
+        //コールーチンを開始する
+        startCoroutine()
 
         //開始フラグを立てる
         isStarted = true
@@ -111,6 +88,15 @@ class TimerService(private var seconds: Int) {
 
         //タイマーを再開
         isMove = true
+
+        //止まっていたとき
+        if (check) {
+            //調整値を増やす
+            adjustTime += System.nanoTime() - stopTime
+
+            //コールーチンを開始する
+            startCoroutine()
+        }
 
         //イベントを呼び出す
         listeners.forEach { it.onRestart(check) }
@@ -169,6 +155,44 @@ class TimerService(private var seconds: Int) {
         //イベントを呼び出す
         listeners.forEach { it.onAdd(seconds) }
     }
+
+    /**
+     * コールーチンを開始する
+     *
+     */
+    private fun startCoroutine() {
+        //別スレッドでタイマーを開始
+        CoroutineScope(Dispatchers.Default).launch {
+            do {
+                //終了フラグを確認
+                if (isFinish || !isMove) {
+                    break
+                }
+
+                //イベントを呼び出す
+                listeners.forEach { it.onUpdate() }
+
+                //スレッドを0.5秒待つ
+                delay(500)
+
+                //経過時間を更新
+                elapsedTime = System.nanoTime() - startNanoTime
+            } while (elapsedTime < (seconds * 1000000000L) + adjustTime)// 経過時間が、秒数 * 1000000000 + 調整値 以下なら続ける
+
+            //終了フラグを確認
+            if (isFinish) {
+                //終了する
+                finish()
+            }
+
+            //停止のフラグを確認
+            if (!isMove) {
+                //停止時の時間を保存
+                stopTime = System.nanoTime()
+            }
+        }
+    }
+
 
     //イベントを受け取るリスナー
     private val listeners = ArrayList<TimerListener>()
