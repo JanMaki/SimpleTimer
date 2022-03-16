@@ -2,33 +2,20 @@ package dev.simpletimer.component.modal
 
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.text.Modal
-import net.dv8tion.jda.api.interactions.components.text.TextInput
-import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
 import java.util.*
 
 /**
  * タイマーを開始するModal
  *
  */
-object StartTimerModal : ModalInteractionManager.Modal<Byte>("start_timer") {
-    override fun run(event: ModalInteractionEvent) {
-        //入力した分数を取得
-        val minutesInputValue = event.getValue("minutes_input")?.asString ?: ""
+object StartTimerModal : TimerModal<Byte>("start_timer") {
+    override val minutesInputName: String
+        get() = "分数"
+    override val secondsInputName: String
+        get() = "秒数"
 
-        //入力した秒数を取得
-        val secondsInputValue = event.getValue("seconds_input")?.asString ?: ""
-
-        //秒数を取得
-        val seconds = ((minutesInputValue.toIntOrNull() ?: 0) * 60) + (secondsInputValue.toIntOrNull() ?: 0)
-
-        //時間を確認する
-        if (seconds <= 0) {
-            event.hook.sendMessage("*1秒以上の時間を設定してください").queue({}, {})
-            return
-        }
-
+    override fun run(event: ModalInteractionEvent, seconds: Int) {
         //チャンネルを取得
         val channel = event.messageChannel
 
@@ -55,22 +42,9 @@ object StartTimerModal : ModalInteractionManager.Modal<Byte>("start_timer") {
         event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue({}, {})
     }
 
-    //分数のInput
-    private val minutesInput = TextInput.create("minutes_input", "分数", TextInputStyle.SHORT)
-        .setPlaceholder("0")
-        .setRequired(false)
-        .build()
-
-    //秒数のInput
-    private val secondsInput = TextInput.create("seconds_input", "秒数", TextInputStyle.SHORT)
-        .setPlaceholder("0")
-        .setRequired(false)
-        .build()
-
-    override fun createModal(data: Byte): Modal {
+    override fun getModalBuilder(data: Byte): Modal.Builder {
         //Modalを作成して返す
         return Modal.create(name, "タイマーを開始する")
-            .addActionRows(ActionRow.of(minutesInput), ActionRow.of(secondsInput))
-            .build()
     }
+
 }

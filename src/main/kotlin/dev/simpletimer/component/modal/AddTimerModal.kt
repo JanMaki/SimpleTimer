@@ -2,10 +2,7 @@ package dev.simpletimer.component.modal
 
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.text.Modal
-import net.dv8tion.jda.api.interactions.components.text.TextInput
-import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -13,23 +10,13 @@ import java.util.concurrent.TimeUnit
  * タイマーを延長するModal
  *
  */
-object AddTimerModal : ModalInteractionManager.Modal<Timer.Number>("add_timer", false) {
-    override fun run(event: ModalInteractionEvent) {
-        //入力した分数を取得
-        val minutesInputValue = event.getValue("minutes_input")?.asString ?: ""
+object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
+    override val minutesInputName: String
+        get() = "延長する分数"
+    override val secondsInputName: String
+        get() = "延長する秒数"
 
-        //入力した秒数を取得
-        val secondsInputValue = event.getValue("seconds_input")?.asString ?: ""
-
-        //秒数を取得
-        val seconds = ((minutesInputValue.toIntOrNull() ?: 0) * 60) + (secondsInputValue.toIntOrNull() ?: 0)
-
-        //時間を確認する
-        if (seconds == 0) {
-            event.reply("*時間を設定してください").queue({}, {})
-            return
-        }
-
+    override fun run(event: ModalInteractionEvent, seconds: Int) {
         val timerNumber = Timer.Number.getNumber(event.modalId.split(":")[1].toInt())
 
         //チャンネルを取得
@@ -62,22 +49,7 @@ object AddTimerModal : ModalInteractionManager.Modal<Timer.Number>("add_timer", 
         }
     }
 
-    //分数のInput
-    private val minutesInput = TextInput.create("minutes_input", "延長する分数", TextInputStyle.SHORT)
-        .setPlaceholder("0")
-        .setRequired(false)
-        .build()
-
-    //秒数のInput
-    private val secondsInput = TextInput.create("seconds_input", "延長する秒数", TextInputStyle.SHORT)
-        .setPlaceholder("0")
-        .setRequired(false)
-        .build()
-
-    override fun createModal(data: Timer.Number): Modal {
-        //Modalを作成して返す
+    override fun getModalBuilder(data: Timer.Number): Modal.Builder {
         return Modal.create("add_timer:${data.number}", "${data.number}番目のタイマーを延長する")
-            .addActionRows(ActionRow.of(minutesInput), ActionRow.of(secondsInput))
-            .build()
     }
 }

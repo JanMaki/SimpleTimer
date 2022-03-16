@@ -96,6 +96,8 @@ class Timer(
     private fun init() {
         timerService.registerListener(this)
 
+        timerService.registerListener(TimerQueue.getTimerQueue(guild, channel, number))
+
         timerService.start()
     }
 

@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
  * デバッグ機能のModal
  *
  */
-object DebugModal : ModalInteractionManager.Modal<Byte>("debug") {
+object DebugModal : ModalManager.Modal<Byte>("debug") {
     override fun run(event: ModalInteractionEvent) {
         //入力した値を取得
         val inputValue = event.getValue("input")?.asString ?: return

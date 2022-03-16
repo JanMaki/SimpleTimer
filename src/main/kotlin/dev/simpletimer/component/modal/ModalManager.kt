@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 /**
  * Modalのマネージャー
  */
-object ModalInteractionManager {
+object ModalManager {
     //Modalーの一覧
     val modals = mutableSetOf<Modal<*>>().apply {
         //Modalを追加
@@ -13,6 +13,7 @@ object ModalInteractionManager {
             arrayOf(
                 AddTimerModal,
                 DebugModal,
+                QueueModal,
                 StartTimerModal
             )
         )
@@ -28,7 +29,7 @@ object ModalInteractionManager {
         /**
          * Modalを実行する
          *
-         * @param event [ModalInteractionEvent] 選択をしたイベント
+         * @param event [ModalInteractionEvent] イベント
          */
         abstract fun run(event: ModalInteractionEvent)
 
