@@ -2,8 +2,8 @@ package dev.simpletimer.component.modal
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
-import dev.simpletimer.timer.Timer
 import dev.simpletimer.extension.sendMessage
+import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.Modal
 import net.dv8tion.jda.api.interactions.components.text.TextInput

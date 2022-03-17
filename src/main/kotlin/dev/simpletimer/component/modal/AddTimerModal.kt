@@ -1,7 +1,7 @@
 package dev.simpletimer.component.modal
 
-import dev.simpletimer.timer.Timer
 import dev.simpletimer.extension.sendEmpty
+import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.Modal
 import java.util.*

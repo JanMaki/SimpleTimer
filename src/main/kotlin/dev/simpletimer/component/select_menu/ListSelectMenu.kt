@@ -1,10 +1,10 @@
 package dev.simpletimer.component.select_menu
 
 import dev.simpletimer.dice.Dice
-import dev.simpletimer.timer.Timer
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.extension.sendMessage
+import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
