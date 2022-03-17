@@ -14,6 +14,7 @@ object ModalManager {
                 AddTimerModal,
                 DebugModal,
                 QueueModal,
+                TimerButtonModal,
                 StartTimerModal
             )
         )

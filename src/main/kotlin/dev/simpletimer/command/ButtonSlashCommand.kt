@@ -1,8 +1,7 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.component.button.DiceButton
-import dev.simpletimer.component.button.TimerButton
-import dev.simpletimer.extension.sendMessage
+import dev.simpletimer.component.modal.TimerButtonModal
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -11,11 +10,10 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 /**
  * ボタンを送信する
  */
-object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを開始するボタンを送信します") {
+object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを開始するボタンを送信します", false) {
     init {
         addSubcommands(
-            SubcommandData("timer", "タイマー")
-                .addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で").setRequired(true)),
+            SubcommandData("timer", "タイマー"),
             SubcommandData("dice", "ダイスロール")
                 .addOptions(OptionData(OptionType.STRING, "ダイス", "ダイスの内容").setRequired(true))
         )
@@ -27,6 +25,9 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
 
         //nullチェック
         if (subCommand == null) {
+            //とりあえず待たせる
+            event.deferReply().queue()
+            //エラーメッセージを送信
             replyCommandError(event)
             return
         }
@@ -35,31 +36,14 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
         when (subCommand) {
             //タイマーのボタン
             "timer" -> {
-                //オプションを取得
-                val option = event.getOption("分")
-
-                //nullチェック
-                if (option == null) {
-                    replyCommandError(event)
-                    return
-                }
-
-                //分数を取得
-                val minutes = option.asInt
-
-                //時間を確認する
-                if (minutes <= 0) {
-                    event.hook.sendMessage("*1秒以上の時間を設定してください", true).queue()
-                    return
-                }
-
-                //ボタンを送信
-                event.hook.sendMessage("**${minutes}分**のタイマーを開始する")
-                    .addActionRow(TimerButton.createButton(minutes * 60))
-                    .queue()
+                //Modalを作成して返す
+                event.replyModal(TimerButtonModal.createModal(0)).queue()
             }
             //ダイスのボタン
             "dice" -> {
+                //とりあえず待たせる
+                event.deferReply().queue()
+
                 //オプションを取得
                 val option = event.getOption("ダイス")
 
@@ -75,6 +59,8 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
                     .queue()
             }
             else -> {
+                //とりあえず待たせる
+                event.deferReply().queue()
                 //エラーメッセージを送信
                 replyCommandError(event)
             }
