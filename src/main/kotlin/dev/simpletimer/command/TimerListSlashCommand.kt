@@ -318,6 +318,67 @@ class TimerListSlashCommand {
         }
     }
 
+
+    /**
+     * 一覧を他のサーバーと同期する
+     *
+     */
+    object CopyList : SlashCommand("list_copy", "他のサーバーの一覧をコピーします") {
+        init {
+            isDefaultEnabled = true
+
+            addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true)
+        }
+
+        override fun run(event: SlashCommandInteractionEvent) {
+            val guild = event.guild!!
+
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData()
+
+            //オプションを取得
+            val option = event.getOption("id")
+
+            //nullチェック
+            if (option == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //Stringに変換
+            val id = option.asString
+
+            //36進数にからLongにする
+            val long = java.lang.Long.parseLong(id, 36)
+
+            //ギルドのIDが違うかを確認
+            if (guild.idLong == long) {
+                event.hook.sendMessage("*対象のサーバーが同じサーバーです", true).queue()
+                return
+            }
+
+            //ターゲットのギルドを取得
+            val targetGuild = SimpleTimer.instance.getGuild(long)
+
+            //nullチェック
+            if (targetGuild == null) {
+                //メッセージを送信
+                event.hook.sendMessage("*無効なIDです", true).queue()
+                return
+            }
+
+            //内容をコピーする
+            guildData.list = LinkedHashMap<String, String>().apply {
+                this.putAll(targetGuild.getGuildData().list)
+            }
+            //ギルドのデータを保存
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+
+            //メッセージを送信
+            event.hook.sendMessage("コピーを行いました").queue()
+        }
+    }
+
     /**
      * ギルドのIDを取得
      *
@@ -331,7 +392,7 @@ class TimerListSlashCommand {
             //36進数にする
             val id = event.guild!!.idLong.toString(36)
             //メッセージを送信
-            event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期できます").queue()
+            event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期でき、\n`/list_copy id: ${id}`を行うことで、このサーバーの一覧をコピーできます").queue()
         }
     }
 }

@@ -46,6 +46,7 @@ object SlashCommandManager {
                 TimerListSlashCommand.ListRemove,
                 TimerListSlashCommand.ListTargetChannel,
                 TimerListSlashCommand.SyncList,
+                TimerListSlashCommand.CopyList,
                 TimerListSlashCommand.GetID
             )
         )
