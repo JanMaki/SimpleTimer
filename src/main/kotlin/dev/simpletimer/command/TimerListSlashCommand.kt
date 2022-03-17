@@ -1,11 +1,11 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
+import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.sendMessage
 import dev.simpletimer.extension.sendMessageEmbeds
 import dev.simpletimer.list.ListMenu
-import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -208,21 +208,11 @@ class TimerListSlashCommand {
                 return
             }
 
-            //チャンネルの権限を確認
-            val permissions = event.guild!!.selfMember.getPermissions(channel)
-            if (!permissions.contains(Permission.ADMINISTRATOR)) {
-                if (!(
-                            permissions.contains(Permission.VIEW_CHANNEL) &&
-                                    permissions.contains(Permission.MESSAGE_SEND) &&
-                                    permissions.contains(Permission.MESSAGE_TTS) &&
-                                    permissions.contains(Permission.MESSAGE_EMBED_LINKS) &&
-                                    permissions.contains(Permission.MESSAGE_HISTORY) &&
-                                    permissions.contains(Permission.MESSAGE_EXT_EMOJI))
-                ) {
-                    //権限が不足しているメッセージを送信する
-                    event.hook.sendMessageEmbeds(SimpleTimer.instance.errorEmbed, true).queue()
-                    return
-                }
+            //管理者権限か、必要な権限を確認
+            if (!event.guildChannel.checkSimpleTimerPermission()) {
+                //権限が不足しているメッセージを送信する
+                event.hook.sendMessageEmbeds(SimpleTimer.instance.errorEmbed, true).queue()
+                return
             }
 
             //ギルドのデータに設定をし、保存
