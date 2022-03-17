@@ -123,8 +123,7 @@ class Timer(
         //10秒の倍数と残り5秒の時、updateのフラグが立っているときはdisplayを更新する
         if (time.seconds % 10 == 0 || update || (time.minute == 0 && time.seconds == 5)) {
             update = false
-            val action = display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
-            action?.queue()
+            display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))?.queue()
         }
     }
 
@@ -193,6 +192,9 @@ class Timer(
         sendMessage("タイマーを一時停止しました", NoticeTiming.LV3)
         sendTTS("タイマーを一時停止しました", NoticeTiming.LV3)
         notice?.addReaction("U+25C0")?.queue()
+        //ディスプレイを更新
+        val time = timerService.getTime()
+        display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))?.queue()
     }
 
     /**
