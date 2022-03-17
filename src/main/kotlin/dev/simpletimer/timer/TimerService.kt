@@ -179,8 +179,8 @@ class TimerService(private var seconds: Int) {
                 elapsedTime = System.nanoTime() - startNanoTime
             } while (elapsedTime < (seconds * 1000000000L) + adjustTime)// 経過時間が、秒数 * 1000000000 + 調整値 以下なら続ける
 
-            //終了フラグを確認
-            if (isFinish) {
+            //終了を確認
+            if (elapsedTime >= (seconds * 1000000000L) + adjustTime) {
                 //終了する
                 finish()
             }
