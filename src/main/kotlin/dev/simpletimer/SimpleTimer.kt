@@ -5,6 +5,7 @@ import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.DataContainer
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.listener.*
+import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
@@ -228,4 +229,12 @@ class SimpleTimer {
         //返す
         return guild
     }
+
+    //権限エラーの埋め込み
+    val errorEmbed = EmbedBuilder().apply {
+        setTitle("SimpleTimer")
+        setDescription(version)
+        addField("必要な権限が付与されていません", "Botの動作に必要な権限が付与されていません", false)
+        addField("詳しくはこちらを参照してください", "https://bit.ly/3cvAlds", false)
+    }.build()
 }

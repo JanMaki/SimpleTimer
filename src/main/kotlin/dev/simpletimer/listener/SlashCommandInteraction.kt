@@ -1,9 +1,9 @@
 package dev.simpletimer.listener
 
+import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
-import dev.simpletimer.util.Log
-import dev.simpletimer.util.SendMessage
 import dev.simpletimer.extension.equalsIgnoreCase
+import dev.simpletimer.util.Log
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.PrivateChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -14,7 +14,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  * スラッシュコマンドに対応をするクラス
  */
 class SlashCommandInteraction : ListenerAdapter() {
-
     /**
      * スラッシュコマンドを実行した時に呼び出される
      *
@@ -42,7 +41,7 @@ class SlashCommandInteraction : ListenerAdapter() {
                                 permissions.contains(Permission.MESSAGE_EXT_EMOJI))
             ) {
                 //権限が不足しているメッセージを送信する
-                event.replyEmbeds(SendMessage.errorEmbed).queue()
+                event.replyEmbeds(SimpleTimer.instance.errorEmbed).queue()
                 return
             }
         }
