@@ -2,10 +2,10 @@ package dev.simpletimer.timer
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.button.AddTimerButton
+import dev.simpletimer.component.button.DeleteMessageButton
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.timer.Timer.Number
-import dev.simpletimer.util.DeletableMessage
 import dev.simpletimer.util.Log
 import dev.simpletimer.util.getAudioPlayer
 import dev.simpletimer.util.getGuildData
@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
+import net.dv8tion.jda.api.interactions.components.ActionRow
 import java.util.*
 import kotlin.math.abs
 
@@ -219,6 +220,12 @@ class Timer(
             NoticeTiming.LV1
         )
 
+        //ディスプレイを更新
+        val time = timerService.getTime()
+        //削除のボタンをつける
+        display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
+            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue({}, {})
+
         //プレイヤーを取得
         val player = guild.getAudioPlayer()
         //オーディオを探す
@@ -237,20 +244,11 @@ class Timer(
 
         if (notice != null) timers.remove(notice?.idLong)
 
-        //ディスプレイを削除可能メッセージに追加
-        if (display != null) {
-            val display = display!!
-            DeletableMessage[display.idLong] = display
-        }
-
         //時間を置いてリアクションを削除
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 delay(5000)
-                display?.clearReactions()?.queue {
-                    //削除用のリアクションを追加
-                    display?.addReaction("\uD83D\uDDD1")?.queue({}, {})
-                }
+                display?.clearReactions()?.queue({}, {})
             } catch (e: InterruptedException) {
                 Log.sendLog(e.stackTraceToString())
             }
@@ -286,6 +284,12 @@ class Timer(
         timers.remove(display?.idLong)
         displays.remove(display?.idLong)
         sendMessage("タイマーを破棄しました", NoticeTiming.NONE, true)
+
+        //ディスプレイを更新
+        val time = timerService.getTime()
+        //削除のボタンをつける
+        display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
+            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue({}, {})
 
         val channelTimers = channelsTimersMap[channel]
         if (channelTimers != null) {
@@ -428,20 +432,17 @@ class Timer(
 
             try {
                 //送信・登録
-                display?.reply(message)?.mentionRepliedUser(false)?.queue { notice ->
+                display?.reply(message)
+                    ?.apply {
+                        //削除のボタンをつける
+                        if (deletable) setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))
+                    }
+                    ?.mentionRepliedUser(false)?.queue { notice ->
+                        timers[notice.idLong] = this
+                        this.notice = notice
+                    } ?: channel.sendMessage(message).queue { notice ->
                     timers[notice.idLong] = this
                     this.notice = notice
-                    if (deletable) {
-                        DeletableMessage[notice.idLong] = notice
-                        notice.addReaction("\uD83D\uDDD1").queue({}, {})
-                    }
-                } ?: channel.sendMessage(message).queue { notice ->
-                    timers[notice.idLong] = this
-                    this.notice = notice
-                    if (deletable) {
-                        DeletableMessage[notice.idLong] = notice
-                        notice.addReaction("\uD83D\uDDD1").queue({}, {})
-                    }
                 }
             } catch (e: Exception) {
                 Log.sendLog(e.stackTraceToString())

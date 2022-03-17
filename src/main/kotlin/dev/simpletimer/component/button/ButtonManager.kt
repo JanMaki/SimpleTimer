@@ -14,6 +14,7 @@ class ButtonManager {
             arrayOf(
                 AddTimerButton,
                 DiceButton,
+                DeleteMessageButton,
                 TimerButton
             )
         )

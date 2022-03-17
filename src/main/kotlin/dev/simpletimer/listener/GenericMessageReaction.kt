@@ -2,7 +2,6 @@ package dev.simpletimer.listener
 
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.timer.Timer
-import dev.simpletimer.util.DeletableMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -38,23 +37,8 @@ class GenericMessageReaction : ListenerAdapter() {
         //タイマーの取得
         val timer = Timer.getTimer(idLong)
 
-        //削除可能メッセージの確認
-        if (DeletableMessage.contains(idLong) && event.reactionEmote.name == "\uD83D\uDDD1") {
-            //メッセージを取得
-            val message = DeletableMessage[idLong]
-
-            //削除可能メッセージの一覧から削除
-            DeletableMessage.remove(idLong)
-
-            //nullチェック
-            if (message == null) return
-
-            //削除
-            message.delete().queue({}, {})
-        }
-
         //タイマーの確認
-        else if (timer != null) {
+        if (timer != null) {
 
             //リアクションの確認・処理
             when (event.reactionEmote.name) {
