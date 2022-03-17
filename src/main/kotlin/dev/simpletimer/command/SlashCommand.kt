@@ -1,6 +1,6 @@
 package dev.simpletimer.command
 
-import dev.simpletimer.util.sendMessage
+import dev.simpletimer.extension.sendMessage
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.internal.interactions.CommandDataImpl

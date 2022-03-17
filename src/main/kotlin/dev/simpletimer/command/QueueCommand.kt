@@ -3,8 +3,8 @@ package dev.simpletimer.command
 import dev.simpletimer.component.modal.QueueModal
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
-import dev.simpletimer.util.sendMessage
-import dev.simpletimer.util.sendMessageEmbeds
+import dev.simpletimer.extension.sendMessage
+import dev.simpletimer.extension.sendMessageEmbeds
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType

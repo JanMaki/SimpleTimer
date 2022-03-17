@@ -6,7 +6,7 @@ import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.guild.GuildData
 import dev.simpletimer.data.old_data_converter.OldDataConverter
-import dev.simpletimer.util.equalsIgnoreCase
+import dev.simpletimer.extension.equalsIgnoreCase
 import net.dv8tion.jda.api.entities.Guild
 import java.io.File
 import java.nio.file.Paths

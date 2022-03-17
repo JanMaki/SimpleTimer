@@ -7,8 +7,8 @@ import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.timer.Timer.Number
 import dev.simpletimer.util.Log
-import dev.simpletimer.util.getAudioPlayer
-import dev.simpletimer.util.getGuildData
+import dev.simpletimer.extension.getAudioPlayer
+import dev.simpletimer.extension.getGuildData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

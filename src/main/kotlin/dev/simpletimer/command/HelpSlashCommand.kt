@@ -1,6 +1,6 @@
 package dev.simpletimer.command
 
-import dev.simpletimer.util.sendMessageEmbeds
+import dev.simpletimer.extension.sendMessageEmbeds
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 

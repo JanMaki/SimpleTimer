@@ -2,8 +2,8 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.audio.AudioInformationData
-import dev.simpletimer.util.getAudioPlayer
-import dev.simpletimer.util.getGuildData
+import dev.simpletimer.extension.getAudioPlayer
+import dev.simpletimer.extension.getGuildData
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent

@@ -2,8 +2,8 @@ package dev.simpletimer.dice
 
 import dev.simpletimer.data.enum.DiceMode
 import dev.simpletimer.dice.bcdice.BCDiceManager
-import dev.simpletimer.util.equalsIgnoreCase
-import dev.simpletimer.util.getGuildData
+import dev.simpletimer.extension.equalsIgnoreCase
+import dev.simpletimer.extension.getGuildData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

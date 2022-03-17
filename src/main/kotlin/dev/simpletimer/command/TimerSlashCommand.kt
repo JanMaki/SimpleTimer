@@ -5,10 +5,11 @@ import dev.simpletimer.component.modal.AddTimerModal
 import dev.simpletimer.component.modal.StartTimerModal
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.timer.Timer
-import dev.simpletimer.util.equalsIgnoreCase
-import dev.simpletimer.util.getGuildData
-import dev.simpletimer.util.sendEmpty
-import dev.simpletimer.util.sendMessage
+import dev.simpletimer.extension.equalsIgnoreCase
+import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.sendMessage
+import dev.simpletimer.extension.sendMessageEmbeds
+import dev.simpletimer.extension.sendEmpty
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.Command

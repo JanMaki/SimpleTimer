@@ -4,9 +4,9 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.dice.DefaultDice
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.dice.bcdice.BCDiceManager
-import dev.simpletimer.util.getGuildData
-import dev.simpletimer.util.sendMessage
-import dev.simpletimer.util.sendMessageEmbeds
+import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.sendMessage
+import dev.simpletimer.extension.sendMessageEmbeds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -5,8 +5,8 @@ import dev.simpletimer.bcdice_kt.BCDice
 import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
 import dev.simpletimer.data.enum.DiceMode
 import dev.simpletimer.util.Log
-import dev.simpletimer.util.equalsIgnoreCase
-import dev.simpletimer.util.getGuildData
+import dev.simpletimer.extension.equalsIgnoreCase
+import dev.simpletimer.extension.getGuildData
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Message

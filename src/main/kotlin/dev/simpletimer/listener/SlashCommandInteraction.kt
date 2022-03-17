@@ -3,7 +3,7 @@ package dev.simpletimer.listener
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.util.Log
 import dev.simpletimer.util.SendMessage
-import dev.simpletimer.util.equalsIgnoreCase
+import dev.simpletimer.extension.equalsIgnoreCase
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.PrivateChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent

@@ -1,9 +1,11 @@
-package dev.simpletimer.util
+package dev.simpletimer.extension
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.audio_player.GuildAudioPlayer
 import dev.simpletimer.data.guild.GuildData
 import net.dv8tion.jda.api.entities.Guild
+
+//Guildを拡張している
 
 /**
  * オーディオプレイヤーを取得

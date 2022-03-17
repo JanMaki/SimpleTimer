@@ -1,7 +1,7 @@
 package dev.simpletimer.listener
 
 import dev.simpletimer.command.SlashCommandManager
-import dev.simpletimer.util.equalsIgnoreCase
+import dev.simpletimer.extension.equalsIgnoreCase
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 

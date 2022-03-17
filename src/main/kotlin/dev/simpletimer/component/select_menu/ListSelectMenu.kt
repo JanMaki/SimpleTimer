@@ -2,9 +2,9 @@ package dev.simpletimer.component.select_menu
 
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.timer.Timer
-import dev.simpletimer.util.getGuildData
-import dev.simpletimer.util.sendEmpty
-import dev.simpletimer.util.sendMessage
+import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.sendEmpty
+import dev.simpletimer.extension.sendMessage
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent

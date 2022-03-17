@@ -1,6 +1,6 @@
 package dev.simpletimer.listener
 
-import dev.simpletimer.util.getAudioPlayer
+import dev.simpletimer.extension.getAudioPlayer
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 

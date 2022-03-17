@@ -3,9 +3,9 @@ package dev.simpletimer.command
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.list.ListMenu
 import dev.simpletimer.util.SendMessage
-import dev.simpletimer.util.getGuildData
-import dev.simpletimer.util.sendMessage
-import dev.simpletimer.util.sendMessageEmbeds
+import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.sendMessage
+import dev.simpletimer.extension.sendMessageEmbeds
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent

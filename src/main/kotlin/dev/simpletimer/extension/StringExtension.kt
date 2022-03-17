@@ -1,4 +1,6 @@
-package dev.simpletimer.util
+package dev.simpletimer.extension
+
+//Stringを拡張する
 
 /**
  * Stringの拡張
