@@ -96,7 +96,7 @@ class GuildAudioPlayer(val guild: Guild) {
             //音源を読み込み
             audioPlayerManager.playerManager.loadItemOrdered(
                 player,
-                audioData.fileURL,
+                audioData.file,
                 object : AudioLoadResultHandler {
                     //トラックの読み込み
                     override fun trackLoaded(track: AudioTrack) {

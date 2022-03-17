@@ -15,7 +15,7 @@ class AudioPlayerManager {
     //オーディオ再生のマネージャー
     val playerManager = DefaultAudioPlayerManager().apply {
         //ソースのマネージャーに追加
-        AudioSourceManagers.registerRemoteSources(this)
+        AudioSourceManagers.registerLocalSource(this)
     }
 
     /**

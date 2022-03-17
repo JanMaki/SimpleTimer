@@ -86,6 +86,9 @@ class DataContainer {
             //ファイル読み込み
             val audioDataFileInputStream = file.inputStream()
             val audioData = Yaml.default.decodeFromStream(AudioInformationData.serializer(), audioDataFileInputStream)
+            //ファイルの位置をフルパスに変更
+            audioData.file = File(audioDirectory, audioData.file).path.toString()
+            //追加
             audioDatum.add(audioData)
         }
     }
