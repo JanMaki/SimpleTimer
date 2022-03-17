@@ -97,7 +97,8 @@ class DiceSlashCommand {
                 dev.simpletimer.data.enum.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
                     CoroutineScope(Dispatchers.Default).launch {
-                        event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild), true).queue({}, {})
+                        event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild), true)
+                            .queue({}, {})
                     }
                 }
             }

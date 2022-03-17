@@ -110,9 +110,11 @@ class GuildAudioPlayer(val guild: Guild) {
                     override fun playlistLoaded(playlist: AudioPlaylist) {
                         //プレイリストはないので何もしない
                     }
+
                     override fun noMatches() {
                         //なにもしない
                     }
+
                     override fun loadFailed(exception: FriendlyException) {
                         //エラー無視
                     }

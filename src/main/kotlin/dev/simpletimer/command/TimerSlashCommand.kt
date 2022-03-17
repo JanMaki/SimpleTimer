@@ -54,7 +54,7 @@ class TimerSlashCommand {
                 //その番号のタイマーが動いているかを確認
                 if (!channelTimers.containsKey(number)) {
                     //タイマーを開始し、インスタンスを代入する
-                    channelTimers[number] = Timer(channel, number,  option.asInt * 60, event.guild!!)
+                    channelTimers[number] = Timer(channel, number, option.asInt * 60, event.guild!!)
                     Timer.channelsTimersMap[channel] = channelTimers
 
                     //空白を出力して消し飛ばす
@@ -183,7 +183,7 @@ class TimerSlashCommand {
             //オプションを取得
             val timerOption = event.getOption("タイマー")
             //nullチェック
-            if (timerOption == null){
+            if (timerOption == null) {
                 replyCommandError(event)
                 return
             }
@@ -191,7 +191,7 @@ class TimerSlashCommand {
             //タイマーの番号を取得
             val number = Timer.Number.getNumber(timerOption.asLong.toInt())
             //nullチェック
-            if (number == null){
+            if (number == null) {
                 replyCommandError(event)
                 return
             }

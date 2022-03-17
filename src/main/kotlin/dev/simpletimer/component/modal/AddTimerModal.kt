@@ -5,7 +5,6 @@ import dev.simpletimer.util.sendEmpty
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.Modal
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * タイマーを延長するModal

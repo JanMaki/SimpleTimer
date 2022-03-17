@@ -13,7 +13,10 @@ fun InteractionHook.sendMessage(message: Message, ephemeral: Boolean): WebhookMe
     return this.sendMessage(message).setEphemeral(ephemeral)
 }
 
-fun InteractionHook.sendMessageEmbeds(embeds: Collection<MessageEmbed>, ephemeral: Boolean): WebhookMessageAction<Message> {
+fun InteractionHook.sendMessageEmbeds(
+    embeds: Collection<MessageEmbed>,
+    ephemeral: Boolean
+): WebhookMessageAction<Message> {
     return this.sendMessageEmbeds(embeds).setEphemeral(ephemeral)
 }
 
@@ -21,7 +24,7 @@ fun InteractionHook.sendMessageEmbeds(embed: MessageEmbed, ephemeral: Boolean): 
     return this.sendMessageEmbeds(embed).setEphemeral(ephemeral)
 }
 
-fun InteractionHook.sendEmpty(){
+fun InteractionHook.sendEmpty() {
     this.sendMessage("|| ||").queue {
         it.delete().queue({}, {})
     }

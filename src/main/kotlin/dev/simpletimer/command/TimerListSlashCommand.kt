@@ -81,7 +81,7 @@ class TimerListSlashCommand {
 
             //上限を確認
             if (list.size >= 10) {
-                event.hook.sendMessage("*10個以上登録できません",true).queue()
+                event.hook.sendMessage("*10個以上登録できません", true).queue()
                 return
             }
 
