@@ -103,7 +103,7 @@ class BCDiceManager {
         try {
             //過去の物を消す
             if (channelViews.containsKey(channel)) {
-                channelViews[channel]?.delete()?.queue({}, {})
+                channelViews[channel]?.delete()?.queue()
             }
             //メッセージを送信
             channel.sendMessageEmbeds(embed).queue { message ->
@@ -112,11 +112,11 @@ class BCDiceManager {
                 //ページを初期化
                 channelViewsPage[channel] = 1
                 //リアクションを付与
-                message.addReaction("⬅️").queue({}, {})
+                message.addReaction("⬅️").queue()
                 for (emoji in numberEmojis) {
-                    message.addReaction(emoji).queue({}, {})
+                    message.addReaction(emoji).queue()
                 }
-                message.addReaction("➡️").queue({}, {})
+                message.addReaction("➡️").queue()
             }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
@@ -142,7 +142,7 @@ class BCDiceManager {
         //対象のメッセージを取得
         val message = channelViews[channel] ?: return
         //編集
-        message.editMessageEmbeds(embed).queue({}, {})
+        message.editMessageEmbeds(embed).queue()
     }
 
     /**
@@ -160,7 +160,7 @@ class BCDiceManager {
         //対象のメッセージを取得
         val message = channelViews[channel] ?: return
         //編集
-        message.editMessageEmbeds(embed).queue({}, {})
+        message.editMessageEmbeds(embed).queue()
     }
 
     /**
@@ -196,11 +196,11 @@ class BCDiceManager {
         try {
             //メッセージを送信
             channel.sendMessage("ダイスBotを**${gameSystem.name}**に変更しました").queue { selectMessage ->
-                selectMessage.addReaction("❓").queue({}, {})
+                selectMessage.addReaction("❓").queue()
 
                 //設定画面を消す
                 if (channelViews.containsKey(channel)) {
-                    channelViews[channel]?.delete()?.queue({}, {})
+                    channelViews[channel]?.delete()?.queue()
                 }
                 channelViews[channel] = selectMessage
             }
@@ -210,7 +210,7 @@ class BCDiceManager {
 
             //ダイスモードを自動的に変更する
             if (guildData.diceMode == DiceMode.Default) {
-                channel.sendMessage("ダイスモードを**BCDice**に変更しました id:${gameSystem.id}").queue({}, {})
+                channel.sendMessage("ダイスモードを**BCDice**に変更しました id:${gameSystem.id}").queue()
             }
 
             guildData.diceBot = gameSystem.id
@@ -267,7 +267,7 @@ class BCDiceManager {
                     builder.addField(" ", buffer.toString(), false)
                 }
 
-                channel.sendMessageEmbeds(builder.build()).queue({}, {})
+                channel.sendMessageEmbeds(builder.build()).queue()
                 buffer.clear()
 
                 builder = EmbedBuilder()

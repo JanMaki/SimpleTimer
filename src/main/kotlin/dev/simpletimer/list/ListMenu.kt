@@ -59,13 +59,13 @@ object ListMenu {
 
         if (list.isEmpty()) {
             //空だった時は埋め込みだけ送信
-            event.hook.sendMessageEmbeds(builder.build(), true).queue({}, {})
+            event.hook.sendMessageEmbeds(builder.build(), true).queue()
         } else {
             //中身があるときは、埋め込みとメニューを送信
             event.hook.sendMessageEmbeds(builder.build())
                 .setEphemeral(true)
                 .addActionRow(ListSelectMenu.createSelectMenu(list))
-                .queue({}, {})
+                .queue()
         }
     }
 }

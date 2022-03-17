@@ -38,6 +38,6 @@ object HelpSlashCommand : SlashCommand("help", "Botの概要などを表示") {
         )
 
         //Embedを作成し、送信
-        event.hook.sendMessageEmbeds(embed.build(), true).queue({}, {})
+        event.hook.sendMessageEmbeds(embed.build(), true).queue()
     }
 }

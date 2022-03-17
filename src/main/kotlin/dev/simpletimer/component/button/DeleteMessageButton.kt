@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
 object DeleteMessageButton : ButtonManager.Button<Byte>("delete") {
     override fun run(event: ButtonInteractionEvent) {
         //メッセージ削除
-        event.message.delete().queue({}, {})
+        event.message.delete().queue()
         //空白を送信
         event.hook.sendEmpty()
     }

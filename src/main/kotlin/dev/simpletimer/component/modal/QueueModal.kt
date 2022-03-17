@@ -20,7 +20,7 @@ object QueueModal : TimerModal<Timer.Number>("queue") {
     override fun run(event: ModalInteractionEvent, seconds: Int) {
         //時間を確認する
         if (seconds == 0) {
-            event.reply("*時間を設定してください").queue({}, {})
+            event.reply("*時間を設定してください").queue()
             return
         }
 
@@ -35,7 +35,7 @@ object QueueModal : TimerModal<Timer.Number>("queue") {
         //キューの量を確認
         if (queue.getQueue().size > 0) {
             //メッセージを送信
-            event.hook.sendMessageEmbeds(queue.getQueueEmbed(), true).queue({}, {})
+            event.hook.sendMessageEmbeds(queue.getQueueEmbed(), true).queue()
         } else {
             //空のメッセージを送信
             event.hook.sendEmpty()

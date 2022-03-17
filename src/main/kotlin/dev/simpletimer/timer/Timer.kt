@@ -124,7 +124,7 @@ class Timer(
         if (time.seconds % 10 == 0 || update || (time.minute == 0 && time.seconds == 5)) {
             update = false
             val action = display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
-            action?.queue({}, {})
+            action?.queue()
         }
     }
 
@@ -171,7 +171,7 @@ class Timer(
         if (time.seconds < 10) byoString = "0$byoString"
         sendDisplayMessage("${time.minute}分${byoString}秒")
         sendTTS("タイマーを再開しました", NoticeTiming.LV3)
-        notice?.clearReactions()?.queue({}, {})
+        notice?.clearReactions()?.queue()
     }
 
     /**
@@ -192,7 +192,7 @@ class Timer(
         //メッセージの送信とリアクション
         sendMessage("タイマーを一時停止しました", NoticeTiming.LV3)
         sendTTS("タイマーを一時停止しました", NoticeTiming.LV3)
-        notice?.addReaction("U+25C0")?.queue({}, {})
+        notice?.addReaction("U+25C0")?.queue()
     }
 
     /**
@@ -224,7 +224,7 @@ class Timer(
         val time = timerService.getTime()
         //削除のボタンをつける
         display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
-            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue({}, {})
+            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue()
 
         //プレイヤーを取得
         val player = guild.getAudioPlayer()
@@ -248,7 +248,7 @@ class Timer(
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 delay(5000)
-                display?.clearReactions()?.queue({}, {})
+                display?.clearReactions()?.queue()
             } catch (e: InterruptedException) {
                 Log.sendLog(e.stackTraceToString())
             }
@@ -289,7 +289,7 @@ class Timer(
         val time = timerService.getTime()
         //削除のボタンをつける
         display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
-            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue({}, {})
+            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue()
 
         val channelTimers = channelsTimersMap[channel]
         if (channelTimers != null) {
@@ -302,7 +302,7 @@ class Timer(
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 delay(5000)
-                display?.clearReactions()?.queue({}, {})
+                display?.clearReactions()?.queue()
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
@@ -321,7 +321,7 @@ class Timer(
                 val id = display?.idLong
                 timers.remove(id)
                 displays.remove(id)
-                display?.delete()?.queue({}, {})
+                display?.delete()?.queue()
             }
             //送信
             channel.sendMessage(number.format(base.format(data)))
@@ -333,13 +333,13 @@ class Timer(
                     timers[id] = this
                     displays[id] = this
                     //リアクションの追加
-                    display.addReaction("U+25C0").queue({}, {})
-                    display.addReaction("U+23F8").queue({}, {})
-                    display.addReaction("U+1F6D1").queue({}, {})
-                    display.addReaction("1️⃣").queue({}, {})
-                    display.addReaction("3️⃣").queue({}, {})
-                    display.addReaction("5️⃣").queue({}, {})
-                    display.addReaction("\uD83D\uDD1F").queue({}, {})
+                    display.addReaction("U+25C0").queue()
+                    display.addReaction("U+23F8").queue()
+                    display.addReaction("U+1F6D1").queue()
+                    display.addReaction("1️⃣").queue()
+                    display.addReaction("3️⃣").queue()
+                    display.addReaction("5️⃣").queue()
+                    display.addReaction("\uD83D\uDD1F").queue()
                 }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
@@ -360,7 +360,7 @@ class Timer(
             //過去のメッセージを確認・削除
             if (notice != null) {
                 timers.remove(notice?.idLong)
-                notice?.delete()?.queue({}, {})
+                notice?.delete()?.queue()
             }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
@@ -474,7 +474,7 @@ class Timer(
                     //時間を置いてメッセージを削除
                     CoroutineScope(Dispatchers.Default).launch {
                         delay(5000)
-                        message.delete().queue({}, {})
+                        message.delete().queue()
                     }
                 }
             } catch (e: Exception) {

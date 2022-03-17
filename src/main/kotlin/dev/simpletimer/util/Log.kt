@@ -17,7 +17,7 @@ object Log {
         logChannels.forEach { channel ->
             try {
                 //メッセージを送信
-                channel.sendMessage(log).queue({}, {})
+                channel.sendMessage(log).queue()
             } catch (ignore: Exception) {
                 ignore.printStackTrace()
             }

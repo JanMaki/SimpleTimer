@@ -40,7 +40,7 @@ class SendMessage {
         fun sendMessage(channel: MessageChannel, string: String, user: User) {
             try {
                 if (channelsMessageMap.containsKey(channel)) {
-                    channelsMessageMap[channel]?.delete()?.queue({}, {})
+                    channelsMessageMap[channel]?.delete()?.queue()
                 }
             } catch (e: Exception) {
                 //権限関係が原因の物は排除

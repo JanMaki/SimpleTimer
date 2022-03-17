@@ -21,7 +21,7 @@ abstract class TimerModal<T>(name: String, beforeReply: Boolean = true) :
 
         //時間を確認する
         if (seconds <= 0) {
-            event.hook.sendMessage("*1秒以上の時間を設定してください", true).queue({}, {})
+            event.hook.sendMessage("*1秒以上の時間を設定してください", true).queue()
             return
         }
 

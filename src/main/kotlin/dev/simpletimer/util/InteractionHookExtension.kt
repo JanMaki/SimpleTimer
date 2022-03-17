@@ -26,6 +26,6 @@ fun InteractionHook.sendMessageEmbeds(embed: MessageEmbed, ephemeral: Boolean): 
 
 fun InteractionHook.sendEmpty() {
     this.sendMessage("|| ||").queue {
-        it.delete().queue({}, {})
+        it.delete().queue()
     }
 }

@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.requests.RestAction
 import java.io.IOException
 import java.net.ServerSocket
 import java.net.URL
@@ -150,6 +151,8 @@ class SimpleTimer {
             return
         }
 
+        RestAction.setDefaultFailure {}
+
         //JDAを作成
         val shardBuilder = JDABuilder.createDefault(token)
 
@@ -178,7 +181,7 @@ class SimpleTimer {
             shards.add(shard)
 
             //コマンドを送信
-            shard.updateCommands().addCommands(SlashCommandManager.slashCommands).queue({}, {})
+            shard.updateCommands().addCommands(SlashCommandManager.slashCommands).queue()
         }
 
         //終了処理

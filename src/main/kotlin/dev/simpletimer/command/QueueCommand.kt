@@ -36,7 +36,7 @@ abstract class QueueCommand {
             val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
             //Modalを返信
-            event.replyModal(QueueModal.createModal(number)).queue({}, {})
+            event.replyModal(QueueModal.createModal(number)).queue()
         }
     }
 
@@ -67,7 +67,7 @@ abstract class QueueCommand {
             event.hook.sendMessageEmbeds(
                 TimerQueue.getTimerQueue(event.guild!!, event.messageChannel, number).getQueueEmbed(),
                 true
-            ).queue({}, {})
+            ).queue()
         }
     }
 
@@ -115,14 +115,14 @@ abstract class QueueCommand {
 
             //キューがあるかを確認する
             if (queue.getQueue().size < index + 1) {
-                event.hook.sendMessage("該当のキューが見つかりません", true).queue({}, {})
+                event.hook.sendMessage("該当のキューが見つかりません", true).queue()
                 return
             }
             //削除
             queue.removeQueueIndex(index)
 
             //メッセージを送信
-            event.hook.sendMessage("${number.number}番目のタイマーのキューを削除しました").queue({}, {})
+            event.hook.sendMessage("${number.number}番目のタイマーのキューを削除しました").queue()
         }
     }
 
@@ -164,7 +164,7 @@ abstract class QueueCommand {
             TimerQueue.getTimerQueue(event.guild!!, event.messageChannel, number).clearQueue()
 
             //メッセージを送信
-            event.hook.sendMessage("${number}番目のタイマーのキューをすべて削除しました").queue({}, {})
+            event.hook.sendMessage("${number}番目のタイマーのキューをすべて削除しました").queue()
         }
     }
 }

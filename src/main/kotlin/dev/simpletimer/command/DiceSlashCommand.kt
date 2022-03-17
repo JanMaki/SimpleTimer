@@ -73,7 +73,7 @@ class DiceSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("ダイスモードを**$diceMode**に変更しました", true).queue({}, {})
+            event.hook.sendMessage("ダイスモードを**$diceMode**に変更しました", true).queue()
         }
     }
 
@@ -92,13 +92,13 @@ class DiceSlashCommand {
             when (guild.getGuildData().diceMode) {
                 dev.simpletimer.data.enum.DiceMode.Default -> {
                     //標準ダイスのヘルプを取得して出力
-                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed(), true).queue({}, {})
+                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed(), true).queue()
                 }
                 dev.simpletimer.data.enum.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
                     CoroutineScope(Dispatchers.Default).launch {
                         event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild), true)
-                            .queue({}, {})
+                            .queue()
                     }
                 }
             }
@@ -111,7 +111,7 @@ class DiceSlashCommand {
     object DiceBot : SlashCommand("dice_bot", "BCDiceで使用するボットを変更します") {
         override fun run(event: SlashCommandInteractionEvent) {
             //メッセージを出力
-            event.hook.sendMessage("メニューよりボットを選択してください").queue({}, {})
+            event.hook.sendMessage("メニューよりボットを選択してください").queue()
 
             CoroutineScope(Dispatchers.Default).launch {
                 //ダイスボットを変更する画面を出す

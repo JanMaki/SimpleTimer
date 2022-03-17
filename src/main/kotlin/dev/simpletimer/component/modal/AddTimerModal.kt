@@ -28,9 +28,9 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
         //タイマーの稼働を確認
         if (!channelTimers.containsKey(timerNumber)) {
             if (timerNumber != null)
-                event.reply(timerNumber.format("*タイマーは動いていません")).setEphemeral(true).queue({}, {})
+                event.reply(timerNumber.format("*タイマーは動いていません")).setEphemeral(true).queue()
             else {
-                event.reply("*タイマーは動いていません").setEphemeral(true).queue({}, {})
+                event.reply("*タイマーは動いていません").setEphemeral(true).queue()
             }
             return
         }

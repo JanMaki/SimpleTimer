@@ -81,7 +81,7 @@ class GenericMessageReaction : ListenerAdapter() {
                 "7️⃣" -> bcdice.select(channel, 7, guild)
                 "8️⃣" -> bcdice.select(channel, 8, guild)
                 "9️⃣" -> bcdice.select(channel, 9, guild)
-                "❓" -> channel.sendMessageEmbeds(bcdice.getInfoEmbed(channel, guild)).queue({}, {})
+                "❓" -> channel.sendMessageEmbeds(bcdice.getInfoEmbed(channel, guild)).queue()
                 else -> return
             }
         }

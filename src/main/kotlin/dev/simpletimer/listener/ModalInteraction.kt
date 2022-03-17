@@ -26,7 +26,7 @@ class ModalInteraction : ListenerAdapter() {
             //考え中をするかを確認
             if (it.beforeReply) {
                 //考え中を出す
-                event.deferReply().queue({}, {})
+                event.deferReply().queue()
             }
 
             //Modalを実行

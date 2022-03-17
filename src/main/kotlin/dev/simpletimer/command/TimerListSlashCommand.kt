@@ -221,7 +221,7 @@ class TimerListSlashCommand {
                                     permissions.contains(Permission.MESSAGE_EXT_EMOJI))
                 ) {
                     //権限が不足しているメッセージを送信する
-                    event.hook.sendMessageEmbeds(SendMessage.errorEmbed, true).queue({}, {})
+                    event.hook.sendMessageEmbeds(SendMessage.errorEmbed, true).queue()
                     return
                 }
             }
@@ -232,7 +232,7 @@ class TimerListSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを送信
-            event.hook.sendMessage("一覧からタイマーやダイスを実行するチャンネルを**${channel.name}**に変更しました").queue({}, {})
+            event.hook.sendMessage("一覧からタイマーやダイスを実行するチャンネルを**${channel.name}**に変更しました").queue()
         }
     }
 

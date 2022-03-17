@@ -37,7 +37,7 @@ object TimerButton : ButtonManager.Button<Int>("timer") {
         }
 
         //最大数のメッセージを出力する
-        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue({}, {})
+        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue()
     }
 
     override fun createButton(data: Int): Button {

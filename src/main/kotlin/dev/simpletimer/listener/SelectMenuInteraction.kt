@@ -18,7 +18,7 @@ class SelectMenuInteraction : ListenerAdapter() {
      */
     override fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
         super.onSelectMenuInteraction(event)
-        event.deferReply().queue({}, {})
+        event.deferReply().queue()
 
         //選択メニューのIDを取得
         val id = event.selectMenu.id ?: return

@@ -33,7 +33,7 @@ class MessageDelete : ListenerAdapter() {
         val message = timer.notice ?: return
 
         //操作用リアクションを追加
-        message.addReaction("\uD83D\uDED1").queue({}, {})
-        message.addReaction("❌").queue({}, {})
+        message.addReaction("\uD83D\uDED1").queue()
+        message.addReaction("❌").queue()
     }
 }

@@ -29,7 +29,7 @@ class ButtonInteraction : ListenerAdapter() {
             //考え中をするかを確認
             if (button.beforeReply) {
                 //考え中を出す
-                event.deferReply().queue({}, {})
+                event.deferReply().queue()
             }
 
             //ボタンを実行

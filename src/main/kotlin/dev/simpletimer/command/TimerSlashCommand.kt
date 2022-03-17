@@ -36,12 +36,12 @@ class TimerSlashCommand {
             //nullチェック
             if (option == null) {
                 //Timerを開始するModalを送信
-                event.replyModal(StartTimerModal.createModal(0)).queue({}, {})
+                event.replyModal(StartTimerModal.createModal(0)).queue()
                 return
             }
 
             //とありあえず待たせる
-            event.deferReply().queue({}, {})
+            event.deferReply().queue()
 
             //チャンネルを取得
             val channel = event.channel
@@ -64,7 +64,7 @@ class TimerSlashCommand {
             }
 
             //最大数のメッセージを出力する
-            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue({}, {})
+            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue()
         }
     }
 
@@ -112,9 +112,9 @@ class TimerSlashCommand {
             if (!channelTimers.containsKey(number)) {
                 //タイマーが稼働していないことを教えるメッセージを出力
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue({}, {})
+                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
+                    event.hook.sendMessage("*タイマーは動いていません", true).queue()
                 }
                 return
             }
@@ -148,7 +148,7 @@ class TimerSlashCommand {
 
             //稼働しているタイマーの数を取得
             if (channelTimers.keys.size == 0) {
-                event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
+                event.hook.sendMessage("*タイマーは動いていません", true).queue()
                 return
             }
 
@@ -197,7 +197,7 @@ class TimerSlashCommand {
             }
 
             //Modalを送信
-            event.replyModal(AddTimerModal.createModal(number)).queue({}, {})
+            event.replyModal(AddTimerModal.createModal(number)).queue()
         }
     }
 
@@ -243,9 +243,9 @@ class TimerSlashCommand {
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue({}, {})
+                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
+                    event.hook.sendMessage("*タイマーは動いていません", true).queue()
                 }
                 return
             }
@@ -304,9 +304,9 @@ class TimerSlashCommand {
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue({}, {})
+                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
+                    event.hook.sendMessage("*タイマーは動いていません", true).queue()
                 }
                 return
             }
@@ -365,9 +365,9 @@ class TimerSlashCommand {
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue({}, {})
+                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません", true).queue({}, {})
+                    event.hook.sendMessage("*タイマーは動いていません", true).queue()
                 }
                 return
             }
@@ -421,7 +421,7 @@ class TimerSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("チャットの読み上げを${timing}にしました").queue({}, {})
+            event.hook.sendMessage("チャットの読み上げを${timing}にしました").queue()
         }
     }
 
@@ -446,7 +446,7 @@ class TimerSlashCommand {
 
             //メッセージの長さを確認
             if (message.length > 20) {
-                event.hook.sendMessage("*20文字以下にしてください", true).queue({}, {})
+                event.hook.sendMessage("*20文字以下にしてください", true).queue()
                 return
             }
 
@@ -456,7 +456,7 @@ class TimerSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("終了時のTTSメッセージを変更しました").queue({}, {})
+            event.hook.sendMessage("終了時のTTSメッセージを変更しました").queue()
         }
     }
 
@@ -499,7 +499,7 @@ class TimerSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("メンションを行うタイミングを${timing}にしました").queue({}, {})
+            event.hook.sendMessage("メンションを行うタイミングを${timing}にしました").queue()
         }
     }
 
@@ -553,7 +553,7 @@ class TimerSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("メンションの設定を${mention}にしました").queue({}, {})
+            event.hook.sendMessage("メンションの設定を${mention}にしました").queue()
 
             //追加を促すメッセージ
             val appendMessageBuffer = StringBuffer()
@@ -599,7 +599,7 @@ class TimerSlashCommand {
             //空だと何もしない
             if (appendMessage != "") {
                 //メッセージを送信
-                event.hook.sendMessage(appendMessage, true).queue({}, {})
+                event.hook.sendMessage(appendMessage, true).queue()
             }
         }
     }
@@ -626,14 +626,14 @@ class TimerSlashCommand {
                 メンションを行う対象のロールがありません。
                 対象のロールは、`/mention_addrole`で追加できます。
                 """.trimIndent()
-                ).queue({}, {})
+                ).queue()
             } else {
                 event.hook.sendMessage(
                     """
                 メンションを行う対象のロールは${list.filterNotNull().joinToString { "`${it.name}`" }}です。
                 対象のロールは、`/mention_addrole`で追加できます。
                 """.trimIndent()
-                ).queue({}, {})
+                ).queue()
             }
         }
     }
@@ -668,7 +668,7 @@ class TimerSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("`${role.name}`をメンション対象に追加しました").queue({}, {})
+            event.hook.sendMessage("`${role.name}`をメンション対象に追加しました").queue()
         }
     }
 
@@ -702,7 +702,7 @@ class TimerSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("`${role.name}`をメンション対象から削除しました").queue({}, {})
+            event.hook.sendMessage("`${role.name}`をメンション対象から削除しました").queue()
         }
     }
 
@@ -728,14 +728,14 @@ class TimerSlashCommand {
                 メンションを行う対象のボイスチャンネルがありません。
                 対象のチャンネルは、`/mention_addvc`で追加できます。
                 """.trimIndent()
-                ).queue({}, {})
+                ).queue()
             } else {
                 event.hook.sendMessage(
                     """
                 メンションを行う対象のボイスチャンネルは${list.filterNotNull().joinToString { "`${it.name}`" }}です。
                 対象のチャンネルは、`/mention_addvc`で追加できます。
                 """.trimIndent()
-                ).queue({}, {})
+                ).queue()
             }
         }
     }
@@ -763,7 +763,7 @@ class TimerSlashCommand {
             //ロール名を取得
             val channel = option.asGuildChannel
             if (channel !is VoiceChannel) {
-                event.hook.sendMessage("ボイスチャットではないチャンネルです", true).queue({}, {})
+                event.hook.sendMessage("ボイスチャットではないチャンネルです", true).queue()
                 return
             }
 
@@ -773,7 +773,7 @@ class TimerSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("`${channel.name}`をメンション対象に追加しました").queue({}, {})
+            event.hook.sendMessage("`${channel.name}`をメンション対象に追加しました").queue()
         }
     }
 
@@ -800,7 +800,7 @@ class TimerSlashCommand {
             //ロール名を取得
             val channel = option.asGuildChannel
             if (channel !is VoiceChannel) {
-                event.hook.sendMessage("*ボイスチャットではないチャンネルです", true).queue({}, {})
+                event.hook.sendMessage("*ボイスチャットではないチャンネルです", true).queue()
                 return
             }
 
@@ -810,7 +810,7 @@ class TimerSlashCommand {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("`${channel.name}`をメンション対象から削除しました").queue({}, {})
+            event.hook.sendMessage("`${channel.name}`をメンション対象から削除しました").queue()
         }
     }
 }

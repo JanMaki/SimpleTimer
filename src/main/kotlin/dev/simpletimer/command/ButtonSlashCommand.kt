@@ -49,14 +49,14 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
 
                 //時間を確認する
                 if (minutes <= 0) {
-                    event.hook.sendMessage("*1秒以上の時間を設定してください", true).queue({}, {})
+                    event.hook.sendMessage("*1秒以上の時間を設定してください", true).queue()
                     return
                 }
 
                 //ボタンを送信
                 event.hook.sendMessage("**${minutes}分**のタイマーを開始する")
                     .addActionRow(TimerButton.createButton(minutes * 60))
-                    .queue({}, {})
+                    .queue()
             }
             //ダイスのボタン
             "dice" -> {
@@ -72,7 +72,7 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
                 //ボタンを送信
                 event.hook.sendMessage("**${option.asString}**を振る")
                     .addActionRow(DiceButton.createButton(option.asString))
-                    .queue({}, {})
+                    .queue()
             }
             else -> {
                 //エラーメッセージを送信

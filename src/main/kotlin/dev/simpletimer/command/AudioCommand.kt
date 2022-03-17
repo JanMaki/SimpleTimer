@@ -30,7 +30,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             val audioData = SimpleTimer.instance.dataContainer.audioDatum.first { it.id == "Voice" }
 
             //メッセージを送信する
-            event.hook.sendMessageEmbeds(getAudioInfoEmbed(audioData, "設定されているオーディオは${audioData.id}です")).queue({}, {})
+            event.hook.sendMessageEmbeds(getAudioInfoEmbed(audioData, "設定されているオーディオは${audioData.id}です")).queue()
 
             //オーディオの通知をしなくして保存
             guildData.needAudioAnnounce = false
@@ -98,7 +98,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             //nullチェック
             if (channel == null) {
                 //エラーメッセージを送信
-                event.hook.sendMessage("*ボイスチャンネルに接続してください").queue({}, {})
+                event.hook.sendMessage("*ボイスチャンネルに接続してください").queue()
                 return
             }
 
@@ -106,7 +106,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             guild.getAudioPlayer().connect(channel)
 
             //メッセージを送信
-            event.hook.sendMessage("チャンネルに参加しました").queue({}, {})
+            event.hook.sendMessage("チャンネルに参加しました").queue()
         }
     }
 
@@ -122,7 +122,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             guild.getAudioPlayer().disconnect()
 
             //メッセージを送信
-            event.hook.sendMessage("チャンネルから退出しました").queue({}, {})
+            event.hook.sendMessage("チャンネルから退出しました").queue()
         }
     }
 
@@ -150,7 +150,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             event.guild!!.getAudioPlayer().play(audioData)
 
             //メッセージを送信
-            event.hook.sendMessage("再生しました").queue({}, {})
+            event.hook.sendMessage("再生しました").queue()
         }
     }
 
@@ -200,7 +200,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             dataContainer.saveGuildsData(guild)
 
             //埋め込みを作成して送信
-            event.hook.sendMessageEmbeds(getAudioInfoEmbed(audioData, "オーディオを${name}に変更しました")).queue({}, {})
+            event.hook.sendMessageEmbeds(getAudioInfoEmbed(audioData, "オーディオを${name}に変更しました")).queue()
         }
 
         override fun autoComplete(event: CommandAutoCompleteInteractionEvent) {
@@ -210,7 +210,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             //文字列のコレクションを返す
             event.replyChoiceStrings(dataContainer.audioDatum.map { it.id }
                 .filter { it.startsWith(event.focusedOption.value) }
-            ).queue({}, {})
+            ).queue()
         }
     }
 }

@@ -36,7 +36,7 @@ abstract class SlashCommand(name: String, description: String, val beforeReply: 
          * @param event [SlashCommandInteractionEvent] スラッシュコマンドのイベント
          */
         fun replyCommandError(event: SlashCommandInteractionEvent) {
-            event.hook.sendMessage("*コマンドエラー", true).queue({}, {})
+            event.hook.sendMessage("*コマンドエラー", true).queue()
         }
     }
 }

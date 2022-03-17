@@ -23,18 +23,18 @@ object DebugModal : ModalManager.Modal<Byte>("debug") {
             //タイマーの稼働数を確認する
             "count" -> {
                 //タイマーの稼働数を送信する
-                event.hook.sendMessage("${Timer.getCount()}個のタイマーが稼働しています", true).queue({}, {})
+                event.hook.sendMessage("${Timer.getCount()}個のタイマーが稼働しています", true).queue()
             }
             //ギルドにコマンドを強制的に追加させる
             "commands" -> {
                 //すべてのコマンド
                 SlashCommandManager.slashCommands.forEach {
                     //コマンドを登録
-                    event.guild?.upsertCommand(it)?.queue({}, {})
+                    event.guild?.upsertCommand(it)?.queue()
                 }
 
                 //メッセージを送信
-                event.hook.sendMessage("コマンドを更新しました", true).queue({}, {})
+                event.hook.sendMessage("コマンドを更新しました", true).queue()
             }
             //接続しているVCの数を確認する
             "audio" -> {
@@ -44,12 +44,12 @@ object DebugModal : ModalManager.Modal<Byte>("debug") {
                         SimpleTimer.instance.audioManager.getAudioPlayers().filter { it.isConnected() }.size
                     }個のVCに接続しています",
                     true
-                ).queue({}, {})
+                ).queue()
             }
             //無効な値の時
             else -> {
                 //メッセージを送信
-                event.hook.sendMessage("*無効な入力です", true).queue({}, {})
+                event.hook.sendMessage("*無効な入力です", true).queue()
             }
         }
     }
