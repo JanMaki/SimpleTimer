@@ -460,6 +460,10 @@ class TimerSlashCommand {
         }
     }
 
+    /**
+     * メンションのタイミングを設定する
+     *
+     */
     object MentionTiming : SlashCommand("mention_timing", "メンションを行うタイミングの設定をする 初期状態ではLV2") {
         init {
             isDefaultEnabled = true
@@ -501,6 +505,7 @@ class TimerSlashCommand {
 
     /**
      * メンション方式を変更する
+     *
      */
     object Mention : SlashCommand("mention", "メンションの方式を変更する") {
         init {
@@ -550,41 +555,59 @@ class TimerSlashCommand {
             //メッセージを出力
             event.hook.sendMessage("メンションの設定を${mention}にしました").queue({}, {})
 
-            //追加を促す
+            //追加を促すメッセージ
             val appendMessageBuffer = StringBuffer()
+            //設定を確認
             if (mention == dev.simpletimer.data.enum.Mention.ROLE) {
+                //ターゲットのロールを確認する
                 val list = guildData.roleMentionTargets
+                //空かを確認
                 if (list.isNotEmpty()) {
+                    //ターゲットを結合
                     appendMessageBuffer.append(
                         "メンションを行う対象のロールは${
                             list.filterNotNull().joinToString { "`${it.name}`" }
                         }です。"
                     )
                 } else {
+                    //ロールがないことを結合
                     appendMessageBuffer.append("メンションを行う対象のロールが設定されていません。")
                 }
+                //コマンドを結合
                 appendMessageBuffer.append("\n対象のロールは、`/mention_addrole`で追加できます。")
             }
             if (mention == dev.simpletimer.data.enum.Mention.TARGET_VC) {
+                //ターゲットのVCを確認する
                 val list = guildData.vcMentionTargets
+                //空かを確認
                 if (list.isNotEmpty()) {
+                    //ターゲットを結合
                     appendMessageBuffer.append(
                         "メンションを行う対象のボイスチャンネルは${
                             list.filterNotNull().joinToString { "`${it.name}`" }
                         }です。"
                     )
                 } else {
+                    //ターゲットがないことを結合
                     appendMessageBuffer.append("メンションを行う対象のボイスチャンネルが設定されていません。")
                 }
+                //コマンドを結合
                 appendMessageBuffer.append("\n対象のボイスチャンネルは、`/mention_addvc`で追加できます。")
             }
+            //StringBufferを文字列に
             val appendMessage = appendMessageBuffer.toString()
+            //空だと何もしない
             if (appendMessage != "") {
+                //メッセージを送信
                 event.hook.sendMessage(appendMessage, true).queue({}, {})
             }
         }
     }
 
+    /**
+     * メンションを行う対象のロールを確認する
+     *
+     */
     object ShowRoleMentionTarget : SlashCommand("mention_role", "メンションを行う対象のロールを確認する") {
         init {
             isDefaultEnabled = true
@@ -593,11 +616,10 @@ class TimerSlashCommand {
         override fun run(event: SlashCommandInteractionEvent) {
             val guild = event.guild!!
 
-            //ギルドのデータを取得
-            val guildData = guild.getGuildData()
+            //ターゲットを取得
+            val list = guild.getGuildData().roleMentionTargets
 
-            val list = guildData.roleMentionTargets
-
+            //空かを確認し、メッセージを送信
             if (list.isEmpty()) {
                 event.hook.sendMessage(
                     """
@@ -616,6 +638,10 @@ class TimerSlashCommand {
         }
     }
 
+    /**
+     * メンションを行う対象のロールを追加する
+     *
+     */
     object AddRoleMentionTarget : SlashCommand("mention_addrole", "メンションを行う対象のロールを追加する") {
         init {
             isDefaultEnabled = true
@@ -646,6 +672,10 @@ class TimerSlashCommand {
         }
     }
 
+    /**
+     * メンションを行う対象のロールを追加する
+     *
+     */
     object RemoveRoleMentionTarget : SlashCommand("mention_removerole", "メンションを行う対象のロールを追加する") {
         init {
             isDefaultEnabled = true
@@ -676,6 +706,10 @@ class TimerSlashCommand {
         }
     }
 
+    /**
+     * メンションを行う対象のボイスチャットを確認する
+     *
+     */
     object ShowVCMentionTarget : SlashCommand("mention_vc", "メンションを行う対象のボイスチャットを確認する") {
         init {
             isDefaultEnabled = true
@@ -685,9 +719,9 @@ class TimerSlashCommand {
             val guild = event.guild!!
 
             //ギルドのデータを取得
-            val guildData = guild.getGuildData()
+            val list = guild.getGuildData().vcMentionTargets
 
-            val list = guildData.vcMentionTargets
+            //空かを確認して、メッセージを送信
             if (list.isEmpty()) {
                 event.hook.sendMessage(
                     """
@@ -706,6 +740,10 @@ class TimerSlashCommand {
         }
     }
 
+    /**
+     * メンションを行う対象のボイスチャットを追加する
+     *
+     */
     object AddVCMentionTarget : SlashCommand("mention_addvc", "メンションを行う対象のボイスチャットを追加する") {
         init {
             isDefaultEnabled = true
@@ -739,6 +777,10 @@ class TimerSlashCommand {
         }
     }
 
+    /**
+     * メンションを行う対象のボイスチャットを削除する
+     *
+     */
     object RemoveVCMentionTarget : SlashCommand("mention_removevc", "メンションを行う対象のボイスチャットを削除する") {
         init {
             isDefaultEnabled = true

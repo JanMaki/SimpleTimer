@@ -7,6 +7,10 @@ import dev.simpletimer.util.sendMessageEmbeds
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.Modal
 
+/**
+ * キューに追加をするモーダル
+ *
+ */
 object QueueModal : TimerModal<Timer.Number>("queue") {
     override val minutesInputName: String
         get() = "分数"

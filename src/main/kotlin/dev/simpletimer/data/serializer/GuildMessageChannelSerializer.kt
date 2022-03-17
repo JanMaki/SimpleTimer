@@ -10,10 +10,9 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import net.dv8tion.jda.api.entities.GuildMessageChannel
-import net.dv8tion.jda.api.entities.MessageChannel
 
 /**
- * [MessageChannel]のSerializer
+ * [GuildMessageChannel]のSerializer
  *
  */
 @Suppress("EXPERIMENTAL_IS_NOT_ENABLED")

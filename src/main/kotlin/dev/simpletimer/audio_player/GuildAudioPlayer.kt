@@ -15,7 +15,6 @@ import net.dv8tion.jda.api.entities.AudioChannel
 import net.dv8tion.jda.api.entities.Guild
 import java.nio.ByteBuffer
 
-
 /**
  * ギルドのオーディオを動かしたりする
  *
@@ -30,7 +29,6 @@ class GuildAudioPlayer(val guild: Guild) {
 
     //JDAのAudioManager
     private val audioManager = guild.audioManager.apply {
-
         //SendingHandlerを設定
         sendingHandler = object : AudioSendHandler {
             //前回のフレーム
@@ -53,10 +51,15 @@ class GuildAudioPlayer(val guild: Guild) {
                 return true
             }
         }
-
     }
 
+    /**
+     * チャンネルに接続しているかを確認する
+     *
+     * @return 接続しているとtrueを返す
+     */
     fun isConnected(): Boolean {
+        //接続を確認
         return audioManager.isConnected
     }
 
@@ -85,7 +88,7 @@ class GuildAudioPlayer(val guild: Guild) {
     /**
      * オーディオを再生
      *
-     * @param audioData [AudioInformationData]
+     * @param audioData 再生する[AudioInformationData]
      */
     fun play(audioData: AudioInformationData) {
         //接続しているかを確認

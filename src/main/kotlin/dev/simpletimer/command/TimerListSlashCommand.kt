@@ -177,6 +177,10 @@ class TimerListSlashCommand {
         }
     }
 
+    /**
+     * 一覧の送信の対象チャンネルを変更する
+     *
+     */
     object ListTargetChannel : SlashCommand("list_target", "タイマーやダイスを送信するチャンネルを設定する") {
         init {
             isDefaultEnabled = true
@@ -232,6 +236,10 @@ class TimerListSlashCommand {
         }
     }
 
+    /**
+     * 一覧を他のサーバーと同期する
+     *
+     */
     object SyncList : SlashCommand("list_sync", "一覧を他のサーバーと同期します") {
         init {
             isDefaultEnabled = true
@@ -288,16 +296,23 @@ class TimerListSlashCommand {
                 //Stringに変換
                 val id = option.asString
 
+                //36進数にからLongにする
                 val long = java.lang.Long.parseLong(id, 36)
 
+                //ギルドのIDが違うかを確認
                 if (guild.idLong != long) {
+                    //ターゲットのギルドを取得
                     val targetGuild = SimpleTimer.instance.getGuild(long)
 
+                    //nullチェック
                     if (targetGuild == null) {
+                        //メッセージを送信
                         event.hook.sendMessage("*無効なIDです", true).queue()
                         return
                     } else {
+                        //メッセージを送信
                         event.hook.sendMessage("同期を開始しました", true).queue()
+                        //ターゲットのギルドを設定
                         guildData.syncTarget = targetGuild
                     }
                 } else {
@@ -309,17 +324,24 @@ class TimerListSlashCommand {
                 event.hook.sendMessage("同期を終了しました").queue()
             }
 
+            //ギルドのデータを保存
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
         }
     }
 
+    /**
+     * ギルドのIDを取得
+     *
+     */
     object GetID : SlashCommand("list_id", "同期に必要なIDを取得します") {
         init {
             isDefaultEnabled = true
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
+            //36進数にする
             val id = event.guild!!.idLong.toString(36)
+            //メッセージを送信
             event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期できます").queue()
         }
     }

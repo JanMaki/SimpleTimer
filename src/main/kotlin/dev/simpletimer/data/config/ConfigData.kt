@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
  * コンフィグのデータ
  *
  * @property token BotのToken
+ * @property loggingChannels ログを送信するチャンネル
  */
 @Serializable
 data class ConfigData(

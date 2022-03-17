@@ -5,6 +5,10 @@ import dev.simpletimer.util.Log
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
+/**
+ * Shardの開始に対応する
+ *
+ */
 class Ready : ListenerAdapter() {
     private var count = 0
 

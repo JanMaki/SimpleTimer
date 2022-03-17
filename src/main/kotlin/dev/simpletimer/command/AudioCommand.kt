@@ -11,7 +11,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType
 
 /**
- * オーディオ系のコマンド
+ * オーディオ系のコマンドの親
+ *
  */
 abstract class AudioCommand(name: String, description: String) : SlashCommand(name, description) {
 
@@ -96,6 +97,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             val channel = guild.voiceChannels.first { it.members.contains(member) }
             //nullチェック
             if (channel == null) {
+                //エラーメッセージを送信
                 event.hook.sendMessage("*ボイスチャンネルに接続してください").queue({}, {})
                 return
             }
@@ -152,7 +154,12 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
         }
     }
 
+    /**
+     * 再生するオーディオを変更する
+     *
+     */
     object Change : AudioCommand("audio_change", "オーディオを変更する") {
+        //データのコンテナ
         private val dataContainer = SimpleTimer.instance.dataContainer
 
         init {

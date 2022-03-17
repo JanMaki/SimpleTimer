@@ -164,14 +164,20 @@ class SimpleTimer {
         shardBuilder.addEventListeners(SlashCommandInteraction())
         shardBuilder.addEventListeners(SelectMenuInteraction())
 
+        //ステータスを設定
         shardBuilder.setStatus(OnlineStatus.ONLINE)
+        //アクティビティを変更
         shardBuilder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "/helpでヘルプ表示　　　　　　"))
 
+        //shardを3回作る
         for (i in 0..2) {
+            //shardを作る
             val shard = shardBuilder.useSharding(i, 3).build()
 
+            //追加
             shards.add(shard)
 
+            //コマンドを送信
             shard.updateCommands().addCommands(SlashCommandManager.slashCommands).queue({}, {})
         }
 
@@ -191,20 +197,32 @@ class SimpleTimer {
                 println("Botを終了します...")
                 break
             }
+            //データの変換
             if (input == "convert") {
                 dataContainer.convertOldData()
             }
         }
     }
 
+    /**
+     * IDからギルドを取得する
+     *
+     * @param id ギルドのID
+     * @return [Guild]?
+     */
     fun getGuild(id: Long): Guild? {
+        //結果用変数
         var guild: Guild? = null
+        //すべてのShardを確認
         shards.forEach {
+            //nullのときは何もしない
             if (guild != null) {
                 return@forEach
             }
+            //ギルドを取得
             guild = it.getGuildById(id)
         }
+        //返す
         return guild
     }
 }
