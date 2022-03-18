@@ -18,6 +18,12 @@ object StartTimerModal : TimerModal<Byte>("start_timer") {
         get() = "秒数"
 
     override fun run(event: ModalInteractionEvent, seconds: Int) {
+        //時間を確認する
+        if (seconds == 0) {
+            event.reply("*1秒以上の時間を設定してください").setEphemeral(true).queue()
+            return
+        }
+
         //チャンネルを取得
         val channel = event.messageChannel
 

@@ -17,6 +17,12 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
         get() = "延長する秒数"
 
     override fun run(event: ModalInteractionEvent, seconds: Int) {
+        //時間を確認する
+        if (seconds == 0) {
+            event.reply("*正しい時間を設定してください").setEphemeral(true).queue()
+            return
+        }
+
         val timerNumber = Timer.Number.getNumber(event.modalId.split(":")[1].toInt())
 
         //チャンネルを取得

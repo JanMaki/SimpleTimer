@@ -19,12 +19,7 @@ abstract class TimerModal<T>(name: String, beforeReply: Boolean = true) :
         //秒数を取得
         val seconds = ((minutesInputValue.toIntOrNull() ?: 0) * 60) + (secondsInputValue.toIntOrNull() ?: 0)
 
-        //時間を確認する
-        if (seconds <= 0) {
-            event.hook.sendMessage("*1秒以上の時間を設定してください", true).queue()
-            return
-        }
-
+        //実行
         run(event, seconds)
     }
 

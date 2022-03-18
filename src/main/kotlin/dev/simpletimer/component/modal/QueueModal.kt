@@ -20,7 +20,7 @@ object QueueModal : TimerModal<Timer.Number>("queue") {
     override fun run(event: ModalInteractionEvent, seconds: Int) {
         //時間を確認する
         if (seconds == 0) {
-            event.reply("*時間を設定してください").queue()
+            event.reply("*正しい時間を設定してください").setEphemeral(true).queue()
             return
         }
 
