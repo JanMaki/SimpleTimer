@@ -150,11 +150,22 @@ class Timer(
     override fun onAdd(seconds: Int) {
         //延長と短縮を判定
         if (seconds >= 0) {
-            sendMessage("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
-            sendTTS("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
+            if (seconds >= 60){
+                sendMessage("タイマーを${seconds/60}分${seconds%60}秒延長しました", NoticeTiming.LV3)
+                sendTTS("タイマーを${seconds/60}秒${seconds%60}延長しました", NoticeTiming.LV3)
+            }else {
+                sendMessage("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
+                sendTTS("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
+            }
         } else {
-            sendMessage("タイマーを${abs(seconds)}秒短縮しました", NoticeTiming.LV3)
-            sendTTS("タイマーを${abs(seconds)}秒短縮しました", NoticeTiming.LV3)
+            val absSeconds = abs(seconds)
+            if (absSeconds >= 60){
+                sendMessage("タイマーを${absSeconds/60}分${absSeconds%60}秒短縮しました", NoticeTiming.LV3)
+                sendTTS("タイマーを${absSeconds/60}分${absSeconds%60}秒短縮しました", NoticeTiming.LV3)
+            }else {
+                sendMessage("タイマーを${seconds}秒短縮しました", NoticeTiming.LV3)
+                sendTTS("タイマーを${seconds}秒短縮しました", NoticeTiming.LV3)
+            }
         }
         //強制的に更新させる
         update = true
