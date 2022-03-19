@@ -174,9 +174,9 @@ class SimpleTimer {
         shardBuilder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "/helpでヘルプ表示　　　　　　"))
 
         //shardを3回作る
-        for (i in 0..2) {
+        for (i in 0..5) {
             //shardを作る
-            val shard = shardBuilder.useSharding(i, 3).build()
+            val shard = shardBuilder.useSharding(i, 6).build()
 
             //追加
             shards.add(shard)
