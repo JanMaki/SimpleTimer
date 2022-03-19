@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.component.button.DiceButton
 import dev.simpletimer.component.modal.TimerButtonModal
+import dev.simpletimer.extension.sendMessage
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -50,6 +51,21 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
                 //nullチェック
                 if (option == null) {
                     replyCommandError(event)
+                    return
+                }
+
+                //ダイスの内容を取得
+                val dice = option.asString
+
+                //:を挟まれないようにする
+                if (dice.contains(":")) {
+                    event.hook.sendMessage("*名前に使用できない文字が含まれています", true).queue()
+                    return
+                }
+
+                //文字数制限
+                if (dice.length >= 30) {
+                    event.hook.sendMessage("*名前の文字数は30文字以下にしてください", true).queue()
                     return
                 }
 

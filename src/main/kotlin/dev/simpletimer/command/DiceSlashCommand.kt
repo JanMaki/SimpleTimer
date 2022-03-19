@@ -38,8 +38,17 @@ class DiceSlashCommand {
                 return
             }
 
+            //ダイスの内容を取得
+            val dice = option.asString
+
+            //文字数制限
+            if (dice.length >= 30) {
+                event.hook.sendMessage("*名前の文字数は30文字以下にしてください", true).queue()
+                return
+            }
+
             //コマンドを実行
-            Dice().roll(event, option.asString)
+            Dice().roll(event, dice)
         }
     }
 
