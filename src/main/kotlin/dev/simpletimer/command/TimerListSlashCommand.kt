@@ -17,10 +17,6 @@ class TimerListSlashCommand {
      * 一覧を表示する
      */
     object List : SlashCommand("list", "一覧を表示します") {
-        init {
-            isDefaultEnabled = true
-        }
-
         override fun run(event: SlashCommandInteractionEvent) {
             //一覧を送信する
             ListMenu.sendList(event)
@@ -33,7 +29,7 @@ class TimerListSlashCommand {
      */
     object ListAdd : SlashCommand("list_add", "一覧に要素を追加・上書きをします") {
         init {
-            isDefaultEnabled = true
+
 
             addSubcommands(
                 SubcommandData("timer", "タイマーを一覧に追加・上書きをする").addOptions(
@@ -119,7 +115,7 @@ class TimerListSlashCommand {
      */
     object ListRemove : SlashCommand("list_remove", "一覧から要素を削除をします") {
         init {
-            isDefaultEnabled = true
+
 
             addOptions(
                 OptionData(OptionType.STRING, "名前", "要素の名前", true, true)
@@ -182,7 +178,7 @@ class TimerListSlashCommand {
      */
     object ListTargetChannel : SlashCommand("list_target", "タイマーやダイスを送信するチャンネルを設定する") {
         init {
-            isDefaultEnabled = true
+
 
             addOption(OptionType.CHANNEL, "テキストチャンネル", "対象のチャンネル", true)
         }
@@ -231,7 +227,7 @@ class TimerListSlashCommand {
      */
     object SyncList : SlashCommand("list_sync", "一覧を他のサーバーと同期します") {
         init {
-            isDefaultEnabled = true
+
 
             addSubcommands(
                 SubcommandData("enable", "同期を行うようにする")
@@ -325,7 +321,7 @@ class TimerListSlashCommand {
      */
     object CopyList : SlashCommand("list_copy", "他のサーバーの一覧をコピーします") {
         init {
-            isDefaultEnabled = true
+
 
             addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true)
         }
@@ -384,10 +380,6 @@ class TimerListSlashCommand {
      *
      */
     object GetID : SlashCommand("list_id", "同期に必要なIDを取得します") {
-        init {
-            isDefaultEnabled = true
-        }
-
         override fun run(event: SlashCommandInteractionEvent) {
             //36進数にする
             val id = event.guild!!.idLong.toString(36)

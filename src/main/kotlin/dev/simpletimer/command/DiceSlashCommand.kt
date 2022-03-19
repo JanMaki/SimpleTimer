@@ -24,7 +24,7 @@ class DiceSlashCommand {
      */
     object Roll : SlashCommand("roll", "ダイスを振ります") {
         init {
-            isDefaultEnabled = true
+
             addOptions(OptionData(OptionType.STRING, "ダイス", "ダイスの内容 例:1d100").setRequired(true))
         }
 
@@ -56,10 +56,6 @@ class DiceSlashCommand {
      * ダイスモードを変更する
      */
     object DiceMode : SlashCommand("dice_mode", "使うダイスをDefaultかBCDiceかを切り替える") {
-        init {
-            isDefaultEnabled = true
-        }
-
         override fun run(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild!!

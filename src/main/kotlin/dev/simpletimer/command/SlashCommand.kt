@@ -13,6 +13,11 @@ import net.dv8tion.jda.internal.interactions.CommandDataImpl
  */
 abstract class SlashCommand(name: String, description: String, val beforeReply: Boolean = true) :
     CommandDataImpl(name, description) {
+
+    init {
+        isDefaultEnabled = true
+    }
+
     /**
      * コマンドを実行する
      *

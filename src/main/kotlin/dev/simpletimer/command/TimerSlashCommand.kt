@@ -24,7 +24,7 @@ class TimerSlashCommand {
      */
     object StartTimer : SlashCommand("timer", "タイマーを開始する", beforeReply = false) {
         init {
-            isDefaultEnabled = true
+
 
             addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で"))
         }
@@ -73,7 +73,7 @@ class TimerSlashCommand {
      */
     object Finish : SlashCommand("finish", "タイマーを終了する") {
         init {
-            isDefaultEnabled = true
+
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "終了するタイマー").setRequired(true).addChoices(
@@ -134,10 +134,6 @@ class TimerSlashCommand {
      * すべてのタイマーを終了
      */
     object FinAll : SlashCommand("finish_all", "すべてのタイマーを終了する") {
-        init {
-            isDefaultEnabled = true
-        }
-
         override fun run(event: SlashCommandInteractionEvent) {
 
             //チャンネルを取得
@@ -167,7 +163,7 @@ class TimerSlashCommand {
      */
     object Add : SlashCommand("add", "タイマーを延長する", false) {
         init {
-            isDefaultEnabled = true
+
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "延長するタイマー").setRequired(true).addChoices(
@@ -206,7 +202,7 @@ class TimerSlashCommand {
      */
     object Stop : SlashCommand("stop", "タイマーを一時停止する") {
         init {
-            isDefaultEnabled = true
+
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "一時停止するタイマー").setRequired(true).addChoices(
@@ -266,7 +262,7 @@ class TimerSlashCommand {
      */
     object Restart : SlashCommand("restart", "タイマーの一時停止を再開する") {
         init {
-            isDefaultEnabled = true
+
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "再開するタイマー").setRequired(true).addChoices(
@@ -328,7 +324,7 @@ class TimerSlashCommand {
      */
     object Check : SlashCommand("check", "タイマーを確認する") {
         init {
-            isDefaultEnabled = true
+
 
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "確認するタイマー").setRequired(true).addChoices(
@@ -388,7 +384,7 @@ class TimerSlashCommand {
      */
     object TTSTiming : SlashCommand("tts_timing", "ttsによるメッセージの読み上げを設定する 初期状態ではLV0") {
         init {
-            isDefaultEnabled = true
+
             addSubcommands(
                 SubcommandData("lv0", "通知を行わない"),
                 SubcommandData("lv1", "タイマー終了時のみ通知"),
@@ -430,7 +426,7 @@ class TimerSlashCommand {
      */
     object FinishTTS : SlashCommand("tts_finishmessage", "終了時のメッセージ読み上げの内容を変更する") {
         init {
-            isDefaultEnabled = true
+
             addOptions(
                 OptionData(
                     OptionType.STRING,
@@ -466,7 +462,7 @@ class TimerSlashCommand {
      */
     object MentionTiming : SlashCommand("mention_timing", "メンションを行うタイミングの設定をする 初期状態ではLV2") {
         init {
-            isDefaultEnabled = true
+
             addSubcommands(
                 SubcommandData("lv0", "通知を行わない"),
                 SubcommandData("lv1", "タイマー終了時のみ通知"),
@@ -509,7 +505,7 @@ class TimerSlashCommand {
      */
     object Mention : SlashCommand("mention", "メンションの方式を変更する") {
         init {
-            isDefaultEnabled = true
+
             addSubcommands(
                 SubcommandData("here", "@hereを用いたメンション"),
                 SubcommandData("vc", "ボイスチャットに接続されているメンバー"),
@@ -609,10 +605,6 @@ class TimerSlashCommand {
      *
      */
     object ShowRoleMentionTarget : SlashCommand("mention_role", "メンションを行う対象のロールを確認する") {
-        init {
-            isDefaultEnabled = true
-        }
-
         override fun run(event: SlashCommandInteractionEvent) {
             val guild = event.guild!!
 
@@ -644,7 +636,7 @@ class TimerSlashCommand {
      */
     object AddRoleMentionTarget : SlashCommand("mention_addrole", "メンションを行う対象のロールを追加する") {
         init {
-            isDefaultEnabled = true
+
             addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
         }
 
@@ -678,7 +670,7 @@ class TimerSlashCommand {
      */
     object RemoveRoleMentionTarget : SlashCommand("mention_removerole", "メンションを行う対象のロールを追加する") {
         init {
-            isDefaultEnabled = true
+
             addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
         }
 
@@ -711,10 +703,6 @@ class TimerSlashCommand {
      *
      */
     object ShowVCMentionTarget : SlashCommand("mention_vc", "メンションを行う対象のボイスチャットを確認する") {
-        init {
-            isDefaultEnabled = true
-        }
-
         override fun run(event: SlashCommandInteractionEvent) {
             val guild = event.guild!!
 
@@ -746,7 +734,7 @@ class TimerSlashCommand {
      */
     object AddVCMentionTarget : SlashCommand("mention_addvc", "メンションを行う対象のボイスチャットを追加する") {
         init {
-            isDefaultEnabled = true
+
             addOptions(OptionData(OptionType.CHANNEL, "channel", "追加するボイスチャット").setRequired(true))
         }
 
@@ -783,7 +771,7 @@ class TimerSlashCommand {
      */
     object RemoveVCMentionTarget : SlashCommand("mention_removevc", "メンションを行う対象のボイスチャットを削除する") {
         init {
-            isDefaultEnabled = true
+
             addOptions(OptionData(OptionType.CHANNEL, "channel", "削除するボイスチャット").setRequired(true))
         }
 
