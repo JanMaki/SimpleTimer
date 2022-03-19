@@ -326,7 +326,7 @@ class TimerSlashCommand {
     /**
      * タイマーを確認する
      */
-    object Check : SlashCommand("check", "タイマーを延長する") {
+    object Check : SlashCommand("check", "タイマーを確認する") {
         init {
             isDefaultEnabled = true
 
