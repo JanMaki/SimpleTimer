@@ -83,18 +83,12 @@ class TimerListSlashCommand {
             //サブコマンドを確認
             when (event.subcommandName) {
                 "timer" -> {
-                    //分を取得
-                    val seconds = event.getOption("分")!!.asLong.toInt()
-
                     //ギルドのデータでタイマーを追加
-                    guildData.list["timer:${name}"] = seconds.toString()
+                    guildData.list["timer:${name}"] = event.getOption("分")!!.asInt.toString()
                 }
                 "dice" -> {
-                    //ダイスの内容を取得
-                    val rollCommand = event.getOption("ダイス")!!.asString
-
                     //ギルドのデータでダイスを追加
-                    guildData.list["dice:${name}"] = rollCommand
+                    guildData.list["dice:${name}"] = event.getOption("ダイス")!!.asString
                 }
             }
 
