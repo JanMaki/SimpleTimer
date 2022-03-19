@@ -94,16 +94,16 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             //メンバーを取得
             val member = event.member
             //接続しているボイスチャンネルを取得
-            val channel = guild.voiceChannels.first { it.members.contains(member) }
+            val channels = guild.voiceChannels.filter { it.members.contains(member) }
             //nullチェック
-            if (channel == null) {
+            if (channels.isEmpty()) {
                 //エラーメッセージを送信
                 event.hook.sendMessage("*ボイスチャンネルに接続してください").queue()
                 return
             }
 
             //接続
-            guild.getAudioPlayer().connect(channel)
+            guild.getAudioPlayer().connect(channels.first())
 
             //メッセージを送信
             event.hook.sendMessage("チャンネルに参加しました").queue()
