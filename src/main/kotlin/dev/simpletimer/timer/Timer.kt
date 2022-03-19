@@ -107,12 +107,22 @@ class Timer(
         sendDisplayMessage("${time.minute}分${time.seconds}秒")
     }
 
+    //以前のUpdate時の時間を保管する
+    private var oldTime: TimerService.Time? = null
+
     override fun onUpdate() {
+        //時間を取得
         val time = timerService.getTime()
 
-        if (time.minute * 60 + time.seconds == this.seconds) {
+        //最初の1秒はなにもしない
+        if (time == TimerService.Time.getTimeFromTotalSeconds(seconds) && oldTime== null) {
             return
         }
+
+        //以前の時間と同じかを確認
+        if (time == oldTime) return
+        //以前に時間を保管
+        oldTime = time
 
         //途中通知の確認
         if (time.seconds == 0 && (time.minute % 10 == 0 || time.minute == 5 || time.minute == 3 || time.minute == 2 || time.minute == 1)) {

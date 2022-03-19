@@ -281,5 +281,32 @@ class TimerService(private var seconds: Int) {
      * @property minute 分[Int]
      * @property seconds 秒[Int]
      */
-    data class Time(val minute: Int, val seconds: Int)
+    data class Time(val minute: Int, val seconds: Int) {
+        companion object {
+            /**
+             * 秒数の合計からインスタンスを作る
+             * 例: 610秒 -> 10分10秒
+             *
+             * @param seconds 秒数
+             * @return [Time]
+             */
+            fun getTimeFromTotalSeconds(seconds: Int): Time{
+                return Time(seconds / 60, seconds % 60)
+            }
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (other == null) return false
+
+            if (other !is Time) return false
+
+            return minute == other.minute && seconds == other.seconds
+        }
+
+        override fun hashCode(): Int {
+            var result = minute
+            result = 31 * result + seconds
+            return result
+        }
+    }
 }
