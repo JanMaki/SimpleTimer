@@ -13,12 +13,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.interactions.components.ActionRow
+import java.awt.Color
 import java.util.*
 import kotlin.math.abs
 
@@ -104,7 +107,7 @@ class Timer(
 
     override fun onStart() {
         val time = timerService.getTime()
-        sendDisplayMessage("${time.minute}分${time.seconds}秒")
+        sendDisplayMessage(time)
     }
 
     //以前のUpdate時の時間を保管する
@@ -133,7 +136,7 @@ class Timer(
         //10秒の倍数と残り5秒の時、updateのフラグが立っているときはdisplayを更新する
         if (time.seconds % 10 == 0 || update || (time.minute == 0 && time.seconds == 5)) {
             update = false
-            display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))?.queue()
+            display?.editMessageEmbeds(generateDisplayEmbed(time))?.queue()
         }
     }
 
@@ -187,9 +190,7 @@ class Timer(
         //新しいdisplayとして作る
         base = "タイマーを再開しました　%s"
         val time = timerService.getTime()
-        var byoString = time.seconds.toString()
-        if (time.seconds < 10) byoString = "0$byoString"
-        sendDisplayMessage("${time.minute}分${byoString}秒")
+        sendDisplayMessage(time)
         sendTTS("タイマーを再開しました", NoticeTiming.LV3)
         notice?.clearReactions()?.queue()
     }
@@ -215,7 +216,7 @@ class Timer(
         notice?.addReaction("U+25C0")?.queue()
         //ディスプレイを更新
         val time = timerService.getTime()
-        display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))?.queue()
+        display?.editMessageEmbeds(generateDisplayEmbed(time))?.queue()
     }
 
     /**
@@ -246,7 +247,7 @@ class Timer(
         //ディスプレイを更新
         val time = timerService.getTime()
         //削除のボタンをつける
-        display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
+        display?.editMessageEmbeds(generateDisplayEmbed(time))
             ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue()
 
         //プレイヤーを取得
@@ -286,9 +287,7 @@ class Timer(
         //新しいdisplayとして作る
         base = "タイマー終了まで: %s"
         val time = timerService.getTime()
-        var byoString = time.seconds.toString()
-        if (time.seconds < 10) byoString = "0$byoString"
-        sendDisplayMessage("${time.minute}分${byoString}秒")
+        sendDisplayMessage(time)
     }
 
     /**
@@ -311,7 +310,7 @@ class Timer(
         //ディスプレイを更新
         val time = timerService.getTime()
         //削除のボタンをつける
-        display?.editMessage(number.format(base.format("${time.minute}分${time.seconds}秒")))
+        display?.editMessageEmbeds(generateDisplayEmbed(time))
             ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue()
 
         val channelTimers = channelsTimersMap[channel]
@@ -337,7 +336,7 @@ class Timer(
      *
      * @param data [String] メッセージ
      */
-    private fun sendDisplayMessage(data: String) {
+    private fun sendDisplayMessage(time: TimerService.Time) {
         try {
             //過去のメッセージを確認・削除
             if (display != null) {
@@ -347,7 +346,7 @@ class Timer(
                 display?.delete()?.queue()
             }
             //送信
-            channel.sendMessage(number.format(base.format(data)))
+            channel.sendMessageEmbeds(generateDisplayEmbed(time))
                 .setActionRow(AddTimerButton.createButton(number))
                 .queue { display ->
                     this.display = display
@@ -372,6 +371,25 @@ class Timer(
             Log.sendLog(e.stackTraceToString())
         }
     }
+
+
+    /**
+     * ディスプレイの埋め込みを作成する
+     *
+     * @param time 表示する時間[TimerService.Time]
+     * @return 作成した[MessageEmbed]
+     */
+    private fun generateDisplayEmbed(time: TimerService.Time): MessageEmbed {
+        //ビルダー
+        val embed = EmbedBuilder()
+        //時間を説明文に書く
+        embed.setDescription(number.format(base.format("${time.minute}分${time.seconds}秒")))
+        //色を設定
+        embed.setColor(number.color)
+        //作成して返す
+        return embed.build()
+    }
+
 
     /**
      * メッセージを送信
@@ -512,11 +530,11 @@ class Timer(
     }
 
     //タイマーの装飾
-    enum class Number(private val string: String, val number: Int) {
-        FIRST("```kotlin\n#1 %s\n```", 1),
-        SECOND("```fix\n#2 %s\n```", 2),
-        THIRD("```md\n#3 %s\n```", 3),
-        FOURTH("```cs\n#4 %s\n```", 4);
+    enum class Number(private val string: String, val number: Int, val color: Color) {
+        FIRST("```kotlin\n#1 %s\n```", 1, Color.WHITE),
+        SECOND("```fix\n#2 %s\n```", 2, Color(183, 133, 43)),
+        THIRD("```md\n#3 %s\n```", 3, Color(3, 144, 205)),
+        FOURTH("```cs\n#4 %s\n```", 4, Color(205, 67, 39));
 
         /**
          * タイマーの装飾を適用する
