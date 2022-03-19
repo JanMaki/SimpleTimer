@@ -115,7 +115,7 @@ class Timer(
         val time = timerService.getTime()
 
         //最初の1秒はなにもしない
-        if (time == TimerService.Time.getTimeFromTotalSeconds(seconds) && oldTime== null) {
+        if (time == TimerService.Time.getTimeFromTotalSeconds(seconds) && oldTime == null) {
             return
         }
 
@@ -150,19 +150,19 @@ class Timer(
     override fun onAdd(seconds: Int) {
         //延長と短縮を判定
         if (seconds >= 0) {
-            if (seconds >= 60){
-                sendMessage("タイマーを${seconds/60}分${seconds%60}秒延長しました", NoticeTiming.LV3)
-                sendTTS("タイマーを${seconds/60}秒${seconds%60}延長しました", NoticeTiming.LV3)
-            }else {
+            if (seconds >= 60) {
+                sendMessage("タイマーを${seconds / 60}分${seconds % 60}秒延長しました", NoticeTiming.LV3)
+                sendTTS("タイマーを${seconds / 60}秒${seconds % 60}延長しました", NoticeTiming.LV3)
+            } else {
                 sendMessage("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
                 sendTTS("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
             }
         } else {
             val absSeconds = abs(seconds)
-            if (absSeconds >= 60){
-                sendMessage("タイマーを${absSeconds/60}分${absSeconds%60}秒短縮しました", NoticeTiming.LV3)
-                sendTTS("タイマーを${absSeconds/60}分${absSeconds%60}秒短縮しました", NoticeTiming.LV3)
-            }else {
+            if (absSeconds >= 60) {
+                sendMessage("タイマーを${absSeconds / 60}分${absSeconds % 60}秒短縮しました", NoticeTiming.LV3)
+                sendTTS("タイマーを${absSeconds / 60}分${absSeconds % 60}秒短縮しました", NoticeTiming.LV3)
+            } else {
                 sendMessage("タイマーを${seconds}秒短縮しました", NoticeTiming.LV3)
                 sendTTS("タイマーを${seconds}秒短縮しました", NoticeTiming.LV3)
             }

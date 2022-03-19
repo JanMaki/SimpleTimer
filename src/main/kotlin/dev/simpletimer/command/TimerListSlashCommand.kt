@@ -392,7 +392,8 @@ class TimerListSlashCommand {
             //36進数にする
             val id = event.guild!!.idLong.toString(36)
             //メッセージを送信
-            event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期でき、\n`/list_copy id: ${id}`を行うことで、このサーバーの一覧をコピーできます").queue()
+            event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期でき、\n`/list_copy id: ${id}`を行うことで、このサーバーの一覧をコピーできます")
+                .queue()
         }
     }
 }

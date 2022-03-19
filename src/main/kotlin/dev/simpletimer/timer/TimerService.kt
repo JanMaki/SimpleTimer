@@ -290,7 +290,7 @@ class TimerService(private var seconds: Int) {
              * @param seconds 秒数
              * @return [Time]
              */
-            fun getTimeFromTotalSeconds(seconds: Int): Time{
+            fun getTimeFromTotalSeconds(seconds: Int): Time {
                 return Time(seconds / 60, seconds % 60)
             }
         }

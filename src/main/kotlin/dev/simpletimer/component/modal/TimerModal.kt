@@ -1,6 +1,5 @@
 package dev.simpletimer.component.modal
 
-import dev.simpletimer.extension.sendMessage
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.text.Modal
