@@ -64,7 +64,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
         }
         //権利表示
         if (audioData.right != "") {
-            embed.addField("権利表示", audioData.right, false)
+            embed.addField("権利表示等", audioData.right, false)
         }
         //その他
         if (audioData.other != "") {
