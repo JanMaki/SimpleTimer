@@ -11,8 +11,8 @@ import net.dv8tion.jda.api.interactions.components.text.Modal
 object TimerButtonModal : TimerModal<Byte>("timer_button") {
     override fun run(event: ModalInteractionEvent, seconds: Int) {
         //時間を確認する
-        if (seconds > 0) {
-            event.reply("*1秒以上の時間を設定してください").setEphemeral(true).queue()
+        if (seconds < 1) {
+            event.hook.sendMessage("*1秒以上の時間を設定してください").setEphemeral(true).queue()
             return
         }
 
