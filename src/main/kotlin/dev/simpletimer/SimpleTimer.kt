@@ -159,6 +159,7 @@ class SimpleTimer {
 
         //リスナーの登録
         shardBuilder.addEventListeners(ButtonInteraction())
+        shardBuilder.addEventListeners(ChannelDelete())
         shardBuilder.addEventListeners(CommandAutoCompleteInteraction())
         shardBuilder.addEventListeners(GenericMessageReaction())
         shardBuilder.addEventListeners(GuildVoiceLeave())

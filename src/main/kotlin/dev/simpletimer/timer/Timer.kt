@@ -15,10 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
-import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.MessageChannel
-import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import java.awt.Color
@@ -34,7 +31,7 @@ import kotlin.math.abs
  */
 class Timer(
     val channel: MessageChannel,
-    private val number: Number,
+    val number: Number,
     private var seconds: Int,
     private val guild: Guild
 ) : TimerService.TimerListener {
@@ -42,8 +39,8 @@ class Timer(
         //チャンネルとタイマーのマップ
         val channelsTimersMap = HashMap<MessageChannel, EnumMap<Number, Timer>>()
 
-        private val displays = TreeMap<Long, Timer>()
-        private val timers = TreeMap<Long, Timer>()
+        val displays = TreeMap<Long, Timer>()
+        val timers = TreeMap<Long, Timer>()
 
         /**
          * メッセージのIDからTimerを取得する
@@ -53,6 +50,14 @@ class Timer(
          */
         fun getTimer(id: Long): Timer? {
             return timers[id]
+        }
+
+        fun getTimer(channel: Channel): Timer? {
+            return if (displays.values.none { it.channel.idLong == channel.idLong }) {
+                null
+            } else {
+                displays.values.first { it.channel.idLong == channel.idLong }
+            }
         }
 
         /**
@@ -79,14 +84,16 @@ class Timer(
     private var base = "タイマーを開始しました %s"
 
     //Displayと通知
-    private var display: Message? = null
+    var display: Message? = null
+        private set
     var notice: Message? = null
+        private set
 
     //強制的に更新を行うかのフラグ
     private var update = false
 
     //タイマーのサービス
-    private val timerService = TimerService(seconds)
+    val timerService = TimerService(seconds)
 
     //開始の処理へ飛ばす
     init {
@@ -334,7 +341,7 @@ class Timer(
     /**
      * 時間表示付きメッセージを送信
      *
-     * @param data [String] メッセージ
+     * @param time [TimerService.Time]
      */
     private fun sendDisplayMessage(time: TimerService.Time) {
         try {
