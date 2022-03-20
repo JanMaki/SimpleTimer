@@ -1,30 +1,25 @@
 package dev.simpletimer.timer
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
 /**
  * タイマーのサービス
  *
  * @property seconds 秒数
  */
-class TimerService(private var seconds: Int) {
+class TimerService(var seconds: Int) {
     //始まっているか
     private var isStarted = false
 
     //動いているか
-    private var isMove = true
+    var isMove = true
 
     //終了しているか
-    private var isFinish = false
+    var isFinish = false
 
     //経過時間
-    private var elapsedTime = 0L
+    var elapsedTime = 0L
 
     //タイマーが開始した時間
-    private var startNanoTime = 0L
+    var startNanoTime = 0L
 
     //タイマーの調整値
     var adjustTime = 0L
@@ -161,41 +156,12 @@ class TimerService(private var seconds: Int) {
      *
      */
     private fun startCoroutine() {
-        //別スレッドでタイマーを開始
-        CoroutineScope(Dispatchers.Default).launch {
-            do {
-                //終了フラグを確認
-                if (isFinish || !isMove) {
-                    break
-                }
-
-                //イベントを呼び出す
-                listeners.forEach { it.onUpdate() }
-
-                //スレッドを0.5秒待つ
-                delay(500)
-
-                //経過時間を更新
-                elapsedTime = System.nanoTime() - startNanoTime
-            } while (elapsedTime < (seconds * 1000000000L) + adjustTime)// 経過時間が、秒数 * 1000000000 + 調整値 以下なら続ける
-
-            //終了を確認
-            if (elapsedTime >= (seconds * 1000000000L) + adjustTime) {
-                //終了する
-                finish()
-            }
-
-            //停止のフラグを確認
-            if (!isMove) {
-                //停止時の時間を保存
-                stopTime = System.nanoTime()
-            }
-        }
+        TimerCoroutineService.start(this)
     }
 
 
     //イベントを受け取るリスナー
-    private val listeners = ArrayList<TimerListener>()
+    val listeners = ArrayList<TimerListener>()
 
     /**
      * リスナーを登録する
