@@ -20,18 +20,26 @@ class TimerCoroutineService(timerService: TimerService) {
          */
         fun start(timerService: TimerService) {
             //コールーチンがすでになかったり、最後のコールーチン内で処理している数が多いかを確認
-            if (coroutineServices.isEmpty() || coroutineServices.last().getTimerCount() > 20) {
+            if (coroutineServices.isEmpty() || coroutineServices.last().getTimerCount() > 19 || !coroutineServices.last().active) {
                 //新しくサービスを作る
                 coroutineServices.add(TimerCoroutineService(timerService))
                 return
             }
+
+            //最後のコールーチンを取得
+            val coroutineService = coroutineServices.last()
+
             //すでにあるコールーチンに登録をする
-            coroutineServices.last().registerTimerService(timerService)
+            coroutineService.registerTimerService(timerService)
         }
     }
 
     //動かすタイマーサービス
     private val timers = arrayListOf(timerService)
+
+    //有効か
+    var active = true
+        private set
 
     init {
         //別スレッドでタイマーを開始
@@ -79,6 +87,9 @@ class TimerCoroutineService(timerService: TimerService) {
                 //スレッドを0.5秒待つ
                 delay(500)
             } while (timers.size > 0)
+
+            //無効にする
+            active = false
         }
     }
 
@@ -99,5 +110,4 @@ class TimerCoroutineService(timerService: TimerService) {
     fun getTimerCount(): Int {
         return timers.size
     }
-
 }
