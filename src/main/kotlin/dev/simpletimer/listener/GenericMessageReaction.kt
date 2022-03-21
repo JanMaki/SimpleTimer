@@ -1,6 +1,8 @@
 package dev.simpletimer.listener
 
+import dev.simpletimer.SimpleTimer
 import dev.simpletimer.dice.bcdice.BCDiceManager
+import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.timer.Timer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +31,19 @@ class GenericMessageReaction : ListenerAdapter() {
         //ユーザーの確認
         val user = event.user
         if (user != null && user.isBot) return
+
+        //管理者権限か、必要な権限を確認
+        if (!event.guildChannel.checkSimpleTimerPermission()) {
+            //権限が不足しているメッセージを送信する
+            try {
+                event.user?.openPrivateChannel()?.queue {
+                    it.sendMessageEmbeds(SimpleTimer.instance.errorEmbed).queue()
+                }
+            }catch (ignore: Exception){
+                //ignore
+            }
+            return
+        }
 
         //クールタイムの確認
         val idLong = event.messageIdLong

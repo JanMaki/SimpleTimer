@@ -1,5 +1,6 @@
 package dev.simpletimer.listener
 
+import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -19,6 +20,11 @@ class MessageDelete : ListenerAdapter() {
         super.onMessageDelete(event)
 
         val idLong = event.messageIdLong
+
+        //管理者権限か、必要な権限を確認
+        if (!event.guildChannel.checkSimpleTimerPermission()) {
+            return
+        }
 
         //タイマーを取得
         val timer = Timer.getTimer(idLong) ?: return
