@@ -232,7 +232,7 @@ class TimerService(var seconds: Int) {
      */
     fun getTime(): Time {
         //残りの秒数を取得する
-        var seconds = this.seconds - (elapsedTime / 1000000000L).toInt()
+        var seconds = this.seconds - ((elapsedTime - adjustTime) / 1000000000L).toInt()
         //60で割り、小数点切り捨てで分数にする
         val minute = seconds / 60
         //分部分を除いた秒数を取得
