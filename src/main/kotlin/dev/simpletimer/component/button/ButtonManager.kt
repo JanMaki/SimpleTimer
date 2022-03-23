@@ -13,6 +13,7 @@ class ButtonManager {
         addAll(
             arrayOf(
                 AddTimerButton,
+                CommunityLinkButton,
                 DiceButton,
                 DeleteMessageButton,
                 TimerButton
