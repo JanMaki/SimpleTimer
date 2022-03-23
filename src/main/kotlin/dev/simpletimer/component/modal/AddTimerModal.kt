@@ -19,7 +19,7 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
     override fun run(event: ModalInteractionEvent, seconds: Int) {
         //時間を確認する
         if (seconds == 0) {
-            event.hook.sendMessage("*正しい時間を設定してください").setEphemeral(true).queue()
+            event.reply("*正しい時間を設定してください").setEphemeral(true).queue()
             return
         }
 
