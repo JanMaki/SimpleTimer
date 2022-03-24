@@ -20,7 +20,9 @@ class TimerCoroutineService(timerService: TimerService) {
          */
         fun start(timerService: TimerService) {
             //コールーチンがすでになかったり、最後のコールーチン内で処理している数が多いかを確認
-            if (coroutineServices.isEmpty() || coroutineServices.last().getTimerCount() > 19 || !coroutineServices.last().active) {
+            if (coroutineServices.isEmpty() || coroutineServices.last()
+                    .getTimerCount() > 19 || !coroutineServices.last().active
+            ) {
                 //新しくサービスを作る
                 coroutineServices.add(TimerCoroutineService(timerService))
                 return

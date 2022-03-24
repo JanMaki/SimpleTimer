@@ -39,7 +39,7 @@ class GenericMessageReaction : ListenerAdapter() {
                 event.user?.openPrivateChannel()?.queue {
                     it.sendMessageEmbeds(SimpleTimer.instance.errorEmbed).queue()
                 }
-            }catch (ignore: Exception){
+            } catch (ignore: Exception) {
                 //ignore
             }
             return
