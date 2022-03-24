@@ -2,7 +2,7 @@ package dev.simpletimer.component.modal
 
 import dev.simpletimer.component.button.TimerButton
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.text.Modal
+import net.dv8tion.jda.api.interactions.components.Modal
 
 /**
  * タイマーのボタンのModal

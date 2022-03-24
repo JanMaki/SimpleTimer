@@ -5,7 +5,7 @@ import dev.simpletimer.extension.sendMessageEmbeds
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.text.Modal
+import net.dv8tion.jda.api.interactions.components.Modal
 
 /**
  * キューに追加をするモーダル

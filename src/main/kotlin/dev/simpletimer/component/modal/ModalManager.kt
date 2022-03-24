@@ -40,6 +40,6 @@ object ModalManager {
          * @param data Modalに何かデータつける時に使う
          * @return 作成した[Modal]
          */
-        abstract fun createModal(data: T): net.dv8tion.jda.api.interactions.components.text.Modal
+        abstract fun createModal(data: T): net.dv8tion.jda.api.interactions.components.Modal
     }
 }
