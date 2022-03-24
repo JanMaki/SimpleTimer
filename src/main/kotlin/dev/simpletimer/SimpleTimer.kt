@@ -162,6 +162,7 @@ class SimpleTimer {
         shardBuilder.addEventListeners(ChannelDelete())
         shardBuilder.addEventListeners(CommandAutoCompleteInteraction())
         shardBuilder.addEventListeners(GenericMessageReaction())
+        shardBuilder.addEventListeners(GuildVoiceJoin())
         shardBuilder.addEventListeners(GuildVoiceLeave())
         shardBuilder.addEventListeners(MessageDelete())
         shardBuilder.addEventListeners(ModalInteraction())
