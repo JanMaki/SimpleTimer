@@ -21,7 +21,7 @@ class GuildVoiceLeave : ListenerAdapter() {
         if (!player.isConnected()) return
 
         //VCの人数を確認
-        if (event.channelLeft.members.filter { !it.user.isBot }.size > 1) return
+        if (event.channelLeft.members.any { !it.user.isBot }) return
 
         //切断
         player.disconnect()
