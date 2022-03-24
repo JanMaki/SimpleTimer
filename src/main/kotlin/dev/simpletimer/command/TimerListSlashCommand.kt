@@ -1,0 +1,385 @@
+package dev.simpletimer.command
+
+import dev.simpletimer.SimpleTimer
+import dev.simpletimer.extension.checkSimpleTimerPermission
+import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.sendMessage
+import dev.simpletimer.extension.sendMessageEmbeds
+import dev.simpletimer.list.ListMenu
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.interactions.commands.OptionType
+import net.dv8tion.jda.api.interactions.commands.build.OptionData
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
+
+class TimerListSlashCommand {
+    /**
+     * 一覧を表示する
+     */
+    object List : SlashCommand("list", "一覧を表示します") {
+        override fun run(event: SlashCommandInteractionEvent) {
+            //一覧を送信する
+            ListMenu.sendList(event)
+        }
+    }
+
+    /**
+     * 一覧に要素を追加・上書きをする
+     *
+     */
+    object ListAdd : SlashCommand("list_add", "一覧に要素を追加・上書きをします") {
+        init {
+
+
+            addSubcommands(
+                SubcommandData("timer", "タイマーを一覧に追加・上書きをする").addOptions(
+                    OptionData(OptionType.STRING, "名前", "タイマーの名前", true),
+                    OptionData(OptionType.INTEGER, "分", "時間を分単位で", true)
+                ),
+                SubcommandData("dice", "ダイスを一覧に追加・上書きをする").addOptions(
+                    OptionData(OptionType.STRING, "名前", "ダイスの名前", true),
+                    OptionData(OptionType.STRING, "ダイス", "ダイスの内容", true)
+                )
+            )
+        }
+
+        override fun run(event: SlashCommandInteractionEvent) {
+            //ギルドを取得
+            val guild = event.guild!!
+
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData()
+
+            //同期の確認
+            if (guildData.listSync) {
+                event.hook.sendMessage("*このサーバーでは一覧を同期しています。", true).queue()
+                return
+            }
+
+            //オプションを取得
+            val name = event.getOption("名前")!!.asString
+
+            //文字数制限
+            if (name.length >= 10) {
+                event.hook.sendMessage("*名前の文字数は10文字以下にしてください", true).queue()
+                return
+            }
+
+            //:を挟まれないようにする
+            if (name.contains(":")) {
+                event.hook.sendMessage("*名前に使用できない文字が含まれています", true).queue()
+                return
+            }
+
+            //ギルドのデータから一覧を取得
+            val list = guildData.list
+
+            //上限を確認
+            if (list.size >= 10) {
+                event.hook.sendMessage("*10個以上登録できません", true).queue()
+                return
+            }
+
+            //サブコマンドを確認
+            when (event.subcommandName) {
+                "timer" -> {
+                    //ギルドのデータでタイマーを追加
+                    guildData.list["timer:${name}"] = event.getOption("分")!!.asInt.toString()
+                }
+                "dice" -> {
+                    //ギルドのデータでダイスを追加
+                    guildData.list["dice:${name}"] = event.getOption("ダイス")!!.asString
+                }
+            }
+
+            //保存
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+
+            //メッセージを送信
+            event.hook.sendMessage("一覧に追加しました").queue()
+
+            //タイマー一覧を送信する
+            ListMenu.sendList(event)
+        }
+    }
+
+    /**
+     * 一覧から要素を削除する
+     *
+     */
+    object ListRemove : SlashCommand("list_remove", "一覧から要素を削除をします") {
+        init {
+
+
+            addOptions(
+                OptionData(OptionType.STRING, "名前", "要素の名前", true, true)
+            )
+        }
+
+        override fun run(event: SlashCommandInteractionEvent) {
+            //ギルドを取得
+            val guild = event.guild!!
+
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData()
+
+            //オプションを取得
+            val name = event.getOption("名前")!!.asString
+
+            //同期の確認
+            if (guildData.listSync) {
+                event.hook.sendMessage("*このサーバーでは一覧を同期しています。", true).queue()
+                return
+            }
+
+            //ギルドのデータから一覧を取得し、有効な要素かを確認する
+            if (!guildData.list.contains("dice:${name}") && !guildData.list.contains("timer:${name}")) {
+                //エラーのメッセージを送信
+                event.hook.sendMessage("*無効な要素です", true).queue()
+                return
+            }
+
+            //ギルドのデータを削除して保存する
+            guildData.list.remove("dice:${name}")
+            guildData.list.remove("timer:${name}")
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+
+            //メッセージを送信
+            event.hook.sendMessage("要素を削除しました").queue()
+
+            //一覧を送信する
+            ListMenu.sendList(event)
+        }
+
+        override fun autoComplete(event: CommandAutoCompleteInteractionEvent) {
+            //オプション名を確認
+            if (event.focusedOption.name != "名前") return
+
+            //ギルドのデータを取得
+            val guildData = event.guild?.getGuildData() ?: return
+
+            //文字列のコレクションを返す
+            event.replyChoiceStrings(guildData.list.keys.map { it.split(":")[1] }.filter {
+                //リストの要素を確認
+                it.startsWith(event.focusedOption.value)
+            }).queue()
+        }
+    }
+
+    /**
+     * 一覧の送信の対象チャンネルを変更する
+     *
+     */
+    object ListTargetChannel : SlashCommand("list_target", "タイマーやダイスを送信するチャンネルを設定する") {
+        init {
+
+
+            addOption(OptionType.CHANNEL, "テキストチャンネル", "対象のチャンネル", true)
+        }
+
+        override fun run(event: SlashCommandInteractionEvent) {
+            //オプションを取得
+            val option = event.getOption("テキストチャンネル")
+
+            //nullチェック
+            if (option == null) {
+                //エラーメッセージを送信
+                replyCommandError(event)
+                return
+            }
+
+            //チャンネルを取得
+            val channel = option.asMessageChannel
+
+            //nullチェック
+            if (channel == null) {
+                //エラーメッセージを送信
+                replyCommandError(event)
+                return
+            }
+
+            //管理者権限か、必要な権限を確認
+            if (!event.guildChannel.checkSimpleTimerPermission()) {
+                //権限が不足しているメッセージを送信する
+                event.hook.sendMessageEmbeds(SimpleTimer.instance.errorEmbed, true).queue()
+                return
+            }
+
+            //ギルドのデータに設定をし、保存
+            val guild = event.guild!!
+            guild.getGuildData().listTargetChannel = channel
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+
+            //メッセージを送信
+            event.hook.sendMessage("一覧からタイマーやダイスを実行するチャンネルを**${channel.name}**に変更しました").queue()
+        }
+    }
+
+    /**
+     * 一覧を他のサーバーと同期する
+     *
+     */
+    object SyncList : SlashCommand("list_sync", "一覧を他のサーバーと同期します") {
+        init {
+
+
+            addSubcommands(
+                SubcommandData("enable", "同期を行うようにする")
+                    .addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true),
+                SubcommandData("disable", "同期を行わないようにする")
+            )
+        }
+
+        override fun run(event: SlashCommandInteractionEvent) {
+            //サブコマンドを取得
+            val subCommand = event.subcommandName
+
+            //nullチェック
+            if (subCommand == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //bool値に変換
+            val bool = when (subCommand) {
+                "enable" -> {
+                    true
+                }
+                "disable" -> {
+                    false
+                }
+                else -> {
+                    return
+                }
+            }
+
+
+            val guild = event.guild!!
+
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData()
+
+            //メンションの方式
+            guildData.listSync = bool
+
+            if (bool) {
+                //オプションを取得
+                val option = event.getOption("id")
+
+                //nullチェック
+                if (option == null) {
+                    replyCommandError(event)
+                    return
+                }
+
+                //Stringに変換
+                val id = option.asString
+
+                //36進数にからLongにする
+                val long = java.lang.Long.parseLong(id, 36)
+
+                //ギルドのIDが違うかを確認
+                if (guild.idLong != long) {
+                    //ターゲットのギルドを取得
+                    val targetGuild = SimpleTimer.instance.getGuild(long)
+
+                    //nullチェック
+                    if (targetGuild == null) {
+                        //メッセージを送信
+                        event.hook.sendMessage("*無効なIDです", true).queue()
+                        return
+                    } else {
+                        //メッセージを送信
+                        event.hook.sendMessage("同期を開始しました", true).queue()
+                        //ターゲットのギルドを設定
+                        guildData.syncTarget = targetGuild
+                    }
+                } else {
+                    event.hook.sendMessage("*対象のサーバーが同じサーバーです", true).queue()
+                    return
+                }
+
+            } else {
+                event.hook.sendMessage("同期を終了しました").queue()
+            }
+
+            //ギルドのデータを保存
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        }
+    }
+
+
+    /**
+     * 一覧を他のサーバーと同期する
+     *
+     */
+    object CopyList : SlashCommand("list_copy", "他のサーバーの一覧をコピーします") {
+        init {
+
+
+            addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true)
+        }
+
+        override fun run(event: SlashCommandInteractionEvent) {
+            val guild = event.guild!!
+
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData()
+
+            //オプションを取得
+            val option = event.getOption("id")
+
+            //nullチェック
+            if (option == null) {
+                replyCommandError(event)
+                return
+            }
+
+            //Stringに変換
+            val id = option.asString
+
+            //36進数にからLongにする
+            val long = java.lang.Long.parseLong(id, 36)
+
+            //ギルドのIDが違うかを確認
+            if (guild.idLong == long) {
+                event.hook.sendMessage("*対象のサーバーが同じサーバーです", true).queue()
+                return
+            }
+
+            //ターゲットのギルドを取得
+            val targetGuild = SimpleTimer.instance.getGuild(long)
+
+            //nullチェック
+            if (targetGuild == null) {
+                //メッセージを送信
+                event.hook.sendMessage("*無効なIDです", true).queue()
+                return
+            }
+
+            //内容をコピーする
+            guildData.list = LinkedHashMap<String, String>().apply {
+                this.putAll(targetGuild.getGuildData().list)
+            }
+            //ギルドのデータを保存
+            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+
+            //メッセージを送信
+            event.hook.sendMessage("コピーを行いました").queue()
+        }
+    }
+
+    /**
+     * ギルドのIDを取得
+     *
+     */
+    object GetID : SlashCommand("list_id", "同期に必要なIDを取得します") {
+        override fun run(event: SlashCommandInteractionEvent) {
+            //36進数にする
+            val id = event.guild!!.idLong.toString(36)
+            //メッセージを送信
+            event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期でき、\n`/list_copy id: ${id}`を行うことで、このサーバーの一覧をコピーできます")
+                .queue()
+        }
+    }
+}
