@@ -20,9 +20,9 @@ object HelpSlashCommand : SlashCommand("help", "Botの概要などを表示") {
         embed.setThumbnail("https://i.ibb.co/YZ8PfJR/youf.png")
         //フィールド追加
         embed.addField("", "**解説**", false)
-        embed.addField("", "SimpleTimerとは\nhttps://www.fanbox.cc/manage/posts/3088356", true)
-        embed.addField("", "タイマーコマンド一覧\nhttps://www.fanbox.cc/manage/posts/3128595", true)
-        embed.addField("", "一覧機能解説\nhttps://www.fanbox.cc/manage/posts/3088371", true)
+        embed.addField("", "SimpleTimerとは\nhttps://simpletimer.fanbox.cc/posts/3088356", true)
+        embed.addField("", "タイマーコマンド一覧\nhttps://simpletimer.fanbox.cc/posts/3128595", true)
+        embed.addField("", "一覧機能解説\nhttps://simpletimer.fanbox.cc/posts/3088371", true)
         embed.addField("", "**開発情報**", false)
         embed.addField("", "ソースコード\nhttps://source.simpletimer.dev/", true)
         embed.addField("", "開発者へ支援\nhttps://simpletimer.fanbox.cc/posts/3128883", true)
