@@ -57,15 +57,9 @@ object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを�
                 //ダイスの内容を取得
                 val dice = option.asString
 
-                //:を挟まれないようにする
-                if (dice.contains(":")) {
-                    event.hook.sendMessage("*名前に使用できない文字が含まれています", true).queue()
-                    return
-                }
-
                 //文字数制限
                 if (dice.length >= 30) {
-                    event.hook.sendMessage("*名前の文字数は30文字以下にしてください", true).queue()
+                    event.hook.sendMessage("*ダイスの内容は30文字以下にしてください", true).queue()
                     return
                 }
 
