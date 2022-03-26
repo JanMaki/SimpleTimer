@@ -98,6 +98,15 @@ class SimpleTimer {
     //起動しているShardのSet
     val shards = mutableSetOf<JDA>()
 
+
+    //権限エラーの埋め込み
+    val errorEmbed = EmbedBuilder().apply {
+        setTitle("SimpleTimer")
+        setDescription(version)
+        addField("必要な権限が付与されていません", "Botの動作に必要な権限が付与されていません", false)
+        addField("詳しくはこちらを参照してください", "https://simpletimer.fanbox.cc/posts/3128708", false)
+    }.build()
+
     init {
         init()
     }
@@ -227,12 +236,4 @@ class SimpleTimer {
         //返す
         return guild
     }
-
-    //権限エラーの埋め込み
-    val errorEmbed = EmbedBuilder().apply {
-        setTitle("SimpleTimer")
-        setDescription(version)
-        addField("必要な権限が付与されていません", "Botの動作に必要な権限が付与されていません", false)
-        addField("詳しくはこちらを参照してください", "https://bit.ly/3cvAlds", false)
-    }.build()
 }
