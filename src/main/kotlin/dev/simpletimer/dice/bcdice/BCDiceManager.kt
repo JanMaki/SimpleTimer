@@ -123,7 +123,7 @@ class BCDiceManager {
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                 return
             }
-            Log.sendLog(e.stackTraceToString())
+            Log.sendLog(e.stackTraceToString(), true)
         }
     }
 
@@ -221,7 +221,7 @@ class BCDiceManager {
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                 return
             }
-            Log.sendLog(e.stackTraceToString())
+            Log.sendLog(e.stackTraceToString(), true)
         }
     }
 

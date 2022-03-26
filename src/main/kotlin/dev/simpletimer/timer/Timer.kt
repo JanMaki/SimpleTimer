@@ -281,7 +281,7 @@ class Timer(
                 delay(5000)
                 display?.clearReactions()?.queue()
             } catch (e: InterruptedException) {
-                Log.sendLog(e.stackTraceToString())
+                Log.sendLog(e.stackTraceToString(), true)
             }
         }
     }
@@ -375,7 +375,7 @@ class Timer(
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                 return
             }
-            Log.sendLog(e.stackTraceToString())
+            Log.sendLog(e.stackTraceToString(), true)
         }
     }
 
@@ -415,7 +415,7 @@ class Timer(
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                 return
             }
-            Log.sendLog(e.stackTraceToString())
+            Log.sendLog(e.stackTraceToString(), true)
         } finally {
             //メッセージのメンションを書き換える
             val guildData = guild.getGuildData()
@@ -493,7 +493,7 @@ class Timer(
                     this.notice = notice
                 }
             } catch (e: Exception) {
-                Log.sendLog(e.stackTraceToString())
+                Log.sendLog(e.stackTraceToString(), true)
             }
         }
     }
@@ -530,7 +530,7 @@ class Timer(
                 if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
                     return
                 }
-                Log.sendLog(e.stackTraceToString())
+                Log.sendLog(e.stackTraceToString(), true)
             }
 
         }
