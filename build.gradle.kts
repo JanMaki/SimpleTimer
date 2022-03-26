@@ -34,9 +34,6 @@ dependencies {
     //YAML
     implementation("com.charleskorn.kaml","kaml","0.42.0")
 
-    //旧YAML コンバートに使用
-    implementation("me.carleslc.Simple-YAML", "Simple-Yaml", "1.7.2")
-
     //BCDice
     implementation("dev.simpletimer","bcdice-kt","1.0.0")
 }

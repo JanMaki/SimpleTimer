@@ -5,7 +5,6 @@ import com.charleskorn.kaml.Yaml
 import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.guild.GuildData
-import dev.simpletimer.data.old_data_converter.OldDataConverter
 import dev.simpletimer.extension.equalsIgnoreCase
 import net.dv8tion.jda.api.entities.Guild
 import java.io.File
@@ -124,40 +123,5 @@ class DataContainer {
         val guildsFileOutputStream = File(guildDirectory, "${guild.idLong}.yml").outputStream()
         Yaml.default.encodeToStream(GuildData.serializer(), guildData, guildsFileOutputStream)
         guildsFileOutputStream.close()
-    }
-
-    /**
-     * 旧データを新データ形式する
-     *
-     */
-    fun convertOldData() {
-        val convert = OldDataConverter.convert(parentDirectory)
-
-        convert.forEach { (id, oldGuildData) ->
-            println("${id}のコンバートを開始")
-
-            //デフォルトのデータと同じときはスキップ
-            if (!Yaml.default.encodeToString(GuildData.serializer(), oldGuildData)
-                    .equalsIgnoreCase(defaultGuildDataYAML)
-            ) {
-                println("${id}をスキップ Default")
-                return@forEach
-            }
-
-            //現行のデータがすでにある時はスキップ
-            guildDatum[id]?.let {
-                if (!Yaml.default.encodeToString(GuildData.serializer(), it).equalsIgnoreCase(defaultGuildDataYAML)) {
-                    println("${id}をスキップ Exists")
-                    return@forEach
-                }
-            }
-
-            //ファイルを書き込み
-            val guildsFileOutputStream = File(guildDirectory, "${id}.yml").outputStream()
-            Yaml.default.encodeToStream(GuildData.serializer(), oldGuildData, guildsFileOutputStream)
-            guildsFileOutputStream.close()
-        }
-
-        println("Done.")
     }
 }
