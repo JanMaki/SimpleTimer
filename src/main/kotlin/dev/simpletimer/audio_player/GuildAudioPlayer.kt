@@ -91,9 +91,6 @@ class GuildAudioPlayer(val guild: Guild) {
      * @param audioData 再生する[AudioInformationData]
      */
     fun play(audioData: AudioInformationData) {
-        //接続しているかを確認
-        if (!isConnected()) return
-
         //コールーチンに持ってく
         CoroutineScope(Dispatchers.Default).launch {
             //音源を読み込み
