@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.audio.AudioInformationData
+import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.extension.getAudioPlayer
 import dev.simpletimer.extension.getGuildData
 import net.dv8tion.jda.api.EmbedBuilder
@@ -106,8 +107,18 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
                 return
             }
 
+            //チャンネルを取得
+            val channel = channels.first()
+
+            //権限を確認
+            if(!channel.checkSimpleTimerPermission()){
+                //権限が不足しているメッセージを送信する
+                event.hook.sendMessageEmbeds(SimpleTimer.instance.errorEmbed).queue()
+                return
+            }
+
             //接続
-            guild.getAudioPlayer().connect(channels.first())
+            guild.getAudioPlayer().connect(channel)
 
             //メッセージを送信
             event.hook.sendMessage("チャンネルに参加しました").queue()
