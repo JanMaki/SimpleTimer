@@ -60,7 +60,7 @@ import java.util.*
 // v1.5.4 メンションの方式を改修
 // v1.5.5 一覧の同期を実装
 // v2.0.0 https://source.simpletimer.dev/pull/1
-
+// v2.0.1 権限関係のバグを修正・変更
 
 /**
  * メインクラス
@@ -83,7 +83,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v2.0.0"
+    private val version = "v2.0.1"
 
     //多重起動防止
     private val lockPort = 918
