@@ -4,10 +4,7 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.AddTimerModal
 import dev.simpletimer.component.modal.StartTimerModal
 import dev.simpletimer.data.enum.NoticeTiming
-import dev.simpletimer.extension.equalsIgnoreCase
-import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.sendEmpty
-import dev.simpletimer.extension.sendMessage
+import dev.simpletimer.extension.*
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -752,6 +749,12 @@ class TimerSlashCommand {
             val channel = option.asGuildChannel
             if (channel !is VoiceChannel) {
                 event.hook.sendMessage("ボイスチャットではないチャンネルです", true).queue()
+                return
+            }
+
+            //権限を確認
+            if (!channel.checkSimpleTimerPermission()) {
+                event.hook.sendMessageEmbeds(SimpleTimer.instance.errorEmbed, true).queue()
                 return
             }
 
