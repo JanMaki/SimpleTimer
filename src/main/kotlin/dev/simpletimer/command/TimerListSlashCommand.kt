@@ -237,7 +237,7 @@ class TimerListSlashCommand {
             //管理者権限か、必要な権限を確認
             if (!event.guildChannel.checkSimpleTimerPermission()) {
                 //権限が不足しているメッセージを送信する
-                event.hook.sendMessageEmbeds(SimpleTimer.instance.errorEmbed, true).queue()
+                event.hook.sendMessageEmbeds(SimpleTimer.instance.getErrorEmbed(event.guildChannel), true).queue()
                 return
             }
 

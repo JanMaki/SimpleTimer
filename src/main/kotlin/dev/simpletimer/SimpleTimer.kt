@@ -10,7 +10,9 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
+import net.dv8tion.jda.api.entities.Channel
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.requests.RestAction
 import java.io.IOException
 import java.net.ServerSocket
@@ -97,15 +99,6 @@ class SimpleTimer {
 
     //起動しているShardのSet
     val shards = mutableSetOf<JDA>()
-
-
-    //権限エラーの埋め込み
-    val errorEmbed = EmbedBuilder().apply {
-        setTitle("SimpleTimer")
-        setDescription(version)
-        addField("必要な権限が付与されていません", "Botの動作に必要な権限が付与されていません", false)
-        addField("詳しくはこちらを参照してください", "https://simpletimer.fanbox.cc/posts/3128708", false)
-    }.build()
 
     init {
         init()
@@ -235,5 +228,21 @@ class SimpleTimer {
         }
         //返す
         return guild
+    }
+
+    /**
+     * 権限エラーの埋め込みを作成する
+     *
+     * @param channel [Channel] 該当のチャンネル
+     * @return [MessageEmbed]
+     */
+    fun getErrorEmbed(channel: Channel): MessageEmbed {
+        return EmbedBuilder().apply {
+            setTitle("SimpleTimer")
+            setDescription(version)
+            addField("必要な権限が付与されていません", "Botの動作に必要な権限が付与されていません", false)
+            addField("該当のチャンネル", "<#${channel.idLong}>", false)
+            addField("詳しくはこちらを参照してください", "https://simpletimer.fanbox.cc/posts/3128708", false)
+        }.build()
     }
 }

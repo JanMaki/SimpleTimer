@@ -32,7 +32,7 @@ class SlashCommandInteraction : ListenerAdapter() {
         //管理者権限か、必要な権限を確認
         if (!event.guildChannel.checkSimpleTimerPermission()) {
             //権限が不足しているメッセージを送信する
-            event.replyEmbeds(SimpleTimer.instance.errorEmbed).queue()
+            event.replyEmbeds(SimpleTimer.instance.getErrorEmbed(event.guildChannel)).queue()
             return
         }
 

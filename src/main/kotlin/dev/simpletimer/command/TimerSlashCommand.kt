@@ -754,7 +754,7 @@ class TimerSlashCommand {
 
             //権限を確認
             if (!channel.checkSimpleTimerPermission()) {
-                event.hook.sendMessageEmbeds(SimpleTimer.instance.errorEmbed, true).queue()
+                event.hook.sendMessageEmbeds(SimpleTimer.instance.getErrorEmbed(channel), true).queue()
                 return
             }
 
