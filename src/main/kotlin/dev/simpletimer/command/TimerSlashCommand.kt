@@ -44,7 +44,7 @@ class TimerSlashCommand {
             event.deferReply().queue()
 
             //チャンネルを取得
-            val channel = event.channel
+            val channel = event.guildChannel
 
             //チャンネルのタイマーを取得する
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }

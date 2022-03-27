@@ -4,6 +4,7 @@ import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.extension.sendMessageEmbeds
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
+import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.Modal
 
@@ -27,7 +28,7 @@ object QueueModal : TimerModal<Timer.Number>("queue") {
         val timerNumber = Timer.Number.getNumber(event.modalId.split(":")[1].toInt()) ?: Timer.Number.FIRST
 
         //キューを取得
-        val queue = TimerQueue.getTimerQueue(event.guild!!, event.messageChannel, timerNumber)
+        val queue = TimerQueue.getTimerQueue(event.guild!!, event.guildChannel as GuildMessageChannel, timerNumber)
 
         //キューに追加
         queue.addTimerQueue(seconds)

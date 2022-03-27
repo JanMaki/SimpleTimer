@@ -5,6 +5,7 @@ import dev.simpletimer.component.button.AddTimerButton
 import dev.simpletimer.component.button.DeleteMessageButton
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
+import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.extension.getAudioPlayer
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.timer.Timer.Number
@@ -30,7 +31,7 @@ import kotlin.math.abs
  * @property seconds [Int] 秒数
  */
 class Timer(
-    val channel: MessageChannel,
+    val channel: GuildMessageChannel,
     val number: Number,
     private var seconds: Int,
     private val guild: Guild
@@ -121,6 +122,12 @@ class Timer(
     private var oldTime: TimerService.Time? = null
 
     override fun onUpdate() {
+        //権限を確認
+        if (!channel.checkSimpleTimerPermission()) {
+            update = true
+            return
+        }
+
         //時間を取得
         val time = timerService.getTime()
 
@@ -404,6 +411,8 @@ class Timer(
      * @param string [String] メッセージ
      */
     private fun sendMessage(string: String, timing: NoticeTiming, deletable: Boolean = false) {
+        if (!channel.checkSimpleTimerPermission()) return
+
         try {
             //過去のメッセージを確認・削除
             if (notice != null) {
@@ -505,6 +514,8 @@ class Timer(
      * @param timing [NoticeTiming] このメッセージのタイミング
      */
     private fun sendTTS(sting: String, timing: NoticeTiming) {
+        if (!channel.checkSimpleTimerPermission()) return
+
         //何もないときは読み上げない
         if (sting.replace(" ", "").replace("　", "") == "") return
 

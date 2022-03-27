@@ -65,7 +65,7 @@ abstract class QueueCommand {
             val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
             event.hook.sendMessageEmbeds(
-                TimerQueue.getTimerQueue(event.guild!!, event.messageChannel, number).getQueueEmbed(),
+                TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).getQueueEmbed(),
                 true
             ).queue()
         }
@@ -111,7 +111,7 @@ abstract class QueueCommand {
             val index = indexOption.asInt - 1
 
             //キューを取得
-            val queue = TimerQueue.getTimerQueue(event.guild!!, event.messageChannel, number)
+            val queue = TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number)
 
             //キューがあるかを確認する
             if (queue.getQueue().size < index + 1) {
@@ -161,7 +161,7 @@ abstract class QueueCommand {
             }
 
             //キューを取得してクリアする
-            TimerQueue.getTimerQueue(event.guild!!, event.messageChannel, number).clearQueue()
+            TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).clearQueue()
 
             //メッセージを送信
             event.hook.sendMessage("${number}番目のタイマーのキューをすべて削除しました").queue()

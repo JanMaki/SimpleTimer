@@ -2,6 +2,7 @@ package dev.simpletimer.timer
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import java.util.*
@@ -11,7 +12,8 @@ import java.util.*
  *
  * @constructor Create empty Queue service
  */
-class TimerQueue(val guild: Guild, val channel: MessageChannel, val number: Timer.Number) : TimerService.TimerListener {
+class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number: Timer.Number) :
+    TimerService.TimerListener {
     companion object {
         private val timerQueues = mutableMapOf<Long, MutableMap<Timer.Number, TimerQueue>>()
 
@@ -23,7 +25,7 @@ class TimerQueue(val guild: Guild, val channel: MessageChannel, val number: Time
          * @param number [Timer.Number]
          * @return [TimerQueue]を返す
          */
-        fun getTimerQueue(guild: Guild, channel: MessageChannel, number: Timer.Number): TimerQueue {
+        fun getTimerQueue(guild: Guild, channel: GuildMessageChannel, number: Timer.Number): TimerQueue {
             return timerQueues.getOrPut(channel.idLong) { mutableMapOf() }
                 .getOrPut(number) { TimerQueue(guild, channel, number) }
         }

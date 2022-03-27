@@ -3,6 +3,7 @@ package dev.simpletimer.component.modal
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.extension.sendMessage
 import dev.simpletimer.timer.Timer
+import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.Modal
 import java.util.*
@@ -25,7 +26,7 @@ object StartTimerModal : TimerModal<Byte>("start_timer") {
         }
 
         //チャンネルを取得
-        val channel = event.messageChannel
+        val channel = event.guildChannel as GuildMessageChannel
 
         //チャンネルのタイマーを取得する
         val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
