@@ -23,9 +23,9 @@ object Log {
         }
 
         //コンソールにも出す
-        if (isError){
+        if (isError) {
             logger.error(log)
-        }else {
+        } else {
             logger.info(log)
         }
     }

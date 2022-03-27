@@ -173,7 +173,7 @@ class TimerListSlashCommand {
             //ギルドを取得
             val guild = event.guild ?: return
             //ギルドのデータを取得
-            val guildData = guild.getGuildData() ?: return
+            val guildData = guild.getGuildData()
 
             //同期の確認
             if (guildData.listSync) {

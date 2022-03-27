@@ -8,15 +8,15 @@ import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
 
 /**
  * YesのNoを問う確認のModal
- * 
+ *
  */
-object YesOrNoModal: ModalManager.Modal<YesOrNoModal.Data>("yes_or_no") {
+object YesOrNoModal : ModalManager.Modal<YesOrNoModal.Data>("yes_or_no") {
     //ユーザーが開いているModalのデータを保管
     private val userDatum = mutableMapOf<Long, Data>()
 
     override fun run(event: ModalInteractionEvent) {
         //データを取得
-        val data  = userDatum[event.user.idLong]
+        val data = userDatum[event.user.idLong]
         //nullチェック
         if (data == null) {
             event.hook.sendMessage("*内容の確認に失敗しました").queue()
@@ -24,7 +24,7 @@ object YesOrNoModal: ModalManager.Modal<YesOrNoModal.Data>("yes_or_no") {
         }
 
         //Inputの内容を確認
-        when ((event.getValue("input")?.asString ?: "").uppercase().trim()){
+        when ((event.getValue("input")?.asString ?: "").uppercase().trim()) {
             "YES", "Y" -> {
                 //Yesのときの処理
                 data.yesAction.run(event)

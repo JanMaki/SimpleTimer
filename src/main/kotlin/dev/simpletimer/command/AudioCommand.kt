@@ -111,7 +111,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommand(na
             val channel = channels.first()
 
             //権限を確認
-            if(!channel.checkSimpleTimerPermission()){
+            if (!channel.checkSimpleTimerPermission()) {
                 //権限が不足しているメッセージを送信する
                 event.hook.sendMessageEmbeds(SimpleTimer.instance.errorEmbed).queue()
                 return
