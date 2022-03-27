@@ -83,7 +83,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    private val version = "v2.0.1"
+    val version = "v2.0.1"
 
     //多重起動防止
     private val lockPort = 918
