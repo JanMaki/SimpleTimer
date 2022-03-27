@@ -1,10 +1,8 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
-import dev.simpletimer.extension.checkSimpleTimerPermission
-import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.sendMessage
-import dev.simpletimer.extension.sendMessageEmbeds
+import dev.simpletimer.component.modal.YesOrNoModal
+import dev.simpletimer.extension.*
 import dev.simpletimer.list.ListMenu
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -163,6 +161,44 @@ class TimerListSlashCommand {
                 //リストの要素を確認
                 it.startsWith(event.focusedOption.value)
             }).queue()
+        }
+    }
+
+    /**
+     * 一覧の全削除
+     *
+     */
+    object ListClear : SlashCommand("list_clear", "一覧の要素をすべて削除します", beforeReply = false) {
+        override fun run(event: SlashCommandInteractionEvent) {
+            //ギルドを取得
+            val guild = event.guild ?: return
+            //ギルドのデータを取得
+            val guildData = guild.getGuildData() ?: return
+
+            //同期の確認
+            if (guildData.listSync) {
+                event.hook.sendMessage("*このサーバーでは一覧を同期しています。", true).queue()
+                return
+            }
+
+            //確認のModalでYesを選択したときの処理
+            val yesAction = YesOrNoModal.Action {
+                //一覧を削除
+                guildData.list.clear()
+                //保存
+                SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+                //メッセージを送信
+                it.hook.sendMessage("すべての要素を削除しました").queue()
+            }
+            //確認のModalでNoを選択したときの処理
+            val noAction = YesOrNoModal.Action {
+                //空白を送信
+                it.hook.sendEmpty()
+            }
+
+            //Modalを作成して返す
+            event.replyModal(YesOrNoModal.createModal(YesOrNoModal.Data(event.user.idLong, yesAction, noAction)))
+                .queue()
         }
     }
 
