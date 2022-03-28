@@ -21,33 +21,35 @@ fun GuildChannel.checkSimpleTimerPermission(): Boolean {
 
     //その他のパーミッションを確認
     val otherPermission = permissions.contains(Permission.VIEW_CHANNEL) &&
-            when (this) {
-                is MessageChannel -> {
-                    permissions.contains(Permission.MESSAGE_SEND) &&
-                            permissions.contains(Permission.MESSAGE_SEND_IN_THREADS) &&
-                            permissions.contains(Permission.MESSAGE_EMBED_LINKS) &&
-                            permissions.contains(Permission.MESSAGE_ATTACH_FILES) &&
-                            permissions.contains(Permission.MESSAGE_ADD_REACTION) &&
-                            permissions.contains(Permission.MESSAGE_EXT_EMOJI) &&
-                            permissions.contains(Permission.MESSAGE_MENTION_EVERYONE) &&
-                            permissions.contains(Permission.MESSAGE_MANAGE) &&
-                            permissions.contains(Permission.MESSAGE_HISTORY) &&
-                            permissions.contains(Permission.MESSAGE_TTS)
-
-                }
-                is VoiceChannel -> {
-                    permissions.contains(Permission.VOICE_CONNECT) &&
-                            permissions.contains(Permission.VOICE_SPEAK)
-                }
-                is StageChannel -> {
-                    permissions.contains(Permission.VOICE_CONNECT) &&
-                            permissions.contains(Permission.VOICE_MUTE_OTHERS)
-                }
-                else -> {
-                    true
-                }
+            //メッセージチャンネル
+            if (this is MessageChannel){
+                permissions.contains(Permission.MESSAGE_SEND) &&
+                        permissions.contains(Permission.MESSAGE_SEND_IN_THREADS) &&
+                        permissions.contains(Permission.MESSAGE_EMBED_LINKS) &&
+                        permissions.contains(Permission.MESSAGE_ATTACH_FILES) &&
+                        permissions.contains(Permission.MESSAGE_ADD_REACTION) &&
+                        permissions.contains(Permission.MESSAGE_EXT_EMOJI) &&
+                        permissions.contains(Permission.MESSAGE_MENTION_EVERYONE) &&
+                        permissions.contains(Permission.MESSAGE_MANAGE) &&
+                        permissions.contains(Permission.MESSAGE_HISTORY) &&
+                        permissions.contains(Permission.MESSAGE_TTS)
+            }else {
+                true
+            } &&
+            //ボイスチャンネル
+            if (this is VoiceChannel){
+                permissions.contains(Permission.VOICE_CONNECT) &&
+                        permissions.contains(Permission.VOICE_SPEAK)
+            }else {
+                true
+            } &&
+            //ステージチャンネル
+            if (this is StageChannel) {
+                permissions.contains(Permission.VOICE_CONNECT) &&
+                        permissions.contains(Permission.VOICE_MUTE_OTHERS)
+            }else {
+                true
             }
-
     //管理者かその他のパーミッションを持っていたらtrueを返す
     return checkAdministrator || otherPermission
 
