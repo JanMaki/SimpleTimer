@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
  * オーディオ系のコマンドの親
  *
  */
-abstract class AudioCommand(name: String, description: String) : SlashCommand(name, description) {
+abstract class AudioCommand(name: String, description: String) : SlashCommandManager.SlashCommand(name, description) {
 
     override fun run(event: SlashCommandInteractionEvent) {
         //ギルドを取得

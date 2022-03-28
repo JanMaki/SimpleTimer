@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 /**
  * デバッグのメニューを開く
  */
-object DebugCommand : SlashCommand("debug", "開発用機能", false) {
+object DebugCommand : SlashCommandManager.SlashCommand("debug", "開発用機能", false) {
     override fun run(event: SlashCommandInteractionEvent) {
         //デバッグのモーダルを作成して返す
         event.replyModal(DebugModal.createModal(0)).queue()

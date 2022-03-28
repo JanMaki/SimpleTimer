@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
  * ヘルプコマンド
  *
  */
-object HelpSlashCommand : SlashCommand("help", "Botの概要などを表示") {
+object HelpSlashCommand : SlashCommandManager.SlashCommand("help", "Botの概要などを表示") {
     //送信する埋め込み
     private val embed = EmbedBuilder().apply {
         //タイトル設定

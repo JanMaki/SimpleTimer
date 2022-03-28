@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 /**
  * ボタンを送信する
  */
-object ButtonSlashCommand : SlashCommand("button", "タイマーやボタンを開始するボタンを送信します", false) {
+object ButtonSlashCommand : SlashCommandManager.SlashCommand("button", "タイマーやボタンを開始するボタンを送信します", false) {
     init {
         addSubcommands(
             SubcommandData("timer", "タイマー"),

@@ -22,7 +22,7 @@ class DiceSlashCommand {
     /**
      * ダイスを実行する
      */
-    object Roll : SlashCommand("roll", "ダイスを振ります") {
+    object Roll : SlashCommandManager.SlashCommand("roll", "ダイスを振ります") {
         init {
             addOptions(OptionData(OptionType.STRING, "ダイス", "ダイスの内容 例:1d100").setRequired(true))
         }
@@ -54,7 +54,7 @@ class DiceSlashCommand {
     /**
      * ダイスモードを変更する
      */
-    object DiceMode : SlashCommand("dice_mode", "使うダイスをDefaultかBCDiceかを切り替える") {
+    object DiceMode : SlashCommandManager.SlashCommand("dice_mode", "使うダイスをDefaultかBCDiceかを切り替える") {
         override fun run(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild!!
@@ -84,7 +84,7 @@ class DiceSlashCommand {
     /**
      * ダイスの情報を表示する
      */
-    object DiceInfo : SlashCommand("dice_info", "ダイスの使い方を表示する") {
+    object DiceInfo : SlashCommandManager.SlashCommand("dice_info", "ダイスの使い方を表示する") {
         override fun run(event: SlashCommandInteractionEvent) {
             //チャンネルを取得
             val channel = event.channel
@@ -112,7 +112,7 @@ class DiceSlashCommand {
     /**
      * ダイスボットを変更する画面を出す
      */
-    object DiceBot : SlashCommand("dice_bot", "BCDiceで使用するボットを変更します") {
+    object DiceBot : SlashCommandManager.SlashCommand("dice_bot", "BCDiceで使用するボットを変更します") {
         override fun run(event: SlashCommandInteractionEvent) {
             //メッセージを出力
             event.hook.sendMessage("メニューよりボットを選択してください").queue()
@@ -127,7 +127,7 @@ class DiceSlashCommand {
     /**
      * 1d100
      */
-    object BasicDice : SlashCommand("1d100", "100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
+    object BasicDice : SlashCommandManager.SlashCommand("1d100", "100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
         override fun run(event: SlashCommandInteractionEvent) {
             Dice().roll(event, "1d100")
         }
@@ -136,7 +136,7 @@ class DiceSlashCommand {
     /**
      * シークレットダイス1d100
      */
-    object BasicSecretDice : SlashCommand("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
+    object BasicSecretDice : SlashCommandManager.SlashCommand("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
         override fun run(event: SlashCommandInteractionEvent) {
             Dice().roll(event, "s1d100")
         }

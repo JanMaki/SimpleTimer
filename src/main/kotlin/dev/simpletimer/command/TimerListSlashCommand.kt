@@ -14,7 +14,7 @@ class TimerListSlashCommand {
     /**
      * 一覧を表示する
      */
-    object List : SlashCommand("list", "一覧を表示します") {
+    object List : SlashCommandManager.SlashCommand("list", "一覧を表示します") {
         override fun run(event: SlashCommandInteractionEvent) {
             //一覧を送信する
             ListMenu.sendList(event)
@@ -25,7 +25,7 @@ class TimerListSlashCommand {
      * 一覧に要素を追加・上書きをする
      *
      */
-    object ListAdd : SlashCommand("list_add", "一覧に要素を追加・上書きをします") {
+    object ListAdd : SlashCommandManager.SlashCommand("list_add", "一覧に要素を追加・上書きをします") {
         init {
             addSubcommands(
                 SubcommandData("timer", "タイマーを一覧に追加・上書きをする").addOptions(
@@ -103,7 +103,7 @@ class TimerListSlashCommand {
      * 一覧から要素を削除する
      *
      */
-    object ListRemove : SlashCommand("list_remove", "一覧から要素を削除をします") {
+    object ListRemove : SlashCommandManager.SlashCommand("list_remove", "一覧から要素を削除をします") {
         init {
             addOptions(
                 OptionData(OptionType.STRING, "名前", "要素の名前", true, true)
@@ -164,7 +164,7 @@ class TimerListSlashCommand {
      * 一覧の全削除
      *
      */
-    object ListClear : SlashCommand("list_clear", "一覧の要素をすべて削除します", beforeReply = false) {
+    object ListClear : SlashCommandManager.SlashCommand("list_clear", "一覧の要素をすべて削除します", beforeReply = false) {
         override fun run(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild ?: return
@@ -202,7 +202,7 @@ class TimerListSlashCommand {
      * 一覧の送信の対象チャンネルを変更する
      *
      */
-    object ListTargetChannel : SlashCommand("list_target", "タイマーやダイスを送信するチャンネルを設定する") {
+    object ListTargetChannel : SlashCommandManager.SlashCommand("list_target", "タイマーやダイスを送信するチャンネルを設定する") {
         init {
             addOption(OptionType.CHANNEL, "テキストチャンネル", "対象のチャンネル", true)
         }
@@ -249,7 +249,7 @@ class TimerListSlashCommand {
      * 一覧を他のサーバーと同期する
      *
      */
-    object SyncList : SlashCommand("list_sync", "一覧を他のサーバーと同期します") {
+    object SyncList : SlashCommandManager.SlashCommand("list_sync", "一覧を他のサーバーと同期します") {
         init {
             addSubcommands(
                 SubcommandData("enable", "同期を行うようにする")
@@ -341,7 +341,7 @@ class TimerListSlashCommand {
      * 一覧を他のサーバーと同期する
      *
      */
-    object CopyList : SlashCommand("list_copy", "他のサーバーの一覧をコピーします") {
+    object CopyList : SlashCommandManager.SlashCommand("list_copy", "他のサーバーの一覧をコピーします") {
         init {
             addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true)
         }
@@ -399,7 +399,7 @@ class TimerListSlashCommand {
      * ギルドのIDを取得
      *
      */
-    object GetID : SlashCommand("list_id", "同期に必要なIDを取得します") {
+    object GetID : SlashCommandManager.SlashCommand("list_id", "同期に必要なIDを取得します") {
         override fun run(event: SlashCommandInteractionEvent) {
             //36進数にする
             val id = event.guild!!.idLong.toString(36)
