@@ -1,15 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0"
-    kotlin("plugin.serialization") version "1.4.20"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.serialization") version "1.6.10"
 
-    id("com.github.johnrengelman.shadow") version "5.2.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
-
-group = "dev.simpletimer"
-version = "2.0.0"
-val name = "SimpleTimer"
 
 repositories {
     mavenCentral()
@@ -18,8 +14,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 
     //Discord連携 JDA
@@ -32,7 +26,7 @@ dependencies {
     implementation("com.github.aikaterna","lavaplayer-natives","original-SNAPSHOT")
 
     //YAML
-    implementation("com.charleskorn.kaml","kaml","0.42.0")
+    implementation("com.charleskorn.kaml","kaml","0.43.0")
 
     //BCDice
     implementation("dev.simpletimer","bcdice-kt","1.0.0")
