@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 
-abstract class QueueCommand {
+abstract class QueueCommands {
     /**
      * キューを追加する
      *

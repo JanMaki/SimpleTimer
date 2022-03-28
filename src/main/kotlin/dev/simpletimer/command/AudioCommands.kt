@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
  * オーディオ系のコマンドの親
  *
  */
-abstract class AudioCommand(name: String, description: String) : SlashCommandManager.SlashCommand(name, description) {
+abstract class AudioCommands(name: String, description: String) : SlashCommandManager.SlashCommand(name, description) {
 
     override fun run(event: SlashCommandInteractionEvent) {
         //ギルドを取得
@@ -87,7 +87,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommandMan
      * ボイスチャンネルに接続をする
      *
      */
-    object Connect : AudioCommand("audio_connect", "ボイスチャンネルに接続する") {
+    object Connect : AudioCommands("audio_connect", "ボイスチャンネルに接続する") {
         override fun runAudio(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild ?: return
@@ -128,7 +128,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommandMan
     /**
      * ボイスチャンネルから切断する
      */
-    object DisConnect : AudioCommand("audio_disconnect", "ボイスチャンネルから抜ける") {
+    object DisConnect : AudioCommands("audio_disconnect", "ボイスチャンネルから抜ける") {
         override fun runAudio(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild ?: return
@@ -145,7 +145,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommandMan
      * 設定されているオーディオを再生する
      *
      */
-    object Listen : AudioCommand("audio_listen", "設定されているオーディオを試聴する") {
+    object Listen : AudioCommands("audio_listen", "設定されているオーディオを試聴する") {
         override fun runAudio(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild!!
@@ -173,7 +173,7 @@ abstract class AudioCommand(name: String, description: String) : SlashCommandMan
      * 再生するオーディオを変更する
      *
      */
-    object Change : AudioCommand("audio_change", "オーディオを変更する") {
+    object Change : AudioCommands("audio_change", "オーディオを変更する") {
         //データのコンテナ
         private val dataContainer = SimpleTimer.instance.dataContainer
 

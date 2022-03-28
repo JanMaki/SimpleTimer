@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData
 /**
  * ダイス関連のコマンド
  */
-class DiceSlashCommand {
+class DiceCommands {
 
     /**
      * ダイスを実行する

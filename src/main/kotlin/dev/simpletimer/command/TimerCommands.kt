@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 import java.util.*
 
-class TimerSlashCommand {
+class TimerCommands {
 
     /**
      * タイマーを開始する
