@@ -21,8 +21,6 @@ class TimerSlashCommand {
      */
     object StartTimer : SlashCommand("timer", "タイマーを開始する", beforeReply = false) {
         init {
-
-
             addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で"))
         }
 
@@ -70,8 +68,6 @@ class TimerSlashCommand {
      */
     object Finish : SlashCommand("finish", "タイマーを終了する") {
         init {
-
-
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "終了するタイマー").setRequired(true).addChoices(
                     Command.Choice("1番目のタイマー", 1),
@@ -160,8 +156,6 @@ class TimerSlashCommand {
      */
     object Add : SlashCommand("add", "タイマーを延長する", false) {
         init {
-
-
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "延長するタイマー").setRequired(true).addChoices(
                     Command.Choice("1番目のタイマー", 1),
@@ -199,8 +193,6 @@ class TimerSlashCommand {
      */
     object Stop : SlashCommand("stop", "タイマーを一時停止する") {
         init {
-
-
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "一時停止するタイマー").setRequired(true).addChoices(
                     Command.Choice("1番目のタイマー", 1),
@@ -259,8 +251,6 @@ class TimerSlashCommand {
      */
     object Restart : SlashCommand("restart", "タイマーの一時停止を再開する") {
         init {
-
-
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "再開するタイマー").setRequired(true).addChoices(
                     Command.Choice("1番目のタイマー", 1),
@@ -321,8 +311,6 @@ class TimerSlashCommand {
      */
     object Check : SlashCommand("check", "タイマーを確認する") {
         init {
-
-
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "確認するタイマー").setRequired(true).addChoices(
                     Command.Choice("1番目のタイマー", 1),
@@ -381,7 +369,6 @@ class TimerSlashCommand {
      */
     object TTSTiming : SlashCommand("tts_timing", "ttsによるメッセージの読み上げを設定する 初期状態ではLV0") {
         init {
-
             addSubcommands(
                 SubcommandData("lv0", "通知を行わない"),
                 SubcommandData("lv1", "タイマー終了時のみ通知"),
@@ -423,7 +410,6 @@ class TimerSlashCommand {
      */
     object FinishTTS : SlashCommand("tts_finishmessage", "終了時のメッセージ読み上げの内容を変更する") {
         init {
-
             addOptions(
                 OptionData(
                     OptionType.STRING,
@@ -459,7 +445,6 @@ class TimerSlashCommand {
      */
     object MentionTiming : SlashCommand("mention_timing", "メンションを行うタイミングの設定をする 初期状態ではLV2") {
         init {
-
             addSubcommands(
                 SubcommandData("lv0", "通知を行わない"),
                 SubcommandData("lv1", "タイマー終了時のみ通知"),
@@ -502,7 +487,6 @@ class TimerSlashCommand {
      */
     object Mention : SlashCommand("mention", "メンションの方式を変更する") {
         init {
-
             addSubcommands(
                 SubcommandData("here", "@hereを用いたメンション"),
                 SubcommandData("vc", "ボイスチャットに接続されているメンバー"),
@@ -633,7 +617,6 @@ class TimerSlashCommand {
      */
     object AddRoleMentionTarget : SlashCommand("mention_addrole", "メンションを行う対象のロールを追加する") {
         init {
-
             addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
         }
 
@@ -667,7 +650,6 @@ class TimerSlashCommand {
      */
     object RemoveRoleMentionTarget : SlashCommand("mention_removerole", "メンションを行う対象のロールを追加する") {
         init {
-
             addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
         }
 
@@ -731,7 +713,6 @@ class TimerSlashCommand {
      */
     object AddVCMentionTarget : SlashCommand("mention_addvc", "メンションを行う対象のボイスチャットを追加する") {
         init {
-
             addOptions(OptionData(OptionType.CHANNEL, "channel", "追加するボイスチャット").setRequired(true))
         }
 
@@ -774,7 +755,6 @@ class TimerSlashCommand {
      */
     object RemoveVCMentionTarget : SlashCommand("mention_removevc", "メンションを行う対象のボイスチャットを削除する") {
         init {
-
             addOptions(OptionData(OptionType.CHANNEL, "channel", "削除するボイスチャット").setRequired(true))
         }
 

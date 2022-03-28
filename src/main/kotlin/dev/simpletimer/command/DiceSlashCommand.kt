@@ -24,7 +24,6 @@ class DiceSlashCommand {
      */
     object Roll : SlashCommand("roll", "ダイスを振ります") {
         init {
-
             addOptions(OptionData(OptionType.STRING, "ダイス", "ダイスの内容 例:1d100").setRequired(true))
         }
 

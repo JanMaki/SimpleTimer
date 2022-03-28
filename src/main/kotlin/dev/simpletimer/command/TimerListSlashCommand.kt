@@ -27,8 +27,6 @@ class TimerListSlashCommand {
      */
     object ListAdd : SlashCommand("list_add", "一覧に要素を追加・上書きをします") {
         init {
-
-
             addSubcommands(
                 SubcommandData("timer", "タイマーを一覧に追加・上書きをする").addOptions(
                     OptionData(OptionType.STRING, "名前", "タイマーの名前", true),
@@ -107,8 +105,6 @@ class TimerListSlashCommand {
      */
     object ListRemove : SlashCommand("list_remove", "一覧から要素を削除をします") {
         init {
-
-
             addOptions(
                 OptionData(OptionType.STRING, "名前", "要素の名前", true, true)
             )
@@ -208,8 +204,6 @@ class TimerListSlashCommand {
      */
     object ListTargetChannel : SlashCommand("list_target", "タイマーやダイスを送信するチャンネルを設定する") {
         init {
-
-
             addOption(OptionType.CHANNEL, "テキストチャンネル", "対象のチャンネル", true)
         }
 
@@ -257,8 +251,6 @@ class TimerListSlashCommand {
      */
     object SyncList : SlashCommand("list_sync", "一覧を他のサーバーと同期します") {
         init {
-
-
             addSubcommands(
                 SubcommandData("enable", "同期を行うようにする")
                     .addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true),
@@ -351,8 +343,6 @@ class TimerListSlashCommand {
      */
     object CopyList : SlashCommand("list_copy", "他のサーバーの一覧をコピーします") {
         init {
-
-
             addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true)
         }
 

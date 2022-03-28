@@ -19,8 +19,6 @@ abstract class QueueCommand {
      */
     object Queue : SlashCommand("queue", "タイマーをキューに追加をする", false) {
         init {
-
-
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "キューを追加するタイマー").addChoices(
                     Command.Choice("1番目のタイマー", 1),
@@ -48,8 +46,6 @@ abstract class QueueCommand {
      */
     object Show : SlashCommand("queue_show", "キューを確認する") {
         init {
-
-
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "確認をするタイマー").addChoices(
                     Command.Choice("1番目のタイマー", 1),
@@ -79,8 +75,6 @@ abstract class QueueCommand {
      */
     object Remove : SlashCommand("queue_remove", "キューからタイマーを削除する") {
         init {
-
-
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "キューを削除するタイマー").addChoices(
                     Command.Choice("1番目のタイマー", 1),
@@ -134,8 +128,6 @@ abstract class QueueCommand {
      */
     object Clear : SlashCommand("queue_clear", "キュー全て削除する", beforeReply = false) {
         init {
-
-
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "キューを削除するタイマー").addChoices(
                     Command.Choice("1番目のタイマー", 1),
