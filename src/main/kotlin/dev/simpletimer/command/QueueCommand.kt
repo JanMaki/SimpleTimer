@@ -1,6 +1,8 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.component.modal.QueueModal
+import dev.simpletimer.component.modal.YesOrNoModal
+import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.extension.sendMessage
 import dev.simpletimer.extension.sendMessageEmbeds
 import dev.simpletimer.timer.Timer
@@ -130,7 +132,7 @@ abstract class QueueCommand {
      * キューをクリアする
      *
      */
-    object Clear : SlashCommand("queue_clear", "キュー全て削除する") {
+    object Clear : SlashCommand("queue_clear", "キュー全て削除する", beforeReply = false) {
         init {
 
 
@@ -160,11 +162,22 @@ abstract class QueueCommand {
                 return
             }
 
-            //キューを取得してクリアする
-            TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).clearQueue()
+            //確認のModalでYesを選択したときの処理
+            val yesAction = YesOrNoModal.Action {
+                //キューを取得してクリアする
+                TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).clearQueue()
 
-            //メッセージを送信
-            event.hook.sendMessage("${number}番目のタイマーのキューをすべて削除しました").queue()
+                //メッセージを送信
+                it.hook.sendMessage("${number.number}番目のタイマーのキューをすべて削除しました").queue()
+            }
+            //確認のModalでNoを選択したときの処理
+            val noAction = YesOrNoModal.Action {
+                it.hook.sendEmpty()
+            }
+
+            //Modalを作成して返す
+            event.replyModal(YesOrNoModal.createModal(YesOrNoModal.Data(event.user.idLong, yesAction, noAction)))
+                .queue()
         }
     }
 }
