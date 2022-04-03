@@ -228,4 +228,25 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
             ).queue()
         }
     }
+
+    /**
+     * オーディオの一覧を表示する
+     *
+     */
+    object AudioList: AudioCommands("audio_list", "オーディオの一覧を表示します") {
+        override fun runAudio(event: SlashCommandInteractionEvent) {
+            //埋め込みを作成して送信
+            event.hook.sendMessageEmbeds(EmbedBuilder().apply {
+                //タイトルを設定
+                setTitle("オーディオ一覧")
+                //説明文を設定
+                setDescription("使用できるオーディオの一覧です\nコマンド使用時、1行目の太字の文字が名前になります")
+                //オーディオの一覧を確認
+                SimpleTimer.instance.dataContainer.audioDatum.forEach {
+                    //フィールドを追加
+                    this.addField("__**${it.id}**__", "${it.name}\n${it.downloadURL}\n${it.other}", false)
+                }
+            }.build()).queue()
+        }
+    }
 }

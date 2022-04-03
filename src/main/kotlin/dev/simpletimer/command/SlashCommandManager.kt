@@ -16,6 +16,7 @@ object SlashCommandManager {
         AudioCommands.DisConnect,
         AudioCommands.Listen,
         AudioCommands.Change,
+        AudioCommands.AudioList,
         ButtonCommand,
         DebugCommand,
         HelpCommand,
