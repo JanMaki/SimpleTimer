@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import java.awt.Color
 import java.util.*
@@ -379,7 +380,7 @@ class Timer(
                 }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
-            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
+            if ((e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) || e is InsufficientPermissionException) {
                 return
             }
             Log.sendLog(e.stackTraceToString(), true)
