@@ -83,11 +83,11 @@ open class DefaultDice(private val command: String, secret: Boolean = false) {
         var target = -1
         if (command.contains("<=")) {
             val targetString = command.substring(command.indexOf("<=") + 2)
-            target = targetString.toInt()
+            target = targetString.toIntOrNull() ?: 1
             commandValue = command.substring(0, command.indexOf("<="))
         } else if (command.contains("<")) {
             val targetString = command.substring(command.indexOf("<") + 1)
-            target = targetString.toInt() - 1
+            target = targetString.toIntOrNull() ?: 1
             commandValue = command.substring(0, command.indexOf("<"))
         }
 
@@ -164,15 +164,15 @@ open class DefaultDice(private val command: String, secret: Boolean = false) {
 
         //もしdがなかった場合はそのまま返す
         if (splittedValue.size == 1) {
-            resultList.add(splittedValue[0].toInt())
-            list.add(splittedValue[0].toInt())
+            resultList.add(splittedValue[0].toIntOrNull() ?: 0)
+            list.add(splittedValue[0].toIntOrNull() ?: 0)
             return resultList
         }
 
         //ダイスを順番に振る
-        for (count in 1..splittedValue[0].toInt()) {
+        for (count in 1..(splittedValue[0].toIntOrNull() ?: 1)) {
             //乱数作成
-            val result = random.nextInt(splittedValue[1].toInt()) + 1
+            val result = random.nextInt(splittedValue[1].toIntOrNull() ?: 1) + 1
             //個別の結果に追加
             resultList.add(result)
         }
