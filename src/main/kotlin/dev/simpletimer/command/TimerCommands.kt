@@ -7,6 +7,7 @@ import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.extension.*
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.AudioChannel
+import net.dv8tion.jda.api.entities.ChannelType
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -712,7 +713,12 @@ class TimerCommands {
      */
     object AddVCMentionTarget : SlashCommandManager.SlashCommand("mention_addvc", "メンションを行う対象のボイスチャットを追加する") {
         init {
-            addOptions(OptionData(OptionType.CHANNEL, "channel", "追加するボイスチャット").setRequired(true))
+            addOptions(
+                OptionData(OptionType.CHANNEL, "channel", "追加するボイスチャット").setChannelTypes(
+                    ChannelType.VOICE,
+                    ChannelType.STAGE
+                ).setRequired(true)
+            )
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
@@ -754,7 +760,12 @@ class TimerCommands {
      */
     object RemoveVCMentionTarget : SlashCommandManager.SlashCommand("mention_removevc", "メンションを行う対象のボイスチャットを削除する") {
         init {
-            addOptions(OptionData(OptionType.CHANNEL, "channel", "削除するボイスチャット").setRequired(true))
+            addOptions(
+                OptionData(OptionType.CHANNEL, "channel", "削除するボイスチャット").setChannelTypes(
+                    ChannelType.VOICE,
+                    ChannelType.STAGE
+                ).setRequired(true)
+            )
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
