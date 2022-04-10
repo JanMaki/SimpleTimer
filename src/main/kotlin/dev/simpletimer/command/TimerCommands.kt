@@ -19,7 +19,7 @@ class TimerCommands {
     /**
      * タイマーを開始する
      */
-    object StartTimer : SlashCommandManager.SlashCommand("timer", "タイマーを開始する", beforeReply = false) {
+    object StartTimer : SlashCommandManager.SlashCommand("timer", "タイマーを開始する", deferReply = false) {
         init {
             addOptions(OptionData(OptionType.INTEGER, "分", "時間を分単位で"))
         }

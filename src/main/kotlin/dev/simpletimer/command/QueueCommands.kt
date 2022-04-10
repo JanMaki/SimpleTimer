@@ -126,7 +126,7 @@ abstract class QueueCommands {
      * キューをクリアする
      *
      */
-    object Clear : SlashCommandManager.SlashCommand("queue_clear", "キュー全て削除する", beforeReply = false) {
+    object Clear : SlashCommandManager.SlashCommand("queue_clear", "キュー全て削除する", deferReply = false) {
         init {
             addOptions(
                 OptionData(OptionType.INTEGER, "タイマー", "キューを削除するタイマー").addChoices(

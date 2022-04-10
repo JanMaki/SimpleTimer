@@ -65,7 +65,7 @@ object SlashCommandManager {
      * @param name コマンド名
      * @param description コマンドの説明
      */
-    abstract class SlashCommand(name: String, description: String, val beforeReply: Boolean = true) :
+    abstract class SlashCommand(name: String, description: String, val deferReply: Boolean = true) :
         CommandDataImpl(name, description) {
 
         init {

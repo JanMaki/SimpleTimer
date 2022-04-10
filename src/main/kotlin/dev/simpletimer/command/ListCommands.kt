@@ -164,7 +164,7 @@ class ListCommands {
      * 一覧の全削除
      *
      */
-    object ListClear : SlashCommandManager.SlashCommand("list_clear", "一覧の要素をすべて削除します", beforeReply = false) {
+    object ListClear : SlashCommandManager.SlashCommand("list_clear", "一覧の要素をすべて削除します", deferReply = false) {
         override fun run(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild ?: return

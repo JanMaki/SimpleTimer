@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
  *
  */
 object ResetCommand :
-    SlashCommandManager.SlashCommand("reset", "サーバーで設定されているSimpleTimerの設定をリセットします", beforeReply = false) {
+    SlashCommandManager.SlashCommand("reset", "サーバーで設定されているSimpleTimerの設定をリセットします", deferReply = false) {
     override fun run(event: SlashCommandInteractionEvent) {
         val guild = event.guild ?: return
 

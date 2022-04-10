@@ -43,7 +43,7 @@ class SlashCommandInteraction : ListenerAdapter() {
                 //名前を確認
                 if (slashCommand.name.equalsIgnoreCase(name)) {
                     //考え中をするかを確認
-                    if (slashCommand.beforeReply) {
+                    if (slashCommand.deferReply) {
                         //考え中を出す
                         event.deferReply().queue()
                     }
