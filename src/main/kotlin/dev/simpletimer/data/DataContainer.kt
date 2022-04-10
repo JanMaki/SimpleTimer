@@ -114,13 +114,21 @@ class DataContainer {
         //ギルドのデータを取得
         val guildData = getGuildData(guild)
 
+        //保存をするファイル
+        val file = File(guildDirectory, "${guild.idLong}.yml")
+
         //デフォルトのGuildDataのYAMLと比較
-        if (Yaml.default.encodeToString(GuildData.serializer(), guildData)
-                .equalsIgnoreCase(defaultGuildDataYAML)
-        ) return
+        if (Yaml.default.encodeToString(GuildData.serializer(), guildData).equalsIgnoreCase(defaultGuildDataYAML)) {
+            //ファイルが存在しているかを確認
+            if (file.exists()){
+                //ファルを削除
+                file.delete()
+            }
+            return
+        }
 
         //ファイルを書き込み
-        val guildsFileOutputStream = File(guildDirectory, "${guild.idLong}.yml").outputStream()
+        val guildsFileOutputStream = file.outputStream()
         Yaml.default.encodeToStream(GuildData.serializer(), guildData, guildsFileOutputStream)
         guildsFileOutputStream.close()
     }
