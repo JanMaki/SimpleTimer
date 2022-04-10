@@ -9,30 +9,30 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import net.dv8tion.jda.api.entities.VoiceChannel
+import net.dv8tion.jda.api.entities.AudioChannel
 
 /**
- * [VoiceChannel]のSerializer
+ * [AudioChannel]のSerializer
  *
  */
 @Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
 @OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = VoiceChannel::class)
-object VoiceChannelSerializer : KSerializer<VoiceChannel?> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("VoiceChannel", PrimitiveKind.LONG)
+@Serializer(forClass = AudioChannel::class)
+object AudioChannelSerializer : KSerializer<AudioChannel?> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("AudioChannel", PrimitiveKind.LONG)
 
-    override fun serialize(encoder: Encoder, value: VoiceChannel?) {
+    override fun serialize(encoder: Encoder, value: AudioChannel?) {
         //idを取得
         val idLong = value?.idLong ?: return
         //エンコード
         encoder.encodeLong(idLong)
     }
 
-    override fun deserialize(decoder: Decoder): VoiceChannel? {
+    override fun deserialize(decoder: Decoder): AudioChannel? {
         //すべてのShardを確認
         SimpleTimer.instance.shards.forEach { jda ->
-            //long値からVoiceChannelを取得
-            return jda.getVoiceChannelById(decoder.decodeLong()) ?: return@forEach
+            //long値からAudioChannelを取得
+            return jda.getVoiceChannelById(decoder.decodeLong()) ?: jda.getStageChannelById(decoder.decodeLong()) ?: return@forEach
         }
         return null
     }

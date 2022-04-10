@@ -6,8 +6,9 @@ import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
 import dev.simpletimer.data.serializer.GuildSerializer
 import dev.simpletimer.data.serializer.RoleSerializer
-import dev.simpletimer.data.serializer.VoiceChannelSerializer
+import dev.simpletimer.data.serializer.AudioChannelSerializer
 import kotlinx.serialization.Serializable
+import net.dv8tion.jda.api.entities.AudioChannel
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.Role
@@ -36,7 +37,7 @@ data class GuildData(
     var finishTTS: String = "x番目のタイマーが終了しました",
     var mention: Mention = Mention.VC,
     var mentionTiming: NoticeTiming = NoticeTiming.LV2,
-    var vcMentionTargets: MutableList<@Serializable(with = VoiceChannelSerializer::class) VoiceChannel?> = mutableListOf(),
+    var vcMentionTargets: MutableList<@Serializable(with = AudioChannelSerializer::class) AudioChannel?> = mutableListOf(),
     var roleMentionTargets: MutableList<@Serializable(with = RoleSerializer::class) Role?> = mutableListOf(),
     var diceMode: DiceMode = DiceMode.Default,
     var diceBot: String = "DiceBot",

@@ -6,7 +6,7 @@ import dev.simpletimer.component.modal.StartTimerModal
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.extension.*
 import dev.simpletimer.timer.Timer
-import net.dv8tion.jda.api.entities.VoiceChannel
+import net.dv8tion.jda.api.entities.AudioChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -727,7 +727,7 @@ class TimerCommands {
 
             //ロール名を取得
             val channel = option.asGuildChannel
-            if (channel !is VoiceChannel) {
+            if (channel !is AudioChannel) {
                 event.hook.sendMessage("ボイスチャットではないチャンネルです", true).queue()
                 return
             }
@@ -769,7 +769,7 @@ class TimerCommands {
 
             //ロール名を取得
             val channel = option.asGuildChannel
-            if (channel !is VoiceChannel) {
+            if (channel !is AudioChannel) {
                 event.hook.sendMessage("*ボイスチャットではないチャンネルです", true).queue()
                 return
             }
