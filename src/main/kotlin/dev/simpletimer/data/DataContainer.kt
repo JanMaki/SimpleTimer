@@ -102,6 +102,18 @@ class DataContainer {
         return guildDatum.getOrPut(guild.idLong) { GuildData() }
     }
 
+    /**
+     * ギルドのデータを削除する
+     *
+     * @param guild 対象の[Guild]
+     */
+    fun resetGuildData(guild: Guild){
+        //リセットを行う
+        guildDatum[guild.idLong] = GuildData()
+        //保存
+        saveGuildsData(guild)
+    }
+
 
     //デフォルトのGuildDataのYAMLの文字列
     private val defaultGuildDataYAML = Yaml.default.encodeToString(GuildData.serializer(), GuildData())

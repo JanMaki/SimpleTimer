@@ -24,6 +24,7 @@ object SlashCommandManager {
         QueueCommands.Show,
         QueueCommands.Remove,
         QueueCommands.Clear,
+        ResetCommand,
         TimerCommands.StartTimer,
         TimerCommands.Finish,
         TimerCommands.FinAll,
