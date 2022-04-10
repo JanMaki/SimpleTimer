@@ -645,12 +645,12 @@ class TimerCommands {
     }
 
     /**
-     * メンションを行う対象のロールを追加する
+     * メンションを行う対象のロールを削除する
      *
      */
-    object RemoveRoleMentionTarget : SlashCommandManager.SlashCommand("mention_removerole", "メンションを行う対象のロールを追加する") {
+    object RemoveRoleMentionTarget : SlashCommandManager.SlashCommand("mention_removerole", "メンションを行う対象のロールを削除する") {
         init {
-            addOptions(OptionData(OptionType.ROLE, "role", "追加するロール").setRequired(true))
+            addOptions(OptionData(OptionType.ROLE, "role", "削除するロール").setRequired(true))
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
@@ -666,10 +666,9 @@ class TimerCommands {
             //ロール名を取得
             val role = option.asRole
 
-            //ギルドのデータへ追加
+            //ギルドのデータから削除
             val guild = event.guild!!
-            val guildData = guild.getGuildData()
-            guildData.roleMentionTargets.remove(role)
+            guild.getGuildData().roleMentionTargets.removeIf { it?.id == role.id }
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
@@ -777,7 +776,7 @@ class TimerCommands {
 
             //ギルドのデータから削除
             val guild = event.guild!!
-            guild.getGuildData().vcMentionTargets.remove(channel)
+            guild.getGuildData().vcMentionTargets.removeIf { it?.id == channel.id }
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
