@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.Guild
  * [Guild]のSerializer
  *
  */
-@Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
+@Suppress("OPT_IN_IS_NOT_ENABLED")
 @OptIn(ExperimentalSerializationApi::class)
 @Serializer(forClass = Guild::class)
 object GuildSerializer : KSerializer<Guild?> {

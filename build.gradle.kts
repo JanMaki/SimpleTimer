@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.6.21"
     kotlin("plugin.serialization") version "1.6.10"
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
@@ -14,22 +14,22 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.1")
 
     //Discord連携 JDA
-    //implementation("net.dv8tion", "JDA", "5.0.0-alpha.9")
-    implementation(files("libs/JDA-5.0.0-alpha.9_DEV-withDependencies.jar"))
+    implementation("net.dv8tion", "JDA", "5.0.0-alpha.11")
+    //implementation(files("libs/JDA-5.0.0-alpha.9_DEV-withDependencies.jar"))
     //JDAに必要なもの
-    implementation("ch.qos.logback","logback-classic","1.2.8")
+    implementation("ch.qos.logback", "logback-classic", "1.2.8")
     //音再生
-    implementation("com.sedmelluq", "lavaplayer", "1.3.77")
-    implementation("com.github.aikaterna","lavaplayer-natives","original-SNAPSHOT")
+    implementation("com.sedmelluq", "lavaplayer", "1.3.78")
+    implementation("com.github.aikaterna", "lavaplayer-natives", "original-SNAPSHOT")
 
     //YAML
-    implementation("com.charleskorn.kaml","kaml","0.43.0")
+    implementation("com.charleskorn.kaml", "kaml", "0.43.0")
 
     //BCDice
-    implementation("dev.simpletimer","bcdice-kt","1.0.0")
+    implementation("dev.simpletimer", "bcdice-kt", "1.0.0")
 }
 
 tasks.withType<KotlinCompile> {
@@ -41,11 +41,9 @@ val jar by tasks.getting(Jar::class) {
         attributes["Main-Class"] = "dev.simpletimer.SimpleTimer"
     }
 
-    from(
-        configurations.runtimeClasspath.get().map {
-            if (it.isDirectory) it else zipTree(it)
-        }
-    )
+    from(configurations.runtimeClasspath.get().map {
+        if (it.isDirectory) it else zipTree(it)
+    })
 
     exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }

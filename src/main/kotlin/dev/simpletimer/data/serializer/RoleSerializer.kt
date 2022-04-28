@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.Role
  * [Role]のSerializer
  *
  */
-@Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
+@Suppress("OPT_IN_IS_NOT_ENABLED")
 @OptIn(ExperimentalSerializationApi::class)
 @Serializer(forClass = Role::class)
 object RoleSerializer : KSerializer<Role?> {

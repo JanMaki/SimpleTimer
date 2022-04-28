@@ -11,11 +11,8 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import net.dv8tion.jda.api.entities.AudioChannel
 
-/**
- * [AudioChannel]のSerializer
- *
- */
-@Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
+
+@Suppress("OPT_IN_IS_NOT_ENABLED")
 @OptIn(ExperimentalSerializationApi::class)
 @Serializer(forClass = AudioChannel::class)
 object AudioChannelSerializer : KSerializer<AudioChannel?> {
