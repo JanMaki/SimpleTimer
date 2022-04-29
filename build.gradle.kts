@@ -28,8 +28,14 @@ dependencies {
     //YAML
     implementation("com.charleskorn.kaml", "kaml", "0.43.0")
 
+    //Json
+    implementation("org.jetbrains.kotlinx","kotlinx-serialization-json", "1.3.2")
+
     //BCDice
     implementation("dev.simpletimer", "bcdice-kt", "1.0.0")
+
+    //RESTApi
+    implementation("com.github.kittinunf.fuel", "fuel", "2.3.1")
 }
 
 tasks.withType<KotlinCompile> {
