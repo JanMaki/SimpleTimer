@@ -18,6 +18,7 @@ object SlashCommandManager {
         AudioCommands.Change,
         AudioCommands.AudioList,
         ButtonCommand,
+        ChromeCommand,
         DebugCommand,
         HelpCommand,
         QueueCommands.Queue,
