@@ -45,24 +45,14 @@ class GenericMessageReaction : ListenerAdapter() {
 
         //タイマーの確認
         if (timer != null) {
-
             //リアクションの確認・処理
             when (event.reactionEmote.name) {
-                "◀" -> timer.restart()
-                "\uD83D\uDED1" -> timer.finish()
-                "❌" -> timer.end()
-                else -> {
-                    when (event.reactionEmote.name) {
-                        "⏸" -> timer.stop()
-                        "1️⃣" -> timer.add(1 * 60)
-                        "3️⃣" -> timer.add(3 * 60)
-                        "5️⃣" -> timer.add(5 * 60)
-                        "\uD83D\uDD1F" -> timer.add(10 * 60)
-                        else -> return
-                    }
-                }
+                "1️⃣" -> timer.add(1 * 60)
+                "3️⃣" -> timer.add(3 * 60)
+                "5️⃣" -> timer.add(5 * 60)
+                "\uD83D\uDD1F" -> timer.add(10 * 60)
+                else -> return
             }
-
         }
 
         //ダイスの確認

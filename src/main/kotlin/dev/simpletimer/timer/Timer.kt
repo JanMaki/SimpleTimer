@@ -3,6 +3,8 @@ package dev.simpletimer.timer
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.button.AddTimerButton
 import dev.simpletimer.component.button.DeleteMessageButton
+import dev.simpletimer.component.button.FinishButton
+import dev.simpletimer.component.button.StopButton
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.extension.checkSimpleTimerPermission
@@ -364,7 +366,13 @@ class Timer(
             }
             //送信
             channel.sendMessageEmbeds(generateDisplayEmbed(time))
-                .setActionRow(AddTimerButton.createButton(number))
+                .setActionRows(
+                    ActionRow.of(
+                        StopButton.createButton(number),
+                        FinishButton.createButton(number),
+                        AddTimerButton.createButton(number)
+                    )
+                )
                 .queue { display ->
                     this.display = display
                     //登録
@@ -372,9 +380,6 @@ class Timer(
                     timers[id] = this
                     displays[id] = this
                     //リアクションの追加
-                    display.addReaction("U+25C0").queue()
-                    display.addReaction("U+23F8").queue()
-                    display.addReaction("U+1F6D1").queue()
                     display.addReaction("1️⃣").queue()
                     display.addReaction("3️⃣").queue()
                     display.addReaction("5️⃣").queue()

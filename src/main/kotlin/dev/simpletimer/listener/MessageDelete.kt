@@ -32,14 +32,7 @@ class MessageDelete : ListenerAdapter() {
         //ディスプレイ用メッセージか確認
         if (!Timer.isDisplay(idLong)) return
 
-        //タイマーを停止
-        timer.stop()
-
-        //通知用のメッセージの場合はむ無視
-        val message = timer.notice ?: return
-
-        //操作用リアクションを追加
-        message.addReaction("\uD83D\uDED1").queue()
-        message.addReaction("❌").queue()
+        //タイマーを終了
+        timer.end()
     }
 }

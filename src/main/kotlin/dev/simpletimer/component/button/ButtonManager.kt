@@ -16,6 +16,9 @@ class ButtonManager {
                 CommunityLinkButton,
                 DiceButton,
                 DeleteMessageButton,
+                FinishButton,
+                RestartButton,
+                StopButton,
                 TimerButton
             )
         )
