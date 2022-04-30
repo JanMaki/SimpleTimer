@@ -51,6 +51,9 @@ class GuildAudioPlayer(val guild: Guild) {
                 return true
             }
         }
+
+        //スピーカーをミュート
+        isSelfDeafened = true
     }
 
     /**
