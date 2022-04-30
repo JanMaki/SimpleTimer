@@ -92,26 +92,17 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
             //ギルドを取得
             val guild = event.guild ?: return
 
-            //メンバーを取得
-            val member = event.member
-            //接続しているボイスチャンネルとステージチャンネルを取得
-            val channels = guild.voiceChannels.filter {
-                it.members.contains(member)
-            } + guild.stageChannels.filter {
-                it.members.contains(member)
-            }
+            //チャンネルを取得
+            val channel = event.member?.voiceState?.channel
             //nullチェック
-            if (channels.isEmpty()) {
+            if (channel == null){
                 //エラーメッセージを送信
                 event.hook.sendMessage("*ボイスチャンネルに接続してください").queue()
                 return
             }
 
-            //チャンネルを取得
-            val channel = channels.first()
-
             //権限を確認
-            if (!channel.checkSimpleTimerPermission()) {
+            if (!channel.checkSimpleTimerPermission() || !guild.selfMember.hasAccess(channel)) {
                 //権限が不足しているメッセージを送信する
                 event.hook.sendMessageEmbeds(SimpleTimer.instance.getErrorEmbed(channel)).queue()
                 return
