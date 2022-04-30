@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.GuildChannel
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.StageChannel
 import net.dv8tion.jda.api.entities.VoiceChannel
+import net.dv8tion.jda.internal.utils.PermissionUtil
 
 /**
  * SimpleTimerのパーミッションを確認する
@@ -12,45 +13,46 @@ import net.dv8tion.jda.api.entities.VoiceChannel
  * @return 持っていたらtrueを返す
  */
 fun GuildChannel.checkSimpleTimerPermission(): Boolean {
+    //メンバーを取得
+    val member = this.guild.selfMember
 
-    //パーミッションを取得
-    val permissions = this.guild.selfMember.getPermissions(this)
-
-    //管理者の権限を確認
-    val checkAdministrator = permissions.contains(Permission.ADMINISTRATOR)
-
-    //その他のパーミッションを確認
-    val otherPermission = permissions.contains(Permission.VIEW_CHANNEL) &&
+    //パーミッションを確認して返す
+    return PermissionUtil.checkPermission(permissionContainer, member, Permission.VIEW_CHANNEL) &&
             //メッセージチャンネル
-            if (this is MessageChannel){
-                permissions.contains(Permission.MESSAGE_SEND) &&
-                        permissions.contains(Permission.MESSAGE_SEND_IN_THREADS) &&
-                        permissions.contains(Permission.MESSAGE_EMBED_LINKS) &&
-                        permissions.contains(Permission.MESSAGE_ATTACH_FILES) &&
-                        permissions.contains(Permission.MESSAGE_ADD_REACTION) &&
-                        permissions.contains(Permission.MESSAGE_EXT_EMOJI) &&
-                        permissions.contains(Permission.MESSAGE_MENTION_EVERYONE) &&
-                        permissions.contains(Permission.MESSAGE_MANAGE) &&
-                        permissions.contains(Permission.MESSAGE_HISTORY) &&
-                        permissions.contains(Permission.MESSAGE_TTS)
-            }else {
+            if (this is MessageChannel) {
+                PermissionUtil.checkPermission(permissionContainer, member, Permission.MESSAGE_SEND) &&
+                        PermissionUtil.checkPermission(
+                            permissionContainer,
+                            member,
+                            Permission.MESSAGE_SEND_IN_THREADS
+                        ) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.MESSAGE_EMBED_LINKS) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.MESSAGE_ATTACH_FILES) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.MESSAGE_ADD_REACTION) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.MESSAGE_EXT_EMOJI) &&
+                        PermissionUtil.checkPermission(
+                            permissionContainer,
+                            member,
+                            Permission.MESSAGE_MENTION_EVERYONE
+                        ) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.MESSAGE_MANAGE) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.MESSAGE_HISTORY) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.MESSAGE_TTS)
+            } else {
                 true
             } &&
             //ボイスチャンネル
-            if (this is VoiceChannel){
-                permissions.contains(Permission.VOICE_CONNECT) &&
-                        permissions.contains(Permission.VOICE_SPEAK)
-            }else {
+            if (this is VoiceChannel) {
+                PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_CONNECT) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_SPEAK)
+            } else {
                 true
             } &&
             //ステージチャンネル
             if (this is StageChannel) {
-                permissions.contains(Permission.VOICE_CONNECT) &&
-                        permissions.contains(Permission.VOICE_MUTE_OTHERS)
+                PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_CONNECT) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_MUTE_OTHERS)
             }else {
                 true
             }
-    //管理者かその他のパーミッションを持っていたらtrueを返す
-    return checkAdministrator || otherPermission
-
 }
