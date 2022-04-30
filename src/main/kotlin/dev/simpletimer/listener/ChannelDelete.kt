@@ -21,13 +21,13 @@ class ChannelDelete : ListenerAdapter() {
             timer.timerService.isFinish = true
 
             //ディスプレイのデータを削除
-            val display = timer.display ?: return
-            Timer.displays.remove(display.idLong)
-            Timer.timers.remove(display.idLong)
+            val display = timer.display
+            Timer.displays.remove(display?.idLong)
+            Timer.timers.remove(display?.idLong)
 
             //通知のデータを削除
-            val notice = timer.notice ?: return
-            Timer.timers.remove(notice.idLong)
+            val notice = timer.notice
+            Timer.timers.remove(notice?.idLong)
 
             //チャンネルのタイマーから削除
             Timer.channelsTimersMap[event.channel]?.remove(timer.number)
