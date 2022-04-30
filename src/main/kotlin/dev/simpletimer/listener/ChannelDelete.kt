@@ -16,21 +16,21 @@ class ChannelDelete : ListenerAdapter() {
      */
     override fun onChannelDelete(event: ChannelDeleteEvent) {
         //タイマーを取得
-        val timer = Timer.getTimer(event.channel) ?: return
+        Timer.getTimers(event.channel).values.forEach { timer ->
+            //終了フラグを立てる
+            timer.timerService.isFinish = true
 
-        //終了フラグを立てる
-        timer.timerService.isFinish = true
+            //ディスプレイのデータを削除
+            val display = timer.display ?: return
+            Timer.displays.remove(display.idLong)
+            Timer.timers.remove(display.idLong)
 
-        //ディスプレイのデータを削除
-        val display = timer.display ?: return
-        Timer.displays.remove(display.idLong)
-        Timer.timers.remove(display.idLong)
+            //通知のデータを削除
+            val notice = timer.notice ?: return
+            Timer.timers.remove(notice.idLong)
 
-        //通知のデータを削除
-        val notice = timer.notice ?: return
-        Timer.timers.remove(notice.idLong)
-
-        //チャンネルのタイマーから削除
-        Timer.channelsTimersMap[event.channel]?.remove(timer.number)
+            //チャンネルのタイマーから削除
+            Timer.channelsTimersMap[event.channel]?.remove(timer.number)
+        }
     }
 }

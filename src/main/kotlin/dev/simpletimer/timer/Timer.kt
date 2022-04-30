@@ -54,12 +54,14 @@ class Timer(
             return timers[id]
         }
 
-        fun getTimer(channel: Channel): Timer? {
-            return if (displays.values.none { it.channel.idLong == channel.idLong }) {
-                null
-            } else {
-                displays.values.first { it.channel.idLong == channel.idLong }
-            }
+        /**
+         * チャンネルからタイマーの一覧を取得する
+         *
+         * @param channel 該当の[Channel]
+         * @return [Map]<[Number],[Timer]>
+         */
+        fun getTimers(channel: Channel): Map<Number, Timer> {
+            return channelsTimersMap.getOrDefault(channel, mutableMapOf())
         }
 
         /**
