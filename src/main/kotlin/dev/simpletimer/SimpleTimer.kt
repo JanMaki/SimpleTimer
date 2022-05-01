@@ -67,6 +67,8 @@ import java.util.*
 // v2.0.2 一覧の全削除を実装
 // v2.0.3 音源の一覧を確認するコマンドを追加
 // v2.0.4 メンションのターゲットVCを調整
+// v2.0.5 使用APIのバージョンを更新
+// v2.1.0 WebAPIへの対応 Chrome拡張機能の公開
 
 /**
  * メインクラス
@@ -89,7 +91,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v2.0.4"
+    val version = "v2.1.0"
 
     //多重起動防止
     private val lockPort = 918
