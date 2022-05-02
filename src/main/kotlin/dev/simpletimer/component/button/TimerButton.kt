@@ -1,7 +1,6 @@
 package dev.simpletimer.component.button
 
 import dev.simpletimer.extension.sendEmpty
-import dev.simpletimer.extension.sendMessage
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
@@ -37,7 +36,7 @@ object TimerButton : ButtonManager.Button<Int>("timer") {
         }
 
         //最大数のメッセージを出力する
-        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue()
+        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
     }
 
     override fun createButton(data: Int): Button {

@@ -4,7 +4,10 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.AddTimerModal
 import dev.simpletimer.component.modal.StartTimerModal
 import dev.simpletimer.data.enum.NoticeTiming
-import dev.simpletimer.extension.*
+import dev.simpletimer.extension.checkSimpleTimerPermission
+import dev.simpletimer.extension.equalsIgnoreCase
+import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.AudioChannel
 import net.dv8tion.jda.api.entities.ChannelType
@@ -60,7 +63,7 @@ class TimerCommands {
             }
 
             //最大数のメッセージを出力する
-            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue()
+            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
         }
     }
 
@@ -106,9 +109,9 @@ class TimerCommands {
             if (!channelTimers.containsKey(number)) {
                 //タイマーが稼働していないことを教えるメッセージを出力
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue()
+                    event.hook.sendMessage(number.format("*タイマーは動いていません")).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません", true).queue()
+                    event.hook.sendMessage("*タイマーは動いていません").queue()
                 }
                 return
             }
@@ -138,7 +141,7 @@ class TimerCommands {
 
             //稼働しているタイマーの数を取得
             if (channelTimers.keys.size == 0) {
-                event.hook.sendMessage("*タイマーは動いていません", true).queue()
+                event.hook.sendMessage("*タイマーは動いていません").queue()
                 return
             }
 
@@ -229,9 +232,9 @@ class TimerCommands {
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue()
+                    event.hook.sendMessage(number.format("*タイマーは動いていません")).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません", true).queue()
+                    event.hook.sendMessage("*タイマーは動いていません").queue()
                 }
                 return
             }
@@ -288,9 +291,9 @@ class TimerCommands {
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue()
+                    event.hook.sendMessage(number.format("*タイマーは動いていません")).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません", true).queue()
+                    event.hook.sendMessage("*タイマーは動いていません").queue()
                 }
                 return
             }
@@ -347,9 +350,9 @@ class TimerCommands {
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません"), true).queue()
+                    event.hook.sendMessage(number.format("*タイマーは動いていません")).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません", true).queue()
+                    event.hook.sendMessage("*タイマーは動いていません").queue()
                 }
                 return
             }
@@ -426,7 +429,7 @@ class TimerCommands {
 
             //メッセージの長さを確認
             if (message.length > 20) {
-                event.hook.sendMessage("*20文字以下にしてください", true).queue()
+                event.hook.sendMessage("*20文字以下にしてください").queue()
                 return
             }
 
@@ -577,7 +580,7 @@ class TimerCommands {
             //空だと何もしない
             if (appendMessage != "") {
                 //メッセージを送信
-                event.hook.sendMessage(appendMessage, true).queue()
+                event.hook.sendMessage(appendMessage).queue()
             }
         }
     }
@@ -734,13 +737,13 @@ class TimerCommands {
             //ロール名を取得
             val channel = option.asGuildChannel
             if (channel !is AudioChannel) {
-                event.hook.sendMessage("ボイスチャットではないチャンネルです", true).queue()
+                event.hook.sendMessage("ボイスチャットではないチャンネルです").queue()
                 return
             }
 
             //権限を確認
             if (!channel.checkSimpleTimerPermission()) {
-                event.hook.sendMessageEmbeds(SimpleTimer.instance.getErrorEmbed(channel), true).queue()
+                event.hook.sendMessageEmbeds(SimpleTimer.instance.getErrorEmbed(channel)).queue()
                 return
             }
 
@@ -781,7 +784,7 @@ class TimerCommands {
             //ロール名を取得
             val channel = option.asGuildChannel
             if (channel !is AudioChannel) {
-                event.hook.sendMessage("*ボイスチャットではないチャンネルです", true).queue()
+                event.hook.sendMessage("*ボイスチャットではないチャンネルです").queue()
                 return
             }
 

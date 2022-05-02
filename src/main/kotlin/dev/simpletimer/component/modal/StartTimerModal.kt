@@ -1,7 +1,6 @@
 package dev.simpletimer.component.modal
 
 import dev.simpletimer.extension.sendEmpty
-import dev.simpletimer.extension.sendMessage
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
@@ -46,7 +45,7 @@ object StartTimerModal : TimerModal<Byte>("start_timer") {
         }
 
         //最大数のメッセージを出力する
-        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue()
+        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
     }
 
     override fun getModalBuilder(data: Byte): Modal.Builder {

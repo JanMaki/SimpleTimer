@@ -19,7 +19,7 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
     override fun run(event: ModalInteractionEvent, seconds: Int) {
         //時間を確認する
         if (seconds == 0) {
-            event.reply("*正しい時間を設定してください").setEphemeral(true).queue()
+            event.reply("*正しい時間を設定してください").queue()
             return
         }
 
@@ -34,9 +34,9 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
         //タイマーの稼働を確認
         if (!channelTimers.containsKey(timerNumber)) {
             if (timerNumber != null)
-                event.reply(timerNumber.format("*タイマーは動いていません")).setEphemeral(true).queue()
+                event.reply(timerNumber.format("*タイマーは動いていません")).queue()
             else {
-                event.reply("*タイマーは動いていません").setEphemeral(true).queue()
+                event.reply("*タイマーは動いていません").queue()
             }
             return
         }

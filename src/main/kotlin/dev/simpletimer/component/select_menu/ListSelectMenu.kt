@@ -3,7 +3,6 @@ package dev.simpletimer.component.select_menu
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.sendEmpty
-import dev.simpletimer.extension.sendMessage
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.GuildMessageChannel
@@ -46,13 +45,13 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
                     Timer.channelsTimersMap[channel] = channelTimers
 
                     //メッセージを送信
-                    event.hook.sendMessage(number.format("${splitted[1]}（${minutes}分）を実行しました"), true).queue()
+                    event.hook.sendMessage(number.format("${splitted[1]}（${minutes}分）を実行しました")).queue()
                     return
                 }
             }
 
             //最大数のメッセージを出力する
-            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）", true).queue()
+            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
         }
         //ダイスの要素の時
         else if (option.value.startsWith("dice")) {
@@ -63,7 +62,7 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
             Dice().roll(channel, command, event.user)
 
             //メッセージを送信
-            event.hook.sendMessage("${splitted[1]}（${command}）を実行しました", true).queue()
+            event.hook.sendMessage("${splitted[1]}（${command}）を実行しました").queue()
         } else {
             //空白を送信して削除する
             event.hook.sendEmpty()

@@ -2,7 +2,6 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.button.CommunityLinkButton
-import dev.simpletimer.extension.sendMessageEmbeds
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
@@ -42,6 +41,6 @@ object HelpCommand : SlashCommandManager.SlashCommand("help", "Botの概要な�
 
     override fun run(event: SlashCommandInteractionEvent) {
         //Embedを送信
-        event.hook.sendMessageEmbeds(embed, true).addActionRow(CommunityLinkButton.createButton(0)).queue()
+        event.hook.sendMessageEmbeds(embed).addActionRow(CommunityLinkButton.createButton(0)).queue()
     }
 }

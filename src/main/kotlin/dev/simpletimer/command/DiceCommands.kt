@@ -5,8 +5,6 @@ import dev.simpletimer.dice.DefaultDice
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.sendMessage
-import dev.simpletimer.extension.sendMessageEmbeds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +40,7 @@ class DiceCommands {
 
             //文字数制限
             if (dice.length >= 30) {
-                event.hook.sendMessage("*名前の文字数は30文字以下にしてください", true).queue()
+                event.hook.sendMessage("*名前の文字数は30文字以下にしてください").queue()
                 return
             }
 
@@ -77,7 +75,7 @@ class DiceCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("ダイスモードを**$diceMode**に変更しました", true).queue()
+            event.hook.sendMessage("ダイスモードを**$diceMode**に変更しました").queue()
         }
     }
 
@@ -96,12 +94,12 @@ class DiceCommands {
             when (guild.getGuildData().diceMode) {
                 dev.simpletimer.data.enum.DiceMode.Default -> {
                     //標準ダイスのヘルプを取得して出力
-                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed(), true).queue()
+                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed()).queue()
                 }
                 dev.simpletimer.data.enum.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
                     CoroutineScope(Dispatchers.Default).launch {
-                        event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild), true)
+                        event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild))
                             .queue()
                     }
                 }

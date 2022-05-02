@@ -1,6 +1,5 @@
 package dev.simpletimer.command
 
-import dev.simpletimer.extension.sendMessage
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.internal.interactions.CommandDataImpl
@@ -96,7 +95,7 @@ object SlashCommandManager {
              * @param event [SlashCommandInteractionEvent] スラッシュコマンドのイベント
              */
             fun replyCommandError(event: SlashCommandInteractionEvent) {
-                event.hook.sendMessage("*コマンドエラー", true).queue({}){
+                event.hook.sendMessage("*コマンドエラー").queue({}) {
                     event.reply("*コマンドエラー").queue()
                 }
             }

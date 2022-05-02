@@ -2,7 +2,9 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.YesOrNoModal
-import dev.simpletimer.extension.*
+import dev.simpletimer.extension.checkSimpleTimerPermission
+import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.list.ListMenu
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -48,7 +50,7 @@ class ListCommands {
 
             //同期の確認
             if (guildData.listSync) {
-                event.hook.sendMessage("*このサーバーでは一覧を同期しています。", true).queue()
+                event.hook.sendMessage("*このサーバーでは一覧を同期しています。").queue()
                 return
             }
 
@@ -57,13 +59,13 @@ class ListCommands {
 
             //文字数制限
             if (name.length >= 10) {
-                event.hook.sendMessage("*名前の文字数は10文字以下にしてください", true).queue()
+                event.hook.sendMessage("*名前の文字数は10文字以下にしてください").queue()
                 return
             }
 
             //:を挟まれないようにする
             if (name.contains(":")) {
-                event.hook.sendMessage("*名前に使用できない文字が含まれています", true).queue()
+                event.hook.sendMessage("*名前に使用できない文字が含まれています").queue()
                 return
             }
 
@@ -72,7 +74,7 @@ class ListCommands {
 
             //上限を確認
             if (list.size >= 10) {
-                event.hook.sendMessage("*10個以上登録できません", true).queue()
+                event.hook.sendMessage("*10個以上登録できません").queue()
                 return
             }
 
@@ -122,14 +124,14 @@ class ListCommands {
 
             //同期の確認
             if (guildData.listSync) {
-                event.hook.sendMessage("*このサーバーでは一覧を同期しています。", true).queue()
+                event.hook.sendMessage("*このサーバーでは一覧を同期しています。").queue()
                 return
             }
 
             //ギルドのデータから一覧を取得し、有効な要素かを確認する
             if (!guildData.list.contains("dice:${name}") && !guildData.list.contains("timer:${name}")) {
                 //エラーのメッセージを送信
-                event.hook.sendMessage("*無効な要素です", true).queue()
+                event.hook.sendMessage("*無効な要素です").queue()
                 return
             }
 
@@ -173,7 +175,7 @@ class ListCommands {
 
             //同期の確認
             if (guildData.listSync) {
-                event.hook.sendMessage("*このサーバーでは一覧を同期しています。", true).queue()
+                event.hook.sendMessage("*このサーバーでは一覧を同期しています。").queue()
                 return
             }
 
@@ -231,7 +233,7 @@ class ListCommands {
             //管理者権限か、必要な権限を確認
             if (!event.guildChannel.checkSimpleTimerPermission()) {
                 //権限が不足しているメッセージを送信する
-                event.hook.sendMessageEmbeds(SimpleTimer.instance.getErrorEmbed(event.guildChannel), true).queue()
+                event.hook.sendMessageEmbeds(SimpleTimer.instance.getErrorEmbed(event.guildChannel)).queue()
                 return
             }
 
@@ -314,16 +316,16 @@ class ListCommands {
                     //nullチェック
                     if (targetGuild == null) {
                         //メッセージを送信
-                        event.hook.sendMessage("*無効なIDです", true).queue()
+                        event.hook.sendMessage("*無効なIDです").queue()
                         return
                     } else {
                         //メッセージを送信
-                        event.hook.sendMessage("同期を開始しました", true).queue()
+                        event.hook.sendMessage("同期を開始しました").queue()
                         //ターゲットのギルドを設定
                         guildData.syncTarget = targetGuild
                     }
                 } else {
-                    event.hook.sendMessage("*対象のサーバーが同じサーバーです", true).queue()
+                    event.hook.sendMessage("*対象のサーバーが同じサーバーです").queue()
                     return
                 }
 
@@ -369,7 +371,7 @@ class ListCommands {
 
             //ギルドのIDが違うかを確認
             if (guild.idLong == long) {
-                event.hook.sendMessage("*対象のサーバーが同じサーバーです", true).queue()
+                event.hook.sendMessage("*対象のサーバーが同じサーバーです").queue()
                 return
             }
 
@@ -379,7 +381,7 @@ class ListCommands {
             //nullチェック
             if (targetGuild == null) {
                 //メッセージを送信
-                event.hook.sendMessage("*無効なIDです", true).queue()
+                event.hook.sendMessage("*無効なIDです").queue()
                 return
             }
 

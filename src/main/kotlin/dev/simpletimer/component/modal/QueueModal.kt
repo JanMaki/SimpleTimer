@@ -1,7 +1,6 @@
 package dev.simpletimer.component.modal
 
 import dev.simpletimer.extension.sendEmpty
-import dev.simpletimer.extension.sendMessageEmbeds
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
 import net.dv8tion.jda.api.entities.GuildMessageChannel
@@ -21,7 +20,7 @@ object QueueModal : TimerModal<Timer.Number>("queue") {
     override fun run(event: ModalInteractionEvent, seconds: Int) {
         //時間を確認する
         if (seconds < 1) {
-            event.hook.sendMessage("*1秒以上の時間を設定してください").setEphemeral(true).queue()
+            event.hook.sendMessage("*1秒以上の時間を設定してください").queue()
             return
         }
 
@@ -36,7 +35,7 @@ object QueueModal : TimerModal<Timer.Number>("queue") {
         //キューの量を確認
         if (queue.getQueue().size > 0) {
             //メッセージを送信
-            event.hook.sendMessageEmbeds(queue.getQueueEmbed(), true).queue()
+            event.hook.sendMessageEmbeds(queue.getQueueEmbed()).queue()
         } else {
             //空のメッセージを送信
             event.hook.sendEmpty()

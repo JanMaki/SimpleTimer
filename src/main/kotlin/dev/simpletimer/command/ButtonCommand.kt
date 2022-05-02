@@ -2,7 +2,6 @@ package dev.simpletimer.command
 
 import dev.simpletimer.component.button.DiceButton
 import dev.simpletimer.component.modal.TimerButtonModal
-import dev.simpletimer.extension.sendMessage
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -59,7 +58,7 @@ object ButtonCommand : SlashCommandManager.SlashCommand("button", "タイマー�
 
                 //文字数制限
                 if (dice.length >= 30) {
-                    event.hook.sendMessage("*ダイスの内容は30文字以下にしてください", true).queue()
+                    event.hook.sendMessage("*ダイスの内容は30文字以下にしてください").queue()
                     return
                 }
 
