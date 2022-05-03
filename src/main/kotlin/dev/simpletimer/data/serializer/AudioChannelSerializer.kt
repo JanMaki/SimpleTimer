@@ -1,3 +1,5 @@
+@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
+
 package dev.simpletimer.data.serializer
 
 import dev.simpletimer.SimpleTimer
@@ -29,7 +31,8 @@ object AudioChannelSerializer : KSerializer<AudioChannel?> {
         //すべてのShardを確認
         SimpleTimer.instance.shards.forEach { jda ->
             //long値からAudioChannelを取得
-            return jda.getVoiceChannelById(decoder.decodeLong()) ?: jda.getStageChannelById(decoder.decodeLong()) ?: return@forEach
+            return jda.getVoiceChannelById(decoder.decodeLong()) ?: jda.getStageChannelById(decoder.decodeLong())
+            ?: return@forEach
         }
         return null
     }

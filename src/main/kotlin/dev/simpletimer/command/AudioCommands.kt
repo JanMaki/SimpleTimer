@@ -95,7 +95,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
             //チャンネルを取得
             val channel = event.member?.voiceState?.channel
             //nullチェック
-            if (channel == null){
+            if (channel == null) {
                 //エラーメッセージを送信
                 event.hook.sendMessage("*ボイスチャンネルに接続してください").queue()
                 return
@@ -224,7 +224,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
      * オーディオの一覧を表示する
      *
      */
-    object AudioList: AudioCommands("audio_list", "オーディオの一覧を表示します") {
+    object AudioList : AudioCommands("audio_list", "オーディオの一覧を表示します") {
         override fun runAudio(event: SlashCommandInteractionEvent) {
             //埋め込みを作成して送信
             event.hook.sendMessageEmbeds(EmbedBuilder().apply {

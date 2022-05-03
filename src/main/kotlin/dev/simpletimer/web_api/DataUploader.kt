@@ -65,7 +65,7 @@ class DataUploader {
                     "${SimpleTimer.instance.dataContainer.config.apiURL}/timers/${SimpleTimer.instance.dataContainer.config.apiToken}"
                         .httpPut().header(hashMapOf("Content-Type" to "application/json"))
                         .body(Json.encodeToString(ListSerializer(ChannelData.serializer()), channelDataList)).response()
-                }catch (ignore: MalformedURLException) {
+                } catch (ignore: MalformedURLException) {
                     ignore.printStackTrace()
                 }
                 //スレッドを1秒待つ

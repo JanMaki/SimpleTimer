@@ -107,7 +107,7 @@ class DataContainer {
      *
      * @param guild 対象の[Guild]
      */
-    fun resetGuildData(guild: Guild){
+    fun resetGuildData(guild: Guild) {
         //リセットを行う
         guildDatum[guild.idLong] = GuildData()
         //保存
@@ -132,7 +132,7 @@ class DataContainer {
         //デフォルトのGuildDataのYAMLと比較
         if (Yaml.default.encodeToString(GuildData.serializer(), guildData).equalsIgnoreCase(defaultGuildDataYAML)) {
             //ファイルが存在しているかを確認
-            if (file.exists()){
+            if (file.exists()) {
                 //ファルを削除
                 file.delete()
             }

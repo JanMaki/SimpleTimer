@@ -134,7 +134,8 @@ class DiceCommands {
     /**
      * シークレットダイス1d100
      */
-    object BasicSecretDice : SlashCommandManager.SlashCommand("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
+    object BasicSecretDice :
+        SlashCommandManager.SlashCommand("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
         override fun run(event: SlashCommandInteractionEvent) {
             Dice().roll(event, "s1d100")
         }
