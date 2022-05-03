@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.interactions.components.text.TextInput
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
 
 abstract class TimerModal<T>(name: String, beforeReply: Boolean = true) :
-    ModalManager.Modal<T>(name, beforeReply = beforeReply) {
+    ModalManager.Modal<T>(name, deferReply = beforeReply) {
     override fun run(event: ModalInteractionEvent) {
         //入力した分数を取得
         val minutesInputValue = event.getValue("minutes_input")?.asString ?: ""

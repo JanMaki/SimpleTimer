@@ -36,7 +36,7 @@ class ButtonInteraction : ListenerAdapter() {
         //すべてのボタン
         buttonManager.buttons.filter { buttonID.split(":")[0].equalsIgnoreCase(it.name) }.forEach { button ->
             //考え中をするかを確認
-            if (button.beforeReply) {
+            if (button.deferReply) {
                 //考え中を出す
                 event.deferReply().queue()
             }

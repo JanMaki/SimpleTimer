@@ -33,7 +33,7 @@ class ModalInteraction : ListenerAdapter() {
         //すべてのModal
         ModalManager.modals.filter { id.split(":")[0].equalsIgnoreCase(it.name) }.forEach {
             //考え中をするかを確認
-            if (it.beforeReply) {
+            if (it.deferReply) {
                 //考え中を出す
                 event.deferReply().queue()
             }

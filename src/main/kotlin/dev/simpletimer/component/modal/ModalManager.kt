@@ -25,9 +25,9 @@ object ModalManager {
      * Modalの親
      *
      * @property name 識別に使う名前
-     * @property beforeReply あらかじめbeforeReplyを実行するかどうか
+     * @property deferReply あらかじめbeforeReplyを実行するかどうか
      */
-    abstract class Modal<T>(val name: String, val beforeReply: Boolean = true) {
+    abstract class Modal<T>(val name: String, val deferReply: Boolean = true) {
         /**
          * Modalを実行する
          *

@@ -28,9 +28,9 @@ class ButtonManager {
      * ボタンの親
      *
      * @property name 識別に使う名前
-     * @property beforeReply あらかじめbeforeReplyを実行するかどうか
+     * @property deferReply あらかじめbeforeReplyを実行するかどうか
      */
-    abstract class Button<T>(val name: String, val beforeReply: Boolean = true) {
+    abstract class Button<T>(val name: String, val deferReply: Boolean = true) {
         /**
          * ボタンを実行する
          *
