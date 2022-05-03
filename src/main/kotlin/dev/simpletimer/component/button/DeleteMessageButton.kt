@@ -1,6 +1,7 @@
 package dev.simpletimer.component.button
 
 import dev.simpletimer.extension.sendEmpty
+import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
 
@@ -17,6 +18,6 @@ object DeleteMessageButton : ButtonManager.Button<Byte>("delete") {
     }
 
     override fun createButton(data: Byte): Button {
-        return Button.secondary("delete", "🗑️")
+        return Button.secondary("delete", Emoji.fromUnicode("\uD83D\uDDD1"))
     }
 }

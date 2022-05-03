@@ -2,6 +2,7 @@ package dev.simpletimer.component.button
 
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
+import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
 
@@ -21,6 +22,6 @@ object RestartButton : ButtonManager.Button<Timer.Number>("restart_timer") {
 
     override fun createButton(data: Timer.Number): Button {
         //ボタンを作成して返す
-        return Button.primary("restart_timer:${data.number}", "再開")
+        return Button.primary("restart_timer:${data.number}", "再開").withEmoji(Emoji.fromUnicode("◀"))
     }
 }

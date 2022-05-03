@@ -1,6 +1,7 @@
 package dev.simpletimer.component.button
 
 import dev.simpletimer.dice.Dice
+import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
 
@@ -20,6 +21,6 @@ object DiceButton : ButtonManager.Button<String>("dice") {
     }
 
     override fun createButton(data: String): Button {
-        return Button.primary("${name}:$data", "🎲振る")
+        return Button.primary("${name}:$data", "振る").withEmoji(Emoji.fromUnicode("\uD83C\uDFB2"))
     }
 }

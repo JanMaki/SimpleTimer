@@ -2,6 +2,7 @@ package dev.simpletimer.component.button
 
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
+import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
@@ -40,6 +41,6 @@ object TimerButton : ButtonManager.Button<Int>("timer") {
     }
 
     override fun createButton(data: Int): Button {
-        return Button.primary("${name}:$data", "⏱開始")
+        return Button.primary("${name}:$data", "開始").withEmoji(Emoji.fromUnicode("⏱"))
     }
 }
