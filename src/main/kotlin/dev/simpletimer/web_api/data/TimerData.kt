@@ -1,4 +1,4 @@
-package dev.simpletimer.web_api
+package dev.simpletimer.web_api.data
 
 import kotlinx.serialization.Serializable
 
