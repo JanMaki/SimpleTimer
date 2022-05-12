@@ -3,6 +3,7 @@ package dev.simpletimer.data.guild
 import dev.simpletimer.data.enum.DiceMode
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
+import dev.simpletimer.data.lang.Lang
 import dev.simpletimer.data.serializer.AudioChannelSerializer
 import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
 import dev.simpletimer.data.serializer.GuildSerializer
@@ -42,5 +43,6 @@ data class GuildData(
     var listSync: Boolean = false,
     var syncTarget: @Serializable(with = GuildSerializer::class) Guild? = null,
     var audio: String = "Voice",
-    var needAudioAnnounce: Boolean = true
+    var needAudioAnnounce: Boolean = true,
+    var lang: Lang = Lang.JAP
 )

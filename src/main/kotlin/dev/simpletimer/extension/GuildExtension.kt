@@ -3,6 +3,7 @@ package dev.simpletimer.extension
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.audio_player.GuildAudioPlayer
 import dev.simpletimer.data.guild.GuildData
+import dev.simpletimer.data.lang.lang_data.LangData
 import net.dv8tion.jda.api.entities.Guild
 
 //Guildを拡張している
@@ -28,4 +29,14 @@ fun Guild.getAudioPlayer(): GuildAudioPlayer {
  */
 fun Guild.getGuildData(): GuildData {
     return SimpleTimer.instance.dataContainer.getGuildData(this)
+}
+
+/**
+ * [Guild]の拡張
+ * 言語のデータを取得する
+ *
+ * @return [LangData]
+ */
+fun Guild.getLang(): LangData {
+    return SimpleTimer.instance.dataContainer.langs[this.getGuildData().lang] ?: LangData()
 }

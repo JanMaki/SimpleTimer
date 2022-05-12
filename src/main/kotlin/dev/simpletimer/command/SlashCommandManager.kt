@@ -20,6 +20,7 @@ object SlashCommandManager {
         ChromeCommand,
         DebugCommand,
         HelpCommand,
+        LangCommand,
         QueueCommands.Queue,
         QueueCommands.Show,
         QueueCommands.Remove,
