@@ -1,5 +1,6 @@
 package dev.simpletimer.data.lang.lang_data
 
+import dev.simpletimer.data.lang.lang_data.command.CommandLangData
 import kotlinx.serialization.Serializable
 
 /**

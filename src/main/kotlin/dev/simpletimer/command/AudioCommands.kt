@@ -2,9 +2,8 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.audio.AudioInformationData
-import dev.simpletimer.extension.checkSimpleTimerPermission
-import dev.simpletimer.extension.getAudioPlayer
-import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.extension.*
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
@@ -31,7 +30,13 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
             val audioData = SimpleTimer.instance.dataContainer.audioDatum.first { it.id == "Voice" }
 
             //メッセージを送信する
-            event.hook.sendMessageEmbeds(getAudioInfoEmbed(audioData, "設定されているオーディオは${audioData.id}です")).queue()
+            event.hook.sendMessageEmbeds(
+                getAudioInfoEmbed(
+                    guild.getLang(),
+                    audioData,
+                    guild.getLang().command.audio.settingAudio.langFormat(audioData.id)
+                )
+            ).queue()
 
             //オーディオの通知をしなくして保存
             guildData.needAudioAnnounce = false
@@ -49,7 +54,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
      * @param embedTitle 埋め込みのタイトル
      * @return 作成した[MessageEmbed]
      */
-    fun getAudioInfoEmbed(audioData: AudioInformationData, embedTitle: String): MessageEmbed {
+    fun getAudioInfoEmbed(langData: LangData, audioData: AudioInformationData, embedTitle: String): MessageEmbed {
         val embed = EmbedBuilder()
 
         //タイトルを設定
@@ -57,19 +62,19 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
 
         //音源名
         if (audioData.name != "") {
-            embed.addField("名前", audioData.name, false)
+            embed.addField(langData.command.audio.name, audioData.name, false)
         }
         //ダウンロードリンク
         if (audioData.downloadURL != "") {
-            embed.addField("リンク", audioData.downloadURL, false)
+            embed.addField(langData.command.audio.link, audioData.downloadURL, false)
         }
         //権利表示
         if (audioData.right != "") {
-            embed.addField("権利表示等", audioData.right, false)
+            embed.addField(langData.command.audio.copyright, audioData.right, false)
         }
         //その他
         if (audioData.other != "") {
-            embed.addField("その他", audioData.other, false)
+            embed.addField(langData.command.audio.other, audioData.other, false)
         }
 
         //Buildして返す
@@ -97,7 +102,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
             //nullチェック
             if (channel == null) {
                 //エラーメッセージを送信
-                event.hook.sendMessage("*ボイスチャンネルに接続してください").queue()
+                event.hook.sendMessage(guild.getLang().command.audio.pleaseConnectVoiceChannel).queue()
                 return
             }
 
@@ -112,7 +117,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
             guild.getAudioPlayer().connect(channel)
 
             //メッセージを送信
-            event.hook.sendMessage("チャンネルに参加しました").queue()
+            event.hook.sendMessage(guild.getLang().command.audio.joinVoiceChannel).queue()
         }
     }
 
@@ -128,7 +133,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
             guild.getAudioPlayer().disconnect()
 
             //メッセージを送信
-            event.hook.sendMessage("チャンネルから退出しました").queue()
+            event.hook.sendMessage(guild.getLang().command.audio.leaveVoiceChannel).queue()
         }
     }
 
@@ -156,7 +161,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
             event.guild!!.getAudioPlayer().play(audioData)
 
             //メッセージを送信
-            event.hook.sendMessage("再生しました").queue()
+            event.hook.sendMessage(guild.getLang().command.audio.play).queue()
         }
     }
 
@@ -206,7 +211,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
             dataContainer.saveGuildsData(guild)
 
             //埋め込みを作成して送信
-            event.hook.sendMessageEmbeds(getAudioInfoEmbed(audioData, "オーディオを${name}に変更しました")).queue()
+            event.hook.sendMessageEmbeds(getAudioInfoEmbed(guild.getLang(), audioData, "オーディオを${name}に変更しました")).queue()
         }
 
         override fun autoComplete(event: CommandAutoCompleteInteractionEvent) {
@@ -226,12 +231,14 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
      */
     object AudioList : AudioCommands("audio_list", "オーディオの一覧を表示します") {
         override fun runAudio(event: SlashCommandInteractionEvent) {
+            val langData: LangData = event.guild?.getLang() ?: return
+
             //埋め込みを作成して送信
             event.hook.sendMessageEmbeds(EmbedBuilder().apply {
                 //タイトルを設定
-                setTitle("オーディオ一覧")
+                setTitle(langData.command.audio.audioList)
                 //説明文を設定
-                setDescription("使用できるオーディオの一覧です\nコマンド使用時、1行目の太字の文字が名前になります")
+                setDescription(langData.command.audio.audioListDescription)
                 //オーディオの一覧を確認
                 SimpleTimer.instance.dataContainer.audioDatum.forEach {
                     //フィールドを追加
