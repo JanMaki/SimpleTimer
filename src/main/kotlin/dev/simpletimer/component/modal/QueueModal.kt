@@ -32,7 +32,7 @@ object QueueModal : TimerModal<Timer.Number>("queue") {
         //キューの量を確認
         if (queue.getQueue().size > 0) {
             //メッセージを送信
-            event.hook.sendMessageEmbeds(queue.getQueueEmbed()).queue()
+            event.hook.sendMessageEmbeds(queue.getQueueEmbed(event.guild!!.getLang())).queue()
         } else {
             //空のメッセージを送信
             event.hook.sendEmpty()

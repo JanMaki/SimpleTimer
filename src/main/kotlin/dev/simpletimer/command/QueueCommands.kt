@@ -62,7 +62,7 @@ abstract class QueueCommands {
             val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
             event.hook.sendMessageEmbeds(
-                TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).getQueueEmbed()
+                TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).getQueueEmbed(event.guild!!.getLang())
             ).queue()
         }
     }
