@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
  *
  * @property timer タイマーの言語のデータ
  * @property command コマンドの言語のデータ
+ * @property component コンポーネントの言語のデータ
  */
 @Serializable
 data class LangData(

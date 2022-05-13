@@ -2,6 +2,18 @@ package dev.simpletimer.data.lang.lang_data.component
 
 import kotlinx.serialization.Serializable
 
+/**
+ * ボタンの言語のデータ
+ *
+ * @property addTimer
+ * @property finishTimer
+ * @property restartTimer
+ * @property stopTimer
+ * @property startTime
+ * @property timerMaxWarning
+ * @property joinCommunity
+ * @property roll
+ */
 @Serializable
 data class ButtonLangData(
     val addTimer: String = "",
