@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.component.button.DiceButton
 import dev.simpletimer.component.modal.TimerButtonModal
+import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -64,7 +65,7 @@ object ButtonCommand : SlashCommandManager.SlashCommand("button", "タイマー�
 
                 //ボタンを送信
                 event.hook.sendMessage("**${option.asString}**を振る")
-                    .addActionRow(DiceButton.createButton(option.asString))
+                    .addActionRow(DiceButton.createButton(option.asString, event.guild!!.getLang()))
                     .queue()
             }
             else -> {

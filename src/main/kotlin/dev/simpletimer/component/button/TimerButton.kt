@@ -1,5 +1,7 @@
 package dev.simpletimer.component.button
 
+import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.Emoji
@@ -37,10 +39,10 @@ object TimerButton : ButtonManager.Button<Int>("timer") {
         }
 
         //最大数のメッセージを出力する
-        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
+        event.hook.sendMessage(event.guild!!.getLang().component.button.timerMaxWarning).queue()
     }
 
-    override fun createButton(data: Int): Button {
-        return Button.primary("${name}:$data", "開始").withEmoji(Emoji.fromUnicode("⏱"))
+    override fun createButton(data: Int, langData: LangData): Button {
+        return Button.primary("${name}:$data", langData.component.button.startTime).withEmoji(Emoji.fromUnicode("⏱"))
     }
 }

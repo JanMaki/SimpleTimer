@@ -1,6 +1,7 @@
 package dev.simpletimer.component.modal
 
 import dev.simpletimer.component.button.TimerButton
+import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.Modal
 
@@ -18,7 +19,7 @@ object TimerButtonModal : TimerModal<Byte>("timer_button") {
 
         //ボタンを送信
         event.hook.sendMessage("**${seconds / 60}分${seconds % 60}秒**のタイマーを開始する")
-            .addActionRow(TimerButton.createButton(seconds))
+            .addActionRow(TimerButton.createButton(seconds, event.guild!!.getLang()))
             .queue()
     }
 

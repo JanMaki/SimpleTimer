@@ -1,6 +1,7 @@
 package dev.simpletimer.data.lang.lang_data
 
 import dev.simpletimer.data.lang.lang_data.command.CommandLangData
+import dev.simpletimer.data.lang.lang_data.component.ComponentLangData
 import kotlinx.serialization.Serializable
 
 /**
@@ -12,5 +13,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LangData(
     val timer: TimerLangData = TimerLangData(),
-    val command: CommandLangData = CommandLangData()
+    val command: CommandLangData = CommandLangData(),
+    val component: ComponentLangData = ComponentLangData(),
 )

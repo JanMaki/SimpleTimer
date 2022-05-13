@@ -274,7 +274,7 @@ class Timer(
         val time = timerService.getTime()
         //削除のボタンをつける
         display?.editMessageEmbeds(generateDisplayEmbed(time))
-            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue()
+            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))?.queue()
 
         //プレイヤーを取得
         val player = guild.getAudioPlayer()
@@ -337,7 +337,7 @@ class Timer(
         val time = timerService.getTime()
         //削除のボタンをつける
         display?.editMessageEmbeds(generateDisplayEmbed(time))
-            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue()
+            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))?.queue()
 
         val channelTimers = channelsTimersMap[channel]
         if (channelTimers != null) {
@@ -375,9 +375,9 @@ class Timer(
             channel.sendMessageEmbeds(generateDisplayEmbed(time))
                 .setActionRows(
                     ActionRow.of(
-                        StopButton.createButton(number),
-                        FinishButton.createButton(number),
-                        AddTimerButton.createButton(number)
+                        StopButton.createButton(number, guild.getLang()),
+                        FinishButton.createButton(number, guild.getLang()),
+                        AddTimerButton.createButton(number, guild.getLang())
                     )
                 )
                 .queue { display ->
@@ -507,7 +507,7 @@ class Timer(
                 display?.reply(message)
                     ?.apply {
                         //削除のボタンをつける
-                        if (deletable) setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))
+                        if (deletable) setActionRows(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))
                     }
                     ?.mentionRepliedUser(false)?.queue { notice ->
                         timers[notice.idLong] = this
