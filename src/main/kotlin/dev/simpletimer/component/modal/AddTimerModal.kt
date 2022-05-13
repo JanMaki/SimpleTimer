@@ -1,5 +1,8 @@
 package dev.simpletimer.component.modal
 
+import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.langFormat
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
@@ -11,15 +14,13 @@ import java.util.*
  *
  */
 object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
-    override val minutesInputName: String
-        get() = "延長する分数"
-    override val secondsInputName: String
-        get() = "延長する秒数"
-
     override fun run(event: ModalInteractionEvent, seconds: Int) {
+        //言語のデータを取得
+        val langData = event.guild?.getLang() ?: return
+
         //時間を確認する
         if (seconds == 0) {
-            event.reply("*正しい時間を設定してください").queue()
+            event.reply(langData.component.modal.missingTimeWarning).queue()
             return
         }
 
@@ -34,9 +35,9 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
         //タイマーの稼働を確認
         if (!channelTimers.containsKey(timerNumber)) {
             if (timerNumber != null)
-                event.reply(timerNumber.format("*タイマーは動いていません")).queue()
+                event.reply(timerNumber.format(langData.component.modal.timerNotMoveWarning)).queue()
             else {
-                event.reply("*タイマーは動いていません").queue()
+                event.reply(langData.component.modal.timerNotMoveWarning).queue()
             }
             return
         }
@@ -53,7 +54,11 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
         }
     }
 
-    override fun getModalBuilder(data: Timer.Number): Modal.Builder {
-        return Modal.create("add_timer:${data.number}", "${data.number}番目のタイマーを延長する")
+    override fun getInputNames(langData: LangData): Pair<String, String> {
+        return Pair(langData.component.modal.addTimeMinutes, langData.component.modal.addTimeSeconds)
+    }
+
+    override fun getModalBuilder(data: Timer.Number, langData: LangData): Modal.Builder {
+        return Modal.create("add_timer:${data.number}", langData.component.modal.addTime.langFormat(data.number))
     }
 }

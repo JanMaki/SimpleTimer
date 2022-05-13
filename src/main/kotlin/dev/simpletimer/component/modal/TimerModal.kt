@@ -1,5 +1,6 @@
 package dev.simpletimer.component.modal
 
+import dev.simpletimer.data.lang.lang_data.LangData
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.Modal
@@ -30,31 +31,38 @@ abstract class TimerModal<T>(name: String, beforeReply: Boolean = true) :
      */
     abstract fun run(event: ModalInteractionEvent, seconds: Int)
 
-    //分数のInputの名前
-    abstract val minutesInputName: String
+    override fun createModal(data: T, langData: LangData): Modal {
+        //Inputの名前のペアを取得
+        val inputNames = getInputNames(langData)
 
-    //秒数のInputの名前
-    abstract val secondsInputName: String
+        //分数のInput
+        val minutesInput: TextInput = TextInput.create("minutes_input", inputNames.first, TextInputStyle.SHORT)
+            .setPlaceholder("0")
+            .setRequired(false)
+            .build()
 
-    //分数のInput
-    private val minutesInput: TextInput = TextInput.create("minutes_input", minutesInputName, TextInputStyle.SHORT)
-        .setPlaceholder("0")
-        .setRequired(false)
-        .build()
+        //秒数のInput
+        val secondsInput = TextInput.create("seconds_input", inputNames.second, TextInputStyle.SHORT)
+            .setPlaceholder("0")
+            .setRequired(false)
+            .build()
 
-    //秒数のInput
-    private val secondsInput = TextInput.create("seconds_input", secondsInputName, TextInputStyle.SHORT)
-        .setPlaceholder("0")
-        .setRequired(false)
-        .build()
-
-
-    override fun createModal(data: T): Modal {
         //Modalを作成して返す
-        return getModalBuilder(data)
+        return getModalBuilder(data, langData)
             .addActionRows(ActionRow.of(minutesInput), ActionRow.of(secondsInput))
             .build()
     }
+
+    /**
+     * Inputの名前を取得する
+     *
+     * @param langData　[LangData]言語のデータ
+     * @return 分と秒のペア
+     */
+    open fun getInputNames(langData: LangData): Pair<String, String> {
+        return Pair(langData.component.modal.minutes, langData.component.modal.seconds)
+    }
+
 
     /**
      * ModalBuilderを取得する
@@ -62,5 +70,5 @@ abstract class TimerModal<T>(name: String, beforeReply: Boolean = true) :
      * @param data Modalに何かデータつける時に使う
      * @return [Modal.Builder]
      */
-    abstract fun getModalBuilder(data: T): Modal.Builder
+    abstract fun getModalBuilder(data: T, langData: LangData): Modal.Builder
 }

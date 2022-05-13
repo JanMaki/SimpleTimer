@@ -38,7 +38,7 @@ object ButtonCommand : SlashCommandManager.SlashCommand("button", "タイマー�
             //タイマーのボタン
             "timer" -> {
                 //Modalを作成して返す
-                event.replyModal(TimerButtonModal.createModal(0)).queue()
+                event.replyModal(TimerButtonModal.createModal(0, event.guild!!.getLang())).queue()
             }
             //ダイスのボタン
             "dice" -> {

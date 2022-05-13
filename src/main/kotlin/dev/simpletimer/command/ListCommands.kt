@@ -4,6 +4,7 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.YesOrNoModal
 import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.list.ListMenu
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
@@ -195,7 +196,12 @@ class ListCommands {
             }
 
             //Modalを作成して返す
-            event.replyModal(YesOrNoModal.createModal(YesOrNoModal.Data(event.user.idLong, yesAction, noAction)))
+            event.replyModal(
+                YesOrNoModal.createModal(
+                    YesOrNoModal.Data(event.user.idLong, yesAction, noAction),
+                    guild.getLang()
+                )
+            )
                 .queue()
         }
     }

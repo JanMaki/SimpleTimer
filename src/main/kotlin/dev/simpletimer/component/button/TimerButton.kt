@@ -39,7 +39,7 @@ object TimerButton : ButtonManager.Button<Int>("timer") {
         }
 
         //最大数のメッセージを出力する
-        event.hook.sendMessage(event.guild!!.getLang().component.button.timerMaxWarning).queue()
+        event.hook.sendMessage(event.guild!!.getLang().timer.timerMaxWarning).queue()
     }
 
     override fun createButton(data: Int, langData: LangData): Button {

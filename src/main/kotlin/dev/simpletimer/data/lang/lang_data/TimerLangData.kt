@@ -19,6 +19,7 @@ import kotlinx.serialization.Serializable
  * @property finish
  * @property leftCheck 0 -> time
  * @property remove
+ * @property timerMaxWarning
  */
 @Serializable
 data class TimerLangData(
@@ -35,5 +36,6 @@ data class TimerLangData(
     val stop: String = "",
     val finish: String = "",
     val leftCheck: String = "",
-    val remove: String = ""
+    val remove: String = "",
+    val timerMaxWarning: String = ""
 )

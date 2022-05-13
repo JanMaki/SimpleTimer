@@ -9,5 +9,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ComponentLangData (
-    val button: ButtonLangData = ButtonLangData()
+    val button: ButtonLangData = ButtonLangData(),
+    val modal: ModalLangData = ModalLangData()
 )

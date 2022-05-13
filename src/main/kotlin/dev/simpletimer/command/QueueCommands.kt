@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.component.modal.QueueModal
 import dev.simpletimer.component.modal.YesOrNoModal
+import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
@@ -34,7 +35,7 @@ abstract class QueueCommands {
             val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
             //Modalを返信
-            event.replyModal(QueueModal.createModal(number)).queue()
+            event.replyModal(QueueModal.createModal(number, event.guild!!.getLang())).queue()
         }
     }
 
@@ -165,7 +166,12 @@ abstract class QueueCommands {
             }
 
             //Modalを作成して返す
-            event.replyModal(YesOrNoModal.createModal(YesOrNoModal.Data(event.user.idLong, yesAction, noAction)))
+            event.replyModal(
+                YesOrNoModal.createModal(
+                    YesOrNoModal.Data(event.user.idLong, yesAction, noAction),
+                    event.guild!!.getLang()
+                )
+            )
                 .queue()
         }
     }

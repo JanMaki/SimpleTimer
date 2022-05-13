@@ -4,10 +4,7 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.AddTimerModal
 import dev.simpletimer.component.modal.StartTimerModal
 import dev.simpletimer.data.enum.NoticeTiming
-import dev.simpletimer.extension.checkSimpleTimerPermission
-import dev.simpletimer.extension.equalsIgnoreCase
-import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.sendEmpty
+import dev.simpletimer.extension.*
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.AudioChannel
 import net.dv8tion.jda.api.entities.ChannelType
@@ -35,7 +32,7 @@ class TimerCommands {
             //nullチェック
             if (option == null) {
                 //Timerを開始するModalを送信
-                event.replyModal(StartTimerModal.createModal(0)).queue()
+                event.replyModal(StartTimerModal.createModal(0, event.guild!!.getLang())).queue()
                 return
             }
 
@@ -188,7 +185,7 @@ class TimerCommands {
             }
 
             //Modalを送信
-            event.replyModal(AddTimerModal.createModal(number)).queue()
+            event.replyModal(AddTimerModal.createModal(number, event.guild!!.getLang())).queue()
         }
     }
 

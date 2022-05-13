@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.YesOrNoModal
+import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.sendEmpty
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
@@ -33,7 +34,7 @@ object ResetCommand :
                     event.user.idLong,
                     yesAction,
                     noAction
-                )
+                ), guild.getLang()
             )
         ).queue()
     }

@@ -10,7 +10,6 @@ import kotlinx.serialization.Serializable
  * @property restartTimer
  * @property stopTimer
  * @property startTime
- * @property timerMaxWarning
  * @property joinCommunity
  * @property roll
  */
@@ -21,7 +20,6 @@ data class ButtonLangData(
     val restartTimer: String = "",
     val stopTimer: String = "",
     val startTime: String = "",
-    val timerMaxWarning: String = "",
     val joinCommunity: String = "",
     val roll: String = ""
 )
