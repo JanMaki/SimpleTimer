@@ -43,6 +43,7 @@ class ButtonManager {
          * ボタンを作成する
          *
          * @param data ボタンに何かデータつける時に使う
+         * @param langData [LangData]言語のデータ
          * @return 作成した[Button]
          */
         abstract fun createButton(
