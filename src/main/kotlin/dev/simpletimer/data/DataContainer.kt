@@ -60,6 +60,27 @@ class DataContainer {
             config = ConfigData()
         }
 
+
+        //音源を保管するディレクトリがあるかを確認
+        if (!audioDirectory.exists()) audioDirectory.mkdirs()
+
+        //ymlリを読み込み
+        audioDirectory.listFiles()?.filterNotNull()?.filter { it.extension == "yml" }?.forEach { file ->
+            //ファイル読み込み
+            val audioDataFileInputStream = file.inputStream()
+            val audioData = Yaml.default.decodeFromStream(AudioInformationData.serializer(), audioDataFileInputStream)
+            //ファイルの位置をフルパスに変更
+            audioData.file = File(audioDirectory, audioData.file).path.toString()
+            //追加
+            audioDatum.add(audioData)
+        }
+    }
+
+    /**
+     * ギルドの読み込み
+     *
+     */
+    fun loadGuild(){
         //ギルドを保管するディレクトリがあるかを確認
         if (!guildDirectory.exists()) guildDirectory.mkdirs()
 
@@ -75,20 +96,6 @@ class DataContainer {
                 //空データを代入
                 guildDatum[file.nameWithoutExtension.toLong()] = GuildData()
             }
-        }
-
-        //音源を保管するディレクトリがあるかを確認
-        if (!audioDirectory.exists()) audioDirectory.mkdirs()
-
-        //ymlリを読み込み
-        audioDirectory.listFiles()?.filterNotNull()?.filter { it.extension == "yml" }?.forEach { file ->
-            //ファイル読み込み
-            val audioDataFileInputStream = file.inputStream()
-            val audioData = Yaml.default.decodeFromStream(AudioInformationData.serializer(), audioDataFileInputStream)
-            //ファイルの位置をフルパスに変更
-            audioData.file = File(audioDirectory, audioData.file).path.toString()
-            //追加
-            audioDatum.add(audioData)
         }
     }
 

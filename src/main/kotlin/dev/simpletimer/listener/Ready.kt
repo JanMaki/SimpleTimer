@@ -29,6 +29,12 @@ class Ready : ListenerAdapter() {
             Log.logChannels.add(channel)
         }
 
-        Log.sendLog("Shardを起動しました　${++count}/${SimpleTimer.instance.shards.count()}")
+        Log.sendLog("Shardを起動しました　${++count}/${SimpleTimer.instance.dataContainer.config.shardsCount}")
+
+        //最後のShardじゃなかったらおしまい
+        if (count != SimpleTimer.instance.dataContainer.config.shardsCount) return
+
+        //ギルドのデータを読み込み
+        SimpleTimer.instance.dataContainer.loadGuild()
     }
 }
