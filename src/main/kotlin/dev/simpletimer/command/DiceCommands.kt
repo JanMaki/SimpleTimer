@@ -5,6 +5,7 @@ import dev.simpletimer.dice.DefaultDice
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.getLang
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -85,7 +86,7 @@ class DiceCommands {
     object DiceInfo : SlashCommandManager.SlashCommand("dice_info", "ダイスの使い方を表示する") {
         override fun run(event: SlashCommandInteractionEvent) {
             //チャンネルを取得
-            val channel = event.channel
+            val channel = event.guildChannel
 
             //ギルドを取得
             val guild = event.guild ?: return
@@ -94,7 +95,7 @@ class DiceCommands {
             when (guild.getGuildData().diceMode) {
                 dev.simpletimer.data.enum.DiceMode.Default -> {
                     //標準ダイスのヘルプを取得して出力
-                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed()).queue()
+                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed(guild.getLang())).queue()
                 }
                 dev.simpletimer.data.enum.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
@@ -117,7 +118,7 @@ class DiceCommands {
 
             CoroutineScope(Dispatchers.Default).launch {
                 //ダイスボットを変更する画面を出す
-                BCDiceManager.instance.openSelectDiceBotView(event.channel)
+                BCDiceManager.instance.openSelectDiceBotView(event.guildChannel)
             }
         }
     }

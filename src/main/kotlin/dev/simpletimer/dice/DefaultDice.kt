@@ -1,5 +1,6 @@
 package dev.simpletimer.dice
 
+import dev.simpletimer.data.lang.lang_data.LangData
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 import java.awt.Color
@@ -12,7 +13,7 @@ import java.util.*
  * @param command [String] ダイスのコマンド。
  * @param secret [Boolean] シークレットダイスかどうか
  */
-open class DefaultDice(private val command: String, secret: Boolean = false) {
+open class DefaultDice(val langData: LangData, private val command: String, secret: Boolean = false) {
     companion object {
         /**
          * 文字列がDiceのフォーマットに沿っているかを確認する
@@ -47,17 +48,17 @@ open class DefaultDice(private val command: String, secret: Boolean = false) {
          * ダイスの説明画面を表示
          *
          */
-        fun getInfoEmbed(): MessageEmbed {
+        fun getInfoEmbed(langData: LangData): MessageEmbed {
             //作成開始
             val builder = EmbedBuilder()
-            builder.setTitle("SimpleTimer標準ダイス")
+            builder.setTitle(langData.dice.defaultDice.title)
             builder.setColor(Color.GRAY)
-            builder.addField("〇D●", "〇個の●面ダイスを振ります\n例： !1d100　1個100面ダイスを振ります", false)
-            builder.addField("□+■", "□と■を足します\n例１： !2+5　2+7を行います\n例２： !1D6+1 1個6面ダイスを振った結果に+1を行います", false)
-            builder.addField("◇<◆", "◇が◆より下かどうかを成功・失敗で、判定します\n例１： !10<5　10が5より下かどうかを判定します 結果は失敗です　", false)
+            builder.addField("〇D●", langData.dice.defaultDice.dDescription, false)
+            builder.addField("□+■", langData.dice.defaultDice.plusDescription, false)
+            builder.addField("◇<◆", langData.dice.defaultDice.lessDescription, false)
             builder.addField(
                 "◇<=◆",
-                "◇が◆以下かどうかを成功・失敗で、判定します\n例１： !1d10<=2 1個10面ダイスを振った結果が2以下かどうかを判定します 20%の確率で成功します ",
+                langData.dice.defaultDice.lessDescription,
                 false
             )
 
@@ -125,7 +126,7 @@ open class DefaultDice(private val command: String, secret: Boolean = false) {
         //1800文字以上の時は途中を省略する
         if (diceResultBuilder.length > 1800) {
             diceResultBuilder.clear()
-            diceResultBuilder.append("＜省略＞")
+            diceResultBuilder.append(langData.dice.defaultDice.omission)
         }
 
         //結果の文字列を作成
@@ -133,15 +134,15 @@ open class DefaultDice(private val command: String, secret: Boolean = false) {
             if (target > -1) {
                 if (secret) {
                     if (list.sum() <= target) {
-                        "\n$command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　成功"
+                        "\n$command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　${langData.dice.defaultDice.success}"
                     } else {
-                        "\n$command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　失敗"
+                        "\n$command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　${langData.dice.defaultDice.failure}"
                     }
                 } else {
                     if (list.sum() <= target) {
-                        "```md\n# $command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　成功\n```"
+                        "```md\n# $command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　${langData.dice.defaultDice.success}\n```"
                     } else {
-                        "```cs\n# $command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　失敗\n```"
+                        "```cs\n# $command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　${langData.dice.defaultDice.failure}\n```"
                     }
                 }
             } else {

@@ -59,7 +59,7 @@ class GenericMessageReaction : ListenerAdapter() {
         else if (BCDiceManager.instance.isSelectDiceBotView(idLong)) {
 
             val bcdice = BCDiceManager.instance
-            val channel = event.channel
+            val channel = event.guildChannel
             val guild = event.guild
 
             //リアクションの確認・処理
