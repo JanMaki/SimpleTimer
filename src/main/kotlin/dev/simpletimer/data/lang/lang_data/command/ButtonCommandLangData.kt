@@ -5,11 +5,9 @@ import kotlinx.serialization.Serializable
 /**
  * ボタンコマンドの言語のデータ
  *
- * @property longLengthWarning
  * @property roll 0->text
  */
 @Serializable
 data class ButtonCommandLangData(
-    val longLengthWarning: String = "",
     val roll: String = ""
 )

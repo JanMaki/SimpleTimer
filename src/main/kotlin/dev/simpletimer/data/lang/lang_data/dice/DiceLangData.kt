@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
  * @property changeDiceMode 0->text
  * @property defaultDice SimpleTimer標準ダイスの言語のデータ
  * @property bcDice BCDIceのLangのデータ
+ * @property longLengthWarning
  */
 @Serializable
 data class DiceLangData(
@@ -19,5 +20,6 @@ data class DiceLangData(
     val wrongFormat: String = "",
     val changeDiceMode: String = "",
     val defaultDice: DefaultDiceLangData = DefaultDiceLangData(),
-    val bcDice: BCDiceLangData = BCDiceLangData()
+    val bcDice: BCDiceLangData = BCDiceLangData(),
+    val longLengthWarning: String = ""
 )
