@@ -4,14 +4,15 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.bcdice_kt.BCDice
 import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
 import dev.simpletimer.data.enum.DiceMode
-import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.equalsIgnoreCase
 import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.langFormat
 import dev.simpletimer.util.Log
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import java.awt.Color
 
@@ -76,7 +77,7 @@ class BCDiceManager {
 
         //ページ内のgameSystemを貼り付けていく
         for ((count, gameSystem) in gameSystems.withIndex()) {
-            val emoji = numberEmojis[count]
+            val emoji = (count + 1).emoji
             builder.addField(emoji, "**${gameSystem.name}**", false)
         }
 
@@ -97,26 +98,34 @@ class BCDiceManager {
      *
      * @param channel [MessageChannel] 対象のチャンネル
      */
-    fun openSelectDiceBotView(channel: GuildMessageChannel) {
+    fun openSelectDiceBotView(channel: MessageChannel) {
         //embedを作成
-        val embed = createView(channel.guild.getLang(), 1) ?: return
-        try {
-            //過去の物を消す
-            if (channelViews.containsKey(channel)) {
-                channelViews[channel]?.delete()?.queue()
-            }
-            //メッセージを送信
-            channel.sendMessageEmbeds(embed).queue { message ->
-                //マップに登録
-                channelViews[channel] = message
-                //ページを初期化
-                channelViewsPage[channel] = 1
-                //リアクションを付与
-                message.addReaction("⬅️").queue()
-                for (emoji in numberEmojis) {
-                    message.addReaction(emoji).queue()
-                }
-                message.addReaction("➡️").queue()
+        val embed = createView(1) ?: return
+
+        //メッセージを送信
+        channel.sendMessageEmbeds(embed).setActionRows(
+            ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[1]!!)),
+            ActionRow.of(DiceBotPageButton.BackButton.createButton(0), DiceBotPageButton.NextButton.createButton(2))
+        ).queue()
+    }
+
+    /**
+     * ボタンに応答してページを変更する
+     *
+     * @param event [ButtonInteractionEvent]ボタンのイベント
+     */
+    fun changePageFromButtonInteraction(event: ButtonInteractionEvent) {
+        //ボタンのIDを取得
+        val buttonID = event.button.id ?: return
+
+        //ページを取得
+        val page = buttonID.split(":")[1].toInt()
+
+        //ページの上下限を確認
+        if (page < 1 || page > gameSystemPages.size) {
+            //空白を送信
+            event.deferReply().queue {
+                event.hook.sendEmpty()
             }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
@@ -127,98 +136,51 @@ class BCDiceManager {
         }
     }
 
-    /**
-     * ダイス選択画面のページを進める
-     *
-     * @param channel [MessageChannel] 該当のチャンネル
-     */
-    fun nextSelectDiceBotView(channel: GuildMessageChannel) {
-        //開いているページを取得
-        val page = channelViewsPage[channel] ?: return
-        //埋め込みを作成
-        val embed = createView(channel.guild.getLang(), page + 1) ?: return
-        //ページの変数を増やす
-        channelViewsPage[channel] = page + 1
-        //対象のメッセージを取得
-        val message = channelViews[channel] ?: return
-        //編集
-        message.editMessageEmbeds(embed).queue()
-    }
-
-    /**
-     * ダイス選択画面のページを戻す
-     *
-     * @param channel [MessageChannel] 該当のチャンネル
-     */
-    fun backSelectDiceBotView(channel: GuildMessageChannel) {
-        //開いているページを取得
-        val page = channelViewsPage[channel] ?: return
-        //埋め込みを作成
-        val embed = createView(channel.guild.getLang(), page - 1) ?: return
-        //ページの変数を減らす
-        channelViewsPage[channel] = page - 1
-        //対象のメッセージを取得
-        val message = channelViews[channel] ?: return
-        //編集
-        message.editMessageEmbeds(embed).queue()
-    }
-
-    /**
-     * メッセージのIDから、選択画面かを確認する
-     *
-     * @param message [Long] メッセージのID
-     * @return [Boolean] 選択画面か
-     */
-    fun isSelectDiceBotView(message: Long): Boolean {
-        channelViews.forEach { entry ->
-            val value = entry.value
-            if (value.idLong == message) {
-                return true
-            }
+        //メッセージを更新
+        event.message.editMessageEmbeds(createView(page)).queue {
+            //コンポーネント類を編集
+            event.editComponents(
+                ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[page]!!)),
+                ActionRow.of(
+                    DiceBotPageButton.BackButton.createButton(page - 1),
+                    DiceBotPageButton.NextButton.createButton(page + 1)
+                ),
+            ).queue()
         }
-        return false
     }
 
     /**
-     * ダイスボットを選択する
+     * 選択メニューに応じてBotを選択
      *
-     * @param channel [MessageChannel] 該当のテキストチャンネル
-     * @param slot [Int] 開いてるページの何番目か
-     * @param guild [Guild] 対象のギルド
+     * @param event [SelectMenuInteractionEvent]対象のイベント
      */
-    fun select(channel: GuildMessageChannel, slot: Int, guild: Guild) {
-        //開いているページを取得
-        val pageNumber = channelViewsPage[channel] ?: return
-        //ページ内のゲームシステムを取得
-        val gameSystems = gameSystemPages[pageNumber] ?: return
+    fun selectFromSelectMenuInteraction(event: SelectMenuInteractionEvent) {
+        //チャンネルを取得1
+        val channel = event.guildChannel as GuildMessageChannel
+
         //ゲームシステムを取得
-        val gameSystem = gameSystems[slot - 1]
+        val gameSystem = bcdice.getGameSystem(event.selectedOptions[0]?.value ?: return)
+
         try {
             //言語のデータ
             val langData = channel.guild.getLang()
 
             //メッセージを送信
-            channel.sendMessage(langData.dice.bcDice.changeDiceBot.langFormat("**${gameSystem.name}**", gameSystem.id))
-                .queue { selectMessage ->
-                    selectMessage.addReaction("❓").queue()
-                    //設定画面を消す
-                    if (channelViews.containsKey(channel)) {
-                        channelViews[channel]?.delete()?.queue()
-                    }
-                    channelViews[channel] = selectMessage
-                }
+            event.hook.sendMessage(langData.dice.bcDice.changeDiceBot.langFormat("**${gameSystem.name}**", gameSystem.id))
+                .addActionRows(ActionRow.of(DiceBotInfoButton.createButton(0))).queue()
 
             //ギルドのデータを取得
-            val guildData = guild.getGuildData()
+            val guildData = channel.guild.getGuildData()
 
             //ダイスモードを自動的に変更する
             if (guildData.diceMode == DiceMode.Default) {
-                channel.sendMessage(langData.dice.changeDiceMode.langFormat("**BCDice**")).queue()
+                event.hook.sendMessage(langData.dice.changeDiceMode.langFormat("**BCDice**")).queue()
             }
 
+            //データを保存
             guildData.diceBot = gameSystem.id
             guildData.diceMode = DiceMode.BCDice
-            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+            SimpleTimer.instance.dataContainer.saveGuildsData(channel.guild)
         } catch (e: Exception) {
             //権限関係が原因の物は排除
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
