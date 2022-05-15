@@ -475,8 +475,7 @@ class Timer(
                         }
                         //ロールへメンション
                         Mention.ROLE -> {
-                            guildData.roleMentionTargets.filterNotNull().map { "<@&" + it.idLong + ">" }
-                                .joinToString { "" }
+                            guildData.roleMentionTargets.filterNotNull().joinToString { it.asMention }
                         }
                         //対象のVCへのメンション
                         Mention.TARGET_VC -> {

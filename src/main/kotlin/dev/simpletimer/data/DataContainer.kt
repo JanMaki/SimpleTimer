@@ -5,8 +5,6 @@ import com.charleskorn.kaml.Yaml
 import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.guild.GuildData
-import dev.simpletimer.data.lang.Lang
-import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.equalsIgnoreCase
 import net.dv8tion.jda.api.entities.Guild
 import java.io.File
@@ -38,6 +36,7 @@ class DataContainer {
     //ギルドのデータを保管するディレクトリ
     private val guildDirectory = File(parentDirectory, "Guild")
 
+
     //音源データを保管するディレクトリ
     private val audioDirectory = File(parentDirectory, "Audio")
 
@@ -67,22 +66,6 @@ class DataContainer {
             config = ConfigData()
         }
 
-        //ギルドを保管するディレクトリがあるかを確認
-        if (!guildDirectory.exists()) guildDirectory.mkdirs()
-
-        //ymlを読み取り
-        guildDirectory.listFiles()?.filterNotNull()?.filter { it.extension == "yml" }?.forEach { file ->
-            try {
-                //ファイル読み込み
-                val guildFileInputStream = file.inputStream()
-                guildDatum[file.nameWithoutExtension.toLong()] =
-                    Yaml.default.decodeFromStream(GuildData.serializer(), guildFileInputStream)
-                guildFileInputStream.close()
-            } catch (ignore: EmptyYamlDocumentException) {
-                //空データを代入
-                guildDatum[file.nameWithoutExtension.toLong()] = GuildData()
-            }
-        }
 
         //音源を保管するディレクトリがあるかを確認
         if (!audioDirectory.exists()) audioDirectory.mkdirs()
@@ -97,6 +80,7 @@ class DataContainer {
             //追加
             audioDatum.add(audioData)
         }
+
 
         //言語を保管するディレクトリがあるかを確認
         if (!langDirectory.exists()) langDirectory.mkdirs()
@@ -120,6 +104,29 @@ class DataContainer {
 
             //読み込んで代入
             langs[lang] = Yaml.default.decodeFromStream(LangData.serializer(), langFile.inputStream())
+        }
+    }
+
+    /**
+     * ギルドの読み込み
+     *
+     */
+    fun loadGuild(){
+        //ギルドを保管するディレクトリがあるかを確認
+        if (!guildDirectory.exists()) guildDirectory.mkdirs()
+
+        //ymlを読み取り
+        guildDirectory.listFiles()?.filterNotNull()?.filter { it.extension == "yml" }?.forEach { file ->
+            try {
+                //ファイル読み込み
+                val guildFileInputStream = file.inputStream()
+                guildDatum[file.nameWithoutExtension.toLong()] =
+                    Yaml.default.decodeFromStream(GuildData.serializer(), guildFileInputStream)
+                guildFileInputStream.close()
+            } catch (ignore: EmptyYamlDocumentException) {
+                //空データを代入
+                guildDatum[file.nameWithoutExtension.toLong()] = GuildData()
+            }
         }
     }
 
