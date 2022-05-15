@@ -10,5 +10,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CommandLangData(
-    val audio: AudioCommandLangData = AudioCommandLangData()
+    val audio: AudioCommandLangData = AudioCommandLangData(),
+    val button: ButtonCommandLangData = ButtonCommandLangData()
 )
