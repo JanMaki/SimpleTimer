@@ -19,7 +19,7 @@ object ResetCommand :
         val yesAction = YesOrNoModal.Action {
             SimpleTimer.instance.dataContainer.resetGuildData(guild)
 
-            it.hook.sendMessage("SimpleTimerの設定をリセットしました").queue()
+            it.hook.sendMessage(guild.getLang().command.reset.reset).queue()
         }
 
         //確認のModalでNoを選択したときの処理

@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
  * @property lang 言語変更コマンドの言語のデータ
  * @property list 一覧コマンドの言語のデータ
  * @property queue キューコマンドの言語のデータ
+ * @property reset リセットコマンドの言語のデータ
  */
 @Serializable
 data class CommandLangData(
@@ -23,5 +24,6 @@ data class CommandLangData(
     val help: HelpCommandLangData = HelpCommandLangData(),
     val lang: LangCommandLangData = LangCommandLangData(),
     val list: ListCommandLangData = ListCommandLangData(),
-    val queue: QueueCommandLangData = QueueCommandLangData()
+    val queue: QueueCommandLangData = QueueCommandLangData(),
+    val reset: ResetCommandLangData = ResetCommandLangData()
 )
