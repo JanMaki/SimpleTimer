@@ -2,10 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.YesOrNoModal
-import dev.simpletimer.extension.checkSimpleTimerPermission
-import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.getLang
-import dev.simpletimer.extension.sendEmpty
+import dev.simpletimer.extension.*
 import dev.simpletimer.list.ListMenu
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -49,9 +46,12 @@ class ListCommands {
             //ギルドのデータを取得
             val guildData = guild.getGuildData()
 
+            //言語のデータ
+            val langData = guild.getLang()
+
             //同期の確認
             if (guildData.listSync) {
-                event.hook.sendMessage("*このサーバーでは一覧を同期しています。").queue()
+                event.hook.sendMessage(langData.command.list.synced).queue()
                 return
             }
 
@@ -60,13 +60,13 @@ class ListCommands {
 
             //文字数制限
             if (name.length >= 10) {
-                event.hook.sendMessage("*名前の文字数は10文字以下にしてください").queue()
+                event.hook.sendMessage(langData.command.list.longLengthWarning).queue()
                 return
             }
 
             //:を挟まれないようにする
             if (name.contains(":")) {
-                event.hook.sendMessage("*名前に使用できない文字が含まれています").queue()
+                event.hook.sendMessage(langData.command.list.unusableCharacter).queue()
                 return
             }
 
@@ -75,7 +75,7 @@ class ListCommands {
 
             //上限を確認
             if (list.size >= 10) {
-                event.hook.sendMessage("*10個以上登録できません").queue()
+                event.hook.sendMessage(langData.command.list.maxEntry).queue()
                 return
             }
 
@@ -95,7 +95,7 @@ class ListCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを送信
-            event.hook.sendMessage("一覧に追加しました").queue()
+            event.hook.sendMessage(langData.command.list.add).queue()
 
             //タイマー一覧を送信する
             ListMenu.sendList(event)
@@ -120,19 +120,22 @@ class ListCommands {
             //ギルドのデータを取得
             val guildData = guild.getGuildData()
 
+            //言語のデータ
+            val langData = guild.getLang()
+
             //オプションを取得
             val name = event.getOption("名前")!!.asString
 
             //同期の確認
             if (guildData.listSync) {
-                event.hook.sendMessage("*このサーバーでは一覧を同期しています。").queue()
+                event.hook.sendMessage(langData.command.list.synced).queue()
                 return
             }
 
             //ギルドのデータから一覧を取得し、有効な要素かを確認する
             if (!guildData.list.contains("dice:${name}") && !guildData.list.contains("timer:${name}")) {
                 //エラーのメッセージを送信
-                event.hook.sendMessage("*無効な要素です").queue()
+                event.hook.sendMessage(langData.command.list.missingEntryWarning).queue()
                 return
             }
 
@@ -142,7 +145,7 @@ class ListCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを送信
-            event.hook.sendMessage("要素を削除しました").queue()
+            event.hook.sendMessage(langData.command.list.remove).queue()
 
             //一覧を送信する
             ListMenu.sendList(event)
@@ -174,9 +177,12 @@ class ListCommands {
             //ギルドのデータを取得
             val guildData = guild.getGuildData()
 
+            //言語のデータ
+            val langData = guild.getLang()
+
             //同期の確認
             if (guildData.listSync) {
-                event.hook.sendMessage("*このサーバーでは一覧を同期しています。").queue()
+                event.hook.sendMessage(langData.command.list.synced).queue()
                 return
             }
 
@@ -187,7 +193,7 @@ class ListCommands {
                 //保存
                 SimpleTimer.instance.dataContainer.saveGuildsData(guild)
                 //メッセージを送信
-                it.hook.sendMessage("すべての要素を削除しました").queue()
+                it.hook.sendMessage(langData.command.list.clear).queue()
             }
             //確認のModalでNoを選択したときの処理
             val noAction = YesOrNoModal.Action {
@@ -249,7 +255,7 @@ class ListCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを送信
-            event.hook.sendMessage("一覧からタイマーやダイスを実行するチャンネルを**${channel.name}**に変更しました").queue()
+            event.hook.sendMessage(guild.getLang().command.list.changeChannel.langFormat("**${channel.name}**")).queue()
         }
     }
 
@@ -292,6 +298,9 @@ class ListCommands {
 
             val guild = event.guild!!
 
+            //言語のデーター
+            val langData = guild.getLang()
+
             //ギルドのデータを取得
             val guildData = guild.getGuildData()
 
@@ -322,21 +331,21 @@ class ListCommands {
                     //nullチェック
                     if (targetGuild == null) {
                         //メッセージを送信
-                        event.hook.sendMessage("*無効なIDです").queue()
+                        event.hook.sendMessage(langData.command.list.invalidID).queue()
                         return
                     } else {
                         //メッセージを送信
-                        event.hook.sendMessage("同期を開始しました").queue()
+                        event.hook.sendMessage(langData.command.list.startSync).queue()
                         //ターゲットのギルドを設定
                         guildData.syncTarget = targetGuild
                     }
                 } else {
-                    event.hook.sendMessage("*対象のサーバーが同じサーバーです").queue()
+                    event.hook.sendMessage(langData.command.list.targetSame).queue()
                     return
                 }
 
             } else {
-                event.hook.sendMessage("同期を終了しました").queue()
+                event.hook.sendMessage(langData.command.list.finishSync).queue()
             }
 
             //ギルドのデータを保存
@@ -360,6 +369,9 @@ class ListCommands {
             //ギルドのデータを取得
             val guildData = guild.getGuildData()
 
+            //言語のデータ
+            val langData = guild.getLang()
+
             //オプションを取得
             val option = event.getOption("id")
 
@@ -377,7 +389,7 @@ class ListCommands {
 
             //ギルドのIDが違うかを確認
             if (guild.idLong == long) {
-                event.hook.sendMessage("*対象のサーバーが同じサーバーです").queue()
+                event.hook.sendMessage(langData.command.list.targetSame).queue()
                 return
             }
 
@@ -387,7 +399,7 @@ class ListCommands {
             //nullチェック
             if (targetGuild == null) {
                 //メッセージを送信
-                event.hook.sendMessage("*無効なIDです").queue()
+                event.hook.sendMessage(langData.command.list.invalidID).queue()
                 return
             }
 
@@ -399,7 +411,7 @@ class ListCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを送信
-            event.hook.sendMessage("コピーを行いました").queue()
+            event.hook.sendMessage(langData.command.list.copy).queue()
         }
     }
 
@@ -409,10 +421,8 @@ class ListCommands {
      */
     object GetID : SlashCommandManager.SlashCommand("list_id", "同期に必要なIDを取得します") {
         override fun run(event: SlashCommandInteractionEvent) {
-            //36進数にする
-            val id = event.guild!!.idLong.toString(36)
             //メッセージを送信
-            event.hook.sendMessage("IDは`${id}`です。\n他のサーバーで`/list_sync enable id: ${id}`を行うことで、このサーバーの一覧を同期でき、\n`/list_copy id: ${id}`を行うことで、このサーバーの一覧をコピーできます")
+            event.hook.sendMessage(event.guild!!.getLang().command.list.id.langFormat(event.guild!!.idLong.toString(36)))
                 .queue()
         }
     }
