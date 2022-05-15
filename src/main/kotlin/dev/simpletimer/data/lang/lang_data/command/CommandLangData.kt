@@ -9,11 +9,13 @@ import kotlinx.serialization.Serializable
  * @property button ボタンコマンドの言語ののデータ
  * @property chrome Chromeの拡張機能コマンドの言語のデータ
  * @property dice ダイスコマンドの言語のデータ
+ * @property help ヘルプコマンドの言語のデータ
  */
 @Serializable
 data class CommandLangData(
     val audio: AudioCommandLangData = AudioCommandLangData(),
     val button: ButtonCommandLangData = ButtonCommandLangData(),
     val chrome: ChromeCommandLangData = ChromeCommandLangData(),
-    val dice: DiceCommandLangData = DiceCommandLangData()
+    val dice: DiceCommandLangData = DiceCommandLangData(),
+    val help: HelpCommandLangData = HelpCommandLangData()
 )
