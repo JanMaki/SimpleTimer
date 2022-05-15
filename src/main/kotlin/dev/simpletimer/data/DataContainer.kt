@@ -5,6 +5,8 @@ import com.charleskorn.kaml.Yaml
 import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.guild.GuildData
+import dev.simpletimer.data.lang.Lang
+import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.equalsIgnoreCase
 import net.dv8tion.jda.api.entities.Guild
 import java.io.File
