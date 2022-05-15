@@ -20,7 +20,6 @@ class SelectMenuInteraction : ListenerAdapter() {
      */
     override fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
         super.onSelectMenuInteraction(event)
-        event.deferReply().queue()
 
         //管理者権限か、必要な権限を確認
         if (!event.guildChannel.checkSimpleTimerPermission()) {
@@ -34,6 +33,12 @@ class SelectMenuInteraction : ListenerAdapter() {
 
         //すべての選択メニュー
         SelectMenuManager.selectMenus.filter { id.split(":")[0].equalsIgnoreCase(it.name) }.forEach {
+            //考え中をするかを確認
+            if (it.deferReply) {
+                //考え中を出す
+                event.deferReply().queue()
+            }
+
             //選択メニューを実行
             it.run(event)
         }

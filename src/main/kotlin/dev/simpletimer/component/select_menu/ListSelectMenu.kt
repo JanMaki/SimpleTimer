@@ -17,8 +17,11 @@ import java.util.*
  * 一覧の選択メニュー
  *
  */
-object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, String>>("list") {
+object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, String>>("list", false) {
     override fun run(event: SelectMenuInteractionEvent) {
+        //考え中を出す
+        event.deferReply(true).queue()
+
         //選ばれたオプション
         val options = event.selectedOptions
 

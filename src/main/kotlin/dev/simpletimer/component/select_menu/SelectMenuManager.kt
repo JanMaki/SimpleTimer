@@ -21,7 +21,7 @@ object SelectMenuManager {
      *
      * @property name 識別に使う名前
      */
-    abstract class SelectMenu<T>(val name: String) {
+    abstract class SelectMenu<T>(val name: String, val deferReply: Boolean = true) {
         /**
          * 選択メニューを実行する
          *
