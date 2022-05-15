@@ -3,6 +3,7 @@ package dev.simpletimer.command
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.lang.Lang
 import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 
@@ -36,6 +37,9 @@ object LangCommand: SlashCommandManager.SlashCommand("lang", "言語を変更す
         SimpleTimer.instance.dataContainer.saveGuildsData(event.guild!!)
 
         //メッセージを送信
-        event.hook.sendMessage("言語を${lang.displayName}に変更しました").queue()
+        event.hook.sendMessage(
+            SimpleTimer.instance.dataContainer.langs[lang]?.command?.lang?.change?.langFormat("**${lang.displayName}**")
+                ?: ""
+        ).queue()
     }
 }
