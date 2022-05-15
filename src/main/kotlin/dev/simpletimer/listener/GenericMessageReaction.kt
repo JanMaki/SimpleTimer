@@ -1,6 +1,5 @@
 package dev.simpletimer.listener
 
-import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.timer.Timer
 import kotlinx.coroutines.CoroutineScope
@@ -51,33 +50,6 @@ class GenericMessageReaction : ListenerAdapter() {
                 "3️⃣" -> timer.add(3 * 60)
                 "5️⃣" -> timer.add(5 * 60)
                 "\uD83D\uDD1F" -> timer.add(10 * 60)
-                else -> return
-            }
-        }
-
-        //ダイスの確認
-        else if (BCDiceManager.instance.isSelectDiceBotView(idLong)) {
-
-            val bcdice = BCDiceManager.instance
-            val channel = event.channel
-            val guild = event.guild
-
-            //リアクションの確認・処理
-            when (event.reactionEmote.name) {
-                //ページ移動
-                "⬅️" -> bcdice.backSelectDiceBotView(channel)
-                "➡️" -> bcdice.nextSelectDiceBotView(channel)
-                //選択
-                "1️⃣" -> bcdice.select(channel, 1, guild)
-                "2️⃣" -> bcdice.select(channel, 2, guild)
-                "3️⃣" -> bcdice.select(channel, 3, guild)
-                "4️⃣" -> bcdice.select(channel, 4, guild)
-                "5️⃣" -> bcdice.select(channel, 5, guild)
-                "6️⃣" -> bcdice.select(channel, 6, guild)
-                "7️⃣" -> bcdice.select(channel, 7, guild)
-                "8️⃣" -> bcdice.select(channel, 8, guild)
-                "9️⃣" -> bcdice.select(channel, 9, guild)
-                "❓" -> channel.sendMessageEmbeds(bcdice.getInfoEmbed(channel, guild)).queue()
                 else -> return
             }
         }

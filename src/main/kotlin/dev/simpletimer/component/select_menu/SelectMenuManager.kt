@@ -9,6 +9,7 @@ object SelectMenuManager {
         //選択メニューを追加
         addAll(
             arrayOf(
+                DiceBotSelectMenu,
                 ListSelectMenu
             )
         )
