@@ -5,6 +5,8 @@ import dev.simpletimer.dice.DefaultDice
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.langFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +42,7 @@ class DiceCommands {
 
             //文字数制限
             if (dice.length >= 30) {
-                event.hook.sendMessage("*名前の文字数は30文字以下にしてください").queue()
+                event.hook.sendMessage(event.guild!!.getLang().dice.longLengthWarning).queue()
                 return
             }
 
@@ -75,7 +77,7 @@ class DiceCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("ダイスモードを**$diceMode**に変更しました").queue()
+            event.hook.sendMessage(guild.getLang().dice.changeDiceMode.langFormat("**${diceMode}**")).queue()
         }
     }
 
@@ -85,7 +87,7 @@ class DiceCommands {
     object DiceInfo : SlashCommandManager.SlashCommand("dice_info", "ダイスの使い方を表示する") {
         override fun run(event: SlashCommandInteractionEvent) {
             //チャンネルを取得
-            val channel = event.channel
+            val channel = event.guildChannel
 
             //ギルドを取得
             val guild = event.guild ?: return
@@ -94,7 +96,7 @@ class DiceCommands {
             when (guild.getGuildData().diceMode) {
                 dev.simpletimer.data.enum.DiceMode.Default -> {
                     //標準ダイスのヘルプを取得して出力
-                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed()).queue()
+                    event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed(guild.getLang())).queue()
                 }
                 dev.simpletimer.data.enum.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
@@ -113,11 +115,11 @@ class DiceCommands {
     object DiceBot : SlashCommandManager.SlashCommand("dice_bot", "BCDiceで使用するボットを変更します") {
         override fun run(event: SlashCommandInteractionEvent) {
             //メッセージを出力
-            event.hook.sendMessage("メニューよりボットを選択してください").queue()
+            event.hook.sendMessage(event.guild!!.getLang().command.dice.selectInMenu).queue()
 
             CoroutineScope(Dispatchers.Default).launch {
                 //ダイスボットを変更する画面を出す
-                BCDiceManager.instance.openSelectDiceBotView(event.channel)
+                BCDiceManager.instance.openSelectDiceBotView(event.guildChannel)
             }
         }
     }

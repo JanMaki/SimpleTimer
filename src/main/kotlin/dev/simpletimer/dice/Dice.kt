@@ -4,6 +4,8 @@ import dev.simpletimer.data.enum.DiceMode
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.extension.equalsIgnoreCase
 import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.langFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,6 +64,9 @@ class Dice {
         //ギルドのデータを取得
         val guildData = guild.getGuildData()
 
+        //言語のデータ
+        val langData = guild.getLang()
+
         //ギルドのダイスモードを確認
         when (guildData.diceMode) {
             //デフォルトのダイス
@@ -75,13 +80,11 @@ class Dice {
                 if (DefaultDice.checkDiceFormat(diceCommand)) {
 
                     //ダイスを作成
-                    val dice = DefaultDice(diceCommand, isSecret)
+                    val dice = DefaultDice(guild.getLang(), diceCommand, isSecret)
 
                     //出力メッセージの作成
                     val sendMessage = if (isSecret) {
-                        """
-                        ${mention}(シークレットダイス)${dice.resultMessage}
-                        """.trimIndent()
+                        langData.dice.secret.langFormat("${mention}${langData.dice.secret}${dice.resultMessage}")
                     } else {
                         """
                         ${mention}${dice.resultMessage}
@@ -89,17 +92,14 @@ class Dice {
                     }
                     //2000文字超えたときは失敗のログを出す
                     return if (sendMessage.length >= 2000) {
-                        """
-                        ${mention}出力結果の文字数が多すぎます。
-                        ダイスの内容を変更して再度実行してください。
-                        """.trimIndent()
+                        langData.dice.longRangeWaring.langFormat(mention)
                     } else {
                         //結果を出力する
                         sendMessage
                     }
                 } else {
                     //構文が間違ってたらメッセージを出す
-                    return "${mention}*ダイスの構文が間違っています"
+                    return langData.dice.wrongFormat.langFormat(mention)
                 }
             }
 
@@ -111,7 +111,7 @@ class Dice {
                 //結果の確認
                 return if (roll == null) {
                     //構文が間違ってたらメッセージを出す
-                    "${mention}*ダイスの構文が間違っています"
+                    langData.dice.wrongFormat.langFormat(mention)
                 } else {
                     //結果を出力する
                     "${mention}${roll}"

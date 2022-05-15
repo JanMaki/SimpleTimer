@@ -1,5 +1,6 @@
 package dev.simpletimer.component.button
 
+import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
@@ -20,7 +21,7 @@ class DiceBotPageButton {
             BCDiceManager.instance.changePageFromButtonInteraction(event)
         }
 
-        override fun createButton(data: Int): Button {
+        override fun createButton(data: Int, langData: LangData): Button {
             //ボタンを作成して返す
             return Button.primary("${name}:${data}", Emoji.fromUnicode("➡️"))
         }
@@ -36,7 +37,7 @@ class DiceBotPageButton {
             BCDiceManager.instance.changePageFromButtonInteraction(event)
         }
 
-        override fun createButton(data: Int): Button {
+        override fun createButton(data: Int, langData: LangData): Button {
             //ボタンを作成して返す
             return Button.primary("${name}:${data}", Emoji.fromUnicode("⬅️"))
         }

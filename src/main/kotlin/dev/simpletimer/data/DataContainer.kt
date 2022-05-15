@@ -5,6 +5,8 @@ import com.charleskorn.kaml.Yaml
 import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.guild.GuildData
+import dev.simpletimer.data.lang.Lang
+import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.equalsIgnoreCase
 import net.dv8tion.jda.api.entities.Guild
 import java.io.File
@@ -21,7 +23,10 @@ class DataContainer {
     //コンフィグ
     var config: ConfigData
 
+    //オーディオのデータ
     val audioDatum = mutableListOf<AudioInformationData>()
+
+    val langs = mutableMapOf<Lang, LangData>()
 
     //jarがあるディレクトリ
     private val parentDirectory: File =
@@ -36,6 +41,9 @@ class DataContainer {
 
     //音源データを保管するディレクトリ
     private val audioDirectory = File(parentDirectory, "Audio")
+
+    //言語のデータを保管するディレクトリ
+    private val langDirectory = File(parentDirectory, "Langs")
 
     init {
         //コンフィグの読み込み
@@ -73,6 +81,31 @@ class DataContainer {
             audioData.file = File(audioDirectory, audioData.file).path.toString()
             //追加
             audioDatum.add(audioData)
+        }
+
+
+        //言語を保管するディレクトリがあるかを確認
+        if (!langDirectory.exists()) langDirectory.mkdirs()
+
+        //すべての言語を確認
+        for (lang in Lang.values()) {
+            //ファイルを取得
+            val langFile = File(langDirectory, lang.getFilePath())
+
+            //ファイルがあるかを確認
+            if (!langFile.exists()) {
+                //ファイルを作成
+                langFile.parentFile.mkdirs()
+                langFile.createNewFile()
+
+                //デフォルトのデータを書き込み
+                val langFileOutputStream = langFile.outputStream()
+                Yaml.default.encodeToStream(LangData.serializer(), LangData(), langFileOutputStream)
+                langFileOutputStream.close()
+            }
+
+            //読み込んで代入
+            langs[lang] = Yaml.default.decodeFromStream(LangData.serializer(), langFile.inputStream())
         }
     }
 

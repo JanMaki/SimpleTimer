@@ -1,5 +1,7 @@
 package dev.simpletimer.component.modal
 
+import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.GuildMessageChannel
@@ -12,15 +14,13 @@ import java.util.*
  *
  */
 object StartTimerModal : TimerModal<Byte>("start_timer") {
-    override val minutesInputName: String
-        get() = "分数"
-    override val secondsInputName: String
-        get() = "秒数"
-
     override fun run(event: ModalInteractionEvent, seconds: Int) {
+        //言語のデータを取得
+        val langData = event.guild?.getLang() ?: return
+
         //時間を確認する
         if (seconds < 1) {
-            event.hook.sendMessage("*1秒以上の時間を設定してください").setEphemeral(true).queue()
+            event.hook.sendMessage(langData.component.modal.moreThanOneWarning).setEphemeral(true).queue()
             return
         }
 
@@ -45,12 +45,12 @@ object StartTimerModal : TimerModal<Byte>("start_timer") {
         }
 
         //最大数のメッセージを出力する
-        event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
+        event.hook.sendMessage(langData.timer.timerMaxWarning).queue()
     }
 
-    override fun getModalBuilder(data: Byte): Modal.Builder {
+    override fun getModalBuilder(data: Byte, langData: LangData): Modal.Builder {
         //Modalを作成して返す
-        return Modal.create(name, "タイマーを開始する")
+        return Modal.create(name, langData.component.modal.startTimer)
     }
 
 }

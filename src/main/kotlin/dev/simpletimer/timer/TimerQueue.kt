@@ -1,5 +1,7 @@
 package dev.simpletimer.timer
 
+import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildMessageChannel
@@ -100,16 +102,20 @@ class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number:
      *
      * @return 作成した[MessageEmbed]
      */
-    fun getQueueEmbed(): MessageEmbed {
+    fun getQueueEmbed(langData: LangData): MessageEmbed {
         val embed = EmbedBuilder()
 
         //タイトルを設定
-        embed.setTitle("${number.number}番目のキュー")
+        embed.setTitle(langData.timer.queueNumber.langFormat(number.number))
 
         //キューを確認
         getQueue().withIndex().forEach { (index, totalSeconds) ->
             //フィールドを追加
-            embed.addField("${index + 1}", "${totalSeconds / 60}分${totalSeconds % 60}秒", true)
+            embed.addField(
+                "${index + 1}",
+                "${langData.timer.minutes.langFormat(totalSeconds / 60)}${langData.timer.seconds.langFormat(totalSeconds % 60)}",
+                true
+            )
         }
 
         //作って返す

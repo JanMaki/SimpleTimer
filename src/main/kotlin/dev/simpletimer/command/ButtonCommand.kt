@@ -2,6 +2,8 @@ package dev.simpletimer.command
 
 import dev.simpletimer.component.button.DiceButton
 import dev.simpletimer.component.modal.TimerButtonModal
+import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -37,7 +39,7 @@ object ButtonCommand : SlashCommandManager.SlashCommand("button", "タイマー�
             //タイマーのボタン
             "timer" -> {
                 //Modalを作成して返す
-                event.replyModal(TimerButtonModal.createModal(0)).queue()
+                event.replyModal(TimerButtonModal.createModal(0, event.guild!!.getLang())).queue()
             }
             //ダイスのボタン
             "dice" -> {
@@ -56,15 +58,18 @@ object ButtonCommand : SlashCommandManager.SlashCommand("button", "タイマー�
                 //ダイスの内容を取得
                 val dice = option.asString
 
+                //言語のデータ
+                val langData = event.guild?.getLang() ?: return
+
                 //文字数制限
                 if (dice.length >= 30) {
-                    event.hook.sendMessage("*ダイスの内容は30文字以下にしてください").queue()
+                    event.hook.sendMessage(langData.dice.longLengthWarning).queue()
                     return
                 }
 
                 //ボタンを送信
-                event.hook.sendMessage("**${option.asString}**を振る")
-                    .addActionRow(DiceButton.createButton(option.asString))
+                event.hook.sendMessage(langData.command.button.roll.langFormat("**${option.asString}**"))
+                    .addActionRow(DiceButton.createButton(option.asString, event.guild!!.getLang()))
                     .queue()
             }
             else -> {

@@ -1,5 +1,6 @@
 package dev.simpletimer.component.button
 
+import dev.simpletimer.data.lang.lang_data.LangData
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 
 /**
@@ -45,8 +46,12 @@ class ButtonManager {
          * ボタンを作成する
          *
          * @param data ボタンに何かデータつける時に使う
+         * @param langData [LangData]言語のデータ
          * @return 作成した[Button]
          */
-        abstract fun createButton(data: T): net.dv8tion.jda.api.interactions.components.buttons.Button
+        abstract fun createButton(
+            data: T,
+            langData: LangData
+        ): net.dv8tion.jda.api.interactions.components.buttons.Button
     }
 }

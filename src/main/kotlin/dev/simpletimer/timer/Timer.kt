@@ -7,9 +7,7 @@ import dev.simpletimer.component.button.FinishButton
 import dev.simpletimer.component.button.StopButton
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
-import dev.simpletimer.extension.checkSimpleTimerPermission
-import dev.simpletimer.extension.getAudioPlayer
-import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.*
 import dev.simpletimer.timer.Timer.Number
 import dev.simpletimer.util.Log
 import kotlinx.coroutines.CoroutineScope
@@ -86,8 +84,11 @@ class Timer(
         }
     }
 
+    //言語のデータ
+    private val langData = guild.getLang()
+
     //Displayのメッセージの文字列
-    private var base = "タイマーを開始しました %s"
+    private var base = langData.timer.start
 
     //Displayと通知
     var display: Message? = null
@@ -148,8 +149,14 @@ class Timer(
 
         //途中通知の確認
         if (time.seconds == 0 && (time.minute % 10 == 0 || time.minute == 5 || time.minute == 3 || time.minute == 2 || time.minute == 1)) {
-            sendMessage("のこり${time.minute}分です", NoticeTiming.LV2)
-            sendTTS("のこり${time.minute}分です", NoticeTiming.LV2)
+            sendMessage(
+                langData.timer.minutesLeftNotice.langFormat(langData.timer.minutes.langFormat(time.minute)),
+                NoticeTiming.LV2
+            )
+            sendTTS(
+                langData.timer.minutesLeftNotice.langFormat(langData.timer.minutes.langFormat(time.minute)),
+                NoticeTiming.LV2
+            )
         }
 
         //10秒の倍数と残り5秒の時、updateのフラグが立っているときはdisplayを更新する
@@ -171,24 +178,24 @@ class Timer(
 
     override fun onAdd(seconds: Int) {
         //延長と短縮を判定
-        if (seconds >= 0) {
+        val text = if (seconds >= 0) {
             if (seconds >= 60) {
-                sendMessage("タイマーを${seconds / 60}分${seconds % 60}秒延長しました", NoticeTiming.LV3)
-                sendTTS("タイマーを${seconds / 60}秒${seconds % 60}延長しました", NoticeTiming.LV3)
+                langData.timer.add.langFormatTime(langData, seconds / 60, seconds % 60)
             } else {
-                sendMessage("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
-                sendTTS("タイマーを${seconds}秒延長しました", NoticeTiming.LV3)
+                langData.timer.add.langFormat(langData.timer.seconds.langFormat(seconds))
             }
         } else {
             val absSeconds = abs(seconds)
             if (absSeconds >= 60) {
-                sendMessage("タイマーを${absSeconds / 60}分${absSeconds % 60}秒短縮しました", NoticeTiming.LV3)
-                sendTTS("タイマーを${absSeconds / 60}分${absSeconds % 60}秒短縮しました", NoticeTiming.LV3)
+                langData.timer.minus.langFormatTime(langData, seconds / 60, seconds % 60)
             } else {
-                sendMessage("タイマーを${seconds}秒短縮しました", NoticeTiming.LV3)
-                sendTTS("タイマーを${seconds}秒短縮しました", NoticeTiming.LV3)
+                langData.timer.minus.langFormat(langData.timer.seconds.langFormat(seconds))
             }
         }
+
+        sendMessage(text, NoticeTiming.LV3)
+        sendTTS(text, NoticeTiming.LV3)
+
         //強制的に更新させる
         update = true
     }
@@ -203,14 +210,14 @@ class Timer(
 
     override fun onRestart(check: Boolean) {
         if (!check) {
-            sendMessage("タイマーは一時停止していません", NoticeTiming.NONE)
+            sendMessage(langData.timer.notStop, NoticeTiming.NONE)
             return
         }
         //新しいdisplayとして作る
-        base = "タイマーを再開しました　%s"
+        base = langData.timer.restart
         val time = timerService.getTime()
         sendDisplayMessage(time)
-        sendTTS("タイマーを再開しました", NoticeTiming.LV3)
+        sendTTS(langData.timer.restartTTS, NoticeTiming.LV3)
         notice?.clearReactions()?.queue()
     }
 
@@ -225,13 +232,13 @@ class Timer(
     override fun onStop(check: Boolean) {
         //停止の確認
         if (!check) {
-            sendMessage("タイマーは既に一時停止しています", NoticeTiming.NONE)
+            sendMessage(langData.timer.alreadyStop, NoticeTiming.NONE)
             return
         }
         update = true
         //メッセージの送信とリアクション
-        sendMessage("タイマーを一時停止しました", NoticeTiming.LV3)
-        sendTTS("タイマーを一時停止しました", NoticeTiming.LV3)
+        sendMessage(langData.timer.stop, NoticeTiming.LV3)
+        sendTTS(langData.timer.stop, NoticeTiming.LV3)
         notice?.addReaction("U+25C0")?.queue()
         //ディスプレイを更新
         val time = timerService.getTime()
@@ -257,7 +264,7 @@ class Timer(
         //ギルドのデータを取得
         val guildData = guild.getGuildData()
         //メッセージを送信
-        sendMessage("タイマーが終了しました", NoticeTiming.LV1, true)
+        sendMessage(langData.timer.finish, NoticeTiming.LV1, true)
         sendTTS(
             guildData.finishTTS.replace("x", number.number.toString()),
             NoticeTiming.LV1
@@ -267,7 +274,7 @@ class Timer(
         val time = timerService.getTime()
         //削除のボタンをつける
         display?.editMessageEmbeds(generateDisplayEmbed(time))
-            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue()
+            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))?.queue()
 
         //プレイヤーを取得
         val player = guild.getAudioPlayer()
@@ -304,7 +311,7 @@ class Timer(
      */
     fun check() {
         //新しいdisplayとして作る
-        base = "タイマー終了まで: %s"
+        base = langData.timer.leftCheck
         val time = timerService.getTime()
         sendDisplayMessage(time)
     }
@@ -324,13 +331,13 @@ class Timer(
         //登録を消す
         timers.remove(display?.idLong)
         displays.remove(display?.idLong)
-        sendMessage("タイマーを破棄しました", NoticeTiming.NONE, true)
+        sendMessage(langData.timer.remove, NoticeTiming.NONE, true)
 
         //ディスプレイを更新
         val time = timerService.getTime()
         //削除のボタンをつける
         display?.editMessageEmbeds(generateDisplayEmbed(time))
-            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))?.queue()
+            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))?.queue()
 
         val channelTimers = channelsTimersMap[channel]
         if (channelTimers != null) {
@@ -368,9 +375,9 @@ class Timer(
             channel.sendMessageEmbeds(generateDisplayEmbed(time))
                 .setActionRows(
                     ActionRow.of(
-                        StopButton.createButton(number),
-                        FinishButton.createButton(number),
-                        AddTimerButton.createButton(number)
+                        StopButton.createButton(number, guild.getLang()),
+                        FinishButton.createButton(number, guild.getLang()),
+                        AddTimerButton.createButton(number, guild.getLang())
                     )
                 )
                 .queue { display ->
@@ -405,7 +412,7 @@ class Timer(
         //ビルダー
         val embed = EmbedBuilder()
         //時間を説明文に書く
-        embed.setDescription(number.format(base.format("${time.minute}分${time.seconds}秒")))
+        embed.setDescription(number.format(base.langFormatTime(langData, time.minute, time.seconds)))
         //色を設定
         embed.setColor(number.color)
         //作成して返す
@@ -499,7 +506,7 @@ class Timer(
                 display?.reply(message)
                     ?.apply {
                         //削除のボタンをつける
-                        if (deletable) setActionRows(ActionRow.of(DeleteMessageButton.createButton(0)))
+                        if (deletable) setActionRows(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))
                     }
                     ?.mentionRepliedUser(false)?.queue { notice ->
                         timers[notice.idLong] = this

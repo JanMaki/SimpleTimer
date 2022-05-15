@@ -1,5 +1,6 @@
 package dev.simpletimer.component.modal
 
+import dev.simpletimer.data.lang.lang_data.LangData
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 
 /**
@@ -41,6 +42,6 @@ object ModalManager {
          * @param data Modalに何かデータつける時に使う
          * @return 作成した[Modal]
          */
-        abstract fun createModal(data: T): net.dv8tion.jda.api.interactions.components.Modal
+        abstract fun createModal(data: T, langData: LangData): net.dv8tion.jda.api.interactions.components.Modal
     }
 }

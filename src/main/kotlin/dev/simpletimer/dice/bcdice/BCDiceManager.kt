@@ -7,10 +7,8 @@ import dev.simpletimer.component.button.DiceBotInfoButton
 import dev.simpletimer.component.button.DiceBotPageButton
 import dev.simpletimer.component.select_menu.DiceBotSelectMenu
 import dev.simpletimer.data.enum.DiceMode
-import dev.simpletimer.extension.emoji
-import dev.simpletimer.extension.equalsIgnoreCase
-import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.sendEmpty
+import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.extension.*
 import dev.simpletimer.util.Log
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
@@ -69,14 +67,14 @@ class BCDiceManager {
      * @param page [Int]　ページ
      * @return [MessageEmbed] メッセージの埋め込み
      */
-    private fun createView(page: Int): MessageEmbed? {
+    private fun createView(langData: LangData, page: Int): MessageEmbed? {
         //ページを取得
         val gameSystems = gameSystemPages[page] ?: return null
 
         //作成開始
         val builder = EmbedBuilder()
-        builder.setTitle("ダイスBot選択", "https://bcdice.org/systems/")
-        builder.setDescription("使用するダイスボットを選択してください")
+        builder.setTitle(langData.dice.bcDice.botSelect, "https://bcdice.org/systems/")
+        builder.setDescription(langData.dice.bcDice.botSelectDescription)
         builder.setColor(Color.BLUE)
 
         //ページ内のgameSystemを貼り付けていく
@@ -86,25 +84,27 @@ class BCDiceManager {
         }
 
         //ページ数の表示
-        builder.setFooter("ページ: ${page}/${gameSystemPages.size}")
+        builder.setFooter(langData.dice.bcDice.page.langFormat(page, gameSystemPages.size))
 
         return builder.build()
     }
-
 
     /**
      * ダイス選択画面を送る
      *
      * @param channel [MessageChannel] 対象のチャンネル
      */
-    fun openSelectDiceBotView(channel: MessageChannel) {
+    fun openSelectDiceBotView(channel: GuildMessageChannel) {
         //embedを作成
-        val embed = createView(1) ?: return
+        val embed = createView(channel.guild.getLang(), 1) ?: return
 
         //メッセージを送信
         channel.sendMessageEmbeds(embed).setActionRows(
             ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[1]!!)),
-            ActionRow.of(DiceBotPageButton.BackButton.createButton(0), DiceBotPageButton.NextButton.createButton(2))
+            ActionRow.of(
+                DiceBotPageButton.BackButton.createButton(0, channel.guild.getLang()),
+                DiceBotPageButton.NextButton.createButton(2, channel.guild.getLang())
+            )
         ).queue()
     }
 
@@ -130,13 +130,13 @@ class BCDiceManager {
         }
 
         //メッセージを更新
-        event.message.editMessageEmbeds(createView(page)).queue {
+        event.message.editMessageEmbeds(createView(event.guild!!.getLang(), page)).queue {
             //コンポーネント類を編集
             event.editComponents(
                 ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[page]!!)),
                 ActionRow.of(
-                    DiceBotPageButton.BackButton.createButton(page - 1),
-                    DiceBotPageButton.NextButton.createButton(page + 1)
+                    DiceBotPageButton.BackButton.createButton(page - 1, event.guild!!.getLang()),
+                    DiceBotPageButton.NextButton.createButton(page + 1, event.guild!!.getLang())
                 ),
             ).queue()
         }
@@ -155,16 +155,24 @@ class BCDiceManager {
         val gameSystem = bcdice.getGameSystem(event.selectedOptions[0]?.value ?: return)
 
         try {
+            //言語のデータ
+            val langData = channel.guild.getLang()
+
             //メッセージを送信
-            event.hook.sendMessage("ダイスBotを**${gameSystem.name}**に変更しました")
-                .addActionRows(ActionRow.of(DiceBotInfoButton.createButton(0))).queue()
+            event.hook.sendMessage(
+                langData.dice.bcDice.changeDiceBot.langFormat(
+                    "**${gameSystem.name}**",
+                    gameSystem.id
+                )
+            )
+                .addActionRows(ActionRow.of(DiceBotInfoButton.createButton(0, channel.guild.getLang()))).queue()
 
             //ギルドのデータを取得
             val guildData = channel.guild.getGuildData()
 
             //ダイスモードを自動的に変更する
             if (guildData.diceMode == DiceMode.Default) {
-                event.hook.sendMessage("ダイスモードを**BCDice**に変更しました id:${gameSystem.id}").queue()
+                event.hook.sendMessage(langData.dice.changeDiceMode.langFormat("**BCDice**")).queue()
             }
 
             //データを保存
@@ -186,9 +194,12 @@ class BCDiceManager {
      * @param channel [MessageChannel] 送信するテキストチャンネル
      * @param guild [Guild] 対象のギルド
      */
-    fun getInfoEmbed(channel: MessageChannel, guild: Guild): MessageEmbed {
+    fun getInfoEmbed(channel: GuildMessageChannel, guild: Guild): MessageEmbed {
         //ギルドのデータを取得
         val guildData = guild.getGuildData()
+
+        //言語のデータ
+        val langData = guild.getLang()
 
         //ギルドのデータから設定されているダイスボットを取得
         val id = guildData.diceBot
@@ -199,7 +210,7 @@ class BCDiceManager {
         //作成開始
         var builder = EmbedBuilder()
         builder.setTitle(gameSystemInfo.name)
-        builder.setDescription("ダイスは\"/roll ダイス: コマンド\"で実行できます 例: /roll ダイス: 1d100")
+        builder.setDescription(langData.dice.bcDice.diceDescription)
         builder.setColor(Color.BLUE)
 
         if (gameSystemInfo.help_message.length >= 1024) {
@@ -216,7 +227,7 @@ class BCDiceManager {
                 }
 
                 if (isFirst) {
-                    builder.addField("ゲーム固有コマンド", buffer.toString(), false)
+                    builder.addField(langData.dice.bcDice.gameCommand, buffer.toString(), false)
                     isFirst = false
                 } else {
                     builder.addField(" ", buffer.toString(), false)
@@ -229,13 +240,13 @@ class BCDiceManager {
                 builder.setColor(Color.BLUE)
             }
         } else {
-            builder.addField("ゲーム固有コマンド", gameSystemInfo.help_message, false)
+            builder.addField(langData.dice.bcDice.gameCommand, gameSystemInfo.help_message, false)
         }
 
         //システム共通を張る
         if (id != "DiceBot") {
             val defaultGameSystem = bcdice.getGameSystem("DiceBot")
-            builder.addField("システム共通コマンド", defaultGameSystem.help_message, false)
+            builder.addField(langData.dice.bcDice.commonCommand, defaultGameSystem.help_message, false)
         }
 
         return builder.build()
@@ -272,7 +283,7 @@ class BCDiceManager {
         //メッセージを構築して返す
         return if (result.secret) {
             //シークレットダイスダイス
-            "(シークレットダイス)\n||${result.text}||"
+            "${guild.getLang().dice.secret}\n||${result.text}||"
         } else {
             if (result.success || result.critical) {
                 //成功

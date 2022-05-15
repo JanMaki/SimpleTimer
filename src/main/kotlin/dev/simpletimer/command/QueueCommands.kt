@@ -2,6 +2,8 @@ package dev.simpletimer.command
 
 import dev.simpletimer.component.modal.QueueModal
 import dev.simpletimer.component.modal.YesOrNoModal
+import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.langFormat
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
@@ -34,7 +36,7 @@ abstract class QueueCommands {
             val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
             //Modalを返信
-            event.replyModal(QueueModal.createModal(number)).queue()
+            event.replyModal(QueueModal.createModal(number, event.guild!!.getLang())).queue()
         }
     }
 
@@ -61,7 +63,7 @@ abstract class QueueCommands {
             val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
             event.hook.sendMessageEmbeds(
-                TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).getQueueEmbed()
+                TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).getQueueEmbed(event.guild!!.getLang())
             ).queue()
         }
     }
@@ -106,16 +108,19 @@ abstract class QueueCommands {
             //キューを取得
             val queue = TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number)
 
+            //言語のデータ
+            val langData = event.guild!!.getLang()
+
             //キューがあるかを確認する
             if (queue.getQueue().size < index + 1) {
-                event.hook.sendMessage("該当のキューが見つかりません").queue()
+                event.hook.sendMessage(langData.command.queue.queueNotFount).queue()
                 return
             }
             //削除
             queue.removeQueueIndex(index)
 
             //メッセージを送信
-            event.hook.sendMessage("${number.number}番目のタイマーのキューを削除しました").queue()
+            event.hook.sendMessage(langData.command.queue.remove.langFormat(number.number)).queue()
         }
     }
 
@@ -157,7 +162,7 @@ abstract class QueueCommands {
                 TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).clearQueue()
 
                 //メッセージを送信
-                it.hook.sendMessage("${number.number}番目のタイマーのキューをすべて削除しました").queue()
+                it.hook.sendMessage(event.guild!!.getLang().command.queue.clear.langFormat(number.number)).queue()
             }
             //確認のModalでNoを選択したときの処理
             val noAction = YesOrNoModal.Action {
@@ -165,7 +170,12 @@ abstract class QueueCommands {
             }
 
             //Modalを作成して返す
-            event.replyModal(YesOrNoModal.createModal(YesOrNoModal.Data(event.user.idLong, yesAction, noAction)))
+            event.replyModal(
+                YesOrNoModal.createModal(
+                    YesOrNoModal.Data(event.user.idLong, yesAction, noAction),
+                    event.guild!!.getLang()
+                )
+            )
                 .queue()
         }
     }
