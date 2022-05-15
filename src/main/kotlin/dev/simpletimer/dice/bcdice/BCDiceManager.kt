@@ -3,17 +3,22 @@ package dev.simpletimer.dice.bcdice
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.bcdice_kt.BCDice
 import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
+import dev.simpletimer.component.button.DiceBotInfoButton
+import dev.simpletimer.component.button.DiceBotPageButton
+import dev.simpletimer.component.select_menu.DiceBotSelectMenu
 import dev.simpletimer.data.enum.DiceMode
-import dev.simpletimer.extension.equalsIgnoreCase
-import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.langFormat
+import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.extension.*
 import dev.simpletimer.util.Log
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
+import net.dv8tion.jda.api.interactions.components.ActionRow
 import java.awt.Color
 
 class BCDiceManager {
@@ -56,9 +61,6 @@ class BCDiceManager {
         }
     }
 
-    //番号の絵文字の配列
-    private val numberEmojis = arrayOf("1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣")
-
     /**
      * ダイス選択画面のEmbedを作成する
      *
@@ -82,30 +84,27 @@ class BCDiceManager {
         }
 
         //ページ数の表示
-        builder.setFooter(langData.dice.bcDice.page.langFormat(page, gameSystems.size))
+        builder.setFooter(langData.dice.bcDice.page.langFormat(page, gameSystemPages.size))
 
         return builder.build()
     }
-
-    //チャンネルに送ってるViewのマップ
-    private val channelViews = HashMap<MessageChannel, Message>()
-
-    //チャンネルに送ってるViewの開いているページ
-    private val channelViewsPage = HashMap<MessageChannel, Int>()
 
     /**
      * ダイス選択画面を送る
      *
      * @param channel [MessageChannel] 対象のチャンネル
      */
-    fun openSelectDiceBotView(channel: MessageChannel) {
+    fun openSelectDiceBotView(channel: GuildMessageChannel) {
         //embedを作成
-        val embed = createView(1) ?: return
+        val embed = createView(channel.guild.getLang(), 1) ?: return
 
         //メッセージを送信
         channel.sendMessageEmbeds(embed).setActionRows(
             ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[1]!!)),
-            ActionRow.of(DiceBotPageButton.BackButton.createButton(0), DiceBotPageButton.NextButton.createButton(2))
+            ActionRow.of(
+                DiceBotPageButton.BackButton.createButton(0, channel.guild.getLang()),
+                DiceBotPageButton.NextButton.createButton(2, channel.guild.getLang())
+            )
         ).queue()
     }
 
@@ -127,23 +126,17 @@ class BCDiceManager {
             event.deferReply().queue {
                 event.hook.sendEmpty()
             }
-        } catch (e: Exception) {
-            //権限関係が原因の物は排除
-            if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
-                return
-            }
-            Log.sendLog(e.stackTraceToString(), true)
+            return
         }
-    }
 
         //メッセージを更新
-        event.message.editMessageEmbeds(createView(page)).queue {
+        event.message.editMessageEmbeds(createView(event.guild!!.getLang(), page)).queue {
             //コンポーネント類を編集
             event.editComponents(
                 ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[page]!!)),
                 ActionRow.of(
-                    DiceBotPageButton.BackButton.createButton(page - 1),
-                    DiceBotPageButton.NextButton.createButton(page + 1)
+                    DiceBotPageButton.BackButton.createButton(page - 1, event.guild!!.getLang()),
+                    DiceBotPageButton.NextButton.createButton(page + 1, event.guild!!.getLang())
                 ),
             ).queue()
         }
@@ -166,8 +159,13 @@ class BCDiceManager {
             val langData = channel.guild.getLang()
 
             //メッセージを送信
-            event.hook.sendMessage(langData.dice.bcDice.changeDiceBot.langFormat("**${gameSystem.name}**", gameSystem.id))
-                .addActionRows(ActionRow.of(DiceBotInfoButton.createButton(0))).queue()
+            event.hook.sendMessage(
+                langData.dice.bcDice.changeDiceBot.langFormat(
+                    "**${gameSystem.name}**",
+                    gameSystem.id
+                )
+            )
+                .addActionRows(ActionRow.of(DiceBotInfoButton.createButton(0, channel.guild.getLang()))).queue()
 
             //ギルドのデータを取得
             val guildData = channel.guild.getGuildData()
