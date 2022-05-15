@@ -63,7 +63,7 @@ object ButtonCommand : SlashCommandManager.SlashCommand("button", "タイマー�
 
                 //文字数制限
                 if (dice.length >= 30) {
-                    event.hook.sendMessage(langData.command.button.longLengthWarning).queue()
+                    event.hook.sendMessage(langData.dice.longLengthWarning).queue()
                     return
                 }
 

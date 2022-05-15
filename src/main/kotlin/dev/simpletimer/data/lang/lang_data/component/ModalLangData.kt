@@ -28,7 +28,6 @@ data class ModalLangData(
     val minutes: String = "",
     val seconds: String = "",
     val missingTimeWarning: String = "",
-    val timerNotMoveWarning: String = "",
     val addTimeMinutes: String = "",
     val addTimeSeconds: String = "",
     val addTime: String = "",

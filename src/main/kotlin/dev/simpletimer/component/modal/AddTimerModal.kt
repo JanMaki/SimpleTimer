@@ -35,9 +35,9 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
         //タイマーの稼働を確認
         if (!channelTimers.containsKey(timerNumber)) {
             if (timerNumber != null)
-                event.reply(timerNumber.format(langData.component.modal.timerNotMoveWarning)).queue()
+                event.reply(timerNumber.format(langData.timer.timerNotMoveWarning)).queue()
             else {
-                event.reply(langData.component.modal.timerNotMoveWarning).queue()
+                event.reply(langData.timer.timerNotMoveWarning).queue()
             }
             return
         }

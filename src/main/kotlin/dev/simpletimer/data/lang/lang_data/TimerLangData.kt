@@ -39,5 +39,6 @@ data class TimerLangData(
     val leftCheck: String = "",
     val remove: String = "",
     val timerMaxWarning: String = "",
-    val queueNumber: String = ""
+    val queueNumber: String = "",
+    val timerNotMoveWarning: String = ""
 )

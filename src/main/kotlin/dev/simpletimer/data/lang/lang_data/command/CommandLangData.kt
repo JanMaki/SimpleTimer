@@ -14,6 +14,7 @@ import kotlinx.serialization.Serializable
  * @property list 一覧コマンドの言語のデータ
  * @property queue キューコマンドの言語のデータ
  * @property reset リセットコマンドの言語のデータ
+ * @property timer タイマーコマンドの言語のデータ
  */
 @Serializable
 data class CommandLangData(
@@ -25,5 +26,6 @@ data class CommandLangData(
     val lang: LangCommandLangData = LangCommandLangData(),
     val list: ListCommandLangData = ListCommandLangData(),
     val queue: QueueCommandLangData = QueueCommandLangData(),
-    val reset: ResetCommandLangData = ResetCommandLangData()
+    val reset: ResetCommandLangData = ResetCommandLangData(),
+    val timer: TimerCommandLangData = TimerCommandLangData()
 )

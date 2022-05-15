@@ -60,7 +60,7 @@ class TimerCommands {
             }
 
             //最大数のメッセージを出力する
-            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
+            event.hook.sendMessage(event.guild!!.getLang().timer.timerMaxWarning).queue()
         }
     }
 
@@ -104,11 +104,13 @@ class TimerCommands {
 
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
+                val warning = event.guild!!.getLang().timer.timerNotMoveWarning
+
                 //タイマーが稼働していないことを教えるメッセージを出力
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません")).queue()
+                    event.hook.sendMessage(number.format(warning)).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません").queue()
+                    event.hook.sendMessage(warning).queue()
                 }
                 return
             }
@@ -138,7 +140,7 @@ class TimerCommands {
 
             //稼働しているタイマーの数を取得
             if (channelTimers.keys.size == 0) {
-                event.hook.sendMessage("*タイマーは動いていません").queue()
+                event.hook.sendMessage(event.guild!!.getLang().timer.timerNotMoveWarning).queue()
                 return
             }
 
@@ -228,10 +230,11 @@ class TimerCommands {
 
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
+                val warning = event.guild!!.getLang().timer.timerNotMoveWarning
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません")).queue()
+                    event.hook.sendMessage(number.format(warning)).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません").queue()
+                    event.hook.sendMessage(warning).queue()
                 }
                 return
             }
@@ -287,10 +290,11 @@ class TimerCommands {
 
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
+                val warning = event.guild!!.getLang().timer.timerNotMoveWarning
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません")).queue()
+                    event.hook.sendMessage(number.format(warning)).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません").queue()
+                    event.hook.sendMessage(warning).queue()
                 }
                 return
             }
@@ -346,10 +350,11 @@ class TimerCommands {
 
             //タイマーの稼働を確認
             if (!channelTimers.containsKey(number)) {
+                val warning = event.guild!!.getLang().timer.timerNotMoveWarning
                 if (number != null)
-                    event.hook.sendMessage(number.format("*タイマーは動いていません")).queue()
+                    event.hook.sendMessage(number.format(warning)).queue()
                 else {
-                    event.hook.sendMessage("*タイマーは動いていません").queue()
+                    event.hook.sendMessage(warning).queue()
                 }
                 return
             }
@@ -402,7 +407,7 @@ class TimerCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("チャットの読み上げを${timing}にしました").queue()
+            event.hook.sendMessage(guild.getLang().command.timer.ttsTiming.langFormat(timing)).queue()
         }
     }
 
@@ -424,19 +429,20 @@ class TimerCommands {
             //メッセージを取得
             val message = event.getOption("メッセージ")?.asString ?: ""
 
+            val guild = event.guild!!
+
             //メッセージの長さを確認
             if (message.length > 20) {
-                event.hook.sendMessage("*20文字以下にしてください").queue()
+                event.hook.sendMessage(guild.getLang().command.timer.maxMessageLengthWarning).queue()
                 return
             }
 
             //ギルドのデータへ保存
-            val guild = event.guild!!
             guild.getGuildData().finishTTS = message
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("終了時のTTSメッセージを変更しました").queue()
+            event.hook.sendMessage(guild.getLang().command.timer.finishTTS).queue()
         }
     }
 
@@ -478,7 +484,7 @@ class TimerCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("メンションを行うタイミングを${timing}にしました").queue()
+            event.hook.sendMessage(guild.getLang().command.timer.mentionTiming.langFormat(timing)).queue()
         }
     }
 
@@ -530,8 +536,11 @@ class TimerCommands {
             guildData.mention = mention
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
+            //言語のデータ
+            val langData = guild.getLang()
+
             //メッセージを出力
-            event.hook.sendMessage("メンションの設定を${mention}にしました").queue()
+            event.hook.sendMessage(langData.command.timer.mentionSetting.langFormat(mention)).queue()
 
             //追加を促すメッセージ
             val appendMessageBuffer = StringBuffer()
@@ -543,16 +552,15 @@ class TimerCommands {
                 if (list.isNotEmpty()) {
                     //ターゲットを結合
                     appendMessageBuffer.append(
-                        "メンションを行う対象のロールは${
-                            list.filterNotNull().joinToString { "`${it.name}`" }
-                        }です。"
+                        langData.command.timer.targetRole.langFormat(
+                            list.filterNotNull().joinToString { "`${it.name}`" })
                     )
                 } else {
                     //ロールがないことを結合
-                    appendMessageBuffer.append("メンションを行う対象のロールが設定されていません。")
+                    appendMessageBuffer.append(langData.command.timer.targetRoleEmpty)
                 }
                 //コマンドを結合
-                appendMessageBuffer.append("\n対象のロールは、`/mention_addrole`で追加できます。")
+                appendMessageBuffer.append("\n${langData.command.timer.targetRolePrompt}")
             }
             if (mention == dev.simpletimer.data.enum.Mention.TARGET_VC) {
                 //ターゲットのVCを確認する
@@ -561,16 +569,14 @@ class TimerCommands {
                 if (list.isNotEmpty()) {
                     //ターゲットを結合
                     appendMessageBuffer.append(
-                        "メンションを行う対象のボイスチャンネルは${
-                            list.filterNotNull().joinToString { "`${it.name}`" }
-                        }です。"
+                        langData.command.timer.targetVC.langFormat(list.filterNotNull().joinToString { "`${it.name}`" })
                     )
                 } else {
                     //ターゲットがないことを結合
-                    appendMessageBuffer.append("メンションを行う対象のボイスチャンネルが設定されていません。")
+                    appendMessageBuffer.append(langData.command.timer.targetVCEmpty)
                 }
                 //コマンドを結合
-                appendMessageBuffer.append("\n対象のボイスチャンネルは、`/mention_addvc`で追加できます。")
+                appendMessageBuffer.append("\n${langData.command.timer.targetVCPrompt}")
             }
             //StringBufferを文字列に
             val appendMessage = appendMessageBuffer.toString()
@@ -590,23 +596,22 @@ class TimerCommands {
         override fun run(event: SlashCommandInteractionEvent) {
             val guild = event.guild!!
 
+            //言語のデータ
+            val langData = guild.getLang()
+
             //ターゲットを取得
             val list = guild.getGuildData().roleMentionTargets
 
             //空かを確認し、メッセージを送信
             if (list.isEmpty()) {
-                event.hook.sendMessage(
-                    """
-                メンションを行う対象のロールがありません。
-                対象のロールは、`/mention_addrole`で追加できます。
-                """.trimIndent()
-                ).queue()
+                event.hook.sendMessage("${langData.command.timer.targetRoleEmpty}\n${langData.command.timer.targetRolePrompt}")
+                    .queue()
             } else {
                 event.hook.sendMessage(
-                    """
-                メンションを行う対象のロールは${list.filterNotNull().joinToString { "`${it.name}`" }}です。
-                対象のロールは、`/mention_addrole`で追加できます。
-                """.trimIndent()
+                    "${
+                        langData.command.timer.targetRole.langFormat(
+                            list.filterNotNull().joinToString { "`${it.name}`" })
+                    }\n${langData.command.timer.targetRolePrompt}"
                 ).queue()
             }
         }
@@ -641,7 +646,7 @@ class TimerCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("`${role.name}`をメンション対象に追加しました").queue()
+            event.hook.sendMessage(guild.getLang().command.timer.addRole.langFormat(role.name)).queue()
         }
     }
 
@@ -673,7 +678,7 @@ class TimerCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("`${role.name}`をメンション対象から削除しました").queue()
+            event.hook.sendMessage(guild.getLang().command.timer.removeRole.langFormat(role.name)).queue()
         }
     }
 
@@ -685,23 +690,22 @@ class TimerCommands {
         override fun run(event: SlashCommandInteractionEvent) {
             val guild = event.guild!!
 
+            //言語のデータ
+            val langData = guild.getLang()
+
             //ギルドのデータを取得
             val list = guild.getGuildData().vcMentionTargets
 
             //空かを確認して、メッセージを送信
             if (list.isEmpty()) {
-                event.hook.sendMessage(
-                    """
-                メンションを行う対象のボイスチャンネルがありません。
-                対象のチャンネルは、`/mention_addvc`で追加できます。
-                """.trimIndent()
-                ).queue()
+                event.hook.sendMessage("${langData.command.timer.targetVCEmpty}\n${langData.command.timer.targetVCPrompt}")
+                    .queue()
             } else {
                 event.hook.sendMessage(
-                    """
-                メンションを行う対象のボイスチャンネルは${list.filterNotNull().joinToString { "`${it.name}`" }}です。
-                対象のチャンネルは、`/mention_addvc`で追加できます。
-                """.trimIndent()
+                    "${
+                        langData.command.timer.targetVC.langFormat(
+                            list.filterNotNull().joinToString { "`${it.name}`" })
+                    }\n${langData.command.timer.targetVCPrompt}"
                 ).queue()
             }
         }
@@ -731,10 +735,12 @@ class TimerCommands {
                 return
             }
 
+            val langData = event.guild?.getLang() ?: return
+
             //ロール名を取得
             val channel = option.asGuildChannel
             if (channel !is AudioChannel) {
-                event.hook.sendMessage("ボイスチャットではないチャンネルです").queue()
+                event.hook.sendMessage(langData.command.timer.notVCWaring).queue()
                 return
             }
 
@@ -750,7 +756,7 @@ class TimerCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("`${channel.name}`をメンション対象に追加しました").queue()
+            event.hook.sendMessage(langData.command.timer.addVC.langFormat(channel.name)).queue()
         }
     }
 
@@ -778,10 +784,13 @@ class TimerCommands {
                 return
             }
 
+            //言語のデータ
+            val langData = event.guild?.getLang() ?: return
+
             //ロール名を取得
             val channel = option.asGuildChannel
             if (channel !is AudioChannel) {
-                event.hook.sendMessage("*ボイスチャットではないチャンネルです").queue()
+                event.hook.sendMessage(langData.command.timer.notVCWaring).queue()
                 return
             }
 
@@ -791,7 +800,7 @@ class TimerCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage("`${channel.name}`をメンション対象から削除しました").queue()
+            event.hook.sendMessage(langData.command.timer.removeVC.langFormat(channel.name)).queue()
         }
     }
 }
