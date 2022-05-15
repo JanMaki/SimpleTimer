@@ -1,5 +1,6 @@
 package dev.simpletimer.component.select_menu
 
+import dev.simpletimer.data.lang.lang_data.LangData
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 
 //選択メニューのマネージャー
@@ -34,6 +35,6 @@ object SelectMenuManager {
          * @param data 選択メニューに何かデータつける時に使う
          * @return 作成した[SelectMenu]
          */
-        abstract fun createSelectMenu(data: T): net.dv8tion.jda.api.interactions.components.selections.SelectMenu
+        abstract fun createSelectMenu(data: T, langData: LangData): net.dv8tion.jda.api.interactions.components.selections.SelectMenu
     }
 }

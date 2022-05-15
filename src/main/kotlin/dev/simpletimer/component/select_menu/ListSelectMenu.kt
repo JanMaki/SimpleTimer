@@ -1,7 +1,10 @@
 package dev.simpletimer.component.select_menu
 
+import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.langFormat
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.Emoji
@@ -21,6 +24,9 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
 
         //チャンネルを取得
         val channel = event.guild!!.getGuildData().listTargetChannel ?: event.channel as GuildMessageChannel
+
+        //言語のデータ
+        val langData = event.guild!!.getLang()
 
         //オプションを取得
         val option = options[0] ?: return
@@ -45,13 +51,13 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
                     Timer.channelsTimersMap[channel] = channelTimers
 
                     //メッセージを送信
-                    event.hook.sendMessage(number.format("${splitted[1]}（${minutes}分）を実行しました")).queue()
+                    event.hook.sendMessage(number.format(  langData.component.select.runListEntry.langFormat("${splitted[1]}（${langData.timer.minutes.langFormat(minutes)}）"))).queue()
                     return
                 }
             }
 
             //最大数のメッセージを出力する
-            event.hook.sendMessage(":x: これ以上タイマーを動かすことはできません（最大: 4）").queue()
+            event.hook.sendMessage(langData.timer.timerMaxWarning).queue()
         }
         //ダイスの要素の時
         else if (option.value.startsWith("dice")) {
@@ -62,17 +68,17 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
             Dice().roll(channel, command, event.user)
 
             //メッセージを送信
-            event.hook.sendMessage("${splitted[1]}（${command}）を実行しました").queue()
+            event.hook.sendMessage(langData.component.select.runListEntry.langFormat("${splitted[1]}（${command}）")).queue()
         } else {
             //空白を送信して削除する
             event.hook.sendEmpty()
         }
     }
 
-    override fun createSelectMenu(data: LinkedHashMap<String, String>): SelectMenu {
+    override fun createSelectMenu(data: LinkedHashMap<String, String>, langData: LangData): SelectMenu {
         //メニューを作成
         val selectionMenu = SelectMenu.create(name)
-        selectionMenu.placeholder = "選択"
+        selectionMenu.placeholder = langData.component.select.placeholder
         selectionMenu.setRequiredRange(1, 1)
 
         //空白を追加
@@ -85,7 +91,7 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
             //タイマーの時
             if (it.key.startsWith("timer")) {
                 //メニューに追加
-                selectionMenu.addOption("$name (${it.value}分)", "${it.key}:${it.value}", Emoji.fromUnicode("⏱️"))
+                selectionMenu.addOption("$name (${langData.timer.minutes.langFormat(it.value)})", "${it.key}:${it.value}", Emoji.fromUnicode("⏱️"))
 
             }
             //ダイスの時

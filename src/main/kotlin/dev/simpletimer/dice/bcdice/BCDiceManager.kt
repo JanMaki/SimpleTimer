@@ -100,7 +100,7 @@ class BCDiceManager {
 
         //メッセージを送信
         channel.sendMessageEmbeds(embed).setActionRows(
-            ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[1]!!)),
+            ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[1]!!, channel.guild.getLang())),
             ActionRow.of(
                 DiceBotPageButton.BackButton.createButton(0, channel.guild.getLang()),
                 DiceBotPageButton.NextButton.createButton(2, channel.guild.getLang())
@@ -133,7 +133,7 @@ class BCDiceManager {
         event.message.editMessageEmbeds(createView(event.guild!!.getLang(), page)).queue {
             //コンポーネント類を編集
             event.editComponents(
-                ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[page]!!)),
+                ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[page]!!, event.guild!!.getLang())),
                 ActionRow.of(
                     DiceBotPageButton.BackButton.createButton(page - 1, event.guild!!.getLang()),
                     DiceBotPageButton.NextButton.createButton(page + 1, event.guild!!.getLang())

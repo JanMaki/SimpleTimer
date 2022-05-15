@@ -1,6 +1,7 @@
 package dev.simpletimer.component.select_menu
 
 import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
+import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.extension.emoji
 import net.dv8tion.jda.api.entities.Emoji
@@ -17,10 +18,10 @@ object DiceBotSelectMenu : SelectMenuManager.SelectMenu<ArrayList<GameSystem>>("
         BCDiceManager.instance.selectFromSelectMenuInteraction(event)
     }
 
-    override fun createSelectMenu(data: ArrayList<GameSystem>): SelectMenu {
+    override fun createSelectMenu(data: ArrayList<GameSystem>, langData: LangData): SelectMenu {
         //メニューを作成
         val selectionMenu = SelectMenu.create(name)
-        selectionMenu.placeholder = "選択"
+        selectionMenu.placeholder = langData.component.select.placeholder
         selectionMenu.setRequiredRange(1, 1)
         //GameManagerを選択肢に
         data.withIndex().forEach {
