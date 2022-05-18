@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 /**
  * コマンド関係の言語のデータ
  *
+ * @property error
  * @property audio オーディオコマンドの言語のデータ
  * @property button ボタンコマンドの言語ののデータ
  * @property chrome Chromeの拡張機能コマンドの言語のデータ
@@ -18,6 +19,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CommandLangData(
+    val error: String = "",
     val audio: AudioCommandLangData = AudioCommandLangData(),
     val button: ButtonCommandLangData = ButtonCommandLangData(),
     val chrome: ChromeCommandLangData = ChromeCommandLangData(),

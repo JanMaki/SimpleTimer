@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 /**
  * 言語のデータ
- * @property error
+ *
  * @property timer タイマーの言語のデータ
  * @property dice ダイスの言語のデータ
  * @property command コマンドの言語のデータ
@@ -15,7 +15,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class LangData(
-    val error: String = "",
     val timer: TimerLangData = TimerLangData(),
     val dice: DiceLangData = DiceLangData(),
     val command: CommandLangData = CommandLangData(),
