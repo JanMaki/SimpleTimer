@@ -97,7 +97,7 @@ object SlashCommandManager {
              * @param event [SlashCommandInteractionEvent] スラッシュコマンドのイベント
              */
             fun replyCommandError(event: SlashCommandInteractionEvent) {
-                val error = event.guild?.getLang()?.error ?: return
+                val error = event.guild?.getLang()?.command?.error ?: return
                 event.hook.sendMessage(error).queue({}) {
                     event.reply(error).queue()
                 }
