@@ -73,6 +73,7 @@ import java.util.*
 // v2.1.2 rollに対するメンションがされていないのを修正
 // v2.2.0 多言語に対応
 // v2.2.1 ダイスの選択をリアクションからコンポーネントに変更
+// v2.2.2 言語のエラーをいくつかとVCの接続エラーを修正
 
 /**
  * メインクラス
@@ -95,7 +96,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v2.2.1"
+    val version = "v2.2.2"
 
     //多重起動防止
     private val lockPort = 918
