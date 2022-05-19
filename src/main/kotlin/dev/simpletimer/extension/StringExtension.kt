@@ -25,8 +25,6 @@ fun String.equalsIgnoreCase(other: String): Boolean {
 fun String.langFormat(vararg args: Any): String {
     var result = this
 
-    println(args)
-
     args.withIndex().forEach {
         result = result.replace("%${it.index}", it.value.toString())
     }

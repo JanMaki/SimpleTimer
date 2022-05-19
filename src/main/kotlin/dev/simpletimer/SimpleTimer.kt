@@ -194,7 +194,6 @@ class SimpleTimer {
         //shardを3回作る
         for (i in 0 until dataContainer.config.shardsCount) {
             //shardを作る
-            println(i)
             val shard = shardBuilder.useSharding(i, dataContainer.config.shardsCount).build()
 
             //追加
