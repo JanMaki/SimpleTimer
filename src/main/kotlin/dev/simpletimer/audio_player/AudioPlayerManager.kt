@@ -29,6 +29,15 @@ class AudioPlayerManager {
     }
 
     /**
+     * ギルドのオーディオプレイヤーを消す
+     *
+     * @param guild 対象の[Guild]
+     */
+    fun deleteAudioPlayer(guild: Guild){
+        audioPlayers.remove(guild.idLong)
+    }
+
+    /**
      * オーディオプレイヤーをすべて取得
      *
      * @return [Collection]<[GuildAudioPlayer]>
