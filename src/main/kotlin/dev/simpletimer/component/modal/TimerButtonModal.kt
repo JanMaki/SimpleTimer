@@ -26,10 +26,10 @@ object TimerButtonModal : TimerModal<Byte>("timer_button") {
         event.hook.sendMessage(
             langData.component.modal.timerButton.langFormat(
                 "**${
-                    langData.timer.minus.langFormat(
+                    langData.timer.minutes.langFormat(
                         seconds / 60
                     )
-                }${langData.timer.minus.langFormat(seconds % 60)}**"
+                }${langData.timer.minutes.langFormat(seconds % 60)}**"
             )
         )
             .addActionRow(TimerButton.createButton(seconds, event.guild!!.getLang()))
