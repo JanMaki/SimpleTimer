@@ -35,6 +35,9 @@ object SelectMenuManager {
          * @param data 選択メニューに何かデータつける時に使う
          * @return 作成した[SelectMenu]
          */
-        abstract fun createSelectMenu(data: T, langData: LangData): net.dv8tion.jda.api.interactions.components.selections.SelectMenu
+        abstract fun createSelectMenu(
+            data: T,
+            langData: LangData
+        ): net.dv8tion.jda.api.interactions.components.selections.SelectMenu
     }
 }

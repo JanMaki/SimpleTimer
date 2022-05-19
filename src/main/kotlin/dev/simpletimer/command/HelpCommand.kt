@@ -25,12 +25,24 @@ object HelpCommand : SlashCommandManager.SlashCommand("help", "Botの概要な�
             setThumbnail("https://i.ibb.co/YZ8PfJR/youf.png")
             //フィールド追加
             addField("", "**${langData.command.help.explanation}**", false)
-            addField("", "${langData.command.help.whatIsSimpleTimer}\nhttps://simpletimer.fanbox.cc/posts/3088356", true)
-            addField("", "${langData.command.help.timerCommandsList}\nhttps://simpletimer.fanbox.cc/posts/3128595", true)
+            addField(
+                "",
+                "${langData.command.help.whatIsSimpleTimer}\nhttps://simpletimer.fanbox.cc/posts/3088356",
+                true
+            )
+            addField(
+                "",
+                "${langData.command.help.timerCommandsList}\nhttps://simpletimer.fanbox.cc/posts/3128595",
+                true
+            )
             addField("", "${langData.command.help.listExplanation}\nhttps://simpletimer.fanbox.cc/posts/3088371", true)
             addField("", "**${langData.command.help.developInfo}**", false)
             addField("", "${langData.command.help.sourceCode}\nhttps://source.simpletimer.dev/", true)
-            addField("", "${langData.command.help.supportForDeveloper}\nhttps://simpletimer.fanbox.cc/posts/3128883", true)
+            addField(
+                "",
+                "${langData.command.help.supportForDeveloper}\nhttps://simpletimer.fanbox.cc/posts/3128883",
+                true
+            )
             addField("", "**${langData.command.help.show}**", false)
             addField(
                 "",
@@ -45,6 +57,7 @@ object HelpCommand : SlashCommandManager.SlashCommand("help", "Botの概要な�
         }.build()
 
         //Embedを送信
-        event.hook.sendMessageEmbeds(embed).addActionRow(CommunityLinkButton.createButton(0, event.guild!!.getLang())).queue()
+        event.hook.sendMessageEmbeds(embed).addActionRow(CommunityLinkButton.createButton(0, event.guild!!.getLang()))
+            .queue()
     }
 }

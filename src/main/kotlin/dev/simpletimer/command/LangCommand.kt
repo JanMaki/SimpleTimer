@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 /**
  * 言語を変更するコマンド
  */
-object LangCommand: SlashCommandManager.SlashCommand("lang", "言語を変更する") {
+object LangCommand : SlashCommandManager.SlashCommand("lang", "言語を変更する") {
     init {
         //すべての言語を確認
         Lang.values().forEach {
@@ -21,7 +21,7 @@ object LangCommand: SlashCommandManager.SlashCommand("lang", "言語を変更す
 
     override fun run(event: SlashCommandInteractionEvent) {
         //サブコマンドの名前を取得
-        val subCommandName =  event.subcommandName
+        val subCommandName = event.subcommandName
 
         //nullチェック
         if (subCommandName == null) {

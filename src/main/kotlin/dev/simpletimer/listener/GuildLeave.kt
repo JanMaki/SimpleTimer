@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  * ギルドを抜けたときの処理をするクラス
  *
  */
-class GuildLeave: ListenerAdapter() {
+class GuildLeave : ListenerAdapter() {
     /**
      * ギルドを抜けた時に呼び出される
      *

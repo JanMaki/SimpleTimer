@@ -9,7 +9,7 @@ import java.io.File
  * @constructor Create empty Lang
  */
 enum class Lang(private val locale: String, val displayName: String) {
-    JAP("","Japanese/日本語"),
+    JAP("", "Japanese/日本語"),
     ENG("en", "English/英語");
 
     /**

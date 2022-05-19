@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  * @property select SelectMenuの言語のデータ
  */
 @Serializable
-data class ComponentLangData (
+data class ComponentLangData(
     val button: ButtonLangData = ButtonLangData(),
     val modal: ModalLangData = ModalLangData(),
     val select: SelectMenuLangData = SelectMenuLangData()

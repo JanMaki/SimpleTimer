@@ -69,7 +69,7 @@ class DataUploader {
                         val id = it.key.idLong
 
                         //前回送っているかと空だったデータの数を確認
-                        if (sendChannels.contains(id) || emptyTimerCount != 4){
+                        if (sendChannels.contains(id) || emptyTimerCount != 4) {
                             //チャンネルのデータを作成
                             val channelData = ChannelData(it.key.idLong, timers)
 

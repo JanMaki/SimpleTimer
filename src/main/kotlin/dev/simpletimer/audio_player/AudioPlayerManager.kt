@@ -33,7 +33,7 @@ class AudioPlayerManager {
      *
      * @param guild 対象の[Guild]
      */
-    fun deleteAudioPlayer(guild: Guild){
+    fun deleteAudioPlayer(guild: Guild) {
         audioPlayers.remove(guild.idLong)
     }
 

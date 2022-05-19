@@ -1,6 +1,5 @@
 package dev.simpletimer.listener
 
-import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.timer.Timer
 import kotlinx.coroutines.CoroutineScope

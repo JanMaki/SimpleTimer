@@ -113,7 +113,7 @@ class DataContainer {
      * ギルドの読み込み
      *
      */
-    fun loadGuild(){
+    fun loadGuild() {
         //ギルドを保管するディレクトリがあるかを確認
         if (!guildDirectory.exists()) guildDirectory.mkdirs()
 

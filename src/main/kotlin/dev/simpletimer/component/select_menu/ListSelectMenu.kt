@@ -54,7 +54,17 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
                     Timer.channelsTimersMap[channel] = channelTimers
 
                     //メッセージを送信
-                    event.hook.sendMessage(number.format(  langData.component.select.runListEntry.langFormat("${splitted[1]}（${langData.timer.minutes.langFormat(minutes)}）"))).queue()
+                    event.hook.sendMessage(
+                        number.format(
+                            langData.component.select.runListEntry.langFormat(
+                                "${splitted[1]}（${
+                                    langData.timer.minutes.langFormat(
+                                        minutes
+                                    )
+                                }）"
+                            )
+                        )
+                    ).queue()
                     return
                 }
             }
@@ -71,7 +81,8 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
             Dice().roll(channel, command, event.user)
 
             //メッセージを送信
-            event.hook.sendMessage(langData.component.select.runListEntry.langFormat("${splitted[1]}（${command}）")).queue()
+            event.hook.sendMessage(langData.component.select.runListEntry.langFormat("${splitted[1]}（${command}）"))
+                .queue()
         } else {
             //空白を送信して削除する
             event.hook.sendEmpty()
@@ -94,7 +105,11 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
             //タイマーの時
             if (it.key.startsWith("timer")) {
                 //メニューに追加
-                selectionMenu.addOption("$name (${langData.timer.minutes.langFormat(it.value)})", "${it.key}:${it.value}", Emoji.fromUnicode("⏱️"))
+                selectionMenu.addOption(
+                    "$name (${langData.timer.minutes.langFormat(it.value)})",
+                    "${it.key}:${it.value}",
+                    Emoji.fromUnicode("⏱️")
+                )
 
             }
             //ダイスの時
