@@ -36,6 +36,13 @@ class TimerCommands {
                 return
             }
 
+            //長さを確認
+            if (option.asLong * 60 > Int.MAX_VALUE) {
+                replyCommandError(event)
+                return
+            }
+
+
             //とありあえず待たせる
             event.deferReply().queue()
 

@@ -1,20 +1,37 @@
 package dev.simpletimer.component.modal
 
 import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.Modal
 import net.dv8tion.jda.api.interactions.components.text.TextInput
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
 
-abstract class TimerModal<T>(name: String, beforeReply: Boolean = true) :
-    ModalManager.Modal<T>(name, deferReply = beforeReply) {
+abstract class TimerModal<T>(name: String, deferReply: Boolean = true) :
+    ModalManager.Modal<T>(name, deferReply = deferReply) {
     override fun run(event: ModalInteractionEvent) {
         //入力した分数を取得
         val minutesInputValue = event.getValue("minutes_input")?.asString ?: ""
 
         //入力した秒数を取得
         val secondsInputValue = event.getValue("seconds_input")?.asString ?: ""
+
+        //秒数を確認
+        if (((minutesInputValue.toLongOrNull() ?: 0) * 60) + (secondsInputValue.toLongOrNull() ?: 0) > Int.MAX_VALUE) {
+            //メッセージを取得
+            val message = event.guild!!.getLang().component.modal.missingTimeWarning
+            //deferReplyを確認
+            if (deferReply) {
+                //メッセージを送信
+                event.hook.sendMessage(message).queue()
+            } else {
+                //eventに返す
+                event.reply(message).queue()
+            }
+
+            return
+        }
 
         //秒数を取得
         val seconds = ((minutesInputValue.toIntOrNull() ?: 0) * 60) + (secondsInputValue.toIntOrNull() ?: 0)
