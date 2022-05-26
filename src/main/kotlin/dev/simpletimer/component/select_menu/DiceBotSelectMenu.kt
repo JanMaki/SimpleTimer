@@ -14,8 +14,11 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
  */
 object DiceBotSelectMenu : SelectMenuManager.SelectMenu<ArrayList<GameSystem>>("dice_bot") {
     override fun run(event: SelectMenuInteractionEvent) {
+        //選択されているものを取得
+        val id = event.selectedOptions[0]?.value ?: return
+
         //BCDiceManagerに処理を任せる
-        BCDiceManager.instance.selectFromSelectMenuInteraction(event)
+        BCDiceManager.instance.selectFromInteraction(event, id)
     }
 
     override fun createSelectMenu(data: ArrayList<GameSystem>, langData: LangData): SelectMenu {

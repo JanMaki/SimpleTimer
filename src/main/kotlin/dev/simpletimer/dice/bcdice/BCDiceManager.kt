@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import java.awt.Color
 
@@ -147,14 +148,14 @@ class BCDiceManager {
      *
      * @param event [SelectMenuInteractionEvent]対象のイベント
      */
-    fun selectFromSelectMenuInteraction(event: SelectMenuInteractionEvent) {
+    fun selectFromInteraction(event: IReplyCallback, id: String) {
         //チャンネルを取得1
         val channel = event.guildChannel as GuildMessageChannel
 
-        //ゲームシステムを取得
-        val gameSystem = bcdice.getGameSystem(event.selectedOptions[0]?.value ?: return)
-
         try {
+            //ゲームシステムを取得
+            val gameSystem = bcdice.getGameSystem(id)
+
             //言語のデータ
             val langData = channel.guild.getLang()
 
@@ -182,6 +183,11 @@ class BCDiceManager {
         } catch (e: Exception) {
             //権限関係が原因の物は排除
             if (e is ErrorResponseException && (e.errorCode == 50001 || e.errorCode == 10008)) {
+                return
+            }
+            //Botが見つからなかった時
+            if (e is java.lang.IllegalArgumentException) {
+                event.hook.sendMessage(event.guild!!.getLang().dice.bcDice.unknownBot).queue()
                 return
             }
             Log.sendLog(e.stackTraceToString(), true)
@@ -296,5 +302,14 @@ class BCDiceManager {
                 result.text
             }
         }
+    }
+
+    /**
+     * GameSystemの一覧を取得する
+     *
+     * @return リストで返す
+     */
+    fun getGameSystems(): List<GameSystem> {
+        return gameSystemPages.values.flatten()
     }
 }

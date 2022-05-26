@@ -21,5 +21,6 @@ class BCDiceLangData(
     val changeDiceBot: String = "",
     val diceDescription: String = "",
     val gameCommand: String = "",
-    val commonCommand: String = ""
+    val commonCommand: String = "",
+    val unknownBot: String = ""
 )

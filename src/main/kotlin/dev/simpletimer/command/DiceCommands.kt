@@ -10,6 +10,7 @@ import dev.simpletimer.extension.langFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -113,14 +114,50 @@ class DiceCommands {
      * ダイスボットを変更する画面を出す
      */
     object DiceBot : SlashCommandManager.SlashCommand("dice_bot", "BCDiceで使用するボットを変更します") {
-        override fun run(event: SlashCommandInteractionEvent) {
-            //メッセージを出力
-            event.hook.sendMessage(event.guild!!.getLang().command.dice.selectInMenu).queue()
+        init {
+            addOption(OptionType.STRING, "bot", "ボット", false, true)
+        }
 
-            CoroutineScope(Dispatchers.Default).launch {
-                //ダイスボットを変更する画面を出す
-                BCDiceManager.instance.openSelectDiceBotView(event.guildChannel)
+        override fun run(event: SlashCommandInteractionEvent) {
+            //オプションを取得
+            val option = event.getOption("bot")
+
+            //オプションが入力されていないかを確認
+            if (option == null) {
+                //メッセージを出力
+                event.hook.sendMessage(event.guild!!.getLang().command.dice.selectInMenu).queue()
+
+                CoroutineScope(Dispatchers.Default).launch {
+                    //ダイスボットを変更する画面を出す
+                    BCDiceManager.instance.openSelectDiceBotView(event.guildChannel)
+                }
+            } else {
+                //IDを取得してダイスボットを変更する
+                BCDiceManager.instance.selectFromInteraction(
+                    event, if (option.asString.contains("／")) {
+                        option.asString.split("／")[1]
+                    } else {
+                        option.asString
+                    }
+                )
             }
+        }
+
+        override fun autoComplete(event: CommandAutoCompleteInteractionEvent) {
+            //オプションを確認
+            if (event.focusedOption.name != "bot") return
+
+            //返す
+            event.replyChoiceStrings(
+                //入力を元に選択肢を作成 25個以下になる様にする
+                BCDiceManager.instance.getGameSystems().asSequence().filter {
+                    it.id.contains(
+                        event.focusedOption.value, ignoreCase = true
+                    ) || it.name.contains(
+                        event.focusedOption.value, ignoreCase = true
+                    )
+                }.withIndex().filter { it.index < 25 }.map { "${it.value.name}／${it.value.id}" }.toList()
+            ).queue()
         }
     }
 
