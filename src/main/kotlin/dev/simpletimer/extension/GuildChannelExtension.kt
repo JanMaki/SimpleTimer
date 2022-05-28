@@ -44,7 +44,8 @@ fun GuildChannel.checkSimpleTimerPermission(): Boolean {
             //ボイスチャンネル
             if (this is VoiceChannel) {
                 PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_CONNECT) &&
-                        PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_SPEAK)
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_SPEAK) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_MOVE_OTHERS)
             } else {
                 true
             } &&
