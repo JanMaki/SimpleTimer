@@ -52,7 +52,8 @@ fun GuildChannel.checkSimpleTimerPermission(): Boolean {
             //ステージチャンネル
             if (this is StageChannel) {
                 PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_CONNECT) &&
-                        PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_MUTE_OTHERS)
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_MUTE_OTHERS) &&
+                        PermissionUtil.checkPermission(permissionContainer, member, Permission.VOICE_MOVE_OTHERS)
             } else {
                 true
             }
