@@ -75,6 +75,7 @@ import java.util.*
 // v2.2.1 ダイスの選択をリアクションからコンポーネントに変更
 // v2.2.2 言語のエラーをいくつかとVCの接続エラーを修正
 // v2.2.3 タイマー開始の数値でエラーが出ていたのを修正
+// v2.2.4 BCDiceのBot変更時に引数を追加
 
 /**
  * メインクラス
@@ -97,7 +98,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v2.2.3"
+    val version = "v2.2.4"
 
     //多重起動防止
     private val lockPort = 918
