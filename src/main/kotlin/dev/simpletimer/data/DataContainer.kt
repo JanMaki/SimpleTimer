@@ -7,10 +7,14 @@ import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.guild.GuildData
 import dev.simpletimer.data.lang.Lang
 import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfo
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.equalsIgnoreCase
 import net.dv8tion.jda.api.entities.Guild
 import java.io.File
 import java.nio.file.Paths
+import kotlin.reflect.KClass
+import kotlin.reflect.full.memberProperties
 
 /**
  * データ置き場
@@ -26,7 +30,8 @@ class DataContainer {
     //オーディオのデータ
     val audioDatum = mutableListOf<AudioInformationData>()
 
-    val langs = mutableMapOf<Lang, LangData>()
+    //言語のデータ
+    val langDatum = mutableMapOf<Lang, LangData>()
 
     //jarがあるディレクトリ
     private val parentDirectory: File =
@@ -105,7 +110,7 @@ class DataContainer {
             }
 
             //読み込んで代入
-            langs[lang] = Yaml.default.decodeFromStream(LangData.serializer(), langFile.inputStream())
+            langDatum[lang] = Yaml.default.decodeFromStream(LangData.serializer(), langFile.inputStream())
         }
     }
 
@@ -183,5 +188,31 @@ class DataContainer {
         val guildsFileOutputStream = file.outputStream()
         Yaml.default.encodeToStream(GuildData.serializer(), guildData, guildsFileOutputStream)
         guildsFileOutputStream.close()
+    }
+
+    /**
+     * 言語とパスからコマンドの情報の言語のデータを取得する
+     *
+     * @param path [CommandInfoPath]
+     * @return [CommandInfo]
+     */
+    fun getCommandInfoLangData(lang: Lang, path: CommandInfoPath): CommandInfo? {
+        //リフレクションの対象のクラス 最初はコマンドの言語のデータから
+        var targetClass: Any = langDatum[lang]?.commandInfo ?: return null
+        //KClassを取得
+        var kClass: KClass<*> = targetClass::class
+        //パスを.で分割する
+        val propertyNames = path.langPath.split(".")
+        //パスを回す
+        for (name in propertyNames) {
+            //プロパティーを取得
+            val property = kClass.memberProperties.first { it.name == name }
+            //インスタンスを取得
+            targetClass = property.getter.call(targetClass) ?: break
+            //インスタンスのKClassを再度取得
+            kClass = targetClass::class
+        }
+        //キャストして返す
+        return targetClass as CommandInfo
     }
 }

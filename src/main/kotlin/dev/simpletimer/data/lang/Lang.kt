@@ -1,5 +1,6 @@
 package dev.simpletimer.data.lang
 
+import net.dv8tion.jda.api.interactions.DiscordLocale
 import java.io.File
 
 /**
@@ -8,9 +9,9 @@ import java.io.File
  *
  * @constructor Create empty Lang
  */
-enum class Lang(private val locale: String, val displayName: String) {
-    JAP("", "Japanese/日本語"),
-    ENG("en", "English/英語");
+enum class Lang(val discordLocal: DiscordLocale, private val locale: String, val displayName: String) {
+    JAP(DiscordLocale.JAPANESE, "", "Japanese/日本語"),
+    ENG(DiscordLocale.ENGLISH_US, "en", "English/英語");
 
     /**
      * 言語のファイルのパスを取得する

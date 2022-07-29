@@ -38,5 +38,5 @@ fun Guild.getGuildData(): GuildData {
  * @return [LangData]
  */
 fun Guild.getLang(): LangData {
-    return SimpleTimer.instance.dataContainer.langs[this.getGuildData().lang] ?: LangData()
+    return SimpleTimer.instance.dataContainer.langDatum[this.getGuildData().lang] ?: LangData()
 }

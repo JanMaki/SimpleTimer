@@ -3,6 +3,7 @@ package dev.simpletimer.command
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.*
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
@@ -14,7 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
  * オーディオ系のコマンドの親
  *
  */
-abstract class AudioCommands(name: String, description: String) : SlashCommandManager.SlashCommand(name, description) {
+abstract class AudioCommands(langPath: CommandInfoPath) : SlashCommandManager.SlashCommand(langPath) {
 
     override fun run(event: SlashCommandInteractionEvent) {
         //ギルドを取得
@@ -92,7 +93,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
      * ボイスチャンネルに接続をする
      *
      */
-    object Connect : AudioCommands("audio_connect", "ボイスチャンネルに接続する") {
+    object Connect : AudioCommands(CommandInfoPath.AUDIO_CONNECT) {
         override fun runAudio(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild ?: return
@@ -124,7 +125,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
     /**
      * ボイスチャンネルから切断する
      */
-    object DisConnect : AudioCommands("audio_disconnect", "ボイスチャンネルから抜ける") {
+    object DisConnect : AudioCommands(CommandInfoPath.AUDIO_DISCONNECT) {
         override fun runAudio(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild ?: return
@@ -141,7 +142,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
      * 設定されているオーディオを再生する
      *
      */
-    object Listen : AudioCommands("audio_listen", "設定されているオーディオを試聴する") {
+    object Listen : AudioCommands(CommandInfoPath.AUDIO_LISTEN) {
         override fun runAudio(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild!!
@@ -169,13 +170,19 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
      * 再生するオーディオを変更する
      *
      */
-    object Change : AudioCommands("audio_change", "オーディオを変更する") {
+    object Change : AudioCommands(CommandInfoPath.AUDIO_CHANGE) {
         //データのコンテナ
         private val dataContainer = SimpleTimer.instance.dataContainer
 
         init {
             //オプションを追加
-            addOption(OptionType.STRING, "名前", "オーディオの名前", true, true)
+            addOptions(
+                createOptionData(
+                    OptionType.STRING, CommandInfoPath.AUDIO_OPT_NAME,
+                    required = true,
+                    autoComplete = true
+                )
+            )
         }
 
         override fun runAudio(event: SlashCommandInteractionEvent) {
@@ -229,7 +236,7 @@ abstract class AudioCommands(name: String, description: String) : SlashCommandMa
      * オーディオの一覧を表示する
      *
      */
-    object AudioList : AudioCommands("audio_list", "オーディオの一覧を表示します") {
+    object AudioList : AudioCommands(CommandInfoPath.AUDIO_LIST) {
         override fun runAudio(event: SlashCommandInteractionEvent) {
             val langData: LangData = event.guild?.getLang() ?: return
 

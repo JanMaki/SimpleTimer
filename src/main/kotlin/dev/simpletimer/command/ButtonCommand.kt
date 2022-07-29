@@ -2,22 +2,21 @@ package dev.simpletimer.command
 
 import dev.simpletimer.component.button.DiceButton
 import dev.simpletimer.component.modal.TimerButtonModal
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
-import net.dv8tion.jda.api.interactions.commands.build.OptionData
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 
 /**
  * ボタンを送信する
  */
-object ButtonCommand : SlashCommandManager.SlashCommand("button", "タイマーやボタンを開始するボタンを送信します", false) {
+object ButtonCommand : SlashCommandManager.SlashCommand(CommandInfoPath.BUTTON, false) {
     init {
         addSubcommands(
-            SubcommandData("timer", "タイマー"),
-            SubcommandData("dice", "ダイスロール")
-                .addOptions(OptionData(OptionType.STRING, "ダイス", "ダイスの内容").setRequired(true))
+            createSubCommandData(CommandInfoPath.BUTTON_SC_TIMER),
+            createSubCommandData(CommandInfoPath.BUTTON_SC_DICE)
+                .addOptions(createOptionData(OptionType.STRING, CommandInfoPath.BUTTON_OPT_DICE).setRequired(true))
         )
     }
 

@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.button.CommunityLinkButton
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
  * ヘルプコマンド
  *
  */
-object HelpCommand : SlashCommandManager.SlashCommand("help", "Botの概要などを表示") {
+object HelpCommand : SlashCommandManager.SlashCommand(CommandInfoPath.HELP) {
     override fun run(event: SlashCommandInteractionEvent) {
         //言語のデータ
         val langData = event.guild?.getLang() ?: return
