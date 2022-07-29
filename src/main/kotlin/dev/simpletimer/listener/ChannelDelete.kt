@@ -30,7 +30,7 @@ class ChannelDelete : ListenerAdapter() {
             Timer.timers.remove(notice?.idLong)
 
             //チャンネルのタイマーから削除
-            Timer.channelsTimersMap[event.channel]?.remove(timer.number)
+            Timer.channelsTimersMap[event.channel.asMessageChannel()]?.remove(timer.number)
         }
     }
 }

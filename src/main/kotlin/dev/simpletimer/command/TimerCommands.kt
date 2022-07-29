@@ -745,7 +745,7 @@ class TimerCommands {
             val langData = event.guild?.getLang() ?: return
 
             //ロール名を取得
-            val channel = option.asGuildChannel
+            val channel = option.asChannel
             if (channel !is AudioChannel) {
                 event.hook.sendMessage(langData.command.timer.notVCWaring).queue()
                 return
@@ -763,7 +763,8 @@ class TimerCommands {
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage(langData.command.timer.addVC.langFormat(channel.name)).queue()
+            event.hook.sendMessage(langData.command.timer.addVC.langFormat(channel.asGuildMessageChannel().name))
+                .queue()
         }
     }
 
@@ -795,7 +796,7 @@ class TimerCommands {
             val langData = event.guild?.getLang() ?: return
 
             //ロール名を取得
-            val channel = option.asGuildChannel
+            val channel = option.asChannel
             if (channel !is AudioChannel) {
                 event.hook.sendMessage(langData.command.timer.notVCWaring).queue()
                 return
@@ -803,11 +804,12 @@ class TimerCommands {
 
             //ギルドのデータから削除
             val guild = event.guild!!
-            guild.getGuildData().vcMentionTargets.removeIf { it?.id == channel.id }
+            guild.getGuildData().vcMentionTargets.removeIf { it?.id == channel.asGuildMessageChannel().id }
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 
             //メッセージを出力
-            event.hook.sendMessage(langData.command.timer.removeVC.langFormat(channel.name)).queue()
+            event.hook.sendMessage(langData.command.timer.removeVC.langFormat(channel.asGuildMessageChannel().name))
+                .queue()
         }
     }
 }

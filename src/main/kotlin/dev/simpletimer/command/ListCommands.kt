@@ -233,14 +233,8 @@ class ListCommands {
             }
 
             //チャンネルを取得
-            val channel = option.asMessageChannel
+            val channel = option.asChannel.asGuildMessageChannel()
 
-            //nullチェック
-            if (channel == null) {
-                //エラーメッセージを送信
-                replyCommandError(event)
-                return
-            }
 
             //管理者権限か、必要な権限を確認
             if (!event.guildChannel.checkSimpleTimerPermission()) {
