@@ -45,7 +45,7 @@ class GenericMessageReaction : ListenerAdapter() {
         //タイマーの確認
         if (timer != null) {
             //リアクションの確認・処理
-            when (event.reactionEmote.name) {
+            when (event.reaction.emoji.name) {
                 "1️⃣" -> timer.add(1 * 60)
                 "3️⃣" -> timer.add(3 * 60)
                 "5️⃣" -> timer.add(5 * 60)

@@ -17,7 +17,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.1")
 
     //Discord連携 JDA
-    implementation("net.dv8tion", "JDA", "5.0.0-alpha.12")
+    implementation("net.dv8tion", "JDA", "5.0.0-alpha.13")
     //implementation(files("libs/JDA-5.0.0-alpha.9_DEV-withDependencies.jar"))
     //JDAに必要なもの
     implementation("ch.qos.logback", "logback-classic", "1.2.8")

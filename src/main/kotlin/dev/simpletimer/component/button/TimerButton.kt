@@ -4,7 +4,7 @@ import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
-import net.dv8tion.jda.api.entities.Emoji
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.entities.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button

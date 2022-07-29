@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.interactions.components.ActionRow
@@ -239,7 +240,7 @@ class Timer(
         //メッセージの送信とリアクション
         sendMessage(langData.timer.stop, NoticeTiming.LV3)
         sendTTS(langData.timer.stop, NoticeTiming.LV3)
-        notice?.addReaction("U+25C0")?.queue()
+        notice?.addReaction(Emoji.fromUnicode("U+25C0"))?.queue()
         //ディスプレイを更新
         val time = timerService.getTime()
         display?.editMessageEmbeds(generateDisplayEmbed(time))?.queue()
@@ -387,10 +388,10 @@ class Timer(
                     timers[id] = this
                     displays[id] = this
                     //リアクションの追加
-                    display.addReaction("1️⃣").queue()
-                    display.addReaction("3️⃣").queue()
-                    display.addReaction("5️⃣").queue()
-                    display.addReaction("\uD83D\uDD1F").queue()
+                    display.addReaction(Emoji.fromUnicode("1️⃣")).queue()
+                    display.addReaction(Emoji.fromUnicode("3️⃣")).queue()
+                    display.addReaction(Emoji.fromUnicode("5️⃣")).queue()
+                    display.addReaction(Emoji.fromUnicode("\uD83D\uDD1F")).queue()
                 }
         } catch (e: Exception) {
             //権限関係が原因の物は排除

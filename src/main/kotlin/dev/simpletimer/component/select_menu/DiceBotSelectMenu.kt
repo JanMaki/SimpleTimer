@@ -4,7 +4,7 @@ import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.extension.emoji
-import net.dv8tion.jda.api.entities.Emoji
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
 

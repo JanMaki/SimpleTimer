@@ -3,6 +3,7 @@ package dev.simpletimer.command
 import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
 import net.dv8tion.jda.internal.interactions.CommandDataImpl
 
 /**
@@ -58,8 +59,7 @@ object SlashCommandManager {
         ListCommands.SyncList,
         ListCommands.CopyList,
         ListCommands.GetID
-    ).onEach { it.isDefaultEnabled = true }
-
+    )
 
     /**
      * スラッシュコマンドの親
@@ -71,7 +71,7 @@ object SlashCommandManager {
         CommandDataImpl(name, description) {
 
         init {
-            isDefaultEnabled = true
+            defaultPermissions = DefaultMemberPermissions.ENABLED
         }
 
         /**
