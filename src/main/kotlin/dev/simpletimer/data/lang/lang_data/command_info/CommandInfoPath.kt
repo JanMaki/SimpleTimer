@@ -46,6 +46,7 @@ enum class CommandInfoPath(val langPath: String) {
     LIST_OPT_DICE("listOPTDice"),
     LIST_OPT_ELEMENT_NAME("listOPTElementName"),
     LIST_OPT_ID("listOPTID"),
+    LIST_OPT_CHANNEL("listOPTChannel"),
     LIST_SB_TIMER("listSBTimer"),
     LIST_SB_DICE("listSBDice"),
     LIST_SB_SYNC_ENABLE("listSBSyncEnable"),

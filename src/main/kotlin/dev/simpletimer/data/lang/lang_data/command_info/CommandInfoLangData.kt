@@ -138,6 +138,7 @@ data class CommandInfoLangData(
     val listOPTDice: CommandInfo = CommandInfo(),
     val listOPTElementName: CommandInfo = CommandInfo(),
     val listOPTID: CommandInfo = CommandInfo(),
+    val listOPTChannel: CommandInfo = CommandInfo(),
     val listSBTimer: CommandInfo = CommandInfo(),
     val listSBDice: CommandInfo = CommandInfo(),
     val listSBSyncEnable: CommandInfo = CommandInfo(),

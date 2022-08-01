@@ -218,7 +218,7 @@ class ListCommands {
      */
     object ListTargetChannel : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_TARGET_CHANNEL) {
         init {
-            addOption(OptionType.CHANNEL, "テキストチャンネル", "対象のチャンネル", true)
+            addOptions(createOptionData(OptionType.CHANNEL, CommandInfoPath.LIST_OPT_CHANNEL, true))
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
