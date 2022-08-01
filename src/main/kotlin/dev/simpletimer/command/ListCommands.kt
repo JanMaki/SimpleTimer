@@ -8,8 +8,6 @@ import dev.simpletimer.list.ListMenu
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
-
 class ListCommands {
     /**
      * 一覧を表示する
@@ -30,9 +28,9 @@ class ListCommands {
             addSubcommands(
                 createSubCommandData(CommandInfoPath.LIST_SB_TIMER).addOptions(
                     createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_TIMER_NAME, true),
-                    createOptionData(OptionType.INTEGER, CommandInfoPath.LIST_OPT_MINUTES, true)
+                    createOptionData(OptionType.INTEGER, CommandInfoPath.MINUTES, true)
                 ),
-                SubcommandData("dice", "ダイスを一覧に追加・上書きをする").addOptions(
+                createSubCommandData(CommandInfoPath.LIST_SB_DICE).addOptions(
                     createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_DICE_NAME, true),
                     createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_DICE, true)
                 )
@@ -260,9 +258,9 @@ class ListCommands {
     object SyncList : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_SYNC) {
         init {
             addSubcommands(
-                SubcommandData("enable", "同期を行うようにする")
-                    .addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true),
-                SubcommandData("disable", "同期を行わないようにする")
+                createSubCommandData(CommandInfoPath.LIST_SB_SYNC_ENABLE)
+                    .addOptions(createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ID, true)),
+                createSubCommandData(CommandInfoPath.LIST_SB_SYNC_DISABLE)
             )
         }
 

@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.YesOrNoModal
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.sendEmpty
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -11,7 +12,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
  *
  */
 object ResetCommand :
-    SlashCommandManager.SlashCommand("reset", "サーバーで設定されているSimpleTimerの設定をリセットします", deferReply = false) {
+    SlashCommandManager.SlashCommand(CommandInfoPath.RESET, deferReply = false) {
     override fun run(event: SlashCommandInteractionEvent) {
         val guild = event.guild ?: return
 

@@ -6,6 +6,7 @@ import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -70,8 +71,8 @@ object SlashCommandManager {
     /**
      * スラッシュコマンドの親
      *
-     * @param name コマンド名
-     * @param description コマンドの説明
+     * @property deferReply 待たせる返信を行うか
+     * @param langPath 言語のパス
      */
     abstract class SlashCommand(langPath: CommandInfoPath, val deferReply: Boolean = true) : CommandDataImpl(
         SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JAP, langPath)!!.name,
@@ -141,7 +142,7 @@ object SlashCommandManager {
                     dataContainer.getCommandInfoLangData(Lang.JAP, langPath) ?: throw IllegalArgumentException()
 
                 //オプションを作成して返す
-                return OptionData(type, japaneseLangData.name, japaneseLangData.description).apply {
+                return OptionData(type, japaneseLangData.name, japaneseLangData.description, required, autoComplete).apply {
                     //日本語以外の言語を回す
                     Lang.values().filter { it != Lang.JAP }.forEach {
                         //言語のデータを取得
@@ -176,6 +177,26 @@ object SlashCommandManager {
                         //ローカライズを設定
                         setNameLocalization(it.discordLocal, langData.name)
                         setDescriptionLocalization(it.discordLocal, langData.description)
+                    }
+                }
+            }
+
+            fun createChoice(langPath: CommandInfoPath, value: Long): Command.Choice {
+                //データコンテナを取得
+                val dataContainer = SimpleTimer.instance.dataContainer
+
+                //日本語の言語のデータを取得
+                val japaneseLangData =
+                    dataContainer.getCommandInfoLangData(Lang.JAP, langPath) ?: throw IllegalArgumentException()
+
+                //チョイスを作成して返す
+                return Command.Choice(japaneseLangData.name, value).apply {
+                    //日本語以外の言語を回す
+                    Lang.values().filter { it != Lang.JAP }.forEach {
+                        //言語のデータを取得
+                        val langData = dataContainer.getCommandInfoLangData(it, langPath) ?: return@forEach
+                        //ローカライズを設定
+                        setNameLocalization(it.discordLocal, langData.name)
                     }
                 }
             }
