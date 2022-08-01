@@ -1,6 +1,7 @@
 package dev.simpletimer.data.lang.lang_data
 
 import dev.simpletimer.data.lang.lang_data.command.CommandLangData
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoLangData
 import dev.simpletimer.data.lang.lang_data.component.ComponentLangData
 import dev.simpletimer.data.lang.lang_data.dice.DiceLangData
 import kotlinx.serialization.Serializable
@@ -10,6 +11,7 @@ import kotlinx.serialization.Serializable
  *
  * @property timer タイマーの言語のデータ
  * @property dice ダイスの言語のデータ
+ * @property commandInfo コマンドの情報の言語のデータ
  * @property command コマンドの言語のデータ
  * @property component コンポーネントの言語のデータ
  */
@@ -17,6 +19,7 @@ import kotlinx.serialization.Serializable
 data class LangData(
     val timer: TimerLangData = TimerLangData(),
     val dice: DiceLangData = DiceLangData(),
+    val commandInfo: CommandInfoLangData = CommandInfoLangData(),
     val command: CommandLangData = CommandLangData(),
     val component: ComponentLangData = ComponentLangData(),
 )

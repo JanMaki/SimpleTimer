@@ -2,19 +2,17 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.YesOrNoModal
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.*
 import dev.simpletimer.list.ListMenu
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
-import net.dv8tion.jda.api.interactions.commands.build.OptionData
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
-
 class ListCommands {
     /**
      * 一覧を表示する
      */
-    object List : SlashCommandManager.SlashCommand("list", "一覧を表示します") {
+    object List : SlashCommandManager.SlashCommand(CommandInfoPath.LIST) {
         override fun run(event: SlashCommandInteractionEvent) {
             //一覧を送信する
             ListMenu.sendList(event)
@@ -25,16 +23,16 @@ class ListCommands {
      * 一覧に要素を追加・上書きをする
      *
      */
-    object ListAdd : SlashCommandManager.SlashCommand("list_add", "一覧に要素を追加・上書きをします") {
+    object ListAdd : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_ADD) {
         init {
             addSubcommands(
-                SubcommandData("timer", "タイマーを一覧に追加・上書きをする").addOptions(
-                    OptionData(OptionType.STRING, "名前", "タイマーの名前", true),
-                    OptionData(OptionType.INTEGER, "分", "時間を分単位で", true)
+                createSubCommandData(CommandInfoPath.LIST_SB_TIMER).addOptions(
+                    createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_TIMER_NAME, true),
+                    createOptionData(OptionType.INTEGER, CommandInfoPath.MINUTES, true)
                 ),
-                SubcommandData("dice", "ダイスを一覧に追加・上書きをする").addOptions(
-                    OptionData(OptionType.STRING, "名前", "ダイスの名前", true),
-                    OptionData(OptionType.STRING, "ダイス", "ダイスの内容", true)
+                createSubCommandData(CommandInfoPath.LIST_SB_DICE).addOptions(
+                    createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_DICE_NAME, true),
+                    createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_DICE, true)
                 )
             )
         }
@@ -106,10 +104,10 @@ class ListCommands {
      * 一覧から要素を削除する
      *
      */
-    object ListRemove : SlashCommandManager.SlashCommand("list_remove", "一覧から要素を削除をします") {
+    object ListRemove : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_REMOVE) {
         init {
             addOptions(
-                OptionData(OptionType.STRING, "名前", "要素の名前", true, true)
+                createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ELEMENT_NAME, true, true)
             )
         }
 
@@ -170,7 +168,7 @@ class ListCommands {
      * 一覧の全削除
      *
      */
-    object ListClear : SlashCommandManager.SlashCommand("list_clear", "一覧の要素をすべて削除します", deferReply = false) {
+    object ListClear : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_CLEAR, deferReply = false) {
         override fun run(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild ?: return
@@ -216,7 +214,7 @@ class ListCommands {
      * 一覧の送信の対象チャンネルを変更する
      *
      */
-    object ListTargetChannel : SlashCommandManager.SlashCommand("list_target", "タイマーやダイスを送信するチャンネルを設定する") {
+    object ListTargetChannel : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_TARGET_CHANNEL) {
         init {
             addOption(OptionType.CHANNEL, "テキストチャンネル", "対象のチャンネル", true)
         }
@@ -257,12 +255,12 @@ class ListCommands {
      * 一覧を他のサーバーと同期する
      *
      */
-    object SyncList : SlashCommandManager.SlashCommand("list_sync", "一覧を他のサーバーと同期します") {
+    object SyncList : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_SYNC) {
         init {
             addSubcommands(
-                SubcommandData("enable", "同期を行うようにする")
-                    .addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true),
-                SubcommandData("disable", "同期を行わないようにする")
+                createSubCommandData(CommandInfoPath.LIST_SB_SYNC_ENABLE)
+                    .addOptions(createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ID, true)),
+                createSubCommandData(CommandInfoPath.LIST_SB_SYNC_DISABLE)
             )
         }
 
@@ -352,7 +350,7 @@ class ListCommands {
      * 一覧を他のサーバーと同期する
      *
      */
-    object CopyList : SlashCommandManager.SlashCommand("list_copy", "他のサーバーの一覧をコピーします") {
+    object CopyList : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_COPY) {
         init {
             addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true)
         }
@@ -413,7 +411,7 @@ class ListCommands {
      * ギルドのIDを取得
      *
      */
-    object GetID : SlashCommandManager.SlashCommand("list_id", "同期に必要なIDを取得します") {
+    object GetID : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_ID) {
         override fun run(event: SlashCommandInteractionEvent) {
             //メッセージを送信
             event.hook.sendMessage(event.guild!!.getLang().command.list.id.langFormat(event.guild!!.idLong.toString(36)))

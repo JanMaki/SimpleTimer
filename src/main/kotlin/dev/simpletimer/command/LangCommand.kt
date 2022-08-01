@@ -2,6 +2,7 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.lang.Lang
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 /**
  * 言語を変更するコマンド
  */
-object LangCommand : SlashCommandManager.SlashCommand("lang", "言語を変更する") {
+object LangCommand : SlashCommandManager.SlashCommand(CommandInfoPath.LANG) {
     init {
         //すべての言語を確認
         Lang.values().forEach {
@@ -38,7 +39,7 @@ object LangCommand : SlashCommandManager.SlashCommand("lang", "言語を変更�
 
         //メッセージを送信
         event.hook.sendMessage(
-            SimpleTimer.instance.dataContainer.langs[lang]?.command?.lang?.change?.langFormat("**${lang.displayName}**")
+            SimpleTimer.instance.dataContainer.langDatum[lang]?.command?.lang?.change?.langFormat("**${lang.displayName}**")
                 ?: ""
         ).queue()
     }

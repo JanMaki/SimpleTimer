@@ -1,6 +1,7 @@
 package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.dice.DefaultDice
 import dev.simpletimer.dice.Dice
 import dev.simpletimer.dice.bcdice.BCDiceManager
@@ -13,7 +14,6 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
-import net.dv8tion.jda.api.interactions.commands.build.OptionData
 
 /**
  * ダイス関連のコマンド
@@ -23,9 +23,9 @@ class DiceCommands {
     /**
      * ダイスを実行する
      */
-    object Roll : SlashCommandManager.SlashCommand("roll", "ダイスを振ります") {
+    object Roll : SlashCommandManager.SlashCommand(CommandInfoPath.ROLL) {
         init {
-            addOptions(OptionData(OptionType.STRING, "ダイス", "ダイスの内容 例:1d100").setRequired(true))
+            addOptions(createOptionData(OptionType.STRING, CommandInfoPath.DICE_OPT_DICE).setRequired(true))
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
@@ -55,7 +55,7 @@ class DiceCommands {
     /**
      * ダイスモードを変更する
      */
-    object DiceMode : SlashCommandManager.SlashCommand("dice_mode", "使うダイスをDefaultかBCDiceかを切り替える") {
+    object DiceMode : SlashCommandManager.SlashCommand(CommandInfoPath.DICE_MODE) {
         override fun run(event: SlashCommandInteractionEvent) {
             //ギルドを取得
             val guild = event.guild!!
@@ -85,7 +85,7 @@ class DiceCommands {
     /**
      * ダイスの情報を表示する
      */
-    object DiceInfo : SlashCommandManager.SlashCommand("dice_info", "ダイスの使い方を表示する") {
+    object DiceInfo : SlashCommandManager.SlashCommand(CommandInfoPath.DICE_INFO) {
         override fun run(event: SlashCommandInteractionEvent) {
             //チャンネルを取得
             val channel = event.guildChannel
@@ -113,9 +113,15 @@ class DiceCommands {
     /**
      * ダイスボットを変更する画面を出す
      */
-    object DiceBot : SlashCommandManager.SlashCommand("dice_bot", "BCDiceで使用するボットを変更します") {
+    object DiceBot : SlashCommandManager.SlashCommand(CommandInfoPath.DICE_BOT) {
         init {
-            addOption(OptionType.STRING, "bot", "ボット", false, true)
+            addOptions(
+                createOptionData(
+                    OptionType.STRING, CommandInfoPath.DICE_OPT_BOT,
+                    required = false,
+                    autoComplete = true
+                )
+            )
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
@@ -164,7 +170,7 @@ class DiceCommands {
     /**
      * 1d100
      */
-    object BasicDice : SlashCommandManager.SlashCommand("1d100", "100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
+    object BasicDice : SlashCommandManager.SlashCommand(CommandInfoPath.DICE_BASIC) {
         override fun run(event: SlashCommandInteractionEvent) {
             Dice().roll(event, "1d100")
         }
@@ -174,7 +180,7 @@ class DiceCommands {
      * シークレットダイス1d100
      */
     object BasicSecretDice :
-        SlashCommandManager.SlashCommand("s1d100", "結果が隠された100面ダイスを振ります。その他の個数・面数のダイスは'/roll xDy'で使用できます") {
+        SlashCommandManager.SlashCommand(CommandInfoPath.DICE_SECRET) {
         override fun run(event: SlashCommandInteractionEvent) {
             Dice().roll(event, "s1d100")
         }

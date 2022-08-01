@@ -2,29 +2,28 @@ package dev.simpletimer.command
 
 import dev.simpletimer.component.modal.QueueModal
 import dev.simpletimer.component.modal.YesOrNoModal
+import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.langFormat
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
-import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType
-import net.dv8tion.jda.api.interactions.commands.build.OptionData
 
 abstract class QueueCommands {
     /**
      * キューを追加する
      *
      */
-    object Queue : SlashCommandManager.SlashCommand("queue", "タイマーをキューに追加をする", false) {
+    object Queue : SlashCommandManager.SlashCommand(CommandInfoPath.QUEUE, false) {
         init {
             addOptions(
-                OptionData(OptionType.INTEGER, "タイマー", "キューを追加するタイマー").addChoices(
-                    Command.Choice("1番目のタイマー", 1),
-                    Command.Choice("2番目のタイマー", 2),
-                    Command.Choice("3番目のタイマー", 3),
-                    Command.Choice("4番目のタイマー", 4)
+                createOptionData(OptionType.INTEGER, CommandInfoPath.QUEUE_OPT_ADD_TIMER).addChoices(
+                    createChoice(CommandInfoPath.ONE, 1),
+                    createChoice(CommandInfoPath.TWO, 2),
+                    createChoice(CommandInfoPath.THREE, 3),
+                    createChoice(CommandInfoPath.FOUR, 4)
                 )
             )
         }
@@ -44,14 +43,14 @@ abstract class QueueCommands {
      * キューを表示する
      *
      */
-    object Show : SlashCommandManager.SlashCommand("queue_show", "キューを確認する") {
+    object Show : SlashCommandManager.SlashCommand(CommandInfoPath.QUEUE_SHOW) {
         init {
             addOptions(
-                OptionData(OptionType.INTEGER, "タイマー", "確認をするタイマー").addChoices(
-                    Command.Choice("1番目のタイマー", 1),
-                    Command.Choice("2番目のタイマー", 2),
-                    Command.Choice("3番目のタイマー", 3),
-                    Command.Choice("4番目のタイマー", 4)
+                createOptionData(OptionType.INTEGER, CommandInfoPath.QUEUE_OPT_CHECK_TIMER).addChoices(
+                    createChoice(CommandInfoPath.ONE, 1),
+                    createChoice(CommandInfoPath.TWO, 2),
+                    createChoice(CommandInfoPath.THREE, 3),
+                    createChoice(CommandInfoPath.FOUR, 4)
                 )
             )
         }
@@ -73,16 +72,16 @@ abstract class QueueCommands {
      * キューを削除する
      *
      */
-    object Remove : SlashCommandManager.SlashCommand("queue_remove", "キューからタイマーを削除する") {
+    object Remove : SlashCommandManager.SlashCommand(CommandInfoPath.QUEUE_REMOVE) {
         init {
             addOptions(
-                OptionData(OptionType.INTEGER, "タイマー", "キューを削除するタイマー").addChoices(
-                    Command.Choice("1番目のタイマー", 1),
-                    Command.Choice("2番目のタイマー", 2),
-                    Command.Choice("3番目のタイマー", 3),
-                    Command.Choice("4番目のタイマー", 4)
+                createOptionData(OptionType.INTEGER, CommandInfoPath.QUEUE_OPT_REMOVE_TIMER).addChoices(
+                    createChoice(CommandInfoPath.ONE, 1),
+                    createChoice(CommandInfoPath.TWO, 2),
+                    createChoice(CommandInfoPath.THREE, 3),
+                    createChoice(CommandInfoPath.FOUR, 4)
                 ).setRequired(true),
-                OptionData(OptionType.INTEGER, "番号", "削除するタイマーのキュー番号").setRequired(true)
+                createOptionData(OptionType.INTEGER, CommandInfoPath.QUEUE_OPT_NUMBER).setRequired(true)
             )
         }
 
@@ -129,14 +128,14 @@ abstract class QueueCommands {
      * キューをクリアする
      *
      */
-    object Clear : SlashCommandManager.SlashCommand("queue_clear", "キュー全て削除する", deferReply = false) {
+    object Clear : SlashCommandManager.SlashCommand(CommandInfoPath.QUEUE_CLEAR, deferReply = false) {
         init {
             addOptions(
-                OptionData(OptionType.INTEGER, "タイマー", "キューを削除するタイマー").addChoices(
-                    Command.Choice("1番目のタイマー", 1),
-                    Command.Choice("2番目のタイマー", 2),
-                    Command.Choice("3番目のタイマー", 3),
-                    Command.Choice("4番目のタイマー", 4)
+                createOptionData(OptionType.INTEGER, CommandInfoPath.QUEUE_OPT_CLEAR_TIMER).addChoices(
+                    createChoice(CommandInfoPath.ONE, 1),
+                    createChoice(CommandInfoPath.TWO, 2),
+                    createChoice(CommandInfoPath.THREE, 3),
+                    createChoice(CommandInfoPath.FOUR, 4)
                 ).setRequired(true),
             )
         }
