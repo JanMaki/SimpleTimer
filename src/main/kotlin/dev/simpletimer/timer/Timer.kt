@@ -591,12 +591,15 @@ class Timer(
                     1 -> {
                         return FIRST
                     }
+
                     2 -> {
                         return SECOND
                     }
+
                     3 -> {
                         return THIRD
                     }
+
                     4 -> {
                         return FOURTH
                     }

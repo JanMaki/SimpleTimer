@@ -8,6 +8,7 @@ import dev.simpletimer.list.ListMenu
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
+
 class ListCommands {
     /**
      * 一覧を表示する
@@ -83,6 +84,7 @@ class ListCommands {
                     //ギルドのデータでタイマーを追加
                     guildData.list["timer:${name}"] = event.getOption("分")!!.asInt.toString()
                 }
+
                 "dice" -> {
                     //ギルドのデータでダイスを追加
                     guildData.list["dice:${name}"] = event.getOption("ダイス")!!.asString
@@ -279,9 +281,11 @@ class ListCommands {
                 "enable" -> {
                     true
                 }
+
                 "disable" -> {
                     false
                 }
+
                 else -> {
                     return
                 }

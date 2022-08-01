@@ -7,8 +7,8 @@ import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.langFormat
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
-import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.entities.GuildMessageChannel
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
 import java.util.*
