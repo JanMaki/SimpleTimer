@@ -45,10 +45,10 @@ import kotlinx.serialization.Serializable
  * @property listOPTDice
  * @property listOPTElementName
  * @property listOPTID
- * @property listSBTimer
- * @property listSBDice
- * @property listSBSyncEnable
- * @property listSBSyncDisable
+ * @property listSCTimer
+ * @property listSCDice
+ * @property listSCSyncEnable
+ * @property listSCSyncDisable
  * @property queue
  * @property queueShow
  * @property queueRemove
@@ -86,10 +86,10 @@ import kotlinx.serialization.Serializable
  * @property timerOPTRemoveRole
  * @property timerOPTAddVC
  * @property timerOPTRemoveVC
- * @property timerSBZero
- * @property timerSBOne
- * @property timerSBTwo
- * @property timerSBThree
+ * @property timerSCZero
+ * @property timerSCOne
+ * @property timerSCTwo
+ * @property timerSCThree
  * @property timerMentionHere
  * @property timerMentionVC
  * @property timerMentionRole
@@ -138,10 +138,10 @@ data class CommandInfoLangData(
     val listOPTDice: CommandInfo = CommandInfo(),
     val listOPTElementName: CommandInfo = CommandInfo(),
     val listOPTID: CommandInfo = CommandInfo(),
-    val listSBTimer: CommandInfo = CommandInfo(),
-    val listSBDice: CommandInfo = CommandInfo(),
-    val listSBSyncEnable: CommandInfo = CommandInfo(),
-    val listSBSyncDisable: CommandInfo = CommandInfo(),
+    val listSCTimer: CommandInfo = CommandInfo(),
+    val listSCDice: CommandInfo = CommandInfo(),
+    val listSCSyncEnable: CommandInfo = CommandInfo(),
+    val listSCSyncDisable: CommandInfo = CommandInfo(),
     val queue: CommandInfo = CommandInfo(),
     val queueShow: CommandInfo = CommandInfo(),
     val queueRemove: CommandInfo = CommandInfo(),
@@ -179,10 +179,10 @@ data class CommandInfoLangData(
     val timerOPTRemoveRole: CommandInfo = CommandInfo(),
     val timerOPTAddVC: CommandInfo = CommandInfo(),
     val timerOPTRemoveVC: CommandInfo = CommandInfo(),
-    val timerSBZero: CommandInfo = CommandInfo(),
-    val timerSBOne: CommandInfo = CommandInfo(),
-    val timerSBTwo: CommandInfo = CommandInfo(),
-    val timerSBThree: CommandInfo = CommandInfo(),
+    val timerSCZero: CommandInfo = CommandInfo(),
+    val timerSCOne: CommandInfo = CommandInfo(),
+    val timerSCTwo: CommandInfo = CommandInfo(),
+    val timerSCThree: CommandInfo = CommandInfo(),
     val timerMentionHere: CommandInfo = CommandInfo(),
     val timerMentionVC: CommandInfo = CommandInfo(),
     val timerMentionRole: CommandInfo = CommandInfo(),
