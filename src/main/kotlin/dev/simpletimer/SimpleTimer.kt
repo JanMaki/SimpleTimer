@@ -78,23 +78,21 @@ import java.util.*
 // v2.2.4 BCDiceのBot変更時に引数を追加
 
 /**
+ * すべての始まり
+ *
+ */
+fun main() {
+    SimpleTimer()
+}
+
+
+/**
  * メインクラス
  *
  */
 class SimpleTimer {
     companion object {
         lateinit var instance: SimpleTimer
-
-        /**
-         * すべての始まり
-         *
-         * @param args [Array] 引数（未使用）
-         */
-        @JvmStatic
-        fun main(args: Array<String>) {
-            SimpleTimer()
-        }
-
     }
 
     //バージョン
