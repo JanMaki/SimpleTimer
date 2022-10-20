@@ -12,9 +12,8 @@ import dev.simpletimer.extension.*
 import dev.simpletimer.util.Log
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.GuildMessageChannel
-import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
@@ -93,14 +92,14 @@ class BCDiceManager {
     /**
      * ダイス選択画面を送る
      *
-     * @param channel [MessageChannel] 対象のチャンネル
+     * @param channel [GuildMessageChannel] 対象のチャンネル
      */
     fun openSelectDiceBotView(channel: GuildMessageChannel) {
         //embedを作成
         val embed = createView(channel.guild.getLang(), 1) ?: return
 
         //メッセージを送信
-        channel.sendMessageEmbeds(embed).setActionRows(
+        channel.sendMessageEmbeds(embed).setComponents(
             ActionRow.of(DiceBotSelectMenu.createSelectMenu(gameSystemPages[1]!!, channel.guild.getLang())),
             ActionRow.of(
                 DiceBotPageButton.BackButton.createButton(0, channel.guild.getLang()),
@@ -166,7 +165,7 @@ class BCDiceManager {
                     gameSystem.id
                 )
             )
-                .addActionRows(ActionRow.of(DiceBotInfoButton.createButton(0, channel.guild.getLang()))).queue()
+                .setComponents(ActionRow.of(DiceBotInfoButton.createButton(0, channel.guild.getLang()))).queue()
 
             //ギルドのデータを取得
             val guildData = channel.guild.getGuildData()
@@ -197,7 +196,7 @@ class BCDiceManager {
     /**
      * ダイスの説明画面を表示
      *
-     * @param channel [MessageChannel] 送信するテキストチャンネル
+     * @param channel [GuildMessageChannel] 送信するテキストチャンネル
      * @param guild [Guild] 対象のギルド
      */
     fun getInfoEmbed(channel: GuildMessageChannel, guild: Guild): MessageEmbed {

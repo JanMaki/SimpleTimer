@@ -19,19 +19,19 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     //Discord連携 JDA
-    implementation("net.dv8tion", "JDA", "5.0.0-alpha.17")
+    implementation("net.dv8tion", "JDA", "5.0.0-alpha.21")
     //implementation(files("libs/JDA-5.0.0-alpha.9_DEV-withDependencies.jar"))
     //JDAに必要なもの
     implementation("ch.qos.logback", "logback-classic", "1.2.8")
     //音再生
-    implementation("com.sedmelluq", "lavaplayer", "1.3.78")
-    implementation("com.github.aikaterna", "lavaplayer-natives", "original-SNAPSHOT")
+    implementation("com.github.walkyst", "lavaplayer-fork", "1.3.98.4")
+    implementation("com.github.Walkyst", "lavaplayer-natives-fork", "1.0.1")
 
     //YAML
     implementation("com.charleskorn.kaml", "kaml", "0.43.0")
 
     //Json
-    implementation("org.jetbrains.kotlinx","kotlinx-serialization-json", "1.3.2")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.2")
 
     //BCDice
     implementation("dev.simpletimer", "bcdice-kt", "1.1.0")

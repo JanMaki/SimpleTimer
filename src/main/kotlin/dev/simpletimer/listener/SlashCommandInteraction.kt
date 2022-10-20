@@ -5,7 +5,7 @@ import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.extension.equalsIgnoreCase
 import dev.simpletimer.util.Log
-import net.dv8tion.jda.api.entities.PrivateChannel
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.hooks.ListenerAdapter

@@ -1,10 +1,10 @@
 package dev.simpletimer.extension
 
 import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.entities.GuildChannel
-import net.dv8tion.jda.api.entities.MessageChannel
-import net.dv8tion.jda.api.entities.StageChannel
-import net.dv8tion.jda.api.entities.VoiceChannel
+import net.dv8tion.jda.api.entities.channel.concrete.StageChannel
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
 import net.dv8tion.jda.internal.utils.PermissionUtil
 
 /**

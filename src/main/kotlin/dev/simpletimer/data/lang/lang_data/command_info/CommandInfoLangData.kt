@@ -45,10 +45,10 @@ import kotlinx.serialization.Serializable
  * @property listOPTDice
  * @property listOPTElementName
  * @property listOPTID
- * @property listSBTimer
- * @property listSBDice
- * @property listSBSyncEnable
- * @property listSBSyncDisable
+ * @property listSCTimer
+ * @property listSCDice
+ * @property listSCSyncEnable
+ * @property listSCSyncDisable
  * @property queue
  * @property queueShow
  * @property queueRemove
@@ -143,6 +143,10 @@ data class CommandInfoLangData(
     val listSBDice: CommandInfo = CommandInfo(),
     val listSBSyncEnable: CommandInfo = CommandInfo(),
     val listSBSyncDisable: CommandInfo = CommandInfo(),
+    val listSCTimer: CommandInfo = CommandInfo(),
+    val listSCDice: CommandInfo = CommandInfo(),
+    val listSCSyncEnable: CommandInfo = CommandInfo(),
+    val listSCSyncDisable: CommandInfo = CommandInfo(),
     val queue: CommandInfo = CommandInfo(),
     val queueShow: CommandInfo = CommandInfo(),
     val queueRemove: CommandInfo = CommandInfo(),
@@ -180,10 +184,10 @@ data class CommandInfoLangData(
     val timerOPTRemoveRole: CommandInfo = CommandInfo(),
     val timerOPTAddVC: CommandInfo = CommandInfo(),
     val timerOPTRemoveVC: CommandInfo = CommandInfo(),
-    val timerSBZero: CommandInfo = CommandInfo(),
-    val timerSBOne: CommandInfo = CommandInfo(),
-    val timerSBTwo: CommandInfo = CommandInfo(),
-    val timerSBThree: CommandInfo = CommandInfo(),
+    val timerSCZero: CommandInfo = CommandInfo(),
+    val timerSCOne: CommandInfo = CommandInfo(),
+    val timerSCTwo: CommandInfo = CommandInfo(),
+    val timerSCThree: CommandInfo = CommandInfo(),
     val timerMentionHere: CommandInfo = CommandInfo(),
     val timerMentionVC: CommandInfo = CommandInfo(),
     val timerMentionRole: CommandInfo = CommandInfo(),

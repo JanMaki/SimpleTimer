@@ -4,9 +4,8 @@ import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.GuildMessageChannel
-import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import java.util.*
 
 /**
@@ -23,7 +22,7 @@ class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number:
          * チャンネルとギルドとナンバーからタイマーのキューを取得する
          *
          * @param guild [Guild]
-         * @param channel [MessageChannel]
+         * @param channel [GuildMessageChannel]
          * @param number [Timer.Number]
          * @return [TimerQueue]を返す
          */

@@ -11,7 +11,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import net.dv8tion.jda.api.entities.AudioChannel
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 
 
 @Suppress("OPT_IN_IS_NOT_ENABLED")
