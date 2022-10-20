@@ -46,7 +46,7 @@ tasks.withType<KotlinCompile> {
 
 val jar by tasks.getting(Jar::class) {
     manifest {
-        attributes["Main-Class"] = "dev.simpletimer.SimpleTimer"
+        attributes["Main-Class"] = "dev.simpletimer.SimpleTimerKt"
     }
 
     from(configurations.runtimeClasspath.get().map {
