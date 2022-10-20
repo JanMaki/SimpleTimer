@@ -380,8 +380,15 @@ class ListCommands {
             //Stringに変換
             val id = option.asString
 
-            //36進数にからLongにする
-            val long = java.lang.Long.parseLong(id, 36)
+            val long =
+                try {
+                    //36進数にからLongにする
+                    java.lang.Long.parseLong(id, 36)
+                } catch (e: NumberFormatException) {
+                    //エラー
+                    replyCommandError(event)
+                    return
+                }
 
             //ギルドのIDが違うかを確認
             if (guild.idLong == long) {
