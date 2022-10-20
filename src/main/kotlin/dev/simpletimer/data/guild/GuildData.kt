@@ -10,6 +10,8 @@ import dev.simpletimer.data.serializer.GuildSerializer
 import dev.simpletimer.data.serializer.RoleSerializer
 import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 
 /**
  * ギルドのデータ
@@ -17,7 +19,7 @@ import net.dv8tion.jda.api.entities.*
  * @property ttsTiming [NoticeTiming]
  * @property finishTTS 終了時のTTSのメッセージ
  * @property mention [Mention]
- * @property vcMentionTargets 特定のVCへのメンション時にターゲットとなる[VoiceChannel]の[List]
+ * @property vcMentionTargets 特定のVCへのメンション時にターゲットとなる[AudioChannel]の[List]
  * @property roleMentionTargets 特定のRoleへのメンション時にターゲットとなる[Role]の[List]
  * @property diceMode [DiceMode]
  * @property diceBot BCDice使用時に使うダイスシステムのID

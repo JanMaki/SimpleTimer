@@ -15,12 +15,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.entities.channel.Channel
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.interactions.components.ActionRow
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
 import java.awt.Color
 import java.util.*
 import kotlin.math.abs
@@ -275,7 +278,7 @@ class Timer(
         val time = timerService.getTime()
         //削除のボタンをつける
         display?.editMessageEmbeds(generateDisplayEmbed(time))
-            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))?.queue()
+            ?.setComponents(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))?.queue()
 
         //プレイヤーを取得
         val player = guild.getAudioPlayer()
@@ -338,7 +341,7 @@ class Timer(
         val time = timerService.getTime()
         //削除のボタンをつける
         display?.editMessageEmbeds(generateDisplayEmbed(time))
-            ?.setActionRows(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))?.queue()
+            ?.setComponents(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))?.queue()
 
         val channelTimers = channelsTimersMap[channel]
         if (channelTimers != null) {
@@ -374,7 +377,7 @@ class Timer(
             }
             //送信
             channel.sendMessageEmbeds(generateDisplayEmbed(time))
-                .setActionRows(
+                .setComponents(
                     ActionRow.of(
                         StopButton.createButton(number, guild.getLang()),
                         FinishButton.createButton(number, guild.getLang()),
@@ -507,7 +510,7 @@ class Timer(
                 display?.reply(message)
                     ?.apply {
                         //削除のボタンをつける
-                        if (deletable) setActionRows(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))
+                        if (deletable) setComponents(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))
                     }
                     ?.mentionRepliedUser(false)?.queue { notice ->
                         timers[notice.idLong] = this
@@ -539,7 +542,7 @@ class Timer(
         if (guildData.ttsTiming.priority >= timing.priority) {
 
             //メッセージを作成
-            val messageBuilder = MessageBuilder("、${sting.replace("", "")}")
+            val messageBuilder = MessageCreateBuilder().setContent("、${sting.replace("", "")}")
             messageBuilder.setTTS(true)
 
             try {

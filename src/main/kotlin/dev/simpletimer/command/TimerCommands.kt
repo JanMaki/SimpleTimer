@@ -7,8 +7,8 @@ import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.*
 import dev.simpletimer.timer.Timer
-import net.dv8tion.jda.api.entities.AudioChannel
-import net.dv8tion.jda.api.entities.ChannelType
+import net.dv8tion.jda.api.entities.channel.ChannelType
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import java.util.*

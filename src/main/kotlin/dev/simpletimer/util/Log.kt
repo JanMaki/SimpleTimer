@@ -1,6 +1,6 @@
 package dev.simpletimer.util
 
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
 import org.slf4j.LoggerFactory
 
 /**

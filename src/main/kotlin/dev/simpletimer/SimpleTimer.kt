@@ -11,9 +11,9 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
-import net.dv8tion.jda.api.entities.Channel
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.channel.Channel
 import net.dv8tion.jda.api.requests.RestAction
 import java.io.IOException
 import java.net.ServerSocket
@@ -181,8 +181,7 @@ class SimpleTimer {
         shardBuilder.addEventListeners(CommandAutoCompleteInteraction())
         shardBuilder.addEventListeners(GenericMessageReaction())
         shardBuilder.addEventListeners(GuildLeave())
-        shardBuilder.addEventListeners(GuildVoiceJoin())
-        shardBuilder.addEventListeners(GuildVoiceLeave())
+        shardBuilder.addEventListeners(GuildVoiceUpdate())
         shardBuilder.addEventListeners(MessageDelete())
         shardBuilder.addEventListeners(ModalInteraction())
         shardBuilder.addEventListeners(Ready())
