@@ -34,10 +34,12 @@ object YesOrNoModal : ModalManager.Modal<YesOrNoModal.Data>("yes_or_no") {
                 //Yesのときの処理
                 data.yesAction.run(event)
             }
+
             "NO", "N" -> {
                 //Noのときの処理
                 data.noAction.run(event)
             }
+
             else -> {
                 //エラーを送信
                 event.hook.sendMessage(langData.component.modal.yesNoWarning).queue()

@@ -68,6 +68,7 @@ class DiceCommands {
                 dev.simpletimer.data.enum.DiceMode.Default -> {
                     dev.simpletimer.data.enum.DiceMode.BCDice
                 }
+
                 dev.simpletimer.data.enum.DiceMode.BCDice -> {
                     dev.simpletimer.data.enum.DiceMode.Default
                 }
@@ -99,6 +100,7 @@ class DiceCommands {
                     //標準ダイスのヘルプを取得して出力
                     event.hook.sendMessageEmbeds(DefaultDice.getInfoEmbed(guild.getLang())).queue()
                 }
+
                 dev.simpletimer.data.enum.DiceMode.BCDice -> {
                     //BCDiceのヘルプを取得して出力
                     CoroutineScope(Dispatchers.Default).launch {

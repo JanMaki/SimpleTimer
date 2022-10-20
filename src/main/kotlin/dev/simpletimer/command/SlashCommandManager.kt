@@ -142,7 +142,13 @@ object SlashCommandManager {
                     dataContainer.getCommandInfoLangData(Lang.JAP, langPath) ?: throw IllegalArgumentException()
 
                 //オプションを作成して返す
-                return OptionData(type, japaneseLangData.name, japaneseLangData.description, required, autoComplete).apply {
+                return OptionData(
+                    type,
+                    japaneseLangData.name,
+                    japaneseLangData.description,
+                    required,
+                    autoComplete
+                ).apply {
                     //日本語以外の言語を回す
                     Lang.values().filter { it != Lang.JAP }.forEach {
                         //言語のデータを取得

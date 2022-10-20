@@ -71,6 +71,7 @@ object ButtonCommand : SlashCommandManager.SlashCommand(CommandInfoPath.BUTTON, 
                     .addActionRow(DiceButton.createButton(option.asString, event.guild!!.getLang()))
                     .queue()
             }
+
             else -> {
                 //とりあえず待たせる
                 event.deferReply().queue()

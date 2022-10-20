@@ -218,7 +218,8 @@ abstract class AudioCommands(langPath: CommandInfoPath) : SlashCommandManager.Sl
             dataContainer.saveGuildsData(guild)
 
             //埋め込みを作成して送信
-            event.hook.sendMessageEmbeds(getAudioInfoEmbed(guild.getLang(), audioData, "オーディオを${name}に変更しました")).queue()
+            event.hook.sendMessageEmbeds(getAudioInfoEmbed(guild.getLang(), audioData, "オーディオを${name}に変更しました"))
+                .queue()
         }
 
         override fun autoComplete(event: CommandAutoCompleteInteractionEvent) {
