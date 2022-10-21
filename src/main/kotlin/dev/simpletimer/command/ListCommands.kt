@@ -27,11 +27,11 @@ class ListCommands {
     object ListAdd : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_ADD) {
         init {
             addSubcommands(
-                createSubCommandData(CommandInfoPath.LIST_SB_TIMER).addOptions(
+                createSubCommandData(CommandInfoPath.LIST_SC_TIMER).addOptions(
                     createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_TIMER_NAME, true),
                     createOptionData(OptionType.INTEGER, CommandInfoPath.MINUTES, true)
                 ),
-                createSubCommandData(CommandInfoPath.LIST_SB_DICE).addOptions(
+                createSubCommandData(CommandInfoPath.LIST_SC_DICE).addOptions(
                     createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_DICE_NAME, true),
                     createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_DICE, true)
                 )
@@ -260,9 +260,9 @@ class ListCommands {
     object SyncList : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_SYNC) {
         init {
             addSubcommands(
-                createSubCommandData(CommandInfoPath.LIST_SB_SYNC_ENABLE)
+                createSubCommandData(CommandInfoPath.LIST_SC_SYNC_ENABLE)
                     .addOptions(createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ID, true)),
-                createSubCommandData(CommandInfoPath.LIST_SB_SYNC_DISABLE)
+                createSubCommandData(CommandInfoPath.LIST_SC_SYNC_DISABLE)
             )
         }
 

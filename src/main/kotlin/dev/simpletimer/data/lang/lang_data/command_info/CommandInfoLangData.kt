@@ -86,10 +86,10 @@ import kotlinx.serialization.Serializable
  * @property timerOPTRemoveRole
  * @property timerOPTAddVC
  * @property timerOPTRemoveVC
- * @property timerSBZero
- * @property timerSBOne
- * @property timerSBTwo
- * @property timerSBThree
+ * @property timerSCZero
+ * @property timerSCOne
+ * @property timerSCTwo
+ * @property timerSCThree
  * @property timerMentionHere
  * @property timerMentionVC
  * @property timerMentionRole
@@ -139,10 +139,6 @@ data class CommandInfoLangData(
     val listOPTElementName: CommandInfo = CommandInfo(),
     val listOPTID: CommandInfo = CommandInfo(),
     val listOPTChannel: CommandInfo = CommandInfo(),
-    val listSBTimer: CommandInfo = CommandInfo(),
-    val listSBDice: CommandInfo = CommandInfo(),
-    val listSBSyncEnable: CommandInfo = CommandInfo(),
-    val listSBSyncDisable: CommandInfo = CommandInfo(),
     val listSCTimer: CommandInfo = CommandInfo(),
     val listSCDice: CommandInfo = CommandInfo(),
     val listSCSyncEnable: CommandInfo = CommandInfo(),
