@@ -4,6 +4,7 @@ import dev.simpletimer.component.modal.QueueModal
 import dev.simpletimer.component.modal.YesOrNoModal
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.getOption
 import dev.simpletimer.extension.langFormat
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
@@ -30,7 +31,7 @@ abstract class QueueCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val timerOption = event.getOption("タイマー")
+            val timerOption = event.getOption(CommandInfoPath.QUEUE_OPT_ADD_TIMER)
             //タイマーの番号を取得
             val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
@@ -57,7 +58,7 @@ abstract class QueueCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val timerOption = event.getOption("タイマー")
+            val timerOption = event.getOption(CommandInfoPath.QUEUE_OPT_CHECK_TIMER)
             //タイマーの番号を取得
             val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
@@ -87,8 +88,8 @@ abstract class QueueCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val timerOption = event.getOption("タイマー")
-            val indexOption = event.getOption("番号")
+            val timerOption = event.getOption(CommandInfoPath.QUEUE_OPT_REMOVE_TIMER)
+            val indexOption = event.getOption(CommandInfoPath.QUEUE_OPT_NUMBER)
             //nullチェック
             if (timerOption == null || indexOption == null) {
                 replyCommandError(event)
@@ -142,7 +143,7 @@ abstract class QueueCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val timerOption = event.getOption("タイマー")
+            val timerOption = event.getOption( CommandInfoPath.QUEUE_OPT_CLEAR_TIMER)
             //nullチェック
             if (timerOption == null) {
                 replyCommandError(event)

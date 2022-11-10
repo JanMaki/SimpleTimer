@@ -4,6 +4,7 @@ import dev.simpletimer.component.button.DiceButton
 import dev.simpletimer.component.modal.TimerButtonModal
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.getOption
 import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -46,7 +47,7 @@ object ButtonCommand : SlashCommandManager.SlashCommand(CommandInfoPath.BUTTON, 
                 event.deferReply().queue()
 
                 //オプションを取得
-                val option = event.getOption("ダイス")
+                val option = event.getOption(CommandInfoPath.BUTTON_OPT_DICE)
 
                 //nullチェック
                 if (option == null) {

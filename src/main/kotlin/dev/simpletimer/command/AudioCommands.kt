@@ -187,7 +187,7 @@ abstract class AudioCommands(langPath: CommandInfoPath) : SlashCommandManager.Sl
 
         override fun runAudio(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("名前")
+            val option = event.getOption(CommandInfoPath.AUDIO_OPT_NAME)
             //nullチェック
             if (option == null) {
                 replyCommandError(event)

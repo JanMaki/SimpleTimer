@@ -25,7 +25,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("分")
+            val option = event.getOption(CommandInfoPath.MINUTES)
 
             //nullチェック
             if (option == null) {
@@ -87,7 +87,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("タイマー")
+            val option = event.getOption(CommandInfoPath.TIMER_OPT_FINISH_TIMER)
 
             //nullチェック
             if (option == null) {
@@ -177,7 +177,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val timerOption = event.getOption("タイマー")
+            val timerOption = event.getOption(CommandInfoPath.TIMER_OPT_ADD_TIMER)
             //nullチェック
             if (timerOption == null) {
                 replyCommandError(event)
@@ -214,7 +214,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("タイマー")
+            val option = event.getOption(CommandInfoPath.TIMER_OPT_STOP_TIMER)
 
             //nullチェック
             if (option == null) {
@@ -274,7 +274,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("タイマー")
+            val option = event.getOption(CommandInfoPath.TIMER_OPT_RESTART_TIMER)
 
             //nullチェック
             if (option == null) {
@@ -336,7 +336,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val timerOption = event.getOption("タイマー")
+            val timerOption = event.getOption(CommandInfoPath.TIMER_OPT_CHECK_TIMER)
 
             //nullチェック
             if (timerOption == null) {
@@ -431,7 +431,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //メッセージを取得
-            val message = event.getOption("メッセージ")?.asString ?: ""
+            val message = event.getOption(CommandInfoPath.TIMER_OPT_MESSAGE)?.asString ?: ""
 
             val guild = event.guild!!
 
@@ -632,7 +632,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("role")
+            val option = event.getOption(CommandInfoPath.TIMER_OPT_ADD_ROLE)
 
             //nullチェック
             if (option == null) {
@@ -665,7 +665,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("role")
+            val option = event.getOption(CommandInfoPath.TIMER_OPT_REMOVE_ROLE)
 
             //nullチェック
             if (option == null) {
@@ -731,7 +731,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("channel")
+            val option = event.getOption(CommandInfoPath.TIMER_OPT_ADD_VC)
 
             //nullチェック
             if (option == null) {
@@ -781,7 +781,7 @@ class TimerCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("channel")
+            val option = event.getOption(CommandInfoPath.TIMER_OPT_REMOVE_VC)
 
             //nullチェック
             if (option == null) {
