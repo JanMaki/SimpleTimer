@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.serialization") version "1.6.10"
+    kotlin("jvm") version "1.7.20"
+    kotlin("plugin.serialization") version "1.7.20"
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
@@ -14,13 +14,11 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.1")
-
+    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.4")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     //Discord連携 JDA
-    implementation("net.dv8tion", "JDA", "5.0.0-alpha.21")
-    //implementation(files("libs/JDA-5.0.0-alpha.9_DEV-withDependencies.jar"))
+    implementation("net.dv8tion", "JDA", "5.0.0-alpha.22")
     //JDAに必要なもの
     implementation("ch.qos.logback", "logback-classic", "1.2.8")
     //音再生
@@ -28,13 +26,12 @@ dependencies {
     implementation("com.github.Walkyst", "lavaplayer-natives-fork", "1.0.1")
 
     //YAML
-    implementation("com.charleskorn.kaml", "kaml", "0.43.0")
-
+    implementation("com.charleskorn.kaml", "kaml", "0.49.0")
     //Json
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.2")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.1")
 
     //BCDice
-    implementation("dev.simpletimer", "bcdice-kt", "1.1.0")
+    implementation("dev.simpletimer", "bcdice-kt", "1.2.0")
 
     //RESTApi
     implementation("com.github.kittinunf.fuel", "fuel", "2.3.1")
