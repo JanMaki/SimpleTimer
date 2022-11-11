@@ -1,7 +1,7 @@
 package dev.simpletimer.component.select_menu
 
 import dev.simpletimer.data.lang.lang_data.LangData
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent
 
 //選択メニューのマネージャー
 object SelectMenuManager {
@@ -25,9 +25,9 @@ object SelectMenuManager {
         /**
          * 選択メニューを実行する
          *
-         * @param event [SelectMenuInteractionEvent] 選択をしたイベント
+         * @param event [StringSelectInteractionEvent] 選択をしたイベント
          */
-        abstract fun run(event: SelectMenuInteractionEvent)
+        abstract fun run(event: StringSelectInteractionEvent)
 
         /**
          * 選択メニューを作成する

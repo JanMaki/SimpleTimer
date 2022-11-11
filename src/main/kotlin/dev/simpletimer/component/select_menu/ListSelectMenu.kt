@@ -9,8 +9,9 @@ import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import net.dv8tion.jda.api.entities.emoji.Emoji
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu
 import java.util.*
 
 /**
@@ -18,7 +19,7 @@ import java.util.*
  *
  */
 object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, String>>("list", false) {
-    override fun run(event: SelectMenuInteractionEvent) {
+    override fun run(event: StringSelectInteractionEvent) {
         //考え中を出す
         event.deferReply(true).queue()
 
@@ -91,7 +92,7 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
 
     override fun createSelectMenu(data: LinkedHashMap<String, String>, langData: LangData): SelectMenu {
         //メニューを作成
-        val selectionMenu = SelectMenu.create(name)
+        val selectionMenu = StringSelectMenu.create(name)
         selectionMenu.placeholder = langData.component.select.placeholder
         selectionMenu.setRequiredRange(1, 1)
 
