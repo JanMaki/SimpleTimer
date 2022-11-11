@@ -19,7 +19,7 @@ class GuildVoiceUpdate : ListenerAdapter() {
     override fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
         //Join時
         val channelJoin = event.channelJoined
-        if (channelJoin != null){
+        if (channelJoin != null) {
             //IDを確認
             if (event.member.user.idLong != SimpleTimer.instance.shards.first().selfUser.idLong) return
 
@@ -34,7 +34,7 @@ class GuildVoiceUpdate : ListenerAdapter() {
 
         //Left時
         val channelLeft = event.channelLeft
-        if (channelLeft != null){
+        if (channelLeft != null) {
             //プレイヤーを取得
             val player = event.guild.getAudioPlayer()
 

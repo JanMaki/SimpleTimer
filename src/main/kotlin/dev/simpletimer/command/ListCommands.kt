@@ -55,7 +55,22 @@ class ListCommands {
             }
 
             //オプションを取得
-            val name = event.getOption("名前")!!.asString
+            val name = when (event.subcommandName) {
+                "timer" -> {
+                    //タイマーのときのオプションを取得
+                    event.getOption(CommandInfoPath.LIST_OPT_TIMER_NAME)!!.asString
+                }
+
+                "dice" -> {
+                    //ダイスのときのオプションを取得
+                    event.getOption(CommandInfoPath.LIST_OPT_DICE_NAME)!!.asString
+                }
+
+                else -> {
+                    replyCommandError(event)
+                    return
+                }
+            }
 
             //文字数制限
             if (name.length >= 10) {
@@ -82,12 +97,12 @@ class ListCommands {
             when (event.subcommandName) {
                 "timer" -> {
                     //ギルドのデータでタイマーを追加
-                    guildData.list["timer:${name}"] = event.getOption("分")!!.asInt.toString()
+                    guildData.list["timer:${name}"] = event.getOption(CommandInfoPath.MINUTES)!!.asInt.toString()
                 }
 
                 "dice" -> {
                     //ギルドのデータでダイスを追加
-                    guildData.list["dice:${name}"] = event.getOption("ダイス")!!.asString
+                    guildData.list["dice:${name}"] = event.getOption(CommandInfoPath.LIST_OPT_DICE)!!.asString
                 }
             }
 
@@ -124,7 +139,7 @@ class ListCommands {
             val langData = guild.getLang()
 
             //オプションを取得
-            val name = event.getOption("名前")!!.asString
+            val name = event.getOption(CommandInfoPath.LIST_OPT_ELEMENT_NAME)!!.asString
 
             //同期の確認
             if (guildData.listSync) {
@@ -223,7 +238,7 @@ class ListCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("テキストチャンネル")
+            val option = event.getOption(CommandInfoPath.LIST_OPT_CHANNEL)
 
             //nullチェック
             if (option == null) {
@@ -305,7 +320,7 @@ class ListCommands {
 
             if (bool) {
                 //オプションを取得
-                val option = event.getOption("id")
+                val option = event.getOption(CommandInfoPath.LIST_OPT_ID)
 
                 //nullチェック
                 if (option == null) {
@@ -356,7 +371,7 @@ class ListCommands {
      */
     object CopyList : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_COPY) {
         init {
-            addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true)
+            addOptions(createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ID, true))
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
@@ -369,7 +384,7 @@ class ListCommands {
             val langData = guild.getLang()
 
             //オプションを取得
-            val option = event.getOption("id")
+            val option = event.getOption(CommandInfoPath.LIST_OPT_ID)
 
             //nullチェック
             if (option == null) {

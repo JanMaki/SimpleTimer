@@ -7,6 +7,7 @@ import dev.simpletimer.dice.Dice
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.getOption
 import dev.simpletimer.extension.langFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,7 @@ class DiceCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("ダイス")
+            val option = event.getOption(CommandInfoPath.DICE_OPT_DICE)
 
             //nullチェック
             if (option == null) {
@@ -128,7 +129,7 @@ class DiceCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val option = event.getOption("bot")
+            val option = event.getOption(CommandInfoPath.DICE_OPT_BOT)
 
             //オプションが入力されていないかを確認
             if (option == null) {
