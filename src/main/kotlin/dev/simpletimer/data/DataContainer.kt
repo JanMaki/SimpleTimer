@@ -12,6 +12,7 @@ import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.equalsIgnoreCase
 import net.dv8tion.jda.api.entities.Guild
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
@@ -96,17 +97,26 @@ class DataContainer {
         for (lang in Lang.values()) {
             //ファイルを取得
             val langFile = File(langDirectory, lang.getFilePath())
-
             //ファイルがあるかを確認
             if (!langFile.exists()) {
-                //ファイルを作成
-                langFile.parentFile.mkdirs()
-                langFile.createNewFile()
+                //Jarでの実行かを確認
+                val isJar = File(javaClass.getResource("")?.toURI()!!).isFile
+                if (isJar) {
+                    //リソースを取得してコピー
+                    javaClass.getResourceAsStream("LangData${File.separator}${lang.getFilePath()}")
+                        ?.let {
+                            Files.copy(it, langFile.toPath())
+                        }
+                } else {
+                    //ファイルを作成
+                    langFile.parentFile.mkdirs()
+                    langFile.createNewFile()
 
-                //デフォルトのデータを書き込み
-                val langFileOutputStream = langFile.outputStream()
-                Yaml.default.encodeToStream(LangData.serializer(), LangData(), langFileOutputStream)
-                langFileOutputStream.close()
+                    //デフォルトのデータを書き込み
+                    val langFileOutputStream = langFile.outputStream()
+                    Yaml.default.encodeToStream(LangData.serializer(), LangData(), langFileOutputStream)
+                    langFileOutputStream.close()
+                }
             }
 
             //読み込んで代入
