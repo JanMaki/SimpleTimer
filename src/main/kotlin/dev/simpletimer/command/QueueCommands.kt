@@ -143,7 +143,7 @@ abstract class QueueCommands {
 
         override fun run(event: SlashCommandInteractionEvent) {
             //オプションを取得
-            val timerOption = event.getOption( CommandInfoPath.QUEUE_OPT_CLEAR_TIMER)
+            val timerOption = event.getOption(CommandInfoPath.QUEUE_OPT_CLEAR_TIMER)
             //nullチェック
             if (timerOption == null) {
                 replyCommandError(event)

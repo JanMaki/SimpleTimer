@@ -55,15 +55,17 @@ class ListCommands {
             }
 
             //オプションを取得
-            val name = when (event.subcommandName){
+            val name = when (event.subcommandName) {
                 "timer" -> {
                     //タイマーのときのオプションを取得
                     event.getOption(CommandInfoPath.LIST_OPT_TIMER_NAME)!!.asString
                 }
+
                 "dice" -> {
                     //ダイスのときのオプションを取得
                     event.getOption(CommandInfoPath.LIST_OPT_DICE_NAME)!!.asString
                 }
+
                 else -> {
                     replyCommandError(event)
                     return
