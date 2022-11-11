@@ -27,7 +27,6 @@ class ListCommands {
     object ListAdd : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_ADD) {
         init {
             addSubcommands(
-                //TODO Nameは共通
                 createSubCommandData(CommandInfoPath.LIST_SC_TIMER).addOptions(
                     createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_TIMER_NAME, true),
                     createOptionData(OptionType.INTEGER, CommandInfoPath.MINUTES, true)
@@ -56,8 +55,20 @@ class ListCommands {
             }
 
             //オプションを取得
-            //TODO
-            val name = event.getOption(CommandInfoPath.LIST_OPT_TIMER_NAME)!!.asString
+            val name = when (event.subcommandName){
+                "timer" -> {
+                    //タイマーのときのオプションを取得
+                    event.getOption(CommandInfoPath.LIST_OPT_TIMER_NAME)!!.asString
+                }
+                "dice" -> {
+                    //ダイスのときのオプションを取得
+                    event.getOption(CommandInfoPath.LIST_OPT_DICE_NAME)!!.asString
+                }
+                else -> {
+                    replyCommandError(event)
+                    return
+                }
+            }
 
             //文字数制限
             if (name.length >= 10) {
@@ -358,8 +369,7 @@ class ListCommands {
      */
     object CopyList : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_COPY) {
         init {
-            //TODO id
-            addOption(OptionType.STRING, "id", "同期する対象のサーバーで出力されたIDを入れてください", true)
+            addOptions(createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ID, true))
         }
 
         override fun run(event: SlashCommandInteractionEvent) {
@@ -372,7 +382,7 @@ class ListCommands {
             val langData = guild.getLang()
 
             //オプションを取得
-            val option = event.getOption("id")
+            val option = event.getOption(CommandInfoPath.LIST_OPT_ID)
 
             //nullチェック
             if (option == null) {
