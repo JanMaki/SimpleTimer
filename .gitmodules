@@ -1,0 +1,3 @@
+[submodule "src/main/resources/LandData"]
+	path = src/main/resources/LandData
+	url = https://github.com/JanMaki/SimpleTimer-Localization.git
