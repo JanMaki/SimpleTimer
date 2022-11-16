@@ -4,7 +4,7 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.select_menu.SelectMenuManager
 import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.extension.equalsIgnoreCase
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 /**
@@ -16,10 +16,10 @@ class SelectMenuInteraction : ListenerAdapter() {
     /**
      * 選択メニューを選択した時に実行される
      *
-     * @param event [SelectMenuInteractionEvent] イベント
+     * @param event [StringSelectInteractionEvent] イベント
      */
-    override fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
-        super.onSelectMenuInteraction(event)
+    override fun onStringSelectInteraction(event: StringSelectInteractionEvent) {
+        super.onStringSelectInteraction(event)
 
         //管理者権限か、必要な権限を確認
         if (!event.guildChannel.checkSimpleTimerPermission()) {

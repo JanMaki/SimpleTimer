@@ -42,6 +42,8 @@ tasks.withType<KotlinCompile> {
 }
 
 val jar by tasks.getting(Jar::class) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     manifest {
         attributes["Main-Class"] = "dev.simpletimer.SimpleTimerKt"
     }

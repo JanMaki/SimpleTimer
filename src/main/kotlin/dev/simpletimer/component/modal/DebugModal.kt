@@ -5,9 +5,9 @@ import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.Modal
 import net.dv8tion.jda.api.interactions.components.text.TextInput
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
+import net.dv8tion.jda.api.interactions.modals.Modal
 
 /**
  * デバッグ機能のModal

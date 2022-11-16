@@ -15,7 +15,6 @@ import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback
 import net.dv8tion.jda.api.interactions.components.ActionRow
@@ -145,7 +144,8 @@ class BCDiceManager {
     /**
      * 選択メニューに応じてBotを選択
      *
-     * @param event [SelectMenuInteractionEvent]対象のイベント
+     * @param event [IReplyCallback]対象のイベントのコールバック
+     * @parm id BotのID
      */
     fun selectFromInteraction(event: IReplyCallback, id: String) {
         //チャンネルを取得1

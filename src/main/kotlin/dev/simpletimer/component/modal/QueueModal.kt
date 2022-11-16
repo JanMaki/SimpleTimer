@@ -7,7 +7,7 @@ import dev.simpletimer.timer.Timer
 import dev.simpletimer.timer.TimerQueue
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.Modal
+import net.dv8tion.jda.api.interactions.modals.Modal
 
 /**
  * キューに追加をするモーダル

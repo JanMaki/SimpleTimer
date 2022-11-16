@@ -6,7 +6,7 @@ import dev.simpletimer.extension.langFormat
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.Modal
+import net.dv8tion.jda.api.interactions.modals.Modal
 import java.util.*
 
 /**

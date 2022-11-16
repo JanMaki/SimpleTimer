@@ -5,7 +5,7 @@ import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.Modal
+import net.dv8tion.jda.api.interactions.modals.Modal
 
 /**
  * タイマーのボタンのModal
