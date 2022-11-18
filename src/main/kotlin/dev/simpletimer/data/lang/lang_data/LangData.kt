@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 /**
  * 言語のデータ
  *
+ * @property information Botの説明の文章
  * @property timer タイマーの言語のデータ
  * @property dice ダイスの言語のデータ
  * @property commandInfo コマンドの情報の言語のデータ
@@ -17,6 +18,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class LangData(
+    val information: String = "",
     val timer: TimerLangData = TimerLangData(),
     val dice: DiceLangData = DiceLangData(),
     val commandInfo: CommandInfoLangData = CommandInfoLangData(),
