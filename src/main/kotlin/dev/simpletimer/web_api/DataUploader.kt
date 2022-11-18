@@ -11,7 +11,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
-import java.net.MalformedURLException
 
 /**
  * タイマーのデータのアップローダー
@@ -81,15 +80,17 @@ class DataUploader {
                         }
                     }
                     //Post!
-                    "${SimpleTimer.instance.dataContainer.config.apiURL}/timers/${SimpleTimer.instance.dataContainer.config.apiToken}"
-                        .httpPut().header(hashMapOf("Content-Type" to "application/json"))
+                    "${SimpleTimer.instance.dataContainer.config.apiURL}/timers/${SimpleTimer.instance.dataContainer.config.apiToken}".httpPut()
+                        .header(hashMapOf("Content-Type" to "application/json"))
                         .body(Json.encodeToString(ListSerializer(ChannelData.serializer()), channelDataList)).response()
-                } catch (ignore: MalformedURLException) {
+                } catch (ignore: Exception) {
                     ignore.printStackTrace()
                 }
                 //スレッドを1秒待つ
                 delay(1000)
             }
+
+
         }
     }
 }
