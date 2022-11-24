@@ -1,5 +1,10 @@
 package dev.simpletimer.timer
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 /**
  * タイマーのサービス
  *
@@ -93,8 +98,11 @@ class TimerService(var seconds: Int) {
             startCoroutine()
         }
 
-        //イベントを呼び出す
-        listeners.forEach { it.onRestart(check) }
+        CoroutineScope(Dispatchers.Default).launch {
+            delay(1)
+            //イベントを呼び出す
+            listeners.forEach { it.onRestart(check) }
+        }
 
         //確認したものを返す
         return check
