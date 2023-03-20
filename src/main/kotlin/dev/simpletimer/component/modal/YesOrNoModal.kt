@@ -3,7 +3,6 @@ package dev.simpletimer.component.modal
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.text.TextInput
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
 import net.dv8tion.jda.api.interactions.modals.Modal
@@ -56,7 +55,7 @@ object YesOrNoModal : ModalManager.Modal<YesOrNoModal.Data>("yes_or_no") {
         userDatum[data.userIdLong] = data
         //Modalを作って返す
         return Modal.create("yes_or_no", langData.component.modal.confirmation)
-            .addActionRows(ActionRow.of(input))
+            .addActionRow(input)
             .build()
     }
 

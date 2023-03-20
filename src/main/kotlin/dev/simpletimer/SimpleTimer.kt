@@ -77,6 +77,7 @@ import java.util.*
 // v2.2.3 タイマー開始の数値でエラーが出ていたのを修正
 // v2.2.4 BCDiceのBot変更時に引数を追加
 // v2.3.0 バグの修正とAPIの更新・差し替え、コマンドを多言語に対応
+// v2.3.1 APIの更新
 
 /**
  * すべての始まり
@@ -97,7 +98,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v2.3.0"
+    val version = "v2.3.1"
 
     //多重起動防止
     private val lockPort = 918

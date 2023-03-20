@@ -3,7 +3,6 @@ package dev.simpletimer.component.modal
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.text.TextInput
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
 import net.dv8tion.jda.api.interactions.modals.Modal
@@ -66,7 +65,7 @@ abstract class TimerModal<T>(name: String, deferReply: Boolean = true) :
 
         //Modalを作成して返す
         return getModalBuilder(data, langData)
-            .addActionRows(ActionRow.of(minutesInput), ActionRow.of(secondsInput))
+            .addActionRow(minutesInput).addActionRow(secondsInput)
             .build()
     }
 

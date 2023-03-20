@@ -18,11 +18,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     //Discord連携 JDA
-    implementation("net.dv8tion", "JDA", "5.0.0-alpha.22")
+    implementation("net.dv8tion", "JDA", "5.0.0-beta.6")
     //JDAに必要なもの
     implementation("ch.qos.logback", "logback-classic", "1.2.8")
     //音再生
-    implementation("com.github.walkyst", "lavaplayer-fork", "1.3.98.4")
+    implementation("com.github.walkyst", "lavaplayer-fork", "1.4.0")
     implementation("com.github.Walkyst", "lavaplayer-natives-fork", "1.0.1")
 
     //YAML
@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.1")
 
     //BCDice
-    implementation("dev.simpletimer", "bcdice-kt", "1.2.1")
+    implementation("dev.simpletimer", "bcdice-kt", "1.3.0")
 
     //RESTApi
     implementation("com.github.kittinunf.fuel", "fuel", "2.3.1")
