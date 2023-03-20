@@ -247,8 +247,16 @@ class ListCommands {
                 return
             }
 
+            val guild = event.guild!!
+
             //チャンネルを取得
-            val channel = option.asChannel.asGuildMessageChannel()
+            val channel = try {
+                option.asChannel.asGuildMessageChannel()
+            } catch (e: IllegalStateException) {
+                //エラーのメッセージを送信
+                event.hook.sendMessage(guild.getLang().command.list.targetError).queue()
+                return
+            }
 
 
             //管理者権限か、必要な権限を確認
@@ -259,7 +267,6 @@ class ListCommands {
             }
 
             //ギルドのデータに設定をし、保存
-            val guild = event.guild!!
             guild.getGuildData().listTargetChannel = channel
             SimpleTimer.instance.dataContainer.saveGuildsData(guild)
 

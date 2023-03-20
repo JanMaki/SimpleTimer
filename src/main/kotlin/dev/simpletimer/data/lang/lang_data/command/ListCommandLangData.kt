@@ -33,6 +33,7 @@ data class ListCommandLangData(
     val clear: String = "",
     val changeChannel: String = "",
     val invalidID: String = "",
+    val targetError: String = "",
     val startSync: String = "",
     val targetSame: String = "",
     val finishSync: String = "",

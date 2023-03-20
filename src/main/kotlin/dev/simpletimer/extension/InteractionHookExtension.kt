@@ -14,12 +14,15 @@ import net.dv8tion.jda.api.interactions.InteractionHook
  *
  */
 fun InteractionHook.sendEmpty() {
-    this.sendMessage("|| ||").queue {
+    this.sendMessage("ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ").queue {
         CoroutineScope(Dispatchers.Default).launch {
-            //1ms止める
-            delay(1)
-            //削除
-            it.delete().queue()
+            //一時的なメッセージじゃないかを確認
+            while (!it.isEphemeral) {
+                //1ms止める
+                delay(1)
+                //メッセージを削除
+                it.delete().queue()
+            }
         }
     }
 }

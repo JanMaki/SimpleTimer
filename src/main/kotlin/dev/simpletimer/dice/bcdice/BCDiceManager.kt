@@ -31,6 +31,7 @@ class BCDiceManager {
     private val bcdice = BCDice()
 
     init {
+        println("BCDiceのセットアップ中...")
         instance = this
 
         if (!bcdice.wasInstalled()) {
@@ -58,6 +59,8 @@ class BCDiceManager {
                 count++
             }
         }
+
+        println("BCDiceのセットアップ完了")
     }
 
     /**

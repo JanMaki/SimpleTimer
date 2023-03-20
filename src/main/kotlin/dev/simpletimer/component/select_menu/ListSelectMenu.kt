@@ -97,7 +97,7 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
         selectionMenu.setRequiredRange(1, 1)
 
         //空白を追加
-        selectionMenu.addOption("　", "empty")
+        selectionMenu.addOption("ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ", "empty")
 
         //タイマの一覧を回す
         data.forEach {
