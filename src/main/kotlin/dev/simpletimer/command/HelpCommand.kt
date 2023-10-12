@@ -25,34 +25,31 @@ object HelpCommand : SlashCommandManager.SlashCommand(CommandInfoPath.HELP) {
             //画像
             setThumbnail("https://i.ibb.co/YZ8PfJR/youf.png")
             //フィールド追加
-            addField("", "**${langData.command.help.explanation}**", false)
             addField(
-                "",
-                "${langData.command.help.whatIsSimpleTimer}\nhttps://simpletimer.fanbox.cc/posts/3088356",
+                "**${langData.command.help.explanation}**",
+                "[${langData.command.help.whatIsSimpleTimer}](https://simpletimer.fanbox.cc/posts/3088356)",
                 true
             )
             addField(
                 "",
-                "${langData.command.help.timerCommandsList}\nhttps://simpletimer.fanbox.cc/posts/3128595",
+                "[${langData.command.help.timerCommandsList}](https://simpletimer.fanbox.cc/posts/3128595)",
                 true
             )
-            addField("", "${langData.command.help.listExplanation}\nhttps://simpletimer.fanbox.cc/posts/3088371", true)
-            addField("", "**${langData.command.help.developInfo}**", false)
-            addField("", "${langData.command.help.sourceCode}\nhttps://source.simpletimer.dev/", true)
+            addField("", "[${langData.command.help.listExplanation}](https://simpletimer.fanbox.cc/posts/3088371)", true)
+            addField("**${langData.command.help.developInfo}**", "[${langData.command.help.sourceCode}](https://source.simpletimer.dev/)", false)
             addField(
                 "",
-                "${langData.command.help.supportForDeveloper}\nhttps://simpletimer.fanbox.cc/posts/3128883",
-                true
-            )
-            addField("", "**${langData.command.help.show}**", false)
-            addField(
-                "",
-                "${langData.command.help.termsOfUse}\nhttps://docs.google.com/document/d/1ae23tZfLhLppYQCICte91qYN__ADQ9w4uq6OVaT3AjM/edit?usp=sharing",
+                "[${langData.command.help.supportForDeveloper}](https://simpletimer.fanbox.cc/posts/3128883)",
                 true
             )
             addField(
+                "**${langData.command.help.show}**",
+                "[${langData.command.help.termsOfUse}](https://docs.google.com/document/d/1ae23tZfLhLppYQCICte91qYN__ADQ9w4uq6OVaT3AjM/edit?usp=sharing)",
+                false
+            )
+            addField(
                 "",
-                "${langData.command.help.policy}\nhttps://docs.google.com/document/d/1etnMMknasi3JU6V573sWWJcqcU8Im1_3b-cc2pqKE6U/edit?usp=sharing",
+                "[${langData.command.help.policy}](https://docs.google.com/document/d/1etnMMknasi3JU6V573sWWJcqcU8Im1_3b-cc2pqKE6U/edit?usp=sharing)",
                 true
             )
         }.build()
