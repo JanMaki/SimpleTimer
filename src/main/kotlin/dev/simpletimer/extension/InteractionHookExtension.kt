@@ -10,5 +10,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook
  *
  */
 fun InteractionHook.sendEmpty() {
-    this.sendMessage("|| ||").queue()
+    this.sendMessage("\u200B").queue{
+        it.delete().queue()
+    }
 }
