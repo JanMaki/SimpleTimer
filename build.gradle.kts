@@ -22,8 +22,8 @@ dependencies {
     //JDAに必要なもの
     implementation("ch.qos.logback", "logback-classic", "1.2.8")
     //音再生
-    implementation("com.github.walkyst", "lavaplayer-fork", "1.4.0")
-    implementation("com.github.Walkyst", "lavaplayer-natives-fork", "1.0.1")
+    implementation("com.github.walkyst", "lavaplayer-fork", "1.4.3")
+    implementation("com.github.Walkyst", "lavaplayer-natives-fork", "1.0.2")
 
     //YAML
     implementation("com.charleskorn.kaml", "kaml", "0.55.0")
