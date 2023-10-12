@@ -155,6 +155,15 @@ abstract class AudioCommands(langPath: CommandInfoPath) : SlashCommandManager.Sl
                 replyCommandError(event)
                 return
             }
+
+            val audioPlayer = event.guild!!.getAudioPlayer()
+
+            //接続しているかを確認
+            if (!audioPlayer.isConnected()) {
+                replyCommandError(event)
+                return
+            }
+
             //オーディオを取得
             val audioData = audioDatum.first()
 
