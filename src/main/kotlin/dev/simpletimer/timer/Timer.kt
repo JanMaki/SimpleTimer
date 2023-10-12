@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
 import java.awt.Color
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs
 
 /**
@@ -45,10 +46,10 @@ class Timer(
 ) : TimerService.TimerListener {
     companion object {
         //チャンネルとタイマーのマップ
-        val channelsTimersMap = HashMap<MessageChannel, EnumMap<Number, Timer>>()
+        val channelsTimersMap = ConcurrentHashMap<MessageChannel, EnumMap<Number, Timer>>()
 
-        val displays = TreeMap<Long, Timer>()
-        val timers = TreeMap<Long, Timer>()
+        val displays = ConcurrentHashMap<Long, Timer>()
+        val timers = ConcurrentHashMap<Long, Timer>()
 
         /**
          * メッセージのIDからTimerを取得する

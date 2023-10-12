@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * キューを管理する
@@ -16,7 +17,7 @@ import java.util.*
 class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number: Timer.Number) :
     TimerService.TimerListener {
     companion object {
-        private val timerQueues = mutableMapOf<Long, MutableMap<Timer.Number, TimerQueue>>()
+        private val timerQueues = ConcurrentHashMap<Long, MutableMap<Timer.Number, TimerQueue>>()
 
         /**
          * チャンネルとギルドとナンバーからタイマーのキューを取得する
