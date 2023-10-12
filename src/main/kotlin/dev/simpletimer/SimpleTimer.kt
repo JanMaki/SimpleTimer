@@ -79,6 +79,7 @@ import java.util.*
 // v2.3.0 バグの修正とAPIの更新・差し替え、コマンドを多言語に対応
 // v2.3.1 APIの更新
 // v2.3.2 バグやエラーの修正
+// v2.3.3 バグの修正とAPIの更新
 
 /**
  * すべての始まり
@@ -99,7 +100,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v2.3.1"
+    val version = "v2.3.3"
 
     //多重起動防止
     private val lockPort = 918
