@@ -124,7 +124,7 @@ class ListCommands {
     object ListRemove : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_REMOVE) {
         init {
             addOptions(
-                createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ELEMENT_NAME, true, true)
+                createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ELEMENT_NAME, required = true, autoComplete = true)
             )
         }
 

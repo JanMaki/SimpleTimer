@@ -22,7 +22,7 @@ object TimerButton : ButtonManager.Button<Int>("timer") {
         val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
 
         //番号を確認
-        for (number in Timer.Number.values()) {
+        for (number in Timer.Number.entries) {
             //その番号のタイマーが動いているかを確認
             if (!channelTimers.containsKey(number)) {
                 //タイマーを開始・代入

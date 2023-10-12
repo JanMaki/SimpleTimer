@@ -93,7 +93,7 @@ class DataContainer {
         if (!langDirectory.exists()) langDirectory.mkdirs()
 
         //すべての言語を確認
-        for (lang in Lang.values()) {
+        for (lang in Lang.entries) {
             //ファイルを取得
             val langFile = File(langDirectory, lang.getFilePath())
             //ファイルがあるかを確認

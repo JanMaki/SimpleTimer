@@ -51,7 +51,7 @@ class TimerCommands {
             val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
 
             //番号を確認
-            for (number in Timer.Number.values()) {
+            for (number in Timer.Number.entries) {
                 //その番号のタイマーが動いているかを確認
                 if (!channelTimers.containsKey(number)) {
                     //タイマーを開始し、インスタンスを代入する
@@ -151,7 +151,7 @@ class TimerCommands {
             }
 
             //タイマーをすべて終了させる
-            for (number in Timer.Number.values()) {
+            for (number in Timer.Number.entries) {
                 channelTimers[number]?.finish()
             }
 

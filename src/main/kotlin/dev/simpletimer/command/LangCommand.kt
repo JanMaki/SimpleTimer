@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 object LangCommand : SlashCommandManager.SlashCommand(CommandInfoPath.LANG) {
     init {
         //すべての言語を確認
-        Lang.values().forEach {
+        Lang.entries.forEach {
             //サブコマンドを追加
             addSubcommands(SubcommandData(it.name.lowercase(), it.displayName))
         }
