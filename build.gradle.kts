@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
-    kotlin("plugin.serialization") version "1.7.20"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.10"
 
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 repositories {
@@ -14,11 +14,11 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.4")
+    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.7.3")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     //Discord連携 JDA
-    implementation("net.dv8tion", "JDA", "5.0.0-beta.6")
+    implementation("net.dv8tion", "JDA", "5.0.0-beta.15")
     //JDAに必要なもの
     implementation("ch.qos.logback", "logback-classic", "1.2.8")
     //音再生
@@ -26,9 +26,9 @@ dependencies {
     implementation("com.github.Walkyst", "lavaplayer-natives-fork", "1.0.1")
 
     //YAML
-    implementation("com.charleskorn.kaml", "kaml", "0.49.0")
+    implementation("com.charleskorn.kaml", "kaml", "0.55.0")
     //Json
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.1")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.6.0")
 
     //BCDice
     implementation("dev.simpletimer", "bcdice-kt", "1.4.0")
