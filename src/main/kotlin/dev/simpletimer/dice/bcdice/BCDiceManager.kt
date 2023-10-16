@@ -295,10 +295,10 @@ class BCDiceManager {
         } else {
             if (result.success || result.critical) {
                 //成功
-                "```md\n# ${result.text}```"
+                "```diff\n+ ${result.text}```"
             } else if (result.failure || result.fumble) {
                 //失敗
-                "```cs\n# ${result.text}```"
+                "```diff\n- ${result.text}```"
             } else {
                 //その他
                 result.text

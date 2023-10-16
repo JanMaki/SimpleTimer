@@ -140,9 +140,9 @@ open class DefaultDice(val langData: LangData, private val command: String, secr
                     }
                 } else {
                     if (list.sum() <= target) {
-                        "```md\n# $command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　${langData.dice.defaultDice.success}\n```"
+                        "```diff\n+ $command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　${langData.dice.defaultDice.success}\n```"
                     } else {
-                        "```cs\n# $command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　${langData.dice.defaultDice.failure}\n```"
+                        "```diff\n- $command　⇒　${diceResultBuilder}　⇒　${list.sum()}　⇒　${langData.dice.defaultDice.failure}\n```"
                     }
                 }
             } else {
