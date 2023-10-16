@@ -193,7 +193,7 @@ class SimpleTimer {
         //ステータスを設定
         shardBuilder.setStatus(OnlineStatus.ONLINE)
         //アクティビティを変更
-        shardBuilder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "/helpでヘルプ表示　　　　　　"))
+        shardBuilder.setActivity(Activity.customStatus("/helpでヘルプ表示"))
 
         //shardを3回作る
         for (i in 0 until dataContainer.config.shardsCount) {
