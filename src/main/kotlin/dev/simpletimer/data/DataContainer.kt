@@ -59,15 +59,15 @@ class DataContainer {
                 configFile.createNewFile()
 
                 //デフォルトのデータを書き込み
-                val configFileOutputStream = configFile.outputStream()
-                Yaml.default.encodeToStream(ConfigData.serializer(), ConfigData(), configFileOutputStream)
-                configFileOutputStream.close()
+                configFile.outputStream().use {
+                    Yaml.default.encodeToStream(ConfigData.serializer(), ConfigData(), it)
+                }
             }
 
             //ファイルを読み込み
-            val configFileInputSimpleTimer = configFile.inputStream()
-            config = Yaml.default.decodeFromStream(ConfigData.serializer(), configFileInputSimpleTimer)
-            configFileInputSimpleTimer.close()
+            config = configFile.inputStream().use {
+                Yaml.default.decodeFromStream(ConfigData.serializer(), it)
+            }
         } catch (ignore: EmptyYamlDocumentException) {
             //空データを代入
             config = ConfigData()
@@ -80,8 +80,9 @@ class DataContainer {
         //ymlリを読み込み
         audioDirectory.listFiles()?.filterNotNull()?.filter { it.extension == "yml" }?.forEach { file ->
             //ファイル読み込み
-            val audioDataFileInputStream = file.inputStream()
-            val audioData = Yaml.default.decodeFromStream(AudioInformationData.serializer(), audioDataFileInputStream)
+            val audioData = file.inputStream().use {
+                Yaml.default.decodeFromStream(AudioInformationData.serializer(), it)
+            }
             //ファイルの位置をフルパスに変更
             audioData.file = File(audioDirectory, audioData.file).path.toString()
             //追加
@@ -103,13 +104,15 @@ class DataContainer {
                 langFile.createNewFile()
 
                 //デフォルトのデータを書き込み
-                val langFileOutputStream = langFile.outputStream()
-                Yaml.default.encodeToStream(LangData.serializer(), LangData(), langFileOutputStream)
-                langFileOutputStream.close()
+                langFile.outputStream().use {
+                    Yaml.default.encodeToStream(LangData.serializer(), LangData(), it)
+                }
             }
 
             //読み込んで代入
-            langDatum[lang] = Yaml.default.decodeFromStream(LangData.serializer(), langFile.inputStream())
+            langDatum[lang] = langFile.inputStream().use {
+                Yaml.default.decodeFromStream(LangData.serializer(), it)
+            }
         }
     }
 
@@ -125,10 +128,9 @@ class DataContainer {
         guildDirectory.listFiles()?.filterNotNull()?.filter { it.extension == "yml" }?.forEach { file ->
             try {
                 //ファイル読み込み
-                val guildFileInputStream = file.inputStream()
-                guildDatum[file.nameWithoutExtension.toLong()] =
-                    Yaml.default.decodeFromStream(GuildData.serializer(), guildFileInputStream)
-                guildFileInputStream.close()
+                guildDatum[file.nameWithoutExtension.toLong()] = file.inputStream().use {
+                    Yaml.default.decodeFromStream(GuildData.serializer(), it)
+                }
             } catch (ignore: EmptyYamlDocumentException) {
                 //空データを代入
                 guildDatum[file.nameWithoutExtension.toLong()] = GuildData()
@@ -184,9 +186,9 @@ class DataContainer {
         }
 
         //ファイルを書き込み
-        val guildsFileOutputStream = file.outputStream()
-        Yaml.default.encodeToStream(GuildData.serializer(), guildData, guildsFileOutputStream)
-        guildsFileOutputStream.close()
+        file.outputStream().use {
+            Yaml.default.encodeToStream(GuildData.serializer(), guildData, it)
+        }
     }
 
     /**
