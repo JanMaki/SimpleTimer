@@ -84,7 +84,9 @@ class Dice {
 
                     //出力メッセージの作成
                     val sendMessage = if (isSecret) {
-                        langData.dice.secret.langFormat("${mention}${langData.dice.secret}${dice.resultMessage}")
+                        """
+                        ${mention}${langData.dice.secret}${dice.resultMessage}
+                        """.trimIndent()
                     } else {
                         """
                         ${mention}${dice.resultMessage}
