@@ -170,10 +170,19 @@ open class DefaultDice(val langData: LangData, private val command: String, secr
             return resultList
         }
 
+        //ダイスの数
+        val diceCount = splittedValue[0].toIntOrNull() ?: 1
+        //ダイスの面数
+        val surface = splittedValue[1].toIntOrNull() ?: 1
+        //0の時は0にしてしまう
+        if (diceCount <= 0 || surface <= 0) {
+            return arrayListOf(0)
+        }
+
         //ダイスを順番に振る
-        for (count in 1..(splittedValue[0].toIntOrNull() ?: 1)) {
+        for (count in 1..diceCount) {
             //乱数作成
-            val result = random.nextInt(splittedValue[1].toIntOrNull() ?: 1) + 1
+            val result = random.nextInt(surface) + 1
             //個別の結果に追加
             resultList.add(result)
         }
