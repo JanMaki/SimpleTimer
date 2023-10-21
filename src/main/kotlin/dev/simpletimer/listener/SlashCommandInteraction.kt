@@ -39,17 +39,22 @@ class SlashCommandInteraction : ListenerAdapter() {
 
         try {
             //スラッシュコマンドを実行する
-            SlashCommandManager.slashCommands.forEach { slashCommand ->
-                //名前を確認
-                if (slashCommand.name.equalsIgnoreCase(name)) {
-                    //考え中をするかを確認
-                    if (slashCommand.deferReply) {
-                        //考え中を出す
-                        event.deferReply().queue()
-                    }
+            SlashCommandManager.slashCommands.first { it.name.equalsIgnoreCase(name) }.let { slashCommand ->
+                //考え中をするかを確認
+                if (slashCommand.deferReply) {
+                    //考え中を出す
+                    event.deferReply().queue()
+                }
 
-                    //実行
+                //サブコマンドがないかを確認
+                val subcommandName = event.subcommandName
+                if (subcommandName == null) {
+                    //通常のコマンドを実行
                     slashCommand.run(event)
+                } else {
+                    //サブコマンドを探して実行
+                    slashCommand.subcommands.first { it.subCommandData.name.equalsIgnoreCase(subcommandName) }
+                        .run(event)
                 }
             }
         } catch (e: Exception) {

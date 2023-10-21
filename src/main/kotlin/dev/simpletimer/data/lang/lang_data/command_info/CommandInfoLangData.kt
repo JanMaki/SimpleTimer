@@ -103,6 +103,7 @@ data class CommandInfoLangData(
     val two: CommandInfo = CommandInfo(),
     val three: CommandInfo = CommandInfo(),
     val four: CommandInfo = CommandInfo(),
+    val audio: CommandInfo = CommandInfo(),
     val audioConnect: CommandInfo = CommandInfo(),
     val audioDisconnect: CommandInfo = CommandInfo(),
     val audioListen: CommandInfo = CommandInfo(),

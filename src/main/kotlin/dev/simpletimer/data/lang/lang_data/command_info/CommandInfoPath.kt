@@ -11,6 +11,7 @@ enum class CommandInfoPath(val langPath: String) {
     TWO("two"),
     THREE("three"),
     FOUR("four"),
+    AUDIO("audio"),
     AUDIO_CONNECT("audioConnect"),
     AUDIO_DISCONNECT("audioDisconnect"),
     AUDIO_LISTEN("audioListen"),
