@@ -5,6 +5,7 @@ import dev.simpletimer.command.audio.AudioCommand
 import dev.simpletimer.command.dice.DiceCommands
 import dev.simpletimer.command.list.ListCommand
 import dev.simpletimer.command.queue.QueueCommand
+import dev.simpletimer.command.timer.TimerCommands
 import dev.simpletimer.data.lang.Lang
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.util.CommandUtil
@@ -37,16 +38,8 @@ object SlashCommandManager {
         TimerCommands.Stop,
         TimerCommands.Restart,
         TimerCommands.Check,
-        TimerCommands.TTSTiming,
-        TimerCommands.FinishTTS,
-        TimerCommands.MentionTiming,
+        TimerCommands.TTS,
         TimerCommands.Mention,
-        TimerCommands.ShowRoleMentionTarget,
-        TimerCommands.AddRoleMentionTarget,
-        TimerCommands.RemoveRoleMentionTarget,
-        TimerCommands.ShowVCMentionTarget,
-        TimerCommands.AddVCMentionTarget,
-        TimerCommands.RemoveVCMentionTarget,
         DiceCommands.Roll,
         DiceCommands.Dice,
         DiceCommands.BasicDice,
