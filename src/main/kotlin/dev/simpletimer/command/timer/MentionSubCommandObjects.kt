@@ -19,7 +19,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
 object MentionTiming : SlashCommandManager.SubCommand(CommandInfoPath.MENTION_TIMING) {
     init {
         addOptions(
-            CommandUtil.createOptionData(OptionType.INTEGER,  CommandInfoPath.TIMER_OPT_TIMING, true)
+            CommandUtil.createOptionData(OptionType.INTEGER, CommandInfoPath.TIMER_OPT_TIMING, true)
                 .addChoices(
                     CommandUtil.createChoice(CommandInfoPath.TIMER_SC_ZERO, 0),
                     CommandUtil.createChoice(CommandInfoPath.TIMER_SC_ONE, 1),
@@ -41,7 +41,7 @@ object MentionTiming : SlashCommandManager.SubCommand(CommandInfoPath.MENTION_TI
 
 
         //ttsのタイミングを取得
-        val timing = when(timingOption.asLong.toInt()) {
+        val timing = when (timingOption.asLong.toInt()) {
             1 -> NoticeTiming.LV1
             2 -> NoticeTiming.LV2
             3 -> NoticeTiming.LV3
@@ -229,7 +229,9 @@ object AddRoleMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.MEN
  */
 object RemoveRoleMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.MENTION_REMOVE_ROLE) {
     init {
-        addOptions(CommandUtil.createOptionData(OptionType.ROLE, CommandInfoPath.TIMER_OPT_REMOVE_ROLE).setRequired(true))
+        addOptions(
+            CommandUtil.createOptionData(OptionType.ROLE, CommandInfoPath.TIMER_OPT_REMOVE_ROLE).setRequired(true)
+        )
     }
 
     override fun run(event: SlashCommandInteractionEvent) {

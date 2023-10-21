@@ -1,20 +1,16 @@
 package dev.simpletimer.command.timer
 
-import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.component.modal.AddTimerModal
 import dev.simpletimer.component.modal.StartTimerModal
-import dev.simpletimer.data.enum.NoticeTiming
-import dev.simpletimer.data.lang.lang_data.command_info.CommandInfo
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
-import dev.simpletimer.extension.*
+import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.getOption
+import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import dev.simpletimer.util.CommandUtil.createChoice
 import dev.simpletimer.util.CommandUtil.createOptionData
-import dev.simpletimer.util.CommandUtil.createSubCommandData
 import dev.simpletimer.util.CommandUtil.replyCommandError
-import net.dv8tion.jda.api.entities.channel.ChannelType
-import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import java.util.*
@@ -387,7 +383,7 @@ class TimerCommands {
     /**
      * TTSの設定
      */
-    object TTS: SlashCommandManager.SlashCommand(CommandInfoPath.TTS, true, TTSTiming, FinishTTS) {
+    object TTS : SlashCommandManager.SlashCommand(CommandInfoPath.TTS, true, TTSTiming, FinishTTS) {
         override fun run(event: SlashCommandInteractionEvent) {
         }
     }
@@ -396,10 +392,17 @@ class TimerCommands {
      * メンションの設定
      *
      */
-    object Mention: SlashCommandManager.SlashCommand(
+    object Mention : SlashCommandManager.SlashCommand(
         CommandInfoPath.MENTION,
         true,
-        MentionTiming, MentionType, ShowRoleMentionTarget, AddRoleMentionTarget, RemoveRoleMentionTarget, ShowVCMentionTarget, AddVCMentionTarget, RemoveVCMentionTarget
+        MentionTiming,
+        MentionType,
+        ShowRoleMentionTarget,
+        AddRoleMentionTarget,
+        RemoveRoleMentionTarget,
+        ShowVCMentionTarget,
+        AddVCMentionTarget,
+        RemoveVCMentionTarget
     ) {
         override fun run(event: SlashCommandInteractionEvent) {
         }

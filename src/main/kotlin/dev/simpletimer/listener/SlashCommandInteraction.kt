@@ -52,15 +52,16 @@ class SlashCommandInteraction : ListenerAdapter() {
                     slashCommand.run(event)
                 } else {
                     //サブコマンドを探して実行
-                    slashCommand.subcommands.first { it.subCommandData.name.equalsIgnoreCase(subcommandName) }.let { subcommand ->
-                        //考え中をするかを確認
-                        if (subcommand.deferReply) {
-                            //通常のコマンドを実行
-                            event.deferReply().queue()
+                    slashCommand.subcommands.first { it.subCommandData.name.equalsIgnoreCase(subcommandName) }
+                        .let { subcommand ->
+                            //考え中をするかを確認
+                            if (subcommand.deferReply) {
+                                //通常のコマンドを実行
+                                event.deferReply().queue()
+                            }
+                            //サブコマンドを実行
+                            subcommand.run(event)
                         }
-                        //サブコマンドを実行
-                        subcommand.run(event)
-                    }
                 }
             }
         } catch (e: Exception) {

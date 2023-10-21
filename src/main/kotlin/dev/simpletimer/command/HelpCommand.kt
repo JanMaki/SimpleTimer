@@ -35,8 +35,16 @@ object HelpCommand : SlashCommandManager.SlashCommand(CommandInfoPath.HELP) {
                 "[${langData.command.help.timerCommandsList}](https://simpletimer.fanbox.cc/posts/3128595)",
                 true
             )
-            addField("", "[${langData.command.help.listExplanation}](https://simpletimer.fanbox.cc/posts/3088371)", true)
-            addField("**${langData.command.help.developInfo}**", "[${langData.command.help.sourceCode}](https://source.simpletimer.dev/)", false)
+            addField(
+                "",
+                "[${langData.command.help.listExplanation}](https://simpletimer.fanbox.cc/posts/3088371)",
+                true
+            )
+            addField(
+                "**${langData.command.help.developInfo}**",
+                "[${langData.command.help.sourceCode}](https://source.simpletimer.dev/)",
+                false
+            )
             addField(
                 "",
                 "[${langData.command.help.supportForDeveloper}](https://simpletimer.fanbox.cc/posts/3128883)",

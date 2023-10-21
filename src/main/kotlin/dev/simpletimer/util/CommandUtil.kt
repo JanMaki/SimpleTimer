@@ -102,13 +102,19 @@ object CommandUtil {
             dataContainer.getCommandInfoLangData(Lang.JAP, langPath) ?: throw IllegalArgumentException()
 
         //チョイスを作成して返す
-        return Command.Choice(japaneseLangData.name+if(japaneseLangData.description.isNotEmpty()) ": "+japaneseLangData.description else "", value).apply {
+        return Command.Choice(
+            japaneseLangData.name + if (japaneseLangData.description.isNotEmpty()) ": " + japaneseLangData.description else "",
+            value
+        ).apply {
             //日本語以外の言語を回す
             Lang.entries.filter { it != Lang.JAP }.forEach {
                 //言語のデータを取得
                 val langData = dataContainer.getCommandInfoLangData(it, langPath) ?: return@forEach
                 //ローカライズを設定
-                setNameLocalization(it.discordLocal, langData.name+if(langData.description.isNotEmpty()) ": "+langData.description else "")
+                setNameLocalization(
+                    it.discordLocal,
+                    langData.name + if (langData.description.isNotEmpty()) ": " + langData.description else ""
+                )
             }
         }
     }

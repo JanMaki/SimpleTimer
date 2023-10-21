@@ -4,7 +4,10 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
-import dev.simpletimer.extension.*
+import dev.simpletimer.extension.getGuildData
+import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.getOption
+import dev.simpletimer.extension.langFormat
 import dev.simpletimer.util.CommandUtil
 import dev.simpletimer.util.CommandUtil.createChoice
 import dev.simpletimer.util.CommandUtil.createOptionData
@@ -18,7 +21,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
 object TTSTiming : SlashCommandManager.SubCommand(CommandInfoPath.TTS_TIMING) {
     init {
         addOptions(
-            createOptionData(OptionType.INTEGER,  CommandInfoPath.TIMER_OPT_TYPE, true)
+            createOptionData(OptionType.INTEGER, CommandInfoPath.TIMER_OPT_TYPE, true)
                 .addChoices(
                     createChoice(CommandInfoPath.TIMER_SC_ZERO, 0),
                     createChoice(CommandInfoPath.TIMER_SC_ONE, 1),
@@ -39,7 +42,7 @@ object TTSTiming : SlashCommandManager.SubCommand(CommandInfoPath.TTS_TIMING) {
         }
 
         //ttsのタイミングを取得
-        val timing = when(timingOption.asLong.toInt()) {
+        val timing = when (timingOption.asLong.toInt()) {
             1 -> NoticeTiming.LV1
             2 -> NoticeTiming.LV2
             3 -> NoticeTiming.LV3
@@ -62,7 +65,7 @@ object TTSTiming : SlashCommandManager.SubCommand(CommandInfoPath.TTS_TIMING) {
 object FinishTTS : SlashCommandManager.SubCommand(CommandInfoPath.TTS_FINISH_MESSAGE) {
     init {
         addOptions(
-            CommandUtil.createOptionData(OptionType.STRING, CommandInfoPath.TIMER_OPT_MESSAGE)
+            createOptionData(OptionType.STRING, CommandInfoPath.TIMER_OPT_MESSAGE)
         )
     }
 

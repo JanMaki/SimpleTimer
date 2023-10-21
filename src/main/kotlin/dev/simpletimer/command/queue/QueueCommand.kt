@@ -8,7 +8,7 @@ object QueueCommand : SlashCommandManager.SlashCommand(
     CommandInfoPath.QUEUE,
     true,
     Add, Show, Remove, Clear
-){
+) {
     override fun run(event: SlashCommandInteractionEvent) {
     }
 }
