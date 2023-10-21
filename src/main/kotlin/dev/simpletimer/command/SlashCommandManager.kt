@@ -2,12 +2,16 @@ package dev.simpletimer.command
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.audio.AudioCommand
+import dev.simpletimer.command.dice.DiceCommands
+import dev.simpletimer.command.list.ListCommand
+import dev.simpletimer.command.queue.QueueCommand
 import dev.simpletimer.data.lang.Lang
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.util.CommandUtil
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
+import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 import net.dv8tion.jda.internal.interactions.CommandDataImpl
 
@@ -24,10 +28,7 @@ object SlashCommandManager {
         DebugCommand,
         HelpCommand,
         LangCommand,
-        QueueCommands.Queue,
-        QueueCommands.Show,
-        QueueCommands.Remove,
-        QueueCommands.Clear,
+        QueueCommand,
         ResetCommand,
         TimerCommands.StartTimer,
         TimerCommands.Finish,
@@ -47,19 +48,10 @@ object SlashCommandManager {
         TimerCommands.AddVCMentionTarget,
         TimerCommands.RemoveVCMentionTarget,
         DiceCommands.Roll,
-        DiceCommands.DiceMode,
-        DiceCommands.DiceInfo,
-        DiceCommands.DiceBot,
+        DiceCommands.Dice,
         DiceCommands.BasicDice,
         DiceCommands.BasicSecretDice,
-        ListCommands.List,
-        ListCommands.ListAdd,
-        ListCommands.ListRemove,
-        ListCommands.ListClear,
-        ListCommands.ListTargetChannel,
-        ListCommands.SyncList,
-        ListCommands.CopyList,
-        ListCommands.GetID
+        ListCommand.List,
     )
 
     /**
@@ -117,7 +109,7 @@ object SlashCommandManager {
      *
      * @param langPath 言語のパス
      */
-    abstract class SubCommand(langPath: CommandInfoPath) {
+    abstract class SubCommand(langPath: CommandInfoPath, val deferReply: Boolean = true) {
         //実際のサブコマンドの中身
         val subCommandData: SubcommandData
 
@@ -140,6 +132,10 @@ object SlashCommandManager {
          */
         open fun autoComplete(event: CommandAutoCompleteInteractionEvent) {
             //デフォルトでは何もしない
+        }
+
+        fun addOptions(vararg options: OptionData) {
+            subCommandData.addOptions(*options)
         }
     }
 }

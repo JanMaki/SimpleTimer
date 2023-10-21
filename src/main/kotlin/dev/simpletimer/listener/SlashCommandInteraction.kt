@@ -40,21 +40,27 @@ class SlashCommandInteraction : ListenerAdapter() {
         try {
             //スラッシュコマンドを実行する
             SlashCommandManager.slashCommands.first { it.name.equalsIgnoreCase(name) }.let { slashCommand ->
-                //考え中をするかを確認
-                if (slashCommand.deferReply) {
-                    //考え中を出す
-                    event.deferReply().queue()
-                }
-
                 //サブコマンドがないかを確認
                 val subcommandName = event.subcommandName
                 if (subcommandName == null) {
+                    //考え中をするかを確認
+                    if (slashCommand.deferReply) {
+                        //考え中を出す
+                        event.deferReply().queue()
+                    }
                     //通常のコマンドを実行
                     slashCommand.run(event)
                 } else {
                     //サブコマンドを探して実行
-                    slashCommand.subcommands.first { it.subCommandData.name.equalsIgnoreCase(subcommandName) }
-                        .run(event)
+                    slashCommand.subcommands.first { it.subCommandData.name.equalsIgnoreCase(subcommandName) }.let { subcommand ->
+                        //考え中をするかを確認
+                        if (subcommand.deferReply) {
+                            //通常のコマンドを実行
+                            event.deferReply().queue()
+                        }
+                        //サブコマンドを実行
+                        subcommand.run(event)
+                    }
                 }
             }
         } catch (e: Exception) {
