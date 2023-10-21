@@ -11,29 +11,46 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 
-
-
-/*
-
 /**
- * 一覧に要素を追加・上書きをする
+ * 一覧を表示する
  *
  */
-object ListAdd : SlashCommandManager.SubCommand(CommandInfoPath.LIST_ADD) {
-    init {
-        addSubcommands(
-            CommandUtil.createSubCommandData(CommandInfoPath.LIST_SC_TIMER).addOptions(
+object ListShow : SlashCommandManager.SubCommand(CommandInfoPath.LIST_SHOW) {
+    override fun run(event: SlashCommandInteractionEvent) {
+        //一覧を送信する
+        ListMenu.sendList(event)
+    }
+}
+
+object ListAddSubCommands {
+    object ListAddTimer : SlashCommandManager.SubCommand(CommandInfoPath.LIST_ADD_TIMER) {
+        init {
+            addOptions(
                 CommandUtil.createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_TIMER_NAME, true),
                 CommandUtil.createOptionData(OptionType.INTEGER, CommandInfoPath.MINUTES, true)
-            ),
-            CommandUtil.createSubCommandData(CommandInfoPath.LIST_SC_DICE).addOptions(
+            )
+        }
+
+        override fun run(event: SlashCommandInteractionEvent) {
+            ListAddSubCommands.run(event)
+        }
+    }
+
+    object ListAddDice : SlashCommandManager.SubCommand(CommandInfoPath.LIST_ADD_DICE) {
+        init {
+            addOptions(
                 CommandUtil.createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_DICE_NAME, true),
                 CommandUtil.createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_DICE, true)
             )
-        )
+        }
+
+        override fun run(event: SlashCommandInteractionEvent) {
+            ListAddSubCommands.run(event)
+        }
     }
 
-    override fun run(event: SlashCommandInteractionEvent) {
+
+    fun run(event: SlashCommandInteractionEvent) {
         //ギルドを取得
         val guild = event.guild!!
 
@@ -111,8 +128,6 @@ object ListAdd : SlashCommandManager.SubCommand(CommandInfoPath.LIST_ADD) {
         ListMenu.sendList(event)
     }
 }
-
- */
 
 
 /**
@@ -278,46 +293,17 @@ object ListTargetChannel : SlashCommandManager.SubCommand(CommandInfoPath.LIST_T
     }
 }
 
-/*
+
 /**
- * 一覧を他のサーバーと同期する
+ * 同期を有効にする
  *
  */
-object SyncList : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_SYNC) {
+object ListSync : SlashCommandManager.SubCommand(CommandInfoPath.LIST_SYNC) {
     init {
-        addSubcommands(
-            CommandUtil.createSubCommandData(CommandInfoPath.LIST_SC_SYNC_ENABLE)
-                .addOptions(CommandUtil.createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ID, true)),
-            CommandUtil.createSubCommandData(CommandInfoPath.LIST_SC_SYNC_DISABLE)
-        )
+        addOptions(CommandUtil.createOptionData(OptionType.STRING, CommandInfoPath.LIST_OPT_ID, true))
     }
 
     override fun run(event: SlashCommandInteractionEvent) {
-        //サブコマンドを取得
-        val subCommand = event.subcommandName
-
-        //nullチェック
-        if (subCommand == null) {
-            CommandUtil.replyCommandError(event)
-            return
-        }
-
-        //bool値に変換
-        val bool = when (subCommand) {
-            "enable" -> {
-                true
-            }
-
-            "disable" -> {
-                false
-            }
-
-            else -> {
-                return
-            }
-        }
-
-
         val guild = event.guild!!
 
         //言語のデーター
@@ -326,48 +312,43 @@ object SyncList : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_SYNC) {
         //ギルドのデータを取得
         val guildData = guild.getGuildData()
 
-        //メンションの方式
-        guildData.listSync = bool
+        //同期をするように
+        guildData.listSync = true
 
-        if (bool) {
-            //オプションを取得
-            val option = event.getOption(CommandInfoPath.LIST_OPT_ID)
+        //オプションを取得
+        val option = event.getOption(CommandInfoPath.LIST_OPT_ID)
+
+        //nullチェック
+        if (option == null) {
+            CommandUtil.replyCommandError(event)
+            return
+        }
+
+        //Stringに変換
+        val id = option.asString
+
+        //36進数にからLongにする
+        val long = java.lang.Long.parseLong(id, 36)
+
+        //ギルドのIDが違うかを確認
+        if (guild.idLong != long) {
+            //ターゲットのギルドを取得
+            val targetGuild = SimpleTimer.instance.getGuild(long)
 
             //nullチェック
-            if (option == null) {
-                CommandUtil.replyCommandError(event)
+            if (targetGuild == null) {
+                //メッセージを送信
+                event.hook.sendMessage(langData.command.list.invalidID).queue()
                 return
-            }
-
-            //Stringに変換
-            val id = option.asString
-
-            //36進数にからLongにする
-            val long = java.lang.Long.parseLong(id, 36)
-
-            //ギルドのIDが違うかを確認
-            if (guild.idLong != long) {
-                //ターゲットのギルドを取得
-                val targetGuild = SimpleTimer.instance.getGuild(long)
-
-                //nullチェック
-                if (targetGuild == null) {
-                    //メッセージを送信
-                    event.hook.sendMessage(langData.command.list.invalidID).queue()
-                    return
-                } else {
-                    //メッセージを送信
-                    event.hook.sendMessage(langData.command.list.startSync).queue()
-                    //ターゲットのギルドを設定
-                    guildData.syncTarget = targetGuild
-                }
             } else {
-                event.hook.sendMessage(langData.command.list.targetSame).queue()
-                return
+                //メッセージを送信
+                event.hook.sendMessage(langData.command.list.startSync).queue()
+                //ターゲットのギルドを設定
+                guildData.syncTarget = targetGuild
             }
-
         } else {
-            event.hook.sendMessage(langData.command.list.finishSync).queue()
+            event.hook.sendMessage(langData.command.list.targetSame).queue()
+            return
         }
 
         //ギルドのデータを保存
@@ -375,7 +356,29 @@ object SyncList : SlashCommandManager.SlashCommand(CommandInfoPath.LIST_SYNC) {
     }
 }
 
+/**
+ * 同期を無効にする
+ *
  */
+object ListSyncOff : SlashCommandManager.SubCommand(CommandInfoPath.LIST_SYNC_OFF) {
+    override fun run(event: SlashCommandInteractionEvent) {
+        val guild = event.guild!!
+
+        //言語のデーター
+        val langData = guild.getLang()
+
+        //ギルドのデータを取得
+        val guildData = guild.getGuildData()
+
+        //同期をしないように
+        guildData.listSync = false
+
+        event.hook.sendMessage(langData.command.list.finishSync).queue()
+
+        //ギルドのデータを保存
+        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+    }
+}
 
 
 /**
