@@ -45,7 +45,7 @@ object CommandUtil {
 
         //日本語の言語のデータを取得
         val japaneseLangData =
-            dataContainer.getCommandInfoLangData(Lang.JAP, langPath) ?: throw IllegalArgumentException()
+            dataContainer.getCommandInfoLangData(Lang.JPA, langPath) ?: throw IllegalArgumentException()
 
         //オプションを作成して返す
         return OptionData(
@@ -56,7 +56,7 @@ object CommandUtil {
             autoComplete
         ).apply {
             //日本語以外の言語を回す
-            Lang.entries.filter { it != Lang.JAP }.forEach {
+            Lang.entries.filter { it != Lang.JPA }.forEach {
                 //言語のデータを取得
                 val langData = dataContainer.getCommandInfoLangData(it, langPath) ?: return@forEach
                 //ローカライズを設定
@@ -78,12 +78,12 @@ object CommandUtil {
 
         //日本語の言語のデータを取得
         val japaneseLangData =
-            dataContainer.getCommandInfoLangData(Lang.JAP, langPath) ?: throw IllegalArgumentException()
+            dataContainer.getCommandInfoLangData(Lang.JPA, langPath) ?: throw IllegalArgumentException()
 
         //サブコマンドを作成して返す
         return SubcommandData(japaneseLangData.name, japaneseLangData.description).apply {
             //日本語以外の言語を回す
-            Lang.entries.filter { it != Lang.JAP }.forEach {
+            Lang.entries.filter { it != Lang.JPA }.forEach {
                 //言語のデータを取得
                 val langData = dataContainer.getCommandInfoLangData(it, langPath) ?: return@forEach
                 //ローカライズを設定
@@ -99,7 +99,7 @@ object CommandUtil {
 
         //日本語の言語のデータを取得
         val japaneseLangData =
-            dataContainer.getCommandInfoLangData(Lang.JAP, langPath) ?: throw IllegalArgumentException()
+            dataContainer.getCommandInfoLangData(Lang.JPA, langPath) ?: throw IllegalArgumentException()
 
         //チョイスを作成して返す
         return Command.Choice(
@@ -107,7 +107,7 @@ object CommandUtil {
             value
         ).apply {
             //日本語以外の言語を回す
-            Lang.entries.filter { it != Lang.JAP }.forEach {
+            Lang.entries.filter { it != Lang.JPA }.forEach {
                 //言語のデータを取得
                 val langData = dataContainer.getCommandInfoLangData(it, langPath) ?: return@forEach
                 //ローカライズを設定

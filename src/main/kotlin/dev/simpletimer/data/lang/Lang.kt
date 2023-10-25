@@ -10,7 +10,7 @@ import java.io.File
  * @constructor Create empty Lang
  */
 enum class Lang(val discordLocal: DiscordLocale, private val locale: String, val displayName: String) {
-    JAP(DiscordLocale.JAPANESE, "", "Japanese/日本語"),
+    JPA(DiscordLocale.JAPANESE, "", "Japanese/日本語"),
     ENG(DiscordLocale.ENGLISH_US, "en", "English/英語");
 
     /**

@@ -59,15 +59,15 @@ object SlashCommandManager {
         val deferReply: Boolean = true,
         vararg val subcommands: SubCommand = emptyArray()
     ) : CommandDataImpl(
-        SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JAP, langPath)!!.name,
-        SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JAP, langPath)!!.description
+        SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JPA, langPath)!!.name,
+        SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JPA, langPath)!!.description
     ) {
 
         init {
             defaultPermissions = DefaultMemberPermissions.ENABLED
 
             //日本語以外を登録
-            Lang.entries.filter { it != Lang.JAP }.forEach {
+            Lang.entries.filter { it != Lang.JPA }.forEach {
                 //言語のデータを取得
                 val langData = SimpleTimer.instance.dataContainer.getCommandInfoLangData(it, langPath) ?: return@forEach
                 //言語のデータを設定

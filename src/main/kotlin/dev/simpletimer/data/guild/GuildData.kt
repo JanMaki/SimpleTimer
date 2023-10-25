@@ -4,10 +4,7 @@ import dev.simpletimer.data.enum.DiceMode
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.lang.Lang
-import dev.simpletimer.data.serializer.AudioChannelSerializer
-import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
-import dev.simpletimer.data.serializer.GuildSerializer
-import dev.simpletimer.data.serializer.RoleSerializer
+import dev.simpletimer.data.serializer.*
 import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Role
@@ -47,5 +44,5 @@ data class GuildData(
     var syncTarget: @Serializable(with = GuildSerializer::class) Guild? = null,
     var audio: String = "Voice",
     var needAudioAnnounce: Boolean = true,
-    var lang: Lang = Lang.JAP
+    var lang: @Serializable(with = LangSerializer::class) Lang = Lang.JPA
 )
