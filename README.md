@@ -19,14 +19,9 @@
 
 ＊バグや不明点、要望などがあった場合はTwitter([@JanuaryMaki](https://twitter.com/JanuaryMaki ))か、Discordのコミュニティサーバーへよろしくお願いします。GitHubのissueでは受け付けておりません。
 ###
-### ｜招待リンク｜
-http://invite.simpletimer.dev
-###
-### ｜コミュニティサーバー｜
-http://community.simpletimer.dev
-###
-### ｜詳細｜
-https://info.simpletimer.dev
+### ｜マニュアル｜
+https://simpletimer.dev/
+
 ###
 ### ｜開発の支援｜
 https://simpletimer.fanbox.cc/posts/3128883
