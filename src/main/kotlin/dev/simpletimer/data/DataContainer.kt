@@ -2,6 +2,7 @@ package dev.simpletimer.data
 
 import com.charleskorn.kaml.EmptyYamlDocumentException
 import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.YamlConfiguration
 import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.guild.GuildData
@@ -129,7 +130,7 @@ class DataContainer {
             try {
                 //ファイル読み込み
                 guildDatum[file.nameWithoutExtension.toLong()] = file.inputStream().use {
-                    Yaml.default.decodeFromStream(GuildData.serializer(), it)
+                    Yaml(configuration = YamlConfiguration()).decodeFromStream(GuildData.serializer(), it)
                 }
             } catch (ignore: EmptyYamlDocumentException) {
                 //空データを代入

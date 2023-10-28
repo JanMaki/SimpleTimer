@@ -5,6 +5,7 @@ import dev.simpletimer.data.lang.Lang
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.langFormat
+import dev.simpletimer.util.CommandUtil.replyCommandError
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 

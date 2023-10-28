@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping
 fun CommandInteractionPayload.getOption(langPath: CommandInfoPath): OptionMapping? {
     //日本語の言語のデータを取得
     val japaneseLangData =
-        SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JAP, langPath)
+        SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JPA, langPath)
             ?: throw IllegalArgumentException()
 
     //オプションを取得して返す
