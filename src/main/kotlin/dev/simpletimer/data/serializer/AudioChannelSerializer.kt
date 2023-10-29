@@ -3,9 +3,7 @@
 package dev.simpletimer.data.serializer
 
 import dev.simpletimer.SimpleTimer
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -13,10 +11,10 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 
-
-@Suppress("OPT_IN_IS_NOT_ENABLED")
-@OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = AudioChannel::class)
+/**
+ * [AudioChannel]のSerializer
+ *
+ */
 object AudioChannelSerializer : KSerializer<AudioChannel?> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("AudioChannel", PrimitiveKind.LONG)
 

@@ -15,9 +15,6 @@ import net.dv8tion.jda.api.entities.Guild
  * [Guild]のSerializer
  *
  */
-@Suppress("OPT_IN_IS_NOT_ENABLED")
-@OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = Guild::class)
 object GuildSerializer : KSerializer<Guild?> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Guild", PrimitiveKind.LONG)
 

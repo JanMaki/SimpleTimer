@@ -18,7 +18,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     //Discord連携 JDA
-    implementation("net.dv8tion", "JDA", "5.0.0-beta.15")
+    implementation("net.dv8tion", "JDA", "5.0.0-beta.17")
     //JDAに必要なもの
     implementation("ch.qos.logback", "logback-classic", "1.2.8")
     //音再生
@@ -38,7 +38,7 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_16.toString()
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
 }
 
 val jar by tasks.getting(Jar::class) {
