@@ -82,6 +82,7 @@ import java.util.*
 // v2.3.3 バグの修正とAPIの更新
 // v2.3.4 ダイスの成功/失敗の見た目とアクティブティの表示方法を変更
 // v2.3.5 ダイス周りのバグを修正
+// v2.4.0 一部コマンドの記法を変更
 
 /**
  * すべての始まり
@@ -102,7 +103,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v2.3.5"
+    val version = "v2.4.0"
 
     //多重起動防止
     private val lockPort = 918
