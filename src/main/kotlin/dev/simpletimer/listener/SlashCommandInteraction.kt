@@ -40,17 +40,8 @@ class SlashCommandInteraction : ListenerAdapter() {
         try {
             //スラッシュコマンドを実行する
             SlashCommandManager.slashCommands.firstOrNull { it.name.equalsIgnoreCase(name) }?.let { slashCommand ->
-                //サブコマンドがないかを確認
-                val subcommandName = event.subcommandName
-                if (subcommandName == null) {
-                    //考え中をするかを確認
-                    if (slashCommand.deferReply) {
-                        //考え中を出す
-                        event.deferReply().queue()
-                    }
-                    //通常のコマンドを実行
-                    slashCommand.run(event)
-                } else {
+                //サブコマンドがあるかを確認
+                event.subcommandName?.let { subcommandName ->
                     //サブコマンドを探して実行
                     slashCommand.subcommands.firstOrNull { it.subCommandData.name.equalsIgnoreCase(subcommandName) }
                         ?.let { subcommand ->
@@ -61,8 +52,17 @@ class SlashCommandInteraction : ListenerAdapter() {
                             }
                             //サブコマンドを実行
                             subcommand.run(event)
+                            return
                         }
                 }
+
+                //通常のコマンドを実行
+                //考え中をするかを確認
+                if (slashCommand.deferReply) {
+                    //考え中を出す
+                    event.deferReply().queue()
+                }
+                slashCommand.run(event)
             }
         } catch (e: Exception) {
             //権限関係が原因の物は排除
