@@ -22,7 +22,7 @@ class CommandAutoCompleteInteraction : ListenerAdapter() {
         val name = event.name
 
         //スラッシュコマンドを実行する
-        SlashCommandManager.slashCommands.first { it.name.equalsIgnoreCase(name) }.let { slashCommand ->
+        SlashCommandManager.slashCommands.firstOrNull { it.name.equalsIgnoreCase(name) }?.let { slashCommand ->
             //サブコマンドがないかを
             val subcommandName = event.subcommandName
             if (subcommandName == null) {
@@ -30,8 +30,8 @@ class CommandAutoCompleteInteraction : ListenerAdapter() {
                 slashCommand.autoComplete(event)
             } else {
                 //サブコマンドで実装している自動補完
-                slashCommand.subcommands.first { it.subCommandData.name.equalsIgnoreCase(subcommandName) }
-                    .autoComplete(event)
+                slashCommand.subcommands.firstOrNull { it.subCommandData.name.equalsIgnoreCase(subcommandName) }
+                    ?.autoComplete(event)
             }
         }
     }
