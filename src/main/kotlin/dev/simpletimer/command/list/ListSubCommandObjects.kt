@@ -3,6 +3,7 @@ package dev.simpletimer.command.list
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.component.modal.YesOrNoModal
+import dev.simpletimer.data.lang.Lang
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.*
 import dev.simpletimer.list.ListMenu
@@ -66,14 +67,18 @@ object ListAddSubCommands {
             return
         }
 
+        //各サブコマンドの名前
+        val timerSubcommandName = SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JPA, CommandInfoPath.LIST_ADD_TIMER)?.name
+        val diceSubcommandName = SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JPA, CommandInfoPath.LIST_ADD_DICE)?.name
+
         //オプションを取得
         val name = when (event.subcommandName) {
-            "timer" -> {
+            timerSubcommandName -> {
                 //タイマーのときのオプションを取得
                 event.getOption(CommandInfoPath.LIST_OPT_TIMER_NAME)!!.asString
             }
 
-            "dice" -> {
+            diceSubcommandName -> {
                 //ダイスのときのオプションを取得
                 event.getOption(CommandInfoPath.LIST_OPT_DICE_NAME)!!.asString
             }
@@ -107,14 +112,19 @@ object ListAddSubCommands {
 
         //サブコマンドを確認
         when (event.subcommandName) {
-            "timer" -> {
+            timerSubcommandName -> {
                 //ギルドのデータでタイマーを追加
                 guildData.list["timer:${name}"] = event.getOption(CommandInfoPath.MINUTES)!!.asInt.toString()
             }
 
-            "dice" -> {
+            diceSubcommandName -> {
                 //ギルドのデータでダイスを追加
                 guildData.list["dice:${name}"] = event.getOption(CommandInfoPath.LIST_OPT_DICE)!!.asString
+            }
+
+            else -> {
+                CommandUtil.replyCommandError(event)
+                return
             }
         }
 
