@@ -162,9 +162,6 @@ class SimpleTimer {
         //データのクラス
         dataContainer = DataContainer()
 
-        //BCDiceのマネージャーを開始
-        BCDiceManager()
-
         //データアップローダーを開始
         DataUploader()
 
@@ -201,7 +198,7 @@ class SimpleTimer {
         //アクティビティを変更
         shardBuilder.setActivity(Activity.customStatus("/helpでヘルプ表示"))
 
-        //shardを3回作る
+        //shardを作る
         for (i in 0 until dataContainer.config.shardsCount) {
             //shardを作る
             val shard = shardBuilder.useSharding(i, dataContainer.config.shardsCount).build()
@@ -212,6 +209,9 @@ class SimpleTimer {
             //コマンドを送信
             shard.updateCommands().addCommands(SlashCommandManager.slashCommands).queue()
         }
+
+        //BCDiceのマネージャーを開始
+        BCDiceManager()
 
         //終了処理
         //入力を作成
