@@ -37,6 +37,11 @@ dependencies {
     implementation("com.github.kittinunf.fuel", "fuel", "2.3.1")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
 }
