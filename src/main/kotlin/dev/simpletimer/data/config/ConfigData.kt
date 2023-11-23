@@ -14,5 +14,6 @@ data class ConfigData(
     val apiURL: String = "http://localhost:8080",
     val apiToken: String = "",
     val shardsCount: Int = 1,
-    val loggingChannels: List<Long> = mutableListOf()
+    val loggingChannels: List<Long> = mutableListOf(),
+    val databaseConfig: DatabaseConfig = DatabaseConfig()
 )

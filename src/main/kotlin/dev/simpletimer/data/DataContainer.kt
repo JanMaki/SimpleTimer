@@ -5,13 +5,12 @@ import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
-import dev.simpletimer.data.guild.GuildData
 import dev.simpletimer.data.lang.Lang
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfo
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
-import dev.simpletimer.extension.equalsIgnoreCase
-import net.dv8tion.jda.api.entities.Guild
+import dev.simpletimer.database.data.GuildData
+import dev.simpletimer.database.transaction.GuildDataTransaction
 import java.io.File
 import java.nio.file.Paths
 import kotlin.reflect.KClass
@@ -22,9 +21,6 @@ import kotlin.reflect.full.memberProperties
  *
  */
 class DataContainer {
-    //全ギルドのデータ
-    private val guildDatum = mutableMapOf<Long, GuildData>()
-
     //コンフィグ
     var config: ConfigData
 
@@ -40,10 +36,6 @@ class DataContainer {
 
     //コンフィグを保管するファイル
     private val configFile = File(parentDirectory, "config.yml")
-
-    //ギルドのデータを保管するディレクトリ
-    private val guildDirectory = File(parentDirectory, "Guild")
-
 
     //音源データを保管するディレクトリ
     private val audioDirectory = File(parentDirectory, "Audio")
@@ -117,78 +109,28 @@ class DataContainer {
         }
     }
 
+
     /**
      * ギルドの読み込み
      *
      */
-    fun loadGuild() {
+    fun convertLegacyDataToDatabase() {
+        val guildDirectory = File(parentDirectory, "Guild")
+
         //ギルドを保管するディレクトリがあるかを確認
         if (!guildDirectory.exists()) guildDirectory.mkdirs()
 
         //ymlを読み取り
         guildDirectory.listFiles()?.filterNotNull()?.filter { it.extension == "yml" }?.forEach { file ->
             try {
+                val guildId = file.nameWithoutExtension.toLong()
                 //ファイル読み込み
-                guildDatum[file.nameWithoutExtension.toLong()] = file.inputStream().use {
+                val guildData = file.inputStream().use {
                     Yaml(configuration = YamlConfiguration()).decodeFromStream(GuildData.serializer(), it)
                 }
+                GuildDataTransaction.insertGuildData(guildId, guildData)
             } catch (ignore: EmptyYamlDocumentException) {
-                //空データを代入
-                guildDatum[file.nameWithoutExtension.toLong()] = GuildData()
             }
-        }
-    }
-
-    /**
-     * ギルドのデータを取得する
-     *
-     * @param guild 対象の[Guild]
-     * @return [GuildData]
-     */
-    fun getGuildData(guild: Guild): GuildData {
-        return guildDatum.getOrPut(guild.idLong) { GuildData() }
-    }
-
-    /**
-     * ギルドのデータを削除する
-     *
-     * @param guild 対象の[Guild]
-     */
-    fun resetGuildData(guild: Guild) {
-        //リセットを行う
-        guildDatum[guild.idLong] = GuildData()
-        //保存
-        saveGuildsData(guild)
-    }
-
-
-    //デフォルトのGuildDataのYAMLの文字列
-    private val defaultGuildDataYAML = Yaml.default.encodeToString(GuildData.serializer(), GuildData())
-
-    /**
-     * ギルドのデータを保存する
-     *
-     */
-    fun saveGuildsData(guild: Guild) {
-        //ギルドのデータを取得
-        val guildData = getGuildData(guild)
-
-        //保存をするファイル
-        val file = File(guildDirectory, "${guild.idLong}.yml")
-
-        //デフォルトのGuildDataのYAMLと比較
-        if (Yaml.default.encodeToString(GuildData.serializer(), guildData).equalsIgnoreCase(defaultGuildDataYAML)) {
-            //ファイルが存在しているかを確認
-            if (file.exists()) {
-                //ファルを削除
-                file.delete()
-            }
-            return
-        }
-
-        //ファイルを書き込み
-        file.outputStream().use {
-            Yaml.default.encodeToStream(GuildData.serializer(), guildData, it)
         }
     }
 

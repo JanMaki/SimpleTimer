@@ -8,6 +8,7 @@ import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.langFormat
+import dev.simpletimer.extension.setGuildData
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -42,7 +43,7 @@ abstract class AudioSubCommand(langPath: CommandInfoPath) : SlashCommandManager.
 
             //オーディオの通知をしなくして保存
             guildData.needAudioAnnounce = false
-            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+            guild.setGuildData(guildData)
         }
 
         //子のコマンドを実行

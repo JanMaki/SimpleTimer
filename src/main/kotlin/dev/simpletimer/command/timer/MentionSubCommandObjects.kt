@@ -50,8 +50,10 @@ object MentionTiming : SlashCommandManager.SubCommand(CommandInfoPath.MENTION_TI
 
         //ギルドのデータへ保存
         val guild = event.guild!!
-        guild.getGuildData().mentionTiming = timing
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        val guildData = guild.getGuildData().apply {
+            this.mentionTiming = timing
+        }
+        guild.setGuildData(guildData)
 
         //メッセージを出力
         event.hook.sendMessage(guild.getLang().command.timer.mentionTiming.langFormat(timing)).queue()
@@ -107,7 +109,7 @@ object MentionType : SlashCommandManager.SubCommand(CommandInfoPath.MENTION_TYPE
 
         //ギルドのデータへ保存
         guildData.mention = mention
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        guild.setGuildData(guildData)
 
         //言語のデータ
         val langData = guild.getLang()
@@ -216,7 +218,7 @@ object AddRoleMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.MEN
         val guild = event.guild!!
         val guildData = guild.getGuildData()
         guildData.roleMentionTargets.add(role)
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        guild.setGuildData(guildData)
 
         //メッセージを出力
         event.hook.sendMessage(guild.getLang().command.timer.addRole.langFormat(role.name)).queue()
@@ -249,8 +251,10 @@ object RemoveRoleMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.
 
         //ギルドのデータから削除
         val guild = event.guild!!
-        guild.getGuildData().roleMentionTargets.removeIf { it?.id == role.id }
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        val guildData = guild.getGuildData().apply {
+            this.roleMentionTargets.removeIf { it?.id == role.id }
+        }
+        guild.setGuildData(guildData)
 
         //メッセージを出力
         event.hook.sendMessage(guild.getLang().command.timer.removeRole.langFormat(role.name)).queue()
@@ -327,8 +331,10 @@ object AddVCMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.MENTI
 
         //ギルドのデータへ追加
         val guild = event.guild!!
-        guild.getGuildData().vcMentionTargets.add(channel)
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        val guildData = guild.getGuildData().apply {
+            this.vcMentionTargets.add(channel)
+        }
+        guild.setGuildData(guildData)
 
         //メッセージを出力
         event.hook.sendMessage(langData.command.timer.addVC.langFormat(channel.asGuildMessageChannel().name))
@@ -372,8 +378,10 @@ object RemoveVCMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.ME
 
         //ギルドのデータから削除
         val guild = event.guild!!
-        guild.getGuildData().vcMentionTargets.removeIf { it?.id == channel.asGuildMessageChannel().id }
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        val guildData = guild.getGuildData().apply {
+            this.vcMentionTargets.removeIf { it?.id == channel.asGuildMessageChannel().id }
+        }
+        guild.setGuildData(guildData)
 
         //メッセージを出力
         event.hook.sendMessage(langData.command.timer.removeVC.langFormat(channel.asGuildMessageChannel().name))

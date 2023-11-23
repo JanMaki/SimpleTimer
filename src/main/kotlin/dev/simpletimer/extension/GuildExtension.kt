@@ -2,8 +2,9 @@ package dev.simpletimer.extension
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.audio_player.GuildAudioPlayer
-import dev.simpletimer.data.guild.GuildData
 import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.database.data.GuildData
+import dev.simpletimer.database.transaction.GuildDataTransaction
 import net.dv8tion.jda.api.entities.Guild
 
 //Guildを拡張している
@@ -28,7 +29,17 @@ fun Guild.getAudioPlayer(): GuildAudioPlayer {
  * @return [GuildData]
  */
 fun Guild.getGuildData(): GuildData {
-    return SimpleTimer.instance.dataContainer.getGuildData(this)
+    return GuildDataTransaction.getGuildData(idLong) ?: GuildData()
+}
+
+/**
+ * [Guild]の拡張
+ * ギルドのデータをセットする
+ *
+ * @param guildData [GuildData]
+ */
+fun Guild.setGuildData(guildData: GuildData) {
+    GuildDataTransaction.updateGuildData(idLong, guildData)
 }
 
 /**

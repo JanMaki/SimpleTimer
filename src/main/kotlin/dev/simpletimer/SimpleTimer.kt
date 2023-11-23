@@ -228,6 +228,8 @@ class SimpleTimer {
                 }
                 println("Botを終了します...")
                 break
+            } else if (input == "convert") {
+                dataContainer.convertLegacyDataToDatabase()
             }
         }
     }

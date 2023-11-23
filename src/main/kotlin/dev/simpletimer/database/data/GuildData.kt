@@ -1,4 +1,4 @@
-package dev.simpletimer.data.guild
+package dev.simpletimer.database.data
 
 import dev.simpletimer.data.enum.DiceMode
 import dev.simpletimer.data.enum.Mention

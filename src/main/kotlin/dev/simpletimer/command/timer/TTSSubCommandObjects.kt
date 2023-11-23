@@ -1,13 +1,9 @@
 package dev.simpletimer.command.timer
 
-import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
-import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.getLang
-import dev.simpletimer.extension.getOption
-import dev.simpletimer.extension.langFormat
+import dev.simpletimer.extension.*
 import dev.simpletimer.util.CommandUtil
 import dev.simpletimer.util.CommandUtil.createChoice
 import dev.simpletimer.util.CommandUtil.createOptionData
@@ -51,8 +47,10 @@ object TTSTiming : SlashCommandManager.SubCommand(CommandInfoPath.TTS_TIMING) {
 
         //ギルドのデータへ保存
         val guild = event.guild!!
-        guild.getGuildData().ttsTiming = timing
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        val guildData = guild.getGuildData().apply {
+            this.ttsTiming = timing
+        }
+        guild.setGuildData(guildData)
 
         //メッセージを出力
         event.hook.sendMessage(guild.getLang().command.timer.ttsTiming.langFormat(timing)).queue()
@@ -82,8 +80,10 @@ object FinishTTS : SlashCommandManager.SubCommand(CommandInfoPath.TTS_FINISH_MES
         }
 
         //ギルドのデータへ保存
-        guild.getGuildData().finishTTS = message
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        val guildData = guild.getGuildData().apply {
+            this.finishTTS = message
+        }
+        guild.setGuildData(guildData)
 
         //メッセージを出力
         event.hook.sendMessage(guild.getLang().command.timer.finishTTS).queue()

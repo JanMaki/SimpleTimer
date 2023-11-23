@@ -1,10 +1,11 @@
 package dev.simpletimer.command
 
-import dev.simpletimer.SimpleTimer
 import dev.simpletimer.component.modal.YesOrNoModal
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
+import dev.simpletimer.database.data.GuildData
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.sendEmpty
+import dev.simpletimer.extension.setGuildData
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
 /**
@@ -18,7 +19,7 @@ object ResetCommand :
 
         //確認のModalでYesを選択したときの処理
         val yesAction = YesOrNoModal.Action {
-            SimpleTimer.instance.dataContainer.resetGuildData(guild)
+            guild.setGuildData(GuildData())
 
             it.hook.sendMessage(guild.getLang().command.reset.reset).queue()
         }

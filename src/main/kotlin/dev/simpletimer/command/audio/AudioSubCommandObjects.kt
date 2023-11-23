@@ -145,7 +145,7 @@ object Change : AudioSubCommand(CommandInfoPath.AUDIO_CHANGE) {
         //オーディオを設定
         guildData.audio = name
         //保存
-        dataContainer.saveGuildsData(guild)
+        guild.setGuildData(guildData)
 
         //埋め込みを作成して送信
         event.hook.sendMessageEmbeds(

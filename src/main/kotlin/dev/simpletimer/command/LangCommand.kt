@@ -5,6 +5,7 @@ import dev.simpletimer.data.lang.Lang
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.langFormat
+import dev.simpletimer.extension.setGuildData
 import dev.simpletimer.util.CommandUtil.replyCommandError
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
@@ -35,8 +36,10 @@ object LangCommand : SlashCommandManager.SlashCommand(CommandInfoPath.LANG) {
         val lang = Lang.valueOf(subCommandName.uppercase())
 
         //言語を保存
-        event.guild!!.getGuildData().lang = lang
-        SimpleTimer.instance.dataContainer.saveGuildsData(event.guild!!)
+        val guildData = event.guild!!.getGuildData().apply {
+            this.lang = lang
+        }
+        event.guild!!.setGuildData(guildData)
 
         //メッセージを送信
         event.hook.sendMessage(

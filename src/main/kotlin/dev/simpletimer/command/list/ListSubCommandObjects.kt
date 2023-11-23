@@ -129,7 +129,7 @@ object ListAddSubCommands {
         }
 
         //保存
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        guild.setGuildData(guildData)
 
         //メッセージを送信
         event.hook.sendMessage(langData.command.list.add).queue()
@@ -185,7 +185,7 @@ object ListRemove : SlashCommandManager.SubCommand(CommandInfoPath.LIST_REMOVE) 
         //ギルドのデータを削除して保存する
         guildData.list.remove("dice:${name}")
         guildData.list.remove("timer:${name}")
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        guild.setGuildData(guildData)
 
         //メッセージを送信
         event.hook.sendMessage(langData.command.list.remove).queue()
@@ -234,7 +234,7 @@ object ListClear : SlashCommandManager.SubCommand(CommandInfoPath.LIST_CLEAR, de
             //一覧を削除
             guildData.list.clear()
             //保存
-            SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+            guild.setGuildData(guildData)
             //メッセージを送信
             it.hook.sendMessage(langData.command.list.clear).queue()
         }
@@ -295,8 +295,10 @@ object ListTargetChannel : SlashCommandManager.SubCommand(CommandInfoPath.LIST_T
         }
 
         //ギルドのデータに設定をし、保存
-        guild.getGuildData().listTargetChannel = channel
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        val guildData = guild.getGuildData().apply {
+            this.listTargetChannel = channel
+        }
+        guild.setGuildData(guildData)
 
         //メッセージを送信
         event.hook.sendMessage(guild.getLang().command.list.changeChannel.langFormat("**${channel.name}**")).queue()
@@ -362,7 +364,7 @@ object ListSync : SlashCommandManager.SubCommand(CommandInfoPath.LIST_SYNC) {
         }
 
         //ギルドのデータを保存
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        guild.setGuildData(guildData)
     }
 }
 
@@ -386,7 +388,7 @@ object ListSyncOff : SlashCommandManager.SubCommand(CommandInfoPath.LIST_SYNC_OF
         event.hook.sendMessage(langData.command.list.finishSync).queue()
 
         //ギルドのデータを保存
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        guild.setGuildData(guildData)
     }
 }
 
@@ -452,7 +454,7 @@ object CopyList : SlashCommandManager.SubCommand(CommandInfoPath.LIST_COPY) {
             this.putAll(targetGuild.getGuildData().list)
         }
         //ギルドのデータを保存
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        guild.setGuildData(guildData)
 
         //メッセージを送信
         event.hook.sendMessage(langData.command.list.copy).queue()

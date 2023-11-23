@@ -13,6 +13,8 @@ repositories {
     maven(url = "https://m2.dv8tion.net/releases")
 }
 
+val exposedVersion = "0.44.1"
+
 dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.7.3")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -35,6 +37,14 @@ dependencies {
 
     //RESTApi
     implementation("com.github.kittinunf.fuel", "fuel", "2.3.1")
+
+    //SQL
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-json:$exposedVersion")
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.3.0")
 }
 
 java {

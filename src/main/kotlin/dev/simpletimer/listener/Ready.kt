@@ -33,8 +33,5 @@ class Ready : ListenerAdapter() {
 
         //最後のShardじゃなかったらおしまい
         if (count != SimpleTimer.instance.dataContainer.config.shardsCount) return
-
-        //ギルドのデータを読み込み
-        SimpleTimer.instance.dataContainer.loadGuild()
     }
 }

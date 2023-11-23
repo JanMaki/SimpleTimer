@@ -1,14 +1,10 @@
 package dev.simpletimer.command.dice
 
-import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.dice.DefaultDice
 import dev.simpletimer.dice.bcdice.BCDiceManager
-import dev.simpletimer.extension.getGuildData
-import dev.simpletimer.extension.getLang
-import dev.simpletimer.extension.getOption
-import dev.simpletimer.extension.langFormat
+import dev.simpletimer.extension.*
 import dev.simpletimer.util.CommandUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +38,7 @@ object DiceMode : SlashCommandManager.SubCommand(CommandInfoPath.DICE_MODE) {
 
         //ギルドのデータへ保存
         guildData.diceMode = diceMode
-        SimpleTimer.instance.dataContainer.saveGuildsData(guild)
+        guild.setGuildData(guildData)
 
         //メッセージを出力
         event.hook.sendMessage(guild.getLang().dice.changeDiceMode.langFormat("**${diceMode}**")).queue()
