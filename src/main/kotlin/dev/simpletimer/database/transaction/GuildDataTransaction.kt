@@ -54,6 +54,12 @@ object GuildDataTransaction {
     fun updateGuildData(guildId: Long, guildData: GuildData) {
         Connector.connect()
 
+        //データが無いときは挿入
+        if (transaction { GuildDataTable.select { GuildDataTable.discordGuildId eq guildId }.limit(1).firstOrNull() } == null) {
+            insertGuildData(guildId, guildData)
+            return
+        }
+
         transaction {
             //UPDATE
             GuildDataTable.update({ GuildDataTable.discordGuildId eq guildId }) {
@@ -87,7 +93,7 @@ object GuildDataTransaction {
         Connector.connect()
 
         return transaction {
-            GuildDataTable.select { GuildDataTable.discordGuildId eq guildId }.firstOrNull()?.let {
+            GuildDataTable.select { GuildDataTable.discordGuildId eq guildId }.limit(1).firstOrNull()?.let {
                 GuildData(
                     it[GuildDataTable.ttsTiming],
                     it[GuildDataTable.finishTTS],
