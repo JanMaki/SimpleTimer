@@ -1,5 +1,6 @@
 package dev.simpletimer.data.config
 
+import dev.simpletimer.data.serializer.ConfigValueSerializer
 import kotlinx.serialization.Serializable
 
 /**
@@ -10,10 +11,10 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ConfigData(
-    val token: String = "TOKEN IS HERE",
-    val apiURL: String = "http://localhost:8080",
-    val apiToken: String = "",
-    val shardsCount: Int = 1,
-    val loggingChannels: List<Long> = mutableListOf(),
+    val token: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue("\$SIMPLETIMER_TOKEN"),
+    val apiURL: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue("\$SIMPLETIMER_API_URL"),
+    val apiToken: @Serializable(with = ConfigValueSerializer::class) ConfigValue =  ConfigValue(),
+    val shardsCount: @Serializable(with = ConfigValueSerializer::class) ConfigValue =  ConfigValue("\$SIMPLETIMER_SHARDS_COUNT"),
+    val loggingChannels: List<@Serializable(with = ConfigValueSerializer::class) ConfigValue> = mutableListOf(),
     val databaseConfig: DatabaseConfig = DatabaseConfig()
 )

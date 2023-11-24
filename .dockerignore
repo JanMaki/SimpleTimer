@@ -1,0 +1,11 @@
+.git/
+.github/
+.idea/
+libs/
+build/
+.env
+.gitattributes
+.gitignore
+.gitmodules
+LICENSE
+README.md

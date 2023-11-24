@@ -22,16 +22,16 @@ class Ready : ListenerAdapter() {
         val config = SimpleTimer.instance.dataContainer.config
 
         //サーバーの一覧を確認
-        config.loggingChannels.forEach guildID@{
+        config.loggingChannels.map { it.value }.forEach guildID@{
             //チャンネルを取得
             val channel = event.jda.getTextChannelById(it) ?: return@guildID
             //ログを出力するチャンネルに追加
             Log.logChannels.add(channel)
         }
 
-        Log.sendLog("Shardを起動しました　${++count}/${SimpleTimer.instance.dataContainer.config.shardsCount}")
+        Log.sendLog("Shardを起動しました　${++count}/${SimpleTimer.instance.dataContainer.config.shardsCount.value}")
 
         //最後のShardじゃなかったらおしまい
-        if (count != SimpleTimer.instance.dataContainer.config.shardsCount) return
+        if (count != SimpleTimer.instance.dataContainer.config.shardsCount.value.toInt()) return
     }
 }

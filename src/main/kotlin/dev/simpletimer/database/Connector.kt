@@ -3,6 +3,7 @@ package dev.simpletimer.database
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.database.table.GuildDataTable
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -21,16 +22,16 @@ object Connector {
      *
      */
     fun connect() {
-        //初期化処理をしたかを確認
-        if (!initialized) init()
-
         //接続
         Database.connect(
-            "jdbc:mariadb://localhost:3306/${databaseConfig.scheme}",
+            "jdbc:mariadb://${databaseConfig.address.value}/${databaseConfig.scheme.value}",
             "org.mariadb.jdbc.Driver",
-            databaseConfig.user,
-            databaseConfig.password
+            databaseConfig.user.value,
+            databaseConfig.password.value
         )
+
+        //初期化処理をしたかを確認
+        if (!initialized) init()
     }
 
     /**
@@ -42,6 +43,7 @@ object Connector {
 
         //テーブルを作成
         transaction {
+            create(GuildDataTable)
             createMissingTablesAndColumns(GuildDataTable)
         }
     }

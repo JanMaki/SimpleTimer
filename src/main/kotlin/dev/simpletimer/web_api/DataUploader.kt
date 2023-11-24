@@ -18,6 +18,8 @@ import kotlinx.serialization.json.Json
  */
 class DataUploader {
     init {
+        val apiUrl = SimpleTimer.instance.dataContainer.config.apiURL.value
+        val apiToken = SimpleTimer.instance.dataContainer.config.apiToken.value
         //コルーチンを開始
         CoroutineScope(Dispatchers.Default).launch {
             //直前に送ったチャンネルのID
@@ -80,9 +82,12 @@ class DataUploader {
                         }
                     }
                     //Post!
-                    "${SimpleTimer.instance.dataContainer.config.apiURL}/timers/${SimpleTimer.instance.dataContainer.config.apiToken}".httpPut()
-                        .header(hashMapOf("Content-Type" to "application/json"))
-                        .body(Json.encodeToString(ListSerializer(ChannelData.serializer()), channelDataList)).response()
+                    if (apiUrl != "" && apiToken != "") {
+                        "$apiUrl/timers/${apiToken}".httpPut()
+                            .header(hashMapOf("Content-Type" to "application/json"))
+                            .body(Json.encodeToString(ListSerializer(ChannelData.serializer()), channelDataList))
+                            .response()
+                    }
                 } catch (ignore: Exception) {
                     ignore.printStackTrace()
                 }

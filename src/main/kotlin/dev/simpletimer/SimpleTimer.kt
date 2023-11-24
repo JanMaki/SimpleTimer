@@ -166,10 +166,10 @@ class SimpleTimer {
         DataUploader()
 
         //Tokenを取得
-        val token = dataContainer.config.token
+        val token = dataContainer.config.token.value
 
         //トークンがないときに終了する
-        if (token.equals("TOKEN IS HERE", ignoreCase = true)) {
+        if (token == "") {
             //コンソールに出力
             println("SETUP: Write the token in the \"token\" field of config.yml")
             return
@@ -199,9 +199,9 @@ class SimpleTimer {
         shardBuilder.setActivity(Activity.customStatus("/helpでヘルプ表示"))
 
         //shardを作る
-        for (i in 0 until dataContainer.config.shardsCount) {
+        for (i in 0 until dataContainer.config.shardsCount.value.toInt()) {
             //shardを作る
-            val shard = shardBuilder.useSharding(i, dataContainer.config.shardsCount).build()
+            val shard = shardBuilder.useSharding(i, dataContainer.config.shardsCount.value.toInt()).build()
 
             //追加
             shards.add(shard)
