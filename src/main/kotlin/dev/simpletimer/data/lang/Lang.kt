@@ -9,7 +9,7 @@ import java.io.File
  *
  * @constructor Create empty Lang
  */
-enum class Lang(val discordLocal: DiscordLocale, private val locale: String, val displayName: String) {
+enum class Lang(val discordLocal: DiscordLocale, val locale: String, val displayName: String) {
     JPA(DiscordLocale.JAPANESE, "", "Japanese/日本語"),
     ENG(DiscordLocale.ENGLISH_US, "en", "English/英語");
 
@@ -19,6 +19,6 @@ enum class Lang(val discordLocal: DiscordLocale, private val locale: String, val
      * @return 言語のファイルの相対パス
      */
     fun getFilePath(): String {
-        return "${if (locale == "") "" else "${locale}${File.separator}"}Lang.yml"
+        return "${File.separator}${if (locale == "") "" else "${locale}${File.separator}"}Lang.yml"
     }
 }

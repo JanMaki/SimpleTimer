@@ -3,6 +3,8 @@ package dev.simpletimer.data
 import com.charleskorn.kaml.EmptyYamlDocumentException
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
+import com.sun.jna.platform.FileUtils
+import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.lang.Lang
@@ -12,6 +14,7 @@ import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.database.data.GuildData
 import dev.simpletimer.database.transaction.GuildDataTransaction
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
@@ -29,6 +32,9 @@ class DataContainer {
 
     //言語のデータ
     val langDatum = mutableMapOf<Lang, LangData>()
+
+    //Jarによる実行かを確認
+    private val isJarFile = File(javaClass.protectionDomain.codeSource.location.path).isFile
 
     //jarがあるディレクトリ
     private val parentDirectory: File =
@@ -84,7 +90,9 @@ class DataContainer {
 
 
         //言語を保管するディレクトリがあるかを確認
-        if (!langDirectory.exists()) langDirectory.mkdirs()
+        if (!langDirectory.exists()) {
+            langDirectory.mkdirs()
+        }
 
         //すべての言語を確認
         for (lang in Lang.entries) {
@@ -92,13 +100,19 @@ class DataContainer {
             val langFile = File(langDirectory, lang.getFilePath())
             //ファイルがあるかを確認
             if (!langFile.exists()) {
-                //ファイルを作成
+                //ディレクトリを作成
                 langFile.parentFile.mkdirs()
-                langFile.createNewFile()
+                //ファイルをリソースからコピー
+                var resourcePath = "LangData${lang.getFilePath()}"
 
-                //デフォルトのデータを書き込み
-                langFile.outputStream().use {
-                    Yaml.default.encodeToStream(LangData.serializer(), LangData(), it)
+                //Jar内のときは区切りにスラッシュを使用するように
+                if (isJarFile) {
+                    resourcePath = resourcePath.replace("\\", "/")
+                }
+
+                //リソースからコピー
+                ClassLoader.getSystemResourceAsStream(resourcePath)?.use { stream ->
+                    Files.copy(stream, langFile.toPath())
                 }
             }
 
