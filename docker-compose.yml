@@ -25,11 +25,14 @@ services:
       - MARIADB_PASSWORD=${DB_PASS}
     volumes:
       - db-storage:/var/lib/mysql
-  adminer:
-    image: adminer
+  phpmyadmin:
+    image: phpmyadmin
     restart: always
     ports:
-      - 8080:8080
+      - 8080:80
+    environment:
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
     depends_on:
       - db
 volumes:
