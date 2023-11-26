@@ -6,9 +6,7 @@ COPY . .
 RUN ./gradlew shadowJar -i
 
 #Botを起動
-FROM ubuntu AS bot
-
-RUN apt update && apt install -y openjdk-17-jdk-headless
+FROM amazoncorretto:17 AS bot
 
 ENV SIMPLETIMER_TOKEN=""
 ENV SIMPLETIMER_SHARDS_COUNT=1
