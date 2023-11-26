@@ -11,7 +11,7 @@ services:
       - SIMPLETIMER_DB_USER=${DB_USER}
       - SIMPLETIMER_DB_PASS=${DB_PASS}
     volumes:
-      - bot-storage:/app
+      - bot-storage:/app/var
     depends_on:
       - db
   db:

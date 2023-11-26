@@ -36,9 +36,9 @@ class DataContainer {
     //Jarによる実行かを確認
     private val isJarFile = File(javaClass.protectionDomain.codeSource.location.path).isFile
 
-    //jarがあるディレクトリ
+    //データを置くディレクトリ
     private val parentDirectory: File =
-        File(Paths.get(javaClass.protectionDomain.codeSource.location.toURI()).toString()).parentFile
+        File(File(Paths.get(javaClass.protectionDomain.codeSource.location.toURI()).toString()).parentFile, "/var")
 
     //コンフィグを保管するファイル
     private val configFile = File(parentDirectory, "config.yml")
