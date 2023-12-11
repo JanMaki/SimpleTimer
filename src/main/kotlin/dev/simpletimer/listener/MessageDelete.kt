@@ -1,5 +1,6 @@
 package dev.simpletimer.listener
 
+import dev.simpletimer.database.transaction.TimerMessageTransaction
 import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent
@@ -26,11 +27,13 @@ class MessageDelete : ListenerAdapter() {
             return
         }
 
-        //タイマーを取得
-        val timer = Timer.getTimer(idLong) ?: return
-
         //ディスプレイ用メッセージか確認
-        if (!Timer.isDisplay(idLong)) return
+        if (!TimerMessageTransaction.isDisplayMessage(idLong)) return
+
+
+        //タイマーを取得
+        val timerData = TimerMessageTransaction.getTimerDataByMessage(idLong) ?: return
+        val timer = Timer.getTimerFromTimerDataId(timerData.timerDataId) ?: return
 
         //タイマーを終了
         timer.end()

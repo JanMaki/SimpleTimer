@@ -1,6 +1,8 @@
 package dev.simpletimer.listener
 
 import dev.simpletimer.SimpleTimer
+import dev.simpletimer.database.transaction.TimerDataTransaction
+import dev.simpletimer.timer.Timer
 import dev.simpletimer.util.Log
 import net.dv8tion.jda.api.events.session.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -31,7 +33,12 @@ class Ready : ListenerAdapter() {
 
         Log.sendLog("Shardを起動しました　${++count}/${SimpleTimer.instance.dataContainer.config.shardsCount.value}")
 
-        //最後のShardじゃなかったらおしまい
-        if (count != SimpleTimer.instance.dataContainer.config.shardsCount.value.toInt()) return
+
+        event.jda.guilds.map { TimerDataTransaction.getTimerData(it) }.forEach {
+            it.forEach { timerData ->
+                Timer(timerData)
+                println(timerData)
+            }
+        }
     }
 }

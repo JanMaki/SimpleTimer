@@ -4,11 +4,9 @@ import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
-import java.util.*
 
 /**
  * タイマーを実行するボタン
@@ -16,30 +14,27 @@ import java.util.*
  */
 object TimerButton : ButtonManager.Button<Int>("timer") {
     override fun run(event: ButtonInteractionEvent) {
-        val channel: GuildMessageChannel = event.guildChannel
+        //チャンネルを取得
+        val channel = event.channel.asGuildMessageChannel()
 
-        //チャンネルのタイマーを取得する
-        val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
+        //使用できる番号を取得
+        val usableNumber = Timer.getUsableNumber(channel)
 
-        //番号を確認
-        for (number in Timer.Number.entries) {
-            //その番号のタイマーが動いているかを確認
-            if (!channelTimers.containsKey(number)) {
-                //タイマーを開始・代入
-                channelTimers[number] = Timer(
-                    channel,
-                    number,
-                    event.componentId.replace("${name}:", "").toIntOrNull() ?: return, event.guild!!
-                )
-                Timer.channelsTimersMap[channel] = channelTimers
-                //空白を送信
-                event.hook.sendEmpty()
-                return
-            }
+        //埋まっているかを確認
+        if (usableNumber.isEmpty()) {
+            //最大数のメッセージを送信
+            event.hook.sendMessage(event.guild!!.getLang().timer.timerMaxWarning).queue()
+            return
         }
 
-        //最大数のメッセージを出力する
-        event.hook.sendMessage(event.guild!!.getLang().timer.timerMaxWarning).queue()
+        //秒数単位にする
+        val seconds = event.componentId.replace("${name}:", "").toIntOrNull() ?: return
+
+        //タイマーを開始
+        Timer(channel, usableNumber.first(), seconds).start()
+
+        //空白を送信して終了
+        event.hook.sendEmpty()
     }
 
     override fun createButton(data: Int, langData: LangData): Button {

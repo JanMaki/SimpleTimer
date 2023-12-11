@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.json.json
+import org.jetbrains.exposed.sql.json.jsonb
 
 /**
  * ギルドのデータの[Table]
@@ -31,12 +31,12 @@ object GuildDataTable : Table("guild_data") {
     val mention = enumeration<Mention>("mention").default(Mention.VC)
     val mentionTiming = enumeration<NoticeTiming>("mention_timing").default(NoticeTiming.LV2)
     val vcMentionTargets =
-        json<MutableList<@Serializable(with = AudioChannelSerializer::class) AudioChannel?>>(
+        jsonb<MutableList<@Serializable(with = AudioChannelSerializer::class) AudioChannel?>>(
             "vc_mention_targets",
             Json.Default
         ).default(mutableListOf())
     val roleMentionTargets =
-        json<MutableList<@Serializable(with = RoleSerializer::class) Role?>>(
+        jsonb<MutableList<@Serializable(with = RoleSerializer::class) Role?>>(
             "json_mention_targets",
             Json.Default
         ).default(
@@ -44,16 +44,16 @@ object GuildDataTable : Table("guild_data") {
         )
     val diceMode = enumeration<DiceMode>("dice_mode").default(DiceMode.Default)
     val diceBot = text("dice_bot").default("DiceBot")
-    val list = json<LinkedHashMap<String, String>>("list", Json.Default).default(linkedMapOf())
-    val listTargetChannel = json<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>(
+    val list = jsonb<LinkedHashMap<String, String>>("list", Json.Default).default(linkedMapOf())
+    val listTargetChannel = jsonb<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>(
         "list_target_channel",
         Json.Default
     ).nullable()
     val listSync = bool("list_sync").default(false)
-    val syncTarget = json<@Serializable(with = GuildSerializer::class) Guild>("sync_target", Json.Default).nullable()
+    val syncTarget = jsonb<@Serializable(with = GuildSerializer::class) Guild>("sync_target", Json.Default).nullable()
     val audio = text("audio").default("Voice")
     val needAudioAnnounce = bool("need_audio_announce").default(true)
-    val lang = json<@Serializable(with = LangSerializer::class) Lang>("lang", Json.Default).default(Lang.JPA)
+    val lang = jsonb<@Serializable(with = LangSerializer::class) Lang>("lang", Json.Default).default(Lang.JPA)
 
 
     override val primaryKey = PrimaryKey(guildDataId)

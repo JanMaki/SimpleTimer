@@ -1,5 +1,6 @@
 package dev.simpletimer.listener
 
+import dev.simpletimer.database.transaction.TimerMessageTransaction
 import dev.simpletimer.extension.checkSimpleTimerPermission
 import dev.simpletimer.timer.Timer
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +41,8 @@ class GenericMessageReaction : ListenerAdapter() {
         if (coolTime.contains(idLong)) return
 
         //タイマーの取得
-        val timer = Timer.getTimer(idLong)
+        val timerData = TimerMessageTransaction.getTimerDataByMessage(idLong) ?: return
+        val timer = Timer.getTimerFromTimerDataId(timerData.timerDataId)
 
         //タイマーの確認
         if (timer != null) {

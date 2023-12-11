@@ -1,6 +1,7 @@
 package dev.simpletimer.timer
 
 import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.extension.getTimerList
 import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
@@ -43,16 +44,15 @@ class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number:
      */
     fun addTimerQueue(seconds: Int) {
         //チャンネルのタイマーを取得する
-        val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
+        val channelTimers = channel.getTimerList()
 
         //タイマーが動いているかを確認
-        if (channelTimers.containsKey(number)) {
+        if (channelTimers.any { it.timerData.number == number }) {
             //キューに追加
             timerQueue.add(seconds)
         } else {
             //タイマーを開始し、インスタンスを代入する
-            channelTimers[number] = Timer(channel, number, seconds, guild)
-            Timer.channelsTimersMap[channel] = channelTimers
+            Timer(channel, number, seconds).start()
         }
     }
 
@@ -86,11 +86,8 @@ class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number:
         //キューがあるかを確認
         if (timerQueue.isEmpty()) return
 
-        //チャンネルのタイマーを取得する
-        val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
-        //タイマーを開始し、インスタンスを代入する
-        channelTimers[number] = Timer(channel, number, timerQueue[0], guild)
-        Timer.channelsTimersMap[channel] = channelTimers
+        //タイマーを作成し、開始させる
+        Timer(channel, number, timerQueue[0]).start()
 
         //キューを削除
         removeQueueIndex(0)

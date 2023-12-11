@@ -5,7 +5,6 @@ import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.DataContainer
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.listener.*
-import dev.simpletimer.web_api.DataUploader
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
@@ -161,9 +160,6 @@ class SimpleTimer {
 
         //データのクラス
         dataContainer = DataContainer()
-
-        //データアップローダーを開始
-        DataUploader()
 
         //Tokenを取得
         val token = dataContainer.config.token.value

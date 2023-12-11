@@ -20,34 +20,19 @@ class TimerCoroutineService {
             CoroutineScope(Dispatchers.Default).launch {
                 do {
                     //経過時間を更新
-                    timerService.elapsedTime = System.nanoTime() - timerService.startNanoTime
+                    val elapsedTime = System.nanoTime() - timerService.serviceData.startNanoTime
 
-                    //離脱フラグ
-                    var leave = false
+                    //動いていないときは離脱
+                    if (!timerService.serviceData.isMove) break
 
-                    //停止のフラグを確認
-                    if (!timerService.isMove) {
-                        //停止時の時間を保存
-                        timerService.stopTime = System.nanoTime()
-                        //離脱する
-                        leave = true
-                    }
-                    //時間を確認
-                    else if (timerService.elapsedTime >= (timerService.seconds * 1000000000L) + timerService.adjustTime) {
+                    //終了のフラグが立っているときも離脱
+                    else if (timerService.serviceData.isFinish) break
+
+                    //時間が経過しているとき
+                    else if (elapsedTime >= (timerService.seconds * 1000000000L) + timerService.serviceData.adjustTime) {
                         //終了処理を実行
-                        timerService.finish() //離脱する
-                        leave = true
-
-                    }
-                    //終了フラグを確認
-                    else if (timerService.isFinish) {
-                        //離脱する
-                        leave = true
-                    }
-
-                    //離脱を確認
-                    if (leave) {
-                        //削除
+                        timerService.finish()
+                        //離脱
                         break
                     }
 

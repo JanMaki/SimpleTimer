@@ -1,5 +1,6 @@
 package dev.simpletimer.timer
 
+import dev.simpletimer.database.data.TimerServiceData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -10,27 +11,14 @@ import kotlinx.coroutines.launch
  *
  * @property seconds 秒数
  */
-class TimerService(var seconds: Int) {
-    //始まっているか
-    private var isStarted = false
+class TimerService(var seconds: Int, val serviceData: TimerServiceData) {
+    init {
+        //すでに開始している時は、コルーチンを始める
+        if (serviceData.isStarted && serviceData.isMove) {
+            startCoroutine()
+        }
+    }
 
-    //動いているか
-    var isMove = true
-
-    //終了しているか
-    var isFinish = false
-
-    //経過時間
-    var elapsedTime = 0L
-
-    //タイマーが開始した時間
-    var startNanoTime = 0L
-
-    //タイマーの調整値
-    var adjustTime = 0L
-
-    //一時停止した時の時間を保管 調整に使用
-    var stopTime = System.nanoTime()
 
     /**
      * タイマーを開始する
@@ -38,18 +26,18 @@ class TimerService(var seconds: Int) {
      */
     fun start(): Boolean {
         //既に開始していたら何もしない
-        if (isStarted) {
+        if (serviceData.isStarted) {
             return false
         }
 
         //開始した時間を代入
-        startNanoTime = System.nanoTime()
+        serviceData.startNanoTime = System.nanoTime()
 
         //コールーチンを開始する
         startCoroutine()
 
         //開始フラグを立てる
-        isStarted = true
+        serviceData.isStarted = true
 
         //イベントを呼び出す
         listeners.forEach { it.onStart() }
@@ -65,10 +53,13 @@ class TimerService(var seconds: Int) {
      */
     fun stop(): Boolean {
         //既に止まっているかを確認
-        val check = isMove
+        val check = serviceData.isMove
 
         //タイマーを止める
-        isMove = false
+        serviceData.isMove = false
+
+        //停止時の時間を保存
+        serviceData.stopTime = System.nanoTime()
 
         //イベントを呼び出す
         listeners.forEach { it.onStop(check) }
@@ -84,15 +75,15 @@ class TimerService(var seconds: Int) {
      */
     fun restart(): Boolean {
         //止まっているかを確認
-        val check = !isMove
+        val check = !serviceData.isMove
 
         //タイマーを再開
-        isMove = true
+        serviceData.isMove = true
 
         //止まっていたとき
         if (check) {
             //調整値を増やす
-            adjustTime += System.nanoTime() - stopTime
+            serviceData.adjustTime += System.nanoTime() - serviceData.stopTime
 
             //コールーチンを開始する
             startCoroutine()
@@ -115,10 +106,10 @@ class TimerService(var seconds: Int) {
      */
     fun finish(): Boolean {
         //既に終わっているかを確認
-        val check = !isFinish
+        val check = !serviceData.isFinish
 
         //タイマーを招集
-        isFinish = true
+        serviceData.isFinish = true
 
         //イベントを呼び出す
         listeners.forEach { it.onFinish(check) }
@@ -134,10 +125,10 @@ class TimerService(var seconds: Int) {
      */
     fun end(): Boolean {
         //既に終わっているかを確認
-        val check = !isFinish
+        val check = !serviceData.isFinish
 
         //タイマーを招集
-        isFinish = true
+        serviceData.isFinish = true
 
         //イベントを呼び出す
         listeners.forEach { it.onEnd(check) }
@@ -239,8 +230,11 @@ class TimerService(var seconds: Int) {
      * @return 残り時間[Time]
      */
     fun getTime(): Time {
+        //経過時間
+        val elapsedTime = System.nanoTime() - serviceData.startNanoTime
+
         //残りの秒数を取得する
-        var seconds = this.seconds - ((elapsedTime - adjustTime) / 1000000000L).toInt()
+        var seconds = this.seconds - ((elapsedTime - serviceData.adjustTime) / 1000000000L).toInt()
         //60で割り、小数点切り捨てで分数にする
         val minute = seconds / 60
         //分部分を除いた秒数を取得

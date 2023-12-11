@@ -3,8 +3,6 @@ package dev.simpletimer.data
 import com.charleskorn.kaml.EmptyYamlDocumentException
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
-import com.sun.jna.platform.FileUtils
-import dev.simpletimer.SimpleTimer
 import dev.simpletimer.data.audio.AudioInformationData
 import dev.simpletimer.data.config.ConfigData
 import dev.simpletimer.data.lang.Lang

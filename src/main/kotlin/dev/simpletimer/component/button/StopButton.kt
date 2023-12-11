@@ -2,6 +2,7 @@ package dev.simpletimer.component.button
 
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.getTimer
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.emoji.Emoji
@@ -13,7 +14,7 @@ object StopButton : ButtonManager.Button<Timer.Number>("stop_timer") {
         //タイマーの番号を取得
         val timerNumber = Timer.Number.getNumber(event.button.id!!.split(":")[1].toInt()) ?: return
         //timerを取得
-        val timer = Timer.getTimers(event.guildChannel)[timerNumber] ?: return
+        val timer = event.getTimer(timerNumber) ?: return
         //停止
         timer.stop()
         //ボタンを変更

@@ -2,12 +2,12 @@ package dev.simpletimer.component.modal
 
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
+import dev.simpletimer.extension.getTimer
 import dev.simpletimer.extension.langFormat
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.modals.Modal
-import java.util.*
 
 /**
  * タイマーを延長するModal
@@ -27,13 +27,10 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
         val timerNumber = Timer.Number.getNumber(event.modalId.split(":")[1].toInt())
 
         //チャンネルを取得
-        val channel = event.messageChannel
-
-        //チャンネルのタイマーを取得
-        val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
+        val timer = event.channel.asGuildMessageChannel().getTimer(timerNumber)
 
         //タイマーの稼働を確認
-        if (!channelTimers.containsKey(timerNumber)) {
+        if (timer == null) {
             if (timerNumber != null)
                 event.reply(timerNumber.format(langData.timer.timerNotMoveWarning)).queue()
             else {
@@ -41,9 +38,6 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
             }
             return
         }
-
-        //タイマーを取得
-        val timer = channelTimers[timerNumber]!!
 
         //タイマーを延長
         timer.add(seconds)

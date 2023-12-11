@@ -2,8 +2,9 @@ package dev.simpletimer.database
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.database.table.GuildDataTable
+import dev.simpletimer.database.table.TimerDataTable
+import dev.simpletimer.database.table.TimerMessageTable
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -11,9 +12,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
  * DBへの接続に使用する
  */
 object Connector {
-    //初期化処理をしたかどうか
-    private var initialized = false
-
     //データベースのコンフィグ
     private val databaseConfig = SimpleTimer.instance.dataContainer.config.databaseConfig
 
@@ -24,27 +22,15 @@ object Connector {
     fun connect() {
         //接続
         Database.connect(
-            "jdbc:mariadb://${databaseConfig.address.value}/${databaseConfig.scheme.value}",
-            "org.mariadb.jdbc.Driver",
+            "jdbc:postgresql://${databaseConfig.address.value}/${databaseConfig.scheme.value}",
+            "org.postgresql.Driver",
             databaseConfig.user.value,
             databaseConfig.password.value
         )
 
-        //初期化処理をしたかを確認
-        if (!initialized) init()
-    }
-
-    /**
-     * DBの初期化処理
-     *
-     */
-    fun init() {
-        initialized = true
-
-        //テーブルを作成
         transaction {
-            create(GuildDataTable)
-            createMissingTablesAndColumns(GuildDataTable)
+            //テーブルを作成
+            createMissingTablesAndColumns(GuildDataTable, TimerDataTable, TimerMessageTable)
         }
     }
 }

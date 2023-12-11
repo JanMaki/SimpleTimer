@@ -3,7 +3,7 @@ package dev.simpletimer.component.modal
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.lang.lang_data.LangData
-import dev.simpletimer.timer.Timer
+import dev.simpletimer.database.transaction.TimerDataTransaction
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.interactions.components.text.TextInput
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
@@ -23,7 +23,7 @@ object DebugModal : ModalManager.Modal<Byte>("debug") {
             //タイマーの稼働数を確認する
             "count" -> {
                 //タイマーの稼働数を送信する
-                event.hook.sendMessage("${Timer.getCount()}個のタイマーが稼働しています").queue()
+                event.hook.sendMessage("${TimerDataTransaction.count()}個のタイマーが稼働しています").queue()
             }
             //ギルドにコマンドを強制的に追加させる
             "commands" -> {

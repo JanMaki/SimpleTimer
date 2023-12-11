@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu
-import java.util.*
 
 /**
  * 一覧の選択メニュー
@@ -27,7 +26,7 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
         val options = event.selectedOptions
 
         //チャンネルを取得
-        val channel = event.guild!!.getGuildData().listTargetChannel ?: event.channel as GuildMessageChannel
+        val targetChannel = event.guild!!.getGuildData().listTargetChannel ?: event.channel as GuildMessageChannel
 
         //言語のデータ
         val langData = event.guild!!.getLang()
@@ -43,43 +42,44 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
             //分を取得
             val minutes = splitted[2].toInt()
 
-            //チャンネルのタイマーを取得する
-            val channelTimers = Timer.channelsTimersMap.getOrPut(channel) { EnumMap(Timer.Number::class.java) }
+            //使用できる番号を取得
+            val usableNumber = Timer.getUsableNumber(targetChannel)
 
-            //番号を確認
-            for (number in Timer.Number.entries) {
-                //その番号のタイマーが動いているかを確認
-                if (!channelTimers.containsKey(number)) {
-                    //タイマーを開始してインスタンスを代入する
-                    channelTimers[number] = Timer(channel, number, minutes * 60, event.guild!!)
-                    Timer.channelsTimersMap[channel] = channelTimers
-
-                    //メッセージを送信
-                    event.hook.sendMessage(
-                        number.format(
-                            langData.component.select.runListEntry.langFormat(
-                                "${splitted[1]}（${
-                                    langData.timer.minutes.langFormat(
-                                        minutes
-                                    )
-                                }）"
-                            )
-                        )
-                    ).queue()
-                    return
-                }
+            //埋まっているかを確認
+            if (usableNumber.isEmpty()) {
+                //最大数のメッセージを出力する
+                event.hook.sendMessage(langData.timer.timerMaxWarning).queue()
+                return
             }
 
-            //最大数のメッセージを出力する
-            event.hook.sendMessage(langData.timer.timerMaxWarning).queue()
+            //使用できる番号の先頭を使用
+            val number = usableNumber.first()
+
+            //タイマーを開始
+            Timer(targetChannel, number, minutes * 60).start()
+
+            //メッセージを送信
+            event.hook.sendMessage(
+                number.format(
+                    langData.component.select.runListEntry.langFormat(
+                        "${splitted[1]}（${
+                            langData.timer.minutes.langFormat(
+                                minutes
+                            )
+                        }）"
+                    )
+                )
+            ).queue()
+            return
         }
+
         //ダイスの要素の時
         else if (option.value.startsWith("dice")) {
             //ダイスのコマンドを取得
             val command = splitted[2]
 
             //ダイスを実行
-            Dice().roll(channel, command, event.user)
+            Dice().roll(targetChannel, command, event.user)
 
             //メッセージを送信
             event.hook.sendMessage(langData.component.select.runListEntry.langFormat("${splitted[1]}（${command}）"))
