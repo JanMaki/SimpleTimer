@@ -103,13 +103,8 @@ object SlashCommandManager {
      * @param langPath 言語のパス
      */
     abstract class SubCommand(langPath: CommandInfoPath, val deferReply: Boolean = true) {
-        //実際のサブコマンドの中身
-        val subCommandData: SubcommandData
-
-        init {
-            //サブコマンドを作成
-            subCommandData = CommandUtil.createSubCommandData(langPath)
-        }
+        //サブコマンドを作成
+        val subCommandData: SubcommandData = CommandUtil.createSubCommandData(langPath)
 
         /**
          * サブコマンドを実行する

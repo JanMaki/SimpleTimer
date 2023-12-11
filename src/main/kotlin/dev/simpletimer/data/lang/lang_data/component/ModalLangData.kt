@@ -8,15 +8,14 @@ import kotlinx.serialization.Serializable
  * @property minutes
  * @property seconds
  * @property missingTimeWarning
- * @property timerNotMoveWarning
  * @property addTimeMinutes
  * @property addTimeSeconds
  * @property addTime
  * @property moreThanOneWarning
- * @property addQueue 0->number
+ * @property addQueue
  * @property startTimer
  * @property timerButton
- * @property createButton 0-minutes&seconds
+ * @property createButton
  * @property missingValue
  * @property yesNoWarning
  * @property check

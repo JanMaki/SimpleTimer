@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 /**
  * タイマーのメッセージのデータ
  *
- * @property message メッセージのID
+ * @property messageId メッセージのID
  * @property messageType メッセージの種類
  */
 @Serializable

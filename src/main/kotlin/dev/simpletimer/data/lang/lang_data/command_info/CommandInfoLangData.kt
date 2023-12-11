@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
  * @property two
  * @property three
  * @property four
+ * @property audio
  * @property audioConnect
  * @property audioDisconnect
  * @property audioListen
@@ -23,6 +24,7 @@ import kotlinx.serialization.Serializable
  * @property extension
  * @property debug
  * @property roll
+ * @property dice
  * @property diceMode
  * @property diceInfo
  * @property diceBot
@@ -33,11 +35,14 @@ import kotlinx.serialization.Serializable
  * @property help
  * @property lang
  * @property list
- * @property listAdd
+ * @property listShow
+ * @property listAddTimer
+ * @property listAddDice
  * @property listRemove
  * @property listClear
  * @property listTargetChannel
  * @property listSync
+ * @property listSyncOff
  * @property listCopy
  * @property listID
  * @property listOPTTimerName
@@ -45,11 +50,9 @@ import kotlinx.serialization.Serializable
  * @property listOPTDice
  * @property listOPTElementName
  * @property listOPTID
- * @property listSCTimer
- * @property listSCDice
- * @property listSCSyncEnable
- * @property listSCSyncDisable
+ * @property listOPTChannel
  * @property queue
+ * @property queueAdd
  * @property queueShow
  * @property queueRemove
  * @property queueClear
@@ -66,10 +69,12 @@ import kotlinx.serialization.Serializable
  * @property stop
  * @property restart
  * @property check
+ * @property tts
  * @property ttsTiming
  * @property ttsFinishMessage
  * @property mentionTiming
  * @property mention
+ * @property mentionType
  * @property mentionRole
  * @property mentionAddRole
  * @property mentionRemoveRole
@@ -86,6 +91,8 @@ import kotlinx.serialization.Serializable
  * @property timerOPTRemoveRole
  * @property timerOPTAddVC
  * @property timerOPTRemoveVC
+ * @property timerOPTTiming
+ * @property timerOPTType
  * @property timerSCZero
  * @property timerSCOne
  * @property timerSCTwo
