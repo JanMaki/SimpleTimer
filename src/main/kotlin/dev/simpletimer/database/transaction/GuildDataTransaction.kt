@@ -55,7 +55,9 @@ object GuildDataTransaction {
         Connector.connect()
 
         //データが無いときは挿入
-        if (transaction { GuildDataTable.select { GuildDataTable.discordGuildId eq guildId }.limit(1).firstOrNull() } == null) {
+        if (transaction {
+                GuildDataTable.select { GuildDataTable.discordGuildId eq guildId }.limit(1).firstOrNull()
+            } == null) {
             insertGuildData(guildId, guildData)
             return
         }

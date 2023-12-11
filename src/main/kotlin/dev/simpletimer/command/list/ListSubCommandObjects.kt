@@ -68,8 +68,10 @@ object ListAddSubCommands {
         }
 
         //各サブコマンドの名前
-        val timerSubcommandName = SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JPA, CommandInfoPath.LIST_ADD_TIMER)?.name
-        val diceSubcommandName = SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JPA, CommandInfoPath.LIST_ADD_DICE)?.name
+        val timerSubcommandName =
+            SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JPA, CommandInfoPath.LIST_ADD_TIMER)?.name
+        val diceSubcommandName =
+            SimpleTimer.instance.dataContainer.getCommandInfoLangData(Lang.JPA, CommandInfoPath.LIST_ADD_DICE)?.name
 
         //オプションを取得
         val name = when (event.subcommandName) {
