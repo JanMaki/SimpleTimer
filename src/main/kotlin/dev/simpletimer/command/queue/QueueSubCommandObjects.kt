@@ -66,7 +66,7 @@ object Show : SlashCommandManager.SubCommand(CommandInfoPath.QUEUE_SHOW) {
         val number = Timer.Number.getNumber(timerOption?.asInt ?: 1) ?: Timer.Number.FIRST
 
         event.hook.sendMessageEmbeds(
-            TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number)
+            TimerQueue.getTimerQueue(event.guildChannel, number)
                 .getQueueEmbed(event.guild!!.getLang())
         ).queue()
     }
@@ -110,7 +110,7 @@ object Remove : SlashCommandManager.SubCommand(CommandInfoPath.QUEUE_REMOVE) {
         val index = indexOption.asInt - 1
 
         //キューを取得
-        val queue = TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number)
+        val queue = TimerQueue.getTimerQueue(event.guildChannel, number)
 
         //言語のデータ
         val langData = event.guild!!.getLang()
@@ -163,7 +163,7 @@ object Clear : SlashCommandManager.SubCommand(CommandInfoPath.QUEUE_CLEAR, defer
         //確認のModalでYesを選択したときの処理
         val yesAction = YesOrNoModal.Action {
             //キューを取得してクリアする
-            TimerQueue.getTimerQueue(event.guild!!, event.guildChannel, number).clearQueue()
+            TimerQueue.getTimerQueue(event.guildChannel, number).clearQueue()
 
             //メッセージを送信
             it.hook.sendMessage(event.guild!!.getLang().command.queue.clear.langFormat(number.number)).queue()
@@ -179,7 +179,6 @@ object Clear : SlashCommandManager.SubCommand(CommandInfoPath.QUEUE_CLEAR, defer
                 YesOrNoModal.Data(event.user.idLong, yesAction, noAction),
                 event.guild!!.getLang()
             )
-        )
-            .queue()
+        ).queue()
     }
 }

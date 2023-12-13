@@ -4,6 +4,7 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.database.table.GuildDataTable
 import dev.simpletimer.database.table.TimerDataTable
 import dev.simpletimer.database.table.TimerMessageTable
+import dev.simpletimer.database.table.TimerQueueTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -30,7 +31,7 @@ object Connector {
 
         transaction {
             //テーブルを作成
-            createMissingTablesAndColumns(GuildDataTable, TimerDataTable, TimerMessageTable)
+            createMissingTablesAndColumns(GuildDataTable, TimerDataTable, TimerMessageTable, TimerQueueTable)
         }
     }
 }

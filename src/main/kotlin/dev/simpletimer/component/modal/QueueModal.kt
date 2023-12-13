@@ -25,7 +25,7 @@ object QueueModal : TimerModal<Timer.Number>("queue") {
         val timerNumber = Timer.Number.getNumber(event.modalId.split(":")[1].toInt()) ?: Timer.Number.FIRST
 
         //キューを取得
-        val queue = TimerQueue.getTimerQueue(event.guild!!, event.guildChannel as GuildMessageChannel, timerNumber)
+        val queue = TimerQueue.getTimerQueue(event.guildChannel as GuildMessageChannel, timerNumber)
 
         //キューに追加
         queue.addTimerQueue(seconds)

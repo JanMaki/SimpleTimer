@@ -133,6 +133,8 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
 
         //タイマーサービスのリスナーに追加
         timerService.registerListener(this)
+        //キュー用のリスナーも追加
+        timerService.registerListener(TimerQueue.getTimerQueue(timerData.channel, timerData.number))
 
         //DBに記録されているメッセージのデータを取得
         TimerMessageTransaction.getTimerMessagesFromTimerData(timerData).forEach { timeMessageData ->
@@ -533,22 +535,21 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
             )
         )?.queue()
 
-        //メッセージを保管
-        val displayMessageTemp = this.displayMessage
-
-        //各種変数を廃棄
-        this.displayMessage = null
-        this.noticeMessage = null
-
         //つけているリアクションを削除
         CoroutineScope(Dispatchers.Default).launch {
             delay(5000)
-            displayMessageTemp?.clearReactions()?.queue()
-        }
+            //メッセージを保管
+            val displayMessageTemp = displayMessage
 
-        //タイマーデータの登録を削除
-        TimerDataTransaction.deleteTimerData(timerData)
-        timerDataIdInstanceMap.remove(timerData.timerDataId)
+            //各種変数を廃棄
+            displayMessage = null
+            noticeMessage = null
+            displayMessageTemp?.clearReactions()?.queue()
+
+            //タイマーデータの登録を削除
+            TimerDataTransaction.deleteTimerData(timerData)
+            timerDataIdInstanceMap.remove(timerData.timerDataId)
+        }
     }
 
 

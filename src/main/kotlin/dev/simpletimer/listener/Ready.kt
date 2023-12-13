@@ -2,7 +2,9 @@ package dev.simpletimer.listener
 
 import dev.simpletimer.SimpleTimer
 import dev.simpletimer.database.transaction.TimerDataTransaction
+import dev.simpletimer.database.transaction.TimerQueueTransaction
 import dev.simpletimer.timer.Timer
+import dev.simpletimer.timer.TimerQueue
 import dev.simpletimer.util.Log
 import net.dv8tion.jda.api.events.session.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -33,11 +35,17 @@ class Ready : ListenerAdapter() {
 
         Log.sendLog("Shardを起動しました　${++count}/${SimpleTimer.instance.dataContainer.config.shardsCount.value}")
 
-
+        //DB上のタイマー再開などをする
         event.jda.guilds.map { TimerDataTransaction.getTimerData(it) }.forEach {
             it.forEach { timerData ->
                 Timer(timerData)
-                println(timerData)
+            }
+        }
+
+        //DBのキューを登録する
+        event.jda.guilds.map { TimerQueueTransaction.getQueue(it) }.forEach {
+            it.forEach { (channel, number, queue) ->
+                TimerQueue.registerTimerQueue(channel, number, queue)
             }
         }
     }

@@ -1,41 +1,56 @@
 package dev.simpletimer.timer
 
 import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.database.transaction.TimerQueueTransaction
 import dev.simpletimer.extension.getTimerList
 import dev.simpletimer.extension.langFormat
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * キューを管理する
+ * キュー周りの処理
  *
- * @constructor Create empty Queue service
+ * @property channel 対象のチャンネル
+ * @property number 対象の[Timer.Number]
+ *
+ * @param queue キューの内容
  */
-class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number: Timer.Number) :
+class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, queue: List<Int> = mutableListOf()) :
     TimerService.TimerListener {
     companion object {
+        //キューのマップ
         private val timerQueues = ConcurrentHashMap<Long, MutableMap<Timer.Number, TimerQueue>>()
 
         /**
          * チャンネルとギルドとナンバーからタイマーのキューを取得する
          *
-         * @param guild [Guild]
          * @param channel [GuildMessageChannel]
          * @param number [Timer.Number]
          * @return [TimerQueue]を返す
          */
-        fun getTimerQueue(guild: Guild, channel: GuildMessageChannel, number: Timer.Number): TimerQueue {
+        fun getTimerQueue(channel: GuildMessageChannel, number: Timer.Number): TimerQueue {
             return timerQueues.getOrPut(channel.idLong) { mutableMapOf() }
-                .getOrPut(number) { TimerQueue(guild, channel, number) }
+                .getOrPut(number) { TimerQueue(channel, number) }
+        }
+
+        /**
+         * タイマーキューを登録する
+         *
+         * @param channel [GuildMessageChannel]
+         * @param number [Timer.Number]
+         * @param queue キューの内容
+         */
+        fun registerTimerQueue(channel: GuildMessageChannel, number: Timer.Number, queue: List<Int>) {
+            //mapに追加
+            timerQueues.getOrPut(channel.idLong) { mutableMapOf() }[number] = TimerQueue(channel, number, queue)
         }
     }
 
-    //キュー
-    private val timerQueue = LinkedList<Int>()
+    init {
+        TimerQueueTransaction.upsertQueue(channel, number, queue)
+    }
 
     /**
      * キューを追加する
@@ -49,7 +64,11 @@ class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number:
         //タイマーが動いているかを確認
         if (channelTimers.any { it.timerData.number == number }) {
             //キューに追加
-            timerQueue.add(seconds)
+            TimerQueueTransaction.getQueue(channel, number).toMutableList().apply {
+                add(seconds)
+            }.let {
+                TimerQueueTransaction.upsertQueue(channel, number, it)
+            }
         } else {
             //タイマーを開始し、インスタンスを代入する
             Timer(channel, number, seconds).start()
@@ -61,7 +80,7 @@ class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number:
      *
      */
     fun clearQueue() {
-        timerQueue.clear()
+        TimerQueueTransaction.clear(channel, number)
     }
 
     /**
@@ -70,24 +89,39 @@ class TimerQueue(val guild: Guild, val channel: GuildMessageChannel, val number:
      * @param index インデックス
      */
     fun removeQueueIndex(index: Int) {
-        timerQueue.removeAt(index)
+        //キューを取得
+        TimerQueueTransaction.getQueue(channel, number).toMutableList().apply {
+            //Indexを指定して削除
+            removeAt(index)
+        }.let {
+            //削除後のキューの大きさを確認
+            if (it.size <= 0) {
+                //消し飛ばす
+                clearQueue()
+            } else {
+                //キューの内容を更新
+                TimerQueueTransaction.upsertQueue(channel, number, it)
+            }
+        }
     }
 
     /**
      * キューを取得
      *
-     * @return [LinkedList]<[Int]>
+     * @return [List]<[Int]>
      */
-    fun getQueue(): LinkedList<Int> {
-        return LinkedList<Int>(timerQueue)
+    fun getQueue(): List<Int> {
+        return TimerQueueTransaction.getQueue(channel, number)
     }
 
     override fun onFinish(check: Boolean) {
+        val queue = TimerQueueTransaction.getQueue(channel, number).toMutableList()
+
         //キューがあるかを確認
-        if (timerQueue.isEmpty()) return
+        if (queue.isEmpty()) return
 
         //タイマーを作成し、開始させる
-        Timer(channel, number, timerQueue[0]).start()
+        Timer(channel, number, queue[0]).start()
 
         //キューを削除
         removeQueueIndex(0)
