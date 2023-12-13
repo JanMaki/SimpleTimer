@@ -86,6 +86,7 @@ import java.util.*
 // v2.4.1 コマンド実行時にエラーが出るのを修正
 // v2.4.2 サブコマンドを用いた一部コマンドがエラーが出るのを修正
 // v2.4.3 /listの一部コマンドが動かないのを修正
+// v2.4.4 /mention系のコマンドの一部が正常に動かないのを修正
 
 /**
  * すべての始まり
@@ -106,7 +107,7 @@ class SimpleTimer {
     }
 
     //バージョン
-    val version = "v2.4.3"
+    val version = "v2.4.4"
 
     //多重起動防止
     private val lockPort = 918
