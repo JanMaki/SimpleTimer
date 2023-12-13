@@ -538,16 +538,26 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         //つけているリアクションを削除
         CoroutineScope(Dispatchers.Default).launch {
             delay(5000)
-            //メッセージを保管
-            val displayMessageTemp = displayMessage
+            //リアクションを削除
+            displayMessage?.clearReactions()?.queue()
 
-            //各種変数を廃棄
-            displayMessage = null
-            noticeMessage = null
-            displayMessageTemp?.clearReactions()?.queue()
-
-            //タイマーデータの登録を削除
+            //各種メッセージを削除
+            displayMessage?.let {
+                //DBから削除
+                TimerMessageTransaction.removeTimerMessageData(displayMessage!!.idLong)
+                //削除
+                displayMessage!!.delete().queue()
+            }
+            noticeMessage?.let {
+                //DBから削除
+                TimerMessageTransaction.removeTimerMessageData(noticeMessage!!.idLong)
+                //削除
+                noticeMessage!!.delete().queue()
+            }
+            //タイマーのデータをDBから削除
             TimerDataTransaction.deleteTimerData(timerData)
+
+            //マップから削除
             timerDataIdInstanceMap.remove(timerData.timerDataId)
         }
     }
