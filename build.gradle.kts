@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.6.0")
 
     //BCDice
-    implementation("dev.simpletimer", "bcdice-kt", "1.6.1")
+    implementation("dev.simpletimer", "bcdice-kt", "1.7.0")
 
     //RESTApi
     implementation("com.github.kittinunf.fuel", "fuel", "2.3.1")
