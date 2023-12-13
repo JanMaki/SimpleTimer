@@ -21,7 +21,7 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
     TimerService.TimerListener {
     companion object {
         //キューのマップ
-        private val timerQueues = ConcurrentHashMap<Long, MutableMap<Timer.Number, TimerQueue>>()
+        private val timerQueues = ConcurrentHashMap<Long, ConcurrentHashMap<Timer.Number, TimerQueue>>()
 
         /**
          * チャンネルとギルドとナンバーからタイマーのキューを取得する
@@ -31,7 +31,7 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
          * @return [TimerQueue]を返す
          */
         fun getTimerQueue(channel: GuildMessageChannel, number: Timer.Number): TimerQueue {
-            return timerQueues.getOrPut(channel.idLong) { mutableMapOf() }
+            return timerQueues.getOrPut(channel.idLong) { ConcurrentHashMap() }
                 .getOrPut(number) { TimerQueue(channel, number) }
         }
 
@@ -44,7 +44,7 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
          */
         fun registerTimerQueue(channel: GuildMessageChannel, number: Timer.Number, queue: List<Int>) {
             //mapに追加
-            timerQueues.getOrPut(channel.idLong) { mutableMapOf() }[number] = TimerQueue(channel, number, queue)
+            timerQueues.getOrPut(channel.idLong) { ConcurrentHashMap() }[number] = TimerQueue(channel, number, queue)
         }
     }
 
