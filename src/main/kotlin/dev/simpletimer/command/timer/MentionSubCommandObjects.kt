@@ -64,7 +64,7 @@ object MentionTiming : SlashCommandManager.SubCommand(CommandInfoPath.MENTION_TI
  */
 object MentionType : SlashCommandManager.SubCommand(CommandInfoPath.MENTION_TYPE) {
     init {
-        MentionTiming.addOptions(
+        addOptions(
             CommandUtil.createOptionData(OptionType.INTEGER, CommandInfoPath.TIMER_OPT_TYPE, true)
                 .addChoices(
                     CommandUtil.createChoice(CommandInfoPath.TIMER_MENTION_HERE, 0),
