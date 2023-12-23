@@ -461,7 +461,13 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         }
 
         //実際に送信するメッセージを作成
-        val messageContext = "${timerData.number.format(message)}${mention}"
+        val messageContext = "${timerData.number.format(message)}${mention}".let {
+            if (it.length >= 2000) {
+                "${timerData.number.format(message)}${langData.timer.mentionOmit}"
+            }else {
+                it
+            }
+        }
 
         //返信をまずは試みる
         displayMessage?.reply("${timerData.number.format(message)}${mention}")?.apply {
