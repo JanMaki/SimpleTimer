@@ -48,6 +48,12 @@ class DataContainer {
     private val langDirectory = File(parentDirectory, "Langs")
 
     init {
+        //ディレクトリの有無を確認
+        if (!parentDirectory.exists()) {
+            //作成
+            parentDirectory.mkdirs()
+        }
+
         //コンフィグの読み込み
         try {
             //ファイルがあるかを確認
