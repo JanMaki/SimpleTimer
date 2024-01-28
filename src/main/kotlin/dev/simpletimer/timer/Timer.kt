@@ -394,8 +394,15 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
      * @return [MessageEmbed]
      */
     private fun generateDisplayEmbed(): MessageEmbed = EmbedBuilder().apply {
-        val time = timerService.getTime()
-        setDescription(timerData.number.format(base!!.langFormatTime(langData, time.minute, time.seconds)))
+        //表示用の分秒(終了後の場合は0)
+        val (minutes, seconds) = if (timerData.timerServiceData.isFinish) {
+            Pair(0, 0)
+        } else {
+            val time = timerService.getTime()
+            Pair(time.minute, time.seconds)
+        }
+        //表示を設定
+        setDescription(timerData.number.format(base!!.langFormatTime(langData, minutes, seconds)))
         //色を適用
         setColor(timerData.number.color)
     }.build()
