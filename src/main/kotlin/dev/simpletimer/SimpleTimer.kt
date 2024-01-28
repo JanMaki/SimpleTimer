@@ -264,7 +264,7 @@ class SimpleTimer {
             setDescription(version)
             addField("必要な権限が付与されていません", "Botの動作に必要な権限が付与されていません", false)
             addField("該当のチャンネル", "<#${channel.idLong}>", false)
-            addField("詳しくはこちらを参照してください", "https://simpletimer.fanbox.cc/posts/3128708", false)
+            addField("詳しくはこちらを参照してください", "https://manual.simpletimer.dev/permissions.html", false)
         }.build()
     }
 }
