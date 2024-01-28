@@ -396,6 +396,8 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
     private fun generateDisplayEmbed(): MessageEmbed = EmbedBuilder().apply {
         val time = timerService.getTime()
         setDescription(timerData.number.format(base!!.langFormatTime(langData, time.minute, time.seconds)))
+        //色を適用
+        setColor(timerData.number.color)
     }.build()
 
     /**
