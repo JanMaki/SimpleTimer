@@ -29,7 +29,7 @@ object TimerDataTable : Table("timer_data") {
     val isStarted = bool("is_started")
     val isMove = bool("is_move")
     val isFinish = bool("is_finish")
-    val startNanoTime = long("start_nano_time")
+    val startMilliTime = long("start_milli_time")
     val adjustTime = long("adjust_time")
     val stopTime = long("stop_time")
 

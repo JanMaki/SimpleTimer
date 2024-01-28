@@ -31,7 +31,7 @@ class TimerService(var seconds: Int, val serviceData: TimerServiceData) {
         }
 
         //開始した時間を代入
-        serviceData.startNanoTime = System.nanoTime()
+        serviceData.startMilliTime = System.currentTimeMillis()
 
         //コールーチンを開始する
         startCoroutine()
@@ -59,7 +59,7 @@ class TimerService(var seconds: Int, val serviceData: TimerServiceData) {
         serviceData.isMove = false
 
         //停止時の時間を保存
-        serviceData.stopTime = System.nanoTime()
+        serviceData.stopTime = System.currentTimeMillis()
 
         //イベントを呼び出す
         listeners.forEach { it.onStop(check) }
@@ -83,7 +83,7 @@ class TimerService(var seconds: Int, val serviceData: TimerServiceData) {
         //止まっていたとき
         if (check) {
             //調整値を増やす
-            serviceData.adjustTime += System.nanoTime() - serviceData.stopTime
+            serviceData.adjustTime += System.currentTimeMillis() - serviceData.stopTime
 
             //コールーチンを開始する
             startCoroutine()
@@ -228,13 +228,13 @@ class TimerService(var seconds: Int, val serviceData: TimerServiceData) {
      * 残り時間を取得する
      *
      * @return 残り時間[Time]
-     */
-    fun getTime(): Time {
+         */
+        fun getTime(): Time {
         //経過時間
-        val elapsedTime = System.nanoTime() - serviceData.startNanoTime
+        val elapsedTime = System.currentTimeMillis() - serviceData.startMilliTime
 
         //残りの秒数を取得する
-        var seconds = this.seconds - ((elapsedTime - serviceData.adjustTime) / 1000000000L).toInt()
+        var seconds = this.seconds - ((elapsedTime - serviceData.adjustTime) / 1000L).toInt()
         //60で割り、小数点切り捨てで分数にする
         val minute = seconds / 60
         //分部分を除いた秒数を取得

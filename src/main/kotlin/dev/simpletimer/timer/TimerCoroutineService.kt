@@ -20,7 +20,7 @@ class TimerCoroutineService {
             CoroutineScope(Dispatchers.Default).launch {
                 do {
                     //経過時間を更新
-                    val elapsedTime = System.nanoTime() - timerService.serviceData.startNanoTime
+                    val elapsedTime = System.currentTimeMillis() - timerService.serviceData.startMilliTime
 
                     //動いていないときは離脱
                     if (!timerService.serviceData.isMove) break
@@ -29,7 +29,7 @@ class TimerCoroutineService {
                     else if (timerService.serviceData.isFinish) break
 
                     //時間が経過しているとき
-                    else if (elapsedTime >= (timerService.seconds * 1000000000L) + timerService.serviceData.adjustTime) {
+                    else if (elapsedTime >= (timerService.seconds * 1000) + timerService.serviceData.adjustTime) {
                         //終了処理を実行
                         timerService.finish()
                         //離脱

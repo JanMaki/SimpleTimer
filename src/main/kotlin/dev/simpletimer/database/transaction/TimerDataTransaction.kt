@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
+import kotlin.concurrent.timer
 
 /**
  * [TimerDataTable]用のトランザクション
@@ -39,7 +40,7 @@ object TimerDataTransaction {
                 it[isStarted] = timerData.timerServiceData.isStarted
                 it[isMove] = timerData.timerServiceData.isMove
                 it[isFinish] = timerData.timerServiceData.isFinish
-                it[startNanoTime] = timerData.timerServiceData.startNanoTime
+                it[startMilliTime] = timerData.timerServiceData.startMilliTime
                 it[adjustTime] = timerData.timerServiceData.adjustTime
                 it[stopTime] = timerData.timerServiceData.stopTime
             }.apply {
@@ -72,7 +73,7 @@ object TimerDataTransaction {
                 it[isStarted] = timerData.timerServiceData.isStarted
                 it[isMove] = timerData.timerServiceData.isMove
                 it[isFinish] = timerData.timerServiceData.isFinish
-                it[startNanoTime] = timerData.timerServiceData.startNanoTime
+                it[startMilliTime] = timerData.timerServiceData.startMilliTime
                 it[adjustTime] = timerData.timerServiceData.adjustTime
                 it[stopTime] = timerData.timerServiceData.stopTime
             }
@@ -182,7 +183,7 @@ object TimerDataTransaction {
                 resultRow[TimerDataTable.isStarted],
                 resultRow[TimerDataTable.isMove],
                 resultRow[TimerDataTable.isFinish],
-                resultRow[TimerDataTable.startNanoTime],
+                resultRow[TimerDataTable.startMilliTime],
                 resultRow[TimerDataTable.adjustTime],
                 resultRow[TimerDataTable.stopTime]
             )
